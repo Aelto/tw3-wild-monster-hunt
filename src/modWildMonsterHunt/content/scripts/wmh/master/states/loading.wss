@@ -1,0 +1,10 @@
+state Loading in WMH_Master {
+	event OnEnterState(previous_state_name: name) {
+		super.OnEnterState(previous_state_name);
+    this.Loading_main();
+	}
+
+  entry function Loading_main() {
+    parent.GotoState('Running');
+  }
+}

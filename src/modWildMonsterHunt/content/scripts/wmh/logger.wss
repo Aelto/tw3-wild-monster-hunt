@@ -1,0 +1,37 @@
+class WMH_Logger {
+  public function init(): WMH_Logger {
+    return this;
+  }
+
+  public function log(message: string, optional level: WMH_LogLevel) {
+    switch (level) {
+      case WMHLL_Info:
+        LogChannel('WMHINFO', message);
+        break;
+      case WMHLL_Warning:
+        LogChannel('WMHWARN', message);
+        break;
+      case WMHLL_Error:
+        LogChannel('WMHERR', message);
+        break;
+    }
+  }
+}
+
+enum WMH_LogLevel {
+  WMHLL_Info = 0,
+  WMHLL_Warning = 1,
+  WMHLL_Error = 2
+}
+
+function WMHINFO(message: string) {
+  thePlayer.wmh.logger.log(message, WMHLL_Info);
+}
+
+function WMHWARN(message: string) {
+  thePlayer.wmh.logger.log(message, WMHLL_Warning);
+}
+
+function WMHERROR(message: string) {
+  thePlayer.wmh.logger.log(message, WMHLL_Error);
+}

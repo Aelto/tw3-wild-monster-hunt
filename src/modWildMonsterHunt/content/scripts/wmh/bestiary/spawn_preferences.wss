@@ -1,0 +1,67 @@
+class WMH_SpawnPreferences {
+  private var time_ranges: array<WMH_TickerGameTime>;
+  
+  private var biome_tags_mandatory: WMH_BiomeTags;
+  private var biome_tags_forbidden: WMH_BiomeTags;
+
+  public function isTimeValid(hour: float): bool {
+    var range: WMH_TimeRange;
+
+    for range in this.time_ranges {
+      if (range.start_hours <= hours && hour <= range.end_hours) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public function isBiomeValid(tags: WMH_BiomeTags): bool {
+    if (
+      this.biome_tags_forbidden.roomNarrow && tags.roomNarrow ||
+      this.biome_tags_forbidden.roomWide && tags.roomWide ||
+      this.biome_tags_forbidden.altitudeLow && tags.altitudeLow ||
+      this.biome_tags_forbidden.altitudeHigh && tags.altitudeHigh ||
+      this.biome_tags_forbidden.humidityLow && tags.humidityLow ||
+      this.biome_tags_forbidden.humidityHigh && tags.humidityHigh ||
+      this.biome_tags_forbidden.vegetationLow && tags.vegetationLow ||
+      this.biome_tags_forbidden.vegetationHigh && tags.vegetationHigh ||
+    ) {
+      return false;
+    }
+
+    if (
+      this.biome_tags_forbidden.roomNarrow && !tags.roomNarrow ||
+      this.biome_tags_forbidden.roomWide && !tags.roomWide ||
+      this.biome_tags_forbidden.altitudeLow && !tags.altitudeLow ||
+      this.biome_tags_forbidden.altitudeHigh && !tags.altitudeHigh ||
+      this.biome_tags_forbidden.humidityLow && !tags.humidityLow ||
+      this.biome_tags_forbidden.humidityHigh && !tags.humidityHigh ||
+      this.biome_tags_forbidden.vegetationLow && !tags.vegetationLow ||
+      this.biome_tags_forbidden.vegetationHigh && !tags.vegetationHigh ||
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
+struct WMH_TimeRange {
+  var start_hours: float;
+  var end_hours: float;
+}
+
+struct WMH_BiomeTags {
+  editable var roomNarrow: bool;
+  editable var roomWide: bool;
+  
+  editable var altitudeLow: bool;
+  editable var altitudeHigh: bool;
+
+  editable var humidityLow: bool;
+  editable var humidityHigh: bool;
+
+  editable var vegetationLow: bool;
+  editable var vegetationHigh: bool;
+}

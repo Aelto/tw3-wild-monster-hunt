@@ -1,0 +1,10 @@
+state Running in WMH_Master {
+	event OnEnterState(previous_state_name: name) {
+		super.OnEnterState(previous_state_name);
+		this.Running_main();
+	}
+
+	entry function Running_main() {
+
+	}
+}

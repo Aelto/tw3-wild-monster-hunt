@@ -1,0 +1,62 @@
+/// A type to abstract away the concept of cooldowns and ticking.
+class WMH_Ticker {
+  private var trigger_timestamp: float;
+  private var cooldown_seconds: float;
+
+  public function init(cooldown_seconds: float): WMH_Ticker {
+    this.reset(cooldown_seconds);
+
+    return this;
+  }
+
+  public function reset(optional cooldown_seconds: float) {
+    this.trigger_timestamp = SUH_now();
+    
+    if (cooldown_seconds > 0) {
+      this.cooldown_seconds = cooldown_seconds;
+    }
+  }
+
+  /// WARNING: mutates the counter if it is expired
+  public function validate(): bool {
+    if (SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds)) {
+      this.reset();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
+class WMH_TickerGameTime {
+  private var trigger_timestamp: GameTime;
+  private var cooldown_seconds: int;
+
+  public function init(cooldown_seconds: int): WMH_Ticker {
+    this.reset(cooldown_seconds);
+
+    return this;
+  }
+
+  public function reset(optional cooldown_seconds: int) {
+    this.trigger_timestamp = theGame.CalculateTimePlayed();
+    
+    if (cooldown_seconds > 0) {
+      this.cooldown_seconds = cooldown_seconds;
+    }
+  }
+
+  /// WARNING: mutates the counter if it is expired
+  public function validate(): bool {
+    var difference: int = GameTimeToSeconds(theGame.CalculateTimePlayed()) - GameTimeToSeconds(this.trigger_timestamp);
+
+    if (difference >= this.cooldown_seconds) {
+      this.reset();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}

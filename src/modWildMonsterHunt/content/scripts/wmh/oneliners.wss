@@ -1,0 +1,9 @@
+class WMH_OnelinerEntity extends SU_OnelinerEntity {}
+
+/// A oneliner that sits to the side of an entity
+class WMH_OnelinerEntitySide extends WMH_OnelinerEntity {
+  public function init(entity: CEntity): WMH_OnelinerEntitySide {
+    this.offset = Vector(1.0);
+    this.render_distance = 5.0;
+  }
+}

@@ -1,0 +1,6 @@
+class WMH_BestiaryEntry {
+  private var preferences: WMH_SpawnPreferences;
+
+  public function init() {}
+  public function canSpawn(): bool {}
+}

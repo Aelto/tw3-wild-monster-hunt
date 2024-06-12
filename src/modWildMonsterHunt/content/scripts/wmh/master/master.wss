@@ -1,0 +1,10 @@
+statemachine class WMH_Master {
+  public var herbalist: WMH_HerbalistManager;
+
+  public function onCreate() {}
+
+  public function onLoad() {
+    this.herbalist = new WMH_HerbalistManager in this;
+    this.GotoState('Loading');
+  }
+}
