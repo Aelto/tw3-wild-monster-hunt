@@ -15,10 +15,9 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    this.preferences = (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.0, 8.0, 0.4))
-      .withTimeRange(WMH_TimeRangeScaling(8.0, 18.0, 1.1))
-      .withTimeRange(WMH_TimeRangeScaling(18.0, 24.0, 0.4))
+    this.preferences.PushBack(
+      (new WMH_SpawnPreferences in this)
+      .withTimeRange(WMH_TimeRangeScaling(0.4, 1.1, 0.4))
       .withMandatoryBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
@@ -42,6 +41,8 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
           /*structuresHigh*/ false,
           /*underground*/ false
         )
-      );
+      )
+      .withBiomeTagsBypass('LeshenGrotto')
+    );
   }
 }

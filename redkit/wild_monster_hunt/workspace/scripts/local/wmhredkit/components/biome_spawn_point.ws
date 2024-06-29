@@ -1,6 +1,8 @@
 // 
 class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public editable var biome_tags: WMH_BiomeTags;
+	public editable var biome_tags_bypass: array<name>;
+	hint biome_tags_bypass = "entities can use the tags from this list to bypass the biome_tags of this spawn point";
 	
 	protected var respawn_ticker: WMH_Ticker;
 	

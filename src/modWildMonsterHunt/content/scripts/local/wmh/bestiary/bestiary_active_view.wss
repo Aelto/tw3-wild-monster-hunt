@@ -31,6 +31,7 @@ class WMH_BestiaryActiveView {
   public function getRandomEntry(
     biome_manager: WMH_BiomeManager,
     biome_tags: WMH_BiomeTags,
+    biome_tags_bypass: array<name>,
     seed: int
   ): WMH_BestiaryEntry {
     var selected_entries: array<WMH_BestiaryEntry>;
@@ -41,7 +42,7 @@ class WMH_BestiaryActiveView {
     // start by building a list of the entries that could spawn from the
     // provided biome tags.
     for current: WMH_BestiaryEntry in this.entries {
-      if (current.canSpawn(biome_tags, day_hour)) {
+      if (current.canSpawn(biome_tags, day_hour, biome_tags_bypass)) {
         selected_entries.PushBack(current);
       }
     }

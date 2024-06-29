@@ -28,10 +28,9 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 3;
     this.difficulty_scaling.maximum_count_hard = 5;
 
-    this.preferences = (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.0, 8.0, 1.5))
-      .withTimeRange(WMH_TimeRangeScaling(8.0, 18.0, 0.5))
-      .withTimeRange(WMH_TimeRangeScaling(18.0, 24.0, 1.5))
+    this.preferences.PushBack(
+      (new WMH_SpawnPreferences in this)
+      .withTimeRange(WMH_TimeRangeScaling(1.5, 1, 0.5))
       .withMandatoryBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
@@ -55,6 +54,7 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
           /*structuresHigh*/ false,
           /*underground*/ false
         )
-      );
+      )
+    );
   }
 }

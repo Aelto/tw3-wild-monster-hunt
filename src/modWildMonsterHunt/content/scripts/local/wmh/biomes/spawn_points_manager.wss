@@ -21,7 +21,10 @@ class WMH_SpawnPointManager {
   }
 
   public function getRandomValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
-    var size: int = this.nearby_spawn_points.Size();
+    var valid_spawn_points: array<WMH_BiomeSpawnPoint> = this
+      .getValidSpawnPoints();
+
+    var size: int = valid_spawn_points.Size();
 
     if (size <= 0) {
       return NULL;
@@ -29,7 +32,20 @@ class WMH_SpawnPointManager {
 
     var index: int = RandNoiseF(seed, size) as int;
 
-    return this.nearby_spawn_points[index];
+    return valid_spawn_points[index];
+  }
+
+  private function getValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {
+    var output: array<WMH_BiomeSpawnPoint>;
+
+    var point: WMH_BiomeSpawnPoint;
+    for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
+      if (point.canRespawn()) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
   }
 
   private function findNearbySpawnPoints(

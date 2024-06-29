@@ -1,13 +1,28 @@
 class WMH_BestiaryEntry {
-  protected var preferences: WMH_SpawnPreferences;
+  protected var preferences: array<WMH_SpawnPreferences>;
   protected var difficulty_scaling: WMH_DifficultyScaling;
   protected var templates: array<WMH_EnemyTemplate>;
 
+  protected var biome_tags_bypass: name;
+
   public function init() {}
 
-  public function canSpawn(biome: WMH_BiomeTags, day_hour: float): bool {
-    return this.preferences.isTimeValid(day_hour)
-        && this.preferences.isBiomeValid(biome);
+  public function canSpawn(biome: WMH_BiomeTags, day_hour: float, optional biome_tags_bypass: array<name>): bool {
+    var preferences: WMH_SpawnPreferences;
+
+    for preferences: WMH_SpawnPreferences in this.preferences {
+      if (
+        preferences.isTimeValid(day_hour)
+        && (
+          preferences.isBiomeBypassed(biome_tags_bypass)
+          || preferences.isBiomeValid(biome)
+        )
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function buildSpawnList(seed: int): array<string> {

@@ -1,11 +1,23 @@
 class WMH_SpawnPreferences {
-  private var time_ranges: array<WMH_TimeRangeScaling>;
-  
+  private var time_range: WMH_TimeRangeScaling;
   private var biome_tags_mandatory: WMH_BiomeTags;
   private var biome_tags_forbidden: WMH_BiomeTags;
 
+  // A tag unique to this scaling that can be assigned to various POIs and that
+  // allows the biome_tags requirements to be ignored
+  private var biome_tags_bypass: name;
+
+  public function from(other: WMH_SpawnPreferences): WMH_SpawnPreferences {
+    this.time_range = other.time_range;
+    this.biome_tags_mandatory = other.biome_tags_mandatory;
+    this.biome_tags_forbidden = other.biome_tags_forbidden;
+    this.biome_tags_bypass = other.biome_tags_bypass;
+
+    return this;
+  }
+
   public function withTimeRange(range: WMH_TimeRangeScaling): WMH_SpawnPreferences {
-    this.time_ranges.PushBack(range);
+    this.time_range = range;
 
     return this;
   }
@@ -22,20 +34,26 @@ class WMH_SpawnPreferences {
     return this;
   }
 
-  public function isTimeValid(hours: float): bool {
-    var range: WMH_TimeRangeScaling;
+  public function withBiomeTagsBypass(tag: name): WMH_SpawnPreferences {
+    this.biome_tags_bypass = tag;
+    
+    return this;
+  }
 
-    for range: WMH_TimeRangeScaling in this.time_ranges {
-      if (
-        range.start_hours <= hours &&
-        hours <= range.end_hours &&
-        range.multiplier > 0
-      ) {
-        return true;
-      }
+  public function getTimeRangeScaling(hours: float): float {
+    if (hours > 20 && hours < 4) {
+      return this.time_range.multiplier_night;
     }
 
-    return false;
+    if (hours > 4 && hours < 12) {
+      return this.time_range.multiplier_morning;
+    }
+
+    return this.time_range.multiplier_afternoon;
+  }
+
+  public function isTimeValid(hours: float): bool {
+    return this.getTimeRangeScaling(hours) > 0;
   }
 
   public function isBiomeValid(tags: WMH_BiomeTags): bool {
@@ -67,10 +85,20 @@ class WMH_SpawnPreferences {
 
     return true;
   }
+
+  public function isBiomeBypassed(biome_tags_bypass: array<name>): bool {
+    return IsNameValid(this.biome_tags_bypass)
+        && biome_tags_bypass.Contains(this.biome_tags_bypass);
+  }
 }
 
 struct WMH_TimeRangeScaling {
-  var start_hours: float;
-  var end_hours: float;
-  var multiplier: float;
+  // from 20:00 to 04:00
+  var multiplier_night: float;
+
+  // from 04:00 to 12:00
+  var multiplier_morning: float;
+
+  // from 12:00 to 20:00
+  var multiplier_afternoon: float;
 }
