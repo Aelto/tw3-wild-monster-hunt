@@ -1,0 +1,24 @@
+statemachine class WMH_Master {
+  public var spawn_points: WMH_SpawnPointManager;
+  public var herbalist: WMH_HerbalistManager;
+  public var biomes: WMH_BiomeManager;
+  public var bestiary: WMH_Bestiary;
+  public var logger: WMH_Logger;
+
+  public function onCreate() {}
+
+  public function onLoad() {
+    this.logger = new WMH_Logger in this;
+    WMHINFO("WMH_Master::OnLoad()");
+
+    this.herbalist = (new WMH_HerbalistManager in this).init();
+    this.biomes = (new WMH_BiomeManager in this).init();
+    this.spawn_points = (new WMH_SpawnPointManager in this).init();
+    this.bestiary = (new WMH_Bestiary in this).init();
+    this.GotoState('Loading');
+  }
+
+  public function onSpawn() {
+    var seed: int = 0;
+  }
+}

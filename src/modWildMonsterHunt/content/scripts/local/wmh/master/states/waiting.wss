@@ -1,0 +1,12 @@
+state Waiting in WMH_Master {
+	event OnEnterState(previous_state_name: name) {
+		super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+	}
+
+  entry function Waiting_main() {
+    WMHINFO("WMH_MasterStateWaiting::Waiting_main()");
+    Sleep(30.0);
+    parent.GotoState('Running');
+  }
+}

@@ -5,6 +5,9 @@ state Running in WMH_Master {
 	}
 
 	entry function Running_main() {
-
+		WMHINFO("WMH_MasterStateRunning:Running_main()");
+		parent.spawn_points.maybeRefresh();
+		parent.onSpawn();
+		parent.GotoState('Waiting');
 	}
 }

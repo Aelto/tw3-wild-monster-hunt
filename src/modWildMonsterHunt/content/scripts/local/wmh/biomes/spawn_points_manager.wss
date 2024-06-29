@@ -1,0 +1,65 @@
+// Keeps track of the spawn points around the player, and which of them are
+// available for respawn.
+class WMH_SpawnPointManager {
+  private var nearby_spawn_points: array<WMH_BiomeSpawnPoint>;
+  private var refresh_ticker: WMH_Ticker;
+
+  public function init(): WMH_SpawnPointManager {
+    this.refresh_ticker = (new WMH_Ticker in this).init(60); // seconds
+
+    return this;
+  }
+
+  public function maybeRefresh() {
+    if (!this.refresh_ticker.validate()) {
+      return;
+    }
+
+    var radius: float = 200;
+    var max: int = 50;
+    this.nearby_spawn_points = this.findNearbySpawnPoints(radius, max);
+  }
+
+  public function getRandomValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
+    var size: int = this.nearby_spawn_points.Size();
+
+    if (size <= 0) {
+      return NULL;
+    }
+
+    var index: int = RandNoiseF(seed, size) as int;
+
+    return this.nearby_spawn_points[index];
+  }
+
+  private function findNearbySpawnPoints(
+    radius: float,
+    count: int
+  ): array<WMH_BiomeSpawnPoint> {
+    var entities: array<CGameplayEntity>;
+
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer,
+      radius,
+      count,
+      '',
+      FLAG_ExcludePlayer,
+      , // target
+      'WMH_BiomeSpawnPoint'
+    );
+
+    var output: array<WMH_BiomeSpawnPoint>;
+    var i: int;
+
+    for (i = 0; i < entities.Size(); i += 1) {
+      var current: WMH_BiomeSpawnPoint = entities[i] as WMH_BiomeSpawnPoint;
+
+      if (current) {
+        output.PushBack(current);
+      }
+    }
+
+    return output;
+  }
+}

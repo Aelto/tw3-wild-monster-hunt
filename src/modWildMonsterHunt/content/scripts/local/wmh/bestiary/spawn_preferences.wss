@@ -1,0 +1,76 @@
+class WMH_SpawnPreferences {
+  private var time_ranges: array<WMH_TimeRangeScaling>;
+  
+  private var biome_tags_mandatory: WMH_BiomeTags;
+  private var biome_tags_forbidden: WMH_BiomeTags;
+
+  public function withTimeRange(range: WMH_TimeRangeScaling): WMH_SpawnPreferences {
+    this.time_ranges.PushBack(range);
+
+    return this;
+  }
+
+  public function withMandatoryBiomeTags(tags: WMH_BiomeTags): WMH_SpawnPreferences {
+    this.biome_tags_mandatory = tags;
+    
+    return this;
+  }
+
+  public function withForbiddenBiomeTags(tags: WMH_BiomeTags): WMH_SpawnPreferences {
+    this.biome_tags_forbidden = tags;
+    
+    return this;
+  }
+
+  public function isTimeValid(hours: float): bool {
+    var range: WMH_TimeRangeScaling;
+
+    for range: WMH_TimeRangeScaling in this.time_ranges {
+      if (
+        range.start_hours <= hours &&
+        hours <= range.end_hours &&
+        range.multiplier > 0
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public function isBiomeValid(tags: WMH_BiomeTags): bool {
+    if (
+      this.biome_tags_forbidden.roomWide && tags.roomWide ||
+      this.biome_tags_forbidden.altitudeHigh && tags.altitudeHigh ||
+      this.biome_tags_forbidden.humidityHigh && tags.humidityHigh ||
+      this.biome_tags_forbidden.vegetationHigh && tags.vegetationHigh ||
+
+      this.biome_tags_forbidden.lightLow && tags.lightLow ||
+      this.biome_tags_forbidden.structuresHigh && tags.structuresHigh ||
+      this.biome_tags_forbidden.underground && tags.underground
+    ) {
+      return false;
+    }
+
+    if (
+      this.biome_tags_mandatory.roomWide && !tags.roomWide ||
+      this.biome_tags_mandatory.altitudeHigh && !tags.altitudeHigh ||
+      this.biome_tags_mandatory.humidityHigh && !tags.humidityHigh ||
+      this.biome_tags_mandatory.vegetationHigh && !tags.vegetationHigh ||
+
+      this.biome_tags_mandatory.lightLow && !tags.lightLow ||
+      this.biome_tags_mandatory.structuresHigh && !tags.structuresHigh ||
+      this.biome_tags_mandatory.underground && !tags.underground
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
+struct WMH_TimeRangeScaling {
+  var start_hours: float;
+  var end_hours: float;
+  var multiplier: float;
+}

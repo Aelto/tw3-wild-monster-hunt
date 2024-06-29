@@ -17,9 +17,13 @@ class WMH_Ticker {
     }
   }
 
+  public function hasExpired(): bool {
+    return SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds);
+  }
+
   /// WARNING: mutates the counter if it is expired
   public function validate(): bool {
-    if (SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds)) {
+    if (this.hasExpired()) {
       this.reset();
       return true;
     }
@@ -33,7 +37,7 @@ class WMH_TickerGameTime {
   private var trigger_timestamp: GameTime;
   private var cooldown_seconds: int;
 
-  public function init(cooldown_seconds: int): WMH_Ticker {
+  public function init(cooldown_seconds: int): WMH_TickerGameTime {
     this.reset(cooldown_seconds);
 
     return this;

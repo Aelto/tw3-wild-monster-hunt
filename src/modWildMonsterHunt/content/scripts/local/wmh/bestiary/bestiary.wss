@@ -1,0 +1,257 @@
+statemachine class WMH_Bestiary {
+  public var active_view: WMH_BestiaryActiveView;
+  public var entries: array<WMH_BestiaryEntry>;
+
+  protected var spawn_requests: array<WMH_SpawnRequest>;
+
+  public function init(): WMH_Bestiary {
+    this.active_view = new WMH_BestiaryActiveView in this;
+    this.active_view.init();
+
+    return this;
+  }
+
+  public function spawnRandomEntry(
+    biome_manager: WMH_BiomeManager,
+    spawn_points_manager: WMH_SpawnPointManager,
+    seed: int
+  ) {
+    var spawn_point: WMH_BiomeSpawnPoint = spawn_points_manager.getRandomValidSpawnPoint(seed);
+
+    if (spawn_point) {
+      this.active_view.getRandomEntry(
+        biome_manager,
+        spawn_point.biome_tags,
+        seed
+      );
+    }
+  }
+
+  public function requestSpawn(request: WMH_SpawnRequest) {
+    this.spawn_requests.PushBack(request);
+
+    if (this.GetCurrentStateName() == 'Waiting') {
+      this.GotoState('Spawning');
+    }
+  }
+}
+
+state Waiting in WMH_Bestiary {
+  event OnEnterState(previous_state_name: name) {
+		super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+	}
+
+  entry function Waiting_main() {
+    WMHINFO("WMH_BestiaryStateWaiting::Waiting_main()");
+  }
+}
+
+state Spawning in WMH_Bestiary {
+  event OnEnterState(previous_state_name: name) {
+		super.OnEnterState(previous_state_name);
+    this.Spawning_main();
+	}
+
+  entry function Spawning_main() {
+    WMHINFO("WMH_BestiaryStateSpawning::Spawning_main()");
+
+
+    while (parent.spawn_requests.Size() > 0) {
+      var request: WMH_SpawnRequest = parent.spawn_requests.PopBack();
+
+      if (request) {
+        this.performSpawnRequest(request);
+      }
+    }
+  }
+
+  latent function performSpawnRequest(request: WMH_SpawnRequest) {
+    var bentry: WMH_BestiaryEntry;
+    var entities: array<CEntity>;
+
+    for bentry: WMH_BestiaryEntry in request.entries {
+      this.spawnTemplates(
+        bentry,
+        request.position,
+        request.seed,
+        /*out*/ entities
+      );
+    }
+
+    request.onRequestFinished(entities);
+  }
+
+  latent function spawnTemplates(
+    bentry: WMH_BestiaryEntry,
+    position: Vector,
+    seed: int,
+    out entities: array<CEntity>
+  ) {
+    var templates: array<string> = bentry.buildSpawnList(seed);
+
+    var group_positions: array<Vector> = WMH_getGroupPositions(
+      position,
+      templates.Size(),
+      /*density*/ 0.01
+    );
+
+    var tags_array: array<name>;
+    tags_array.PushBack('WildMonsterHuntEntity');
+
+    var i: int;
+    for (i = 0; i < templates.Size(); i += 1) {
+      var template_path: string = templates[i];
+
+      // todo: it will load the same templates multiple times
+      var entity_template: CEntityTemplate = LoadResourceAsync(
+        template_path, true
+      ) as CEntityTemplate;
+
+      WMH_FixZAxis(/*out*/ group_positions[i]);
+
+      var current_rotation: EulerAngles = VecToRotation(VecRingRand(1, 2));
+      var persistance: EPersistanceMode = PM_DontPersist;
+
+      var created_entity: CEntity = theGame.CreateEntity(
+        entity_template,
+        group_positions[i],
+        current_rotation,,,,
+        persistance,
+        tags_array
+      );
+
+      bentry.onEntitySpawned(created_entity);
+      entities.PushBack(created_entity);
+    }
+  }
+}
+
+
+function WMH_getGroupPositions(initial_position: Vector, count: int, density: float): array<Vector> {
+  var s, r, x, y: float;
+  var pos_fin: Vector;
+  var output_positions: array<Vector>;
+  
+  var i: int;
+  var sign: int;
+
+  //const values used in the loop
+  pos_fin.Z = initial_position.Z;
+  s = count / density; // maintain a constant density of `density` unit per m2
+  r = SqrtF(s/Pi());
+
+  for (i = 0; i < count; i += 1) {
+    x = RandF() * r;        // add random value within range to X
+    y = RandF() * (r - x);  // add random value to Y so that the point is within the disk
+
+    if(RandRange(2)) {       // randomly select the sign for misplacement
+      sign = 1;
+    }
+    else {
+      sign = -1;
+    }
+      
+    pos_fin.X = initial_position.X + sign * x;  //final X pos
+    
+    if(RandRange(2)) {        // randomly select the sign for misplacement
+      sign = 1;
+    }
+    else {
+      sign = -1;
+    }
+      
+    pos_fin.Y = initial_position.Y + sign * y;  //final Y pos
+
+    // return false means it could not find ground position
+    // in this case, take the default position
+    // if return true, then pos_fin is updated with the correct position
+    if (!WMH_getGroundPosition(pos_fin)) {
+      pos_fin = initial_position;
+    }
+
+    output_positions.PushBack(pos_fin);
+  }
+
+  return output_positions;
+}
+
+function WMH_getGroundPosition(out input_position: Vector, optional personal_space: float, optional radius: float): bool {
+  var found_viable_position: bool;
+  var collision_normal: Vector;
+  var max_height_check: float;
+  var output_position: Vector;
+  var point_z: float;
+  var attempts: int;
+
+  attempts = 10;
+  output_position = input_position;
+  personal_space = MaxF(personal_space, 1.0);
+  max_height_check = 30.0;
+
+  if (radius == 0) {
+    radius = 10.0;
+  }
+
+  do {
+    attempts -= 1;
+
+    // first search for ground based on navigation data.
+    theGame
+    .GetWorld()
+    .NavigationComputeZ(
+      output_position,
+      output_position.Z - max_height_check,
+      output_position.Z + max_height_check,
+      point_z
+    );
+
+    output_position.Z = point_z;
+
+    if (!theGame.GetWorld().NavigationFindSafeSpot(output_position, personal_space, radius, output_position)) {
+      continue;
+    }
+
+    // then do a static trace to find the position on ground
+    // ... okay i'm not sure anymore, is the static trace needed?
+    // theGame
+    // .GetWorld()
+    // .StaticTrace(
+    //   output_position + Vector(0,0,1.5),// + 5,// Vector(0,0,5),
+    //   output_position - Vector(0,0,1.5),// - 5,//Vector(0,0,5),
+    //   output_position,
+    //   collision_normal
+    // );
+
+    // finally, return if the position is above water level
+    if (output_position.Z < theGame.GetWorld().GetWaterLevel(output_position, true)) {
+      continue;
+    }
+
+    found_viable_position = true;
+    break;
+  } while (attempts > 0);
+
+
+  if (found_viable_position) {
+    input_position = output_position;
+
+    return true;
+  }
+
+  return false;
+}
+
+function WMH_FixZAxis(out pos : Vector) {
+  var world : CWorld;
+  var z : float;
+
+  world = theGame.GetWorld();
+
+  if (world.NavigationComputeZ(pos, pos.Z - 128, pos.Z + 128, z)) {
+    pos.Z = z;
+  }
+  else if (world.PhysicsCorrectZ(pos, z)) {
+    pos.Z = z;
+  }
+}

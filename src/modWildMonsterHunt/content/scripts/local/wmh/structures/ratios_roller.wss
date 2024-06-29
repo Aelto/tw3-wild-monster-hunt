@@ -1,0 +1,35 @@
+/// A specialized class to roll a random item from a list of ratios, it works
+/// with indices to be generic.
+///
+/// # Example
+/// ```
+/// var rolled_index: int = (new WMH_RatiosRoller in this)
+///   .addRatio(10)
+///   .addRatio(20)
+///   .addRatio(10)
+///   .roll(seed);
+/// ```
+class WMH_RatiosRoller {
+  private var ratios: array<float>;
+  private var total: float;
+
+  public function addRatio(ratio: float): WMH_RatiosRoller {
+    this.ratios.PushBack(ratio);
+    this.total += ratio;
+
+    return this;
+  }
+
+  public function roll(seed: int): int {
+    var rolled_value: float = RandNoiseF(seed, this.total);
+    var i: int;
+
+    for (i = 0; i < this.ratios.Size(); i += 1) {
+      if (rolled_value - this.ratios[i] <= 0) {
+        return i;
+      }
+    }
+
+    return this.ratios.Size() - 1;
+  }
+}

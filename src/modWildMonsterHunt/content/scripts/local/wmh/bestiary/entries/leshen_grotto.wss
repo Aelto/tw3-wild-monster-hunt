@@ -1,0 +1,47 @@
+// The subspecies of a leshen that can spawn in caves/grottos
+class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
+  public function init() {
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "dlc\bob\data\characters\npc_entities\monsters\spriggan.w2ent",,,
+        "dlc\bob\journal\bestiary\mq7002spriggan.journal"
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 1;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 1;
+    this.difficulty_scaling.minimum_count_hard = 1;
+    this.difficulty_scaling.maximum_count_hard = 1;
+
+    this.preferences = (new WMH_SpawnPreferences in this)
+      .withTimeRange(WMH_TimeRangeScaling(0.0, 8.0, 0.4))
+      .withTimeRange(WMH_TimeRangeScaling(8.0, 18.0, 1.1))
+      .withTimeRange(WMH_TimeRangeScaling(18.0, 24.0, 0.4))
+      .withMandatoryBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ false,
+          /*vegetationHigh*/ false,
+          
+          /*lightLow*/ false,
+          /*structuresHigh*/ false,
+          /*underground*/ true
+        )
+      )
+      .withForbiddenBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ false,
+          /*vegetationHigh*/ false,
+          
+          /*lightLow*/ false,
+          /*structuresHigh*/ false,
+          /*underground*/ false
+        )
+      );
+  }
+}

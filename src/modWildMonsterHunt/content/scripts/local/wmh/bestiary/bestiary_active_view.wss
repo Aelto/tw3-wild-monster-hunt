@@ -1,0 +1,57 @@
+// Acts as a dynamic view (like in databases) of the list of active bestiary
+// entries. A bestiary entry can be considered active or inactive depending on
+// the time of day, or the surrounding biomes for example.
+//
+// As the player moves around the maps the view is adjusted to match the new
+// data.
+class WMH_BestiaryActiveView {
+  private var entries: array<WMH_BestiaryEntry>;
+
+  public function init() {}
+
+  public function updateView(
+    entries: array<WMH_BestiaryEntry>,
+    biome_manager: WMH_BiomeManager
+  ) {
+    var biome: WMH_BiomeTags = biome_manager.getCurrentBiome();
+    var day_hour: int = biome_manager.getDayHour();
+    var current: WMH_BestiaryEntry;
+
+    this.entries.Clear();
+
+    for current: WMH_BestiaryEntry in entries {
+      if (!current.canSpawn(biome, day_hour)) {
+        continue;
+      }
+
+      this.entries.PushBack(current);
+    }
+  }
+
+  public function getRandomEntry(
+    biome_manager: WMH_BiomeManager,
+    biome_tags: WMH_BiomeTags,
+    seed: int
+  ): WMH_BestiaryEntry {
+    var selected_entries: array<WMH_BestiaryEntry>;
+    var day_hour: int = biome_manager.getDayHour();
+    var current: WMH_BestiaryEntry;
+
+    // 1.
+    // start by building a list of the entries that could spawn from the
+    // provided biome tags.
+    for current: WMH_BestiaryEntry in this.entries {
+      if (current.canSpawn(biome_tags, day_hour)) {
+        selected_entries.PushBack(current);
+      }
+    }
+
+    var index: int = RandNoiseF(seed, selected_entries.Size()) as int;
+
+    if (index < 0) {
+      return NULL;
+    }
+
+    return selected_entries[index];
+  }
+}

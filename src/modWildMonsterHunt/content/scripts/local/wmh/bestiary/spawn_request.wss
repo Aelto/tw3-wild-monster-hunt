@@ -1,0 +1,30 @@
+class WMH_SpawnRequest {
+  public var entries: array<WMH_BestiaryEntry>;
+  public var position: Vector;
+  public var seed: int;
+
+  public function init(): WMH_SpawnRequest {
+    return this;
+  }
+
+
+  public function withPosition(position: Vector): WMH_SpawnRequest {
+    this.position = position;
+
+    return this;
+  }
+
+  public function withBestiaryEntry(bentry: WMH_BestiaryEntry): WMH_SpawnRequest {
+    this.entries.PushBack(bentry);
+
+    return this;
+  }
+
+  public function withSeed(seed: int): WMH_SpawnRequest {
+    this.seed = seed;
+
+    return this;
+  }
+
+  public function onRequestFinished(entities: array<CEntity>) {}
+}
