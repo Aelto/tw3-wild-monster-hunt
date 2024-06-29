@@ -18,4 +18,8 @@ class WMH_BiomeManager {
   public function getDayHour(): int {
     return 12;
   }
+
+  public function getWeatherType(): WMH_WeatherType {
+    return WMH_WeatherType_None;
+  }
 }

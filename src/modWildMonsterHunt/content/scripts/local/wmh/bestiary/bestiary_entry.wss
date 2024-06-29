@@ -7,12 +7,18 @@ class WMH_BestiaryEntry {
 
   public function init() {}
 
-  public function canSpawn(biome: WMH_BiomeTags, day_hour: float, optional biome_tags_bypass: array<name>): bool {
+  public function canSpawn(
+    biome: WMH_BiomeTags,
+    day_hour: float,
+    weather: WMH_WeatherType,
+    optional biome_tags_bypass: array<name>
+  ): bool {
     var preferences: WMH_SpawnPreferences;
 
     for preferences: WMH_SpawnPreferences in this.preferences {
       if (
-        preferences.isTimeValid(day_hour)
+        preferences.isWeatherValid(weather)
+        && preferences.isTimeValid(day_hour)
         && (
           preferences.isBiomeBypassed(biome_tags_bypass)
           || preferences.isBiomeValid(biome)

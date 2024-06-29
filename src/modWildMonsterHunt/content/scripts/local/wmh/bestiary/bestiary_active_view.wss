@@ -13,14 +13,17 @@ class WMH_BestiaryActiveView {
     entries: array<WMH_BestiaryEntry>,
     biome_manager: WMH_BiomeManager
   ) {
+    var weather: WMH_WeatherType = biome_manager.getWeatherType();
     var biome: WMH_BiomeTags = biome_manager.getCurrentBiome();
     var day_hour: int = biome_manager.getDayHour();
     var current: WMH_BestiaryEntry;
 
     this.entries.Clear();
 
+    // build a list of the entries that can spawn with the current global
+    // biome data.
     for current: WMH_BestiaryEntry in entries {
-      if (!current.canSpawn(biome, day_hour)) {
+      if (!current.canSpawn(biome, day_hour, weather)) {
         continue;
       }
 
@@ -35,14 +38,17 @@ class WMH_BestiaryActiveView {
     seed: int
   ): WMH_BestiaryEntry {
     var selected_entries: array<WMH_BestiaryEntry>;
+
+    var weather: WMH_WeatherType = biome_manager.getWeatherType();
     var day_hour: int = biome_manager.getDayHour();
+
     var current: WMH_BestiaryEntry;
 
     // 1.
     // start by building a list of the entries that could spawn from the
     // provided biome tags.
     for current: WMH_BestiaryEntry in this.entries {
-      if (current.canSpawn(biome_tags, day_hour, biome_tags_bypass)) {
+      if (current.canSpawn(biome_tags, day_hour, weather, biome_tags_bypass)) {
         selected_entries.PushBack(current);
       }
     }

@@ -7,6 +7,9 @@ class WMH_SpawnPreferences {
   // allows the biome_tags requirements to be ignored
   private var biome_tags_bypass: name;
 
+  private var weather_type: WMH_WeatherType;
+  default weather_type = WMH_WeatherType_None;
+
   public function from(other: WMH_SpawnPreferences): WMH_SpawnPreferences {
     this.time_range = other.time_range;
     this.biome_tags_mandatory = other.biome_tags_mandatory;
@@ -37,6 +40,12 @@ class WMH_SpawnPreferences {
   public function withBiomeTagsBypass(tag: name): WMH_SpawnPreferences {
     this.biome_tags_bypass = tag;
     
+    return this;
+  }
+
+  public function withWeatherType(weather: WMH_WeatherType): WMH_SpawnPreferences {
+    this.weather_type = weather;
+
     return this;
   }
 
@@ -90,6 +99,11 @@ class WMH_SpawnPreferences {
     return IsNameValid(this.biome_tags_bypass)
         && biome_tags_bypass.Contains(this.biome_tags_bypass);
   }
+
+  public function isWeatherValid(weather: WMH_WeatherType): bool {
+    return this.weather_type == WMH_WeatherType_None
+        || this.weather_type == weather;
+  }
 }
 
 struct WMH_TimeRangeScaling {
@@ -101,4 +115,11 @@ struct WMH_TimeRangeScaling {
 
   // from 12:00 to 20:00
   var multiplier_afternoon: float;
+}
+
+enum WMH_WeatherType {
+  WMH_WeatherType_None = 0,
+  WMH_WeatherType_Clear = 1,
+  WMH_WeatherType_Rain = 2,
+  WMH_WeatherType_Snow = 3,
 }
