@@ -1,5 +1,7 @@
 @echo off
 
+:: copies the release into the redkit workspace
+
 call variables.cmd
 call release.bat
 

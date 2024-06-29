@@ -1,0 +1,25 @@
+{
+  "folders": [
+    {
+      "path": "./src/modWildMonsterHunt/content/scripts/local",
+      "name": "wss",
+      "color": "green"
+    },
+    {
+      "name": "redkit-ws",
+      "path": "./redkit/wild_monster_hunt/workspace/scripts"
+    },
+    {
+      "name": "scripts",
+      "path": "scripts"
+    },
+    { 
+      "name": "deps",
+      "path": "deps",
+    },
+    {
+      "path": "."
+    }
+  ],
+  "settings": {}
+}
