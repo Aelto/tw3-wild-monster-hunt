@@ -50,26 +50,32 @@ class WMH_BestiaryEntry {
 
     var output_templates: array<string>;
 
-    while (output_templates.Size() <= spawn_count) {
+    while (true) {
+      var active_templates_size: int = active_templates.Size();
+      if (active_templates_size <= 0) {
+        break;
+      }
+
+      if (output_templates.Size() >= spawn_count) {
+        break;
+      }
+
       var index: int = RandNoiseF(
         seed + spawn_count,
-        active_templates.Size()
+        active_templates_size
       ) as int;
 
       var selected_template: WMH_EnemyTemplate = active_templates[index];
 
-      var i: int = 0;
-      for (i = 0; i < selected_template.count; i += 1) {
-        output_templates.PushBack(selected_template.template);
+      WMHINFO("buildSpawnList() - adding " + selected_template.template);
 
-        active_templates[index].max -= 1;
+      output_templates.PushBack(selected_template.template);
+      active_templates[index].max -= 1;
 
-        // reached the limit of this template per group
-        if (active_templates[index].max <= 0) {
-          // remove it from the available templates
-          active_templates.Erase(index);
-          break;
-        }
+      // reached the limit of this template per group
+      if (active_templates[index].max <= 0) {
+        // remove it from the available templates
+        active_templates.EraseFast(index);
       }
     }
 
@@ -93,9 +99,6 @@ struct WMH_EnemyTemplate {
 
   // the maximum amount of this template per group
   var max      : int;
-
-  // the amount of this template spawned on a successful roll
-  var count    : int;
 
   var bestiary_entry: string;
 }

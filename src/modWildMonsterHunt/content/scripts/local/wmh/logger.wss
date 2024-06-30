@@ -1,5 +1,12 @@
 class WMH_Logger {
+  private var debug_oneliner: WMH_OnelinerScreenDebugLog;
+  private var messages_buffer: array<string>;
+
+
   public function init(): WMH_Logger {
+    this.debug_oneliner = (new WMH_OnelinerScreenDebugLog in this).init();
+    this.debug_oneliner.register();
+
     return this;
   }
 
@@ -7,14 +14,36 @@ class WMH_Logger {
     switch (level) {
       case WMHLL_Info:
         LogChannel('WMHINFO', message);
+        this.bufferMessage("[WMHINFO] " + message);
         break;
       case WMHLL_Warning:
         LogChannel('WMHWARN', message);
+        this.bufferMessage("[WMHWARN] " + message);
         break;
       case WMHLL_Error:
         LogChannel('WMHERR', message);
+        this.bufferMessage("[WMHERR] " + message);
         break;
     }
+  }
+
+  private function bufferMessage(message: string) {
+    this.messages_buffer.Insert(0, message);
+
+    var size: int = this.messages_buffer.Size();
+    if (size > 20) {
+      this.messages_buffer.PopBack();
+    }
+
+    var oneliner_text: string;
+    var i: int;
+
+    for (i = size; i >= 0; i -= 1) {
+      oneliner_text += this.messages_buffer[i] + "<br/>";
+    }
+
+    this.debug_oneliner.text = oneliner_text;
+    this.debug_oneliner.update();
   }
 }
 

@@ -4,7 +4,7 @@ class WMH_Ticker {
   private var cooldown_seconds: float;
 
   public function init(cooldown_seconds: float): WMH_Ticker {
-    this.reset(cooldown_seconds);
+    this.cooldown_seconds = cooldown_seconds;
 
     return this;
   }

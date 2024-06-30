@@ -6,6 +6,6 @@ state Loading in WMH_Master {
 
   entry function Loading_main() {
     Sleep(5.0);
-    parent.GotoState('Running');
+    parent.GotoState('Waiting');
   }
 }

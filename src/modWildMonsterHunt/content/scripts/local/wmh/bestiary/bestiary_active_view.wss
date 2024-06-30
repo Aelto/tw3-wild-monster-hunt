@@ -6,10 +6,24 @@
 // data.
 class WMH_BestiaryActiveView {
   private var entries: array<WMH_BestiaryEntry>;
+  private var refresh_ticker: WMH_Ticker;
 
-  public function init() {}
+  public function init() {
+    this.refresh_ticker = (new WMH_Ticker in this).init(60); // seconds
+  }
 
-  public function updateView(
+  public function maybeRefresh(
+    entries: array<WMH_BestiaryEntry>,
+    biome_manager: WMH_BiomeManager
+  ) {
+    if (!this.refresh_ticker.validate()) {
+      return;
+    }
+
+    this.updateView(entries, biome_manager);
+  }
+
+  private function updateView(
     entries: array<WMH_BestiaryEntry>,
     biome_manager: WMH_BiomeManager
   ) {

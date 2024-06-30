@@ -8,7 +8,7 @@ statemachine class WMH_Master {
   public function onCreate() {}
 
   public function onLoad() {
-    this.logger = new WMH_Logger in this;
+    this.logger = (new WMH_Logger in this).init();
     WMHINFO("WMH_Master::OnLoad()");
 
     this.herbalist = (new WMH_HerbalistManager in this).init();
@@ -20,5 +20,11 @@ statemachine class WMH_Master {
 
   public function onSpawn() {
     var seed: int = 0;
+
+    this.bestiary.spawnRandomEntry(
+      this.biomes,
+      this.spawn_points,
+      seed
+    );
   }
 }

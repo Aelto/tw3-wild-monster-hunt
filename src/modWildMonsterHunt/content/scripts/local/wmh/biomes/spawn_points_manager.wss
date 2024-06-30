@@ -15,7 +15,9 @@ class WMH_SpawnPointManager {
       return;
     }
 
-    var radius: float = 200;
+    WMHINFO("WMH_SpawnPointManager, refreshing nearby spawn points");
+
+    var radius: float = 50;
     var max: int = 50;
     this.nearby_spawn_points = this.findNearbySpawnPoints(radius, max);
   }

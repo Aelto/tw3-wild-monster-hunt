@@ -1,29 +1,31 @@
 class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
   public function init() {
+    super.init();
+
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl1.w2ent",,,
+        "characters\npc_entities\monsters\drowner_lvl1.w2ent",,
         "gameplay\journal\bestiary\drowner.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl2.w2ent",,,
+        "characters\npc_entities\monsters\drowner_lvl2.w2ent",,
         "gameplay\journal\bestiary\drowner.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl3.w2ent",,,
+        "characters\npc_entities\monsters\drowner_lvl3.w2ent",,
         "gameplay\journal\bestiary\drowner.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl4__dead.w2ent", 2,,
+        "characters\npc_entities\monsters\drowner_lvl4__dead.w2ent", 2,
         "gameplay\journal\bestiary\drowner.journal"
       )
     );

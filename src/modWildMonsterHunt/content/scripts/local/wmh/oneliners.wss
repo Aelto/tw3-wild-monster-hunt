@@ -2,9 +2,19 @@ class WMH_OnelinerEntity extends SU_OnelinerEntity {}
 
 /// A oneliner that sits to the side of an entity
 class WMH_OnelinerEntitySide extends WMH_OnelinerEntity {
-  public function init(entity: CEntity): WMH_OnelinerEntitySide {
+  public function WMH_OnelinerEntitySide(entity: CEntity): WMH_OnelinerEntitySide {
     this.offset = Vector(1.0);
     this.render_distance = 5;
+
+    return this;
+  }
+}
+
+class WMH_OnelinerScreen extends SU_OnelinerScreen {}
+
+class WMH_OnelinerScreenDebugLog extends WMH_OnelinerScreen {
+  public function init(): WMH_OnelinerScreenDebugLog {
+    this.position = Vector(0.0, 0.5);
 
     return this;
   }

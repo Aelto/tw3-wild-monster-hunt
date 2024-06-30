@@ -6,7 +6,7 @@ state Waiting in WMH_Master {
 
   entry function Waiting_main() {
     WMHINFO("WMH_MasterStateWaiting::Waiting_main()");
-    Sleep(30.0);
+    Sleep(15.0);
     parent.GotoState('Running');
   }
 }

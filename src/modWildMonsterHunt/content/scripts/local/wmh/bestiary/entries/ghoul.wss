@@ -1,22 +1,24 @@
 class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
   public function init() {
+    super.init();
+
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl1.w2ent",,,
+        "characters\npc_entities\monsters\ghoul_lvl1.w2ent",,
         "gameplay\journal\bestiary\bestiaryghoul.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl2.w2ent",,,
+        "characters\npc_entities\monsters\ghoul_lvl2.w2ent",,
         "gameplay\journal\bestiary\bestiaryghoul.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl3.w2ent",,,
+        "characters\npc_entities\monsters\ghoul_lvl3.w2ent",,
         "gameplay\journal\bestiary\bestiaryghoul.journal"
       )
     );

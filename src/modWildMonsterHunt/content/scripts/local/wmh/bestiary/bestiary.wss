@@ -7,6 +7,8 @@ statemachine class WMH_Bestiary {
   public function init(): WMH_Bestiary {
     this.active_view = new WMH_BestiaryActiveView in this;
     this.active_view.init();
+    this.initEntries();
+    this.GotoState('Waiting');
 
     return this;
   }
@@ -19,12 +21,27 @@ statemachine class WMH_Bestiary {
     var spawn_point: WMH_BiomeSpawnPoint = spawn_points_manager.getRandomValidSpawnPoint(seed);
 
     if (spawn_point) {
-      this.active_view.getRandomEntry(
+      var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
         biome_manager,
         spawn_point.biome_tags,
         spawn_point.biome_tags_bypass,
         seed
       );
+
+      if (bentry) {
+        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+          .init()
+          .withPosition(spawn_point.GetWorldPosition())
+          .withBestiaryEntry(bentry)
+          .withSeed(seed);
+
+        this.requestSpawn(request);
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+      }
+    } else {
+      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid spawn point");
     }
   }
 
@@ -34,6 +51,27 @@ statemachine class WMH_Bestiary {
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Spawning');
     }
+  }
+
+  public function maybeRefresh(biome_manager: WMH_BiomeManager) {
+    this.active_view.maybeRefresh(this.entries, biome_manager);
+  }
+
+  private function initEntries() {
+    var bentry_Ghoul: WMH_BestiaryEntryGhoul = 
+      (new WMH_BestiaryEntryGhoul in this);
+    bentry_Ghoul.init();
+    this.entries.PushBack(bentry_Ghoul);
+
+    var bentry_Drowner: WMH_BestiaryEntryDrowner =
+      (new WMH_BestiaryEntryDrowner in this);
+    bentry_Drowner.init();
+    this.entries.PushBack(bentry_Drowner);
+
+    var bentry_Grotto: WMH_BestiaryEntryLeshenGrotto =
+      (new WMH_BestiaryEntryLeshenGrotto in this);
+    bentry_Grotto.init();
+    this.entries.PushBack(bentry_Grotto);
   }
 }
 
@@ -65,6 +103,8 @@ state Spawning in WMH_Bestiary {
         this.performSpawnRequest(request);
       }
     }
+
+    parent.GotoState('Waiting');
   }
 
   latent function performSpawnRequest(request: WMH_SpawnRequest) {
