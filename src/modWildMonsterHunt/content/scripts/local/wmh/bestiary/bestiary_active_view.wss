@@ -28,18 +28,17 @@ class WMH_BestiaryActiveView {
     biome_manager: WMH_BiomeManager
   ) {
     var weather: WMH_WeatherType = biome_manager.getWeatherType();
-    var biome: WMH_BiomeTags = biome_manager.getCurrentBiome();
+    var biome: WMH_BiomeTags = biome_manager.getGlobalBiome();
     var day_hour: int = biome_manager.getDayHour();
     var current: WMH_BestiaryEntry;
 
     this.entries.Clear();
 
-    // build a list of the entries that can spawn with the current global
-    // biome data.
+    // build a list with just the entries that we allow to spawn
     for current: WMH_BestiaryEntry in entries {
-      if (!current.canSpawn(biome, day_hour, weather)) {
-        continue;
-      }
+      // this is where additional filtering can be done, for example based on
+      // the player's progression through the game or if the species are in
+      // the player's bestiary.
 
       this.entries.PushBack(current);
     }
@@ -55,6 +54,7 @@ class WMH_BestiaryActiveView {
 
     var weather: WMH_WeatherType = biome_manager.getWeatherType();
     var day_hour: int = biome_manager.getDayHour();
+    var global_biome: WMH_BiomeTags = biome_manager.getGlobalBiome();
 
     var current: WMH_BestiaryEntry;
 
@@ -62,7 +62,13 @@ class WMH_BestiaryActiveView {
     // start by building a list of the entries that could spawn from the
     // provided biome tags.
     for current: WMH_BestiaryEntry in this.entries {
-      if (current.canSpawn(biome_tags, day_hour, weather, biome_tags_bypass)) {
+      if (current.canSpawn(
+        biome_tags,
+        day_hour,
+        weather,
+        global_biome,
+        biome_tags_bypass
+      )) {
         selected_entries.PushBack(current);
       }
     }

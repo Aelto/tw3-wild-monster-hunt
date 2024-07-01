@@ -1,4 +1,4 @@
-// Keeps track of global list of [WMH_BiomeTags], can be used to alter the spawn
+// Keeps track of global [WMH_BiomeTags], can be used to alter the spawn
 // rates on a global aspect.
 class WMH_BiomeManager {
   private var current_biome: WMH_BiomeTags;
@@ -7,11 +7,11 @@ class WMH_BiomeManager {
     return this;
   }
 
-  public function setCurrentBiomeTags(tags: WMH_BiomeTags) {
+  public function setGlobalBiomeTags(tags: WMH_BiomeTags) {
     this.current_biome = tags;
   }
 
-  public function getCurrentBiome(): WMH_BiomeTags {
+  public function getGlobalBiome(): WMH_BiomeTags {
     return this.current_biome;
   }
 

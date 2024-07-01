@@ -11,6 +11,7 @@ class WMH_BestiaryEntry {
     biome: WMH_BiomeTags,
     day_hour: float,
     weather: WMH_WeatherType,
+    optional global_biome: WMH_BiomeTags,
     optional biome_tags_bypass: array<name>
   ): bool {
     var preferences: WMH_SpawnPreferences;
@@ -21,7 +22,7 @@ class WMH_BestiaryEntry {
         && preferences.isTimeValid(day_hour)
         && (
           preferences.isBiomeBypassed(biome_tags_bypass)
-          || preferences.isBiomeValid(biome)
+          || preferences.isBiomeValid(biome, global_biome)
         )
       ) {
         return true;

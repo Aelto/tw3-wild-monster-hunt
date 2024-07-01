@@ -65,29 +65,64 @@ class WMH_SpawnPreferences {
     return this.getTimeRangeScaling(hours) > 0;
   }
 
-  public function isBiomeValid(tags: WMH_BiomeTags): bool {
-    if (
-      this.biome_tags_forbidden.roomWide && tags.roomWide ||
-      this.biome_tags_forbidden.altitudeHigh && tags.altitudeHigh ||
-      this.biome_tags_forbidden.humidityHigh && tags.humidityHigh ||
-      this.biome_tags_forbidden.vegetationHigh && tags.vegetationHigh ||
+  public function isBiomeValid(
+    tags: WMH_BiomeTags,
 
-      this.biome_tags_forbidden.lightLow && tags.lightLow ||
-      this.biome_tags_forbidden.structuresHigh && tags.structuresHigh ||
-      this.biome_tags_forbidden.underground && tags.underground
+    // global tags that can be merged into the normal tags, if a value is
+    // `true` in the global tags and `false` in the original then the merge
+    // will be `true`.
+    optional global: WMH_BiomeTags
+  ): bool {
+    if (
+      this.biome_tags_forbidden.roomWide
+      && (tags.roomWide || global.roomWide) ||
+
+      this.biome_tags_forbidden.altitudeHigh
+      && (tags.altitudeHigh || global.altitudeHigh) ||
+
+      this.biome_tags_forbidden.humidityHigh
+      && (tags.humidityHigh || global.humidityHigh) ||
+
+      this.biome_tags_forbidden.vegetationHigh
+      && (tags.vegetationHigh || global.vegetationHigh) ||
+
+
+      this.biome_tags_forbidden.lightLow
+      && (tags.lightLow || global.lightLow) ||
+
+      this.biome_tags_forbidden.structuresHigh
+      && (tags.structuresHigh || global.structuresHigh) ||
+
+      this.biome_tags_forbidden.underground
+      && (tags.underground || global.underground)
+
     ) {
       return false;
     }
 
     if (
-      this.biome_tags_mandatory.roomWide && !tags.roomWide ||
-      this.biome_tags_mandatory.altitudeHigh && !tags.altitudeHigh ||
-      this.biome_tags_mandatory.humidityHigh && !tags.humidityHigh ||
-      this.biome_tags_mandatory.vegetationHigh && !tags.vegetationHigh ||
+      this.biome_tags_mandatory.roomWide
+      && !(tags.roomWide || global.roomWide) ||
 
-      this.biome_tags_mandatory.lightLow && !tags.lightLow ||
-      this.biome_tags_mandatory.structuresHigh && !tags.structuresHigh ||
-      this.biome_tags_mandatory.underground && !tags.underground
+      this.biome_tags_mandatory.altitudeHigh
+      && !(tags.altitudeHigh || global.altitudeHigh) ||
+
+      this.biome_tags_mandatory.humidityHigh
+      && !(tags.humidityHigh || global.humidityHigh) ||
+
+      this.biome_tags_mandatory.vegetationHigh
+      && !(tags.vegetationHigh || global.vegetationHigh) ||
+
+
+      this.biome_tags_mandatory.lightLow
+      && !(tags.lightLow || global.lightLow) ||
+
+      this.biome_tags_mandatory.structuresHigh
+      && !(tags.structuresHigh || global.structuresHigh) ||
+
+      this.biome_tags_mandatory.underground
+      && !(tags.underground || global.underground)
+
     ) {
       return false;
     }
