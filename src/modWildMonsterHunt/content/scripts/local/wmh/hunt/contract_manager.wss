@@ -1,0 +1,131 @@
+#define const ContractDurationMinutes = 60 * 5;
+
+struct WMH_Contract {
+  var target: WMH_BestiaryId;
+
+  var created_at_minutes: int;
+}
+
+// Keeps track of the currently active contract targets the player has
+class WMH_ContractManager {
+  private var pending_contracts: array<WMH_Contract>;
+
+  // stores the creatures that were killed during the current hunt, and that
+  // should result in completed contracts the next time the player enters a
+  // settlement.
+  private var killed_creatures: array<WMH_BestiaryId>;
+
+  public function init(): WMH_ContractManager {
+    todo!("load contracts from storage")
+
+    return this;
+  }
+
+  public function onEnteredSettlement(
+    bestiary: WMH_Bestiary,
+    storage: WMH_Storage
+  ) {
+    var new_level: WMH_Level = this.finishCompletedContracts(
+      this.killed_creatures,
+      storage.getLevel(),
+    );
+
+    this.finishExpiredContracts(bestiary, new_level);
+
+    var contracts_to_generate: int = 5 - this.pending_contracts.Size();
+
+    if (contracts_to_generate > 0) {
+      this.generateNewPendingContracts(
+        bestiary,
+        new_level,
+        contracts_to_generate
+      );
+    }
+
+    storage.setLevel(new_level);
+  }
+
+  public function onCreatureKilled(id: WMH_BestiaryId) {
+    this.killed_creatures.PushBack(id);
+  }
+
+  private function onContractCompleted(contract: WMH_Contract) {
+    WMHHUD("Contract completed.");
+
+    todo!("grant rewards")
+  }
+
+  private function finishCompletedContracts(
+    killed_creatures: array<WMH_BestiaryId>,
+    level: WMH_Level
+  ): WMH_Level {
+    var completed_contracts: array<WMH_Contract>;
+
+    var id: WMH_BestiaryId;
+    for id: WMH_BestiaryId in killed_creatures {
+      var contract: WMH_Contract;
+      
+      for contract: WMH_Contract in this.pending_contracts {
+        if (contract.target.value == id.value) {
+          completed_contracts.PushBack(contract);
+        }
+      }
+    }
+
+    for contract: WMH_Contract in completed_contracts {
+      this.pending_contracts.Remove(contract);
+      this.onContractCompleted(contract);
+    }
+
+    return WMH_Level(level.value + completed_contracts.Size());
+  }
+
+  private function finishExpiredContracts(
+    bestiary: WMH_Bestiary,
+    level: WMH_Level
+  ) {
+    var expired_contracts: array<WMH_Contract>;
+
+    var contract: WMH_Contract;
+    for contract: WMH_Contract in this.pending_contracts {
+      if (this.isContractExpired(contract)) {
+        expired_contracts.PushBack(contract);
+      }
+    }
+
+    for contract: WMH_Contract in expired_contracts {
+      this.pending_contracts.Remove(contract);
+    }
+  }
+
+  private function generateNewPendingContracts(
+    bestiary: WMH_Bestiary,
+    level: WMH_Level,
+    count: int
+  ) {
+    var now: int = WMH_getGameTimeMinutes();
+    var elites: array<WMH_BestiaryEntry> = bestiary.getEliteEntries(level);
+    
+    var i: int;
+    for (i = count; i > 0; i -= 1) {
+      var seed: int = now + i;
+
+      var target_index: int = RandNoiseF(seed, elites.Size() as float) as int;
+      var bentry: WMH_BestiaryEntry = elites[target_index];
+
+      var contract: WMH_Contract = WMH_Contract(
+        bentry.id,
+        now
+      );
+
+      this.pending_contracts.PushBack(contract);
+      WMHHUD("New contract: " + bentry.getLocName());
+    }
+  }
+
+  private function isContractExpired(contract: WMH_Contract): bool {
+    var now: int = WMH_getGameTimeMinutes();
+
+    return now - contract.created_at_minutes >= ContractDurationMinutes!;
+  }
+}

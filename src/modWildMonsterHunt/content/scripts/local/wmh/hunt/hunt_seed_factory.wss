@@ -1,0 +1,11 @@
+struct WMH_HuntSeedFactory {
+  /// represents the difficulty level of the hunt
+  var level: WMH_Level;
+
+  /// used to differentiate the multiple hunts that may be generated from
+  /// a same origin and for a same level
+  var index: int;
+
+  /// a time based offset that can be used to alter the seed as time passes
+  var timeoffset: int;
+}

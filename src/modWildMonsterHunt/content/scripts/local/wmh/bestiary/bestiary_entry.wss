@@ -1,11 +1,29 @@
+struct WMH_BestiaryId {
+  var value: int;
+}
+
 class WMH_BestiaryEntry {
+  public var id: WMH_BestiaryId;
+
   protected var preferences: array<WMH_SpawnPreferences>;
   protected var difficulty_scaling: WMH_DifficultyScaling;
   protected var templates: array<WMH_EnemyTemplate>;
 
   protected var biome_tags_bypass: name;
 
-  public function init() {}
+  public var strength: float;
+
+  public function init(id: WMH_BestiaryId) {
+    this.id = id;
+  }
+
+  public function getLocName(): string {
+    return "Unknown";
+  }
+
+  public function isElite(level: WMH_Level): bool {
+    return this.strength > level.value;
+  }
 
   public function canSpawn(
     biome: WMH_BiomeTags,
@@ -91,7 +109,7 @@ class WMH_BestiaryEntry {
 
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
-    // inventory.AddMoney(1);
+    todo!("inventory.AddMoney(1)")
   }
 }
 

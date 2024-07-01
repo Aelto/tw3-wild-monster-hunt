@@ -13,6 +13,19 @@ statemachine class WMH_Bestiary {
     return this;
   }
 
+  public function getEliteEntries(level: WMH_Level): array<WMH_BestiaryEntry> {
+    var output: array<WMH_BestiaryEntry>;
+
+    var bentry: WMH_BestiaryEntry;
+    for bentry: WMH_BestiaryEntry in this.entries {
+      if (bentry.isElite(level)) {
+        output.PushBack(bentry);
+      }
+    }
+
+    return output;
+  }
+
   public function spawnRandomEntry(
     biome_manager: WMH_BiomeManager,
     spawn_points_manager: WMH_SpawnPointManager,
@@ -58,20 +71,25 @@ statemachine class WMH_Bestiary {
   }
 
   private function initEntries() {
+    var index: int = 0;
+
     var bentry_Ghoul: WMH_BestiaryEntryGhoul = 
       (new WMH_BestiaryEntryGhoul in this);
-    bentry_Ghoul.init();
+    bentry_Ghoul.init(WMH_BestiaryId(index));
     this.entries.PushBack(bentry_Ghoul);
+    index += 1;
 
     var bentry_Drowner: WMH_BestiaryEntryDrowner =
       (new WMH_BestiaryEntryDrowner in this);
-    bentry_Drowner.init();
+    bentry_Drowner.init(WMH_BestiaryId(index));
     this.entries.PushBack(bentry_Drowner);
+    index += 1;
 
     var bentry_Grotto: WMH_BestiaryEntryLeshenGrotto =
       (new WMH_BestiaryEntryLeshenGrotto in this);
-    bentry_Grotto.init();
+    bentry_Grotto.init(WMH_BestiaryId(index));
     this.entries.PushBack(bentry_Grotto);
+    index += 1;
   }
 }
 

@@ -50,11 +50,14 @@ class WMH_Logger {
 enum WMH_LogLevel {
   WMHLL_Info = 0,
   WMHLL_Warning = 1,
-  WMHLL_Error = 2
+  WMHLL_Error = 2,
+  WMHLL_Hud = 3
 }
 
 function WMHINFO(message: string) {
-  thePlayer.wmh.logger.log(message, WMHLL_Info);
+  #ifdef DEBUG {
+    thePlayer.wmh.logger.log(message, WMHLL_Info);
+  };
 }
 
 function WMHWARN(message: string) {
@@ -63,4 +66,8 @@ function WMHWARN(message: string) {
 
 function WMHERROR(message: string) {
   thePlayer.wmh.logger.log(message, WMHLL_Error);
+}
+
+function WMHHUD(message: string) {
+  thePlayer.wmh.logger.log(message, WMHLL_Hud);
 }

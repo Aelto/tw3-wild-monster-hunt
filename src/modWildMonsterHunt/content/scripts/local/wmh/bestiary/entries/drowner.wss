@@ -1,6 +1,6 @@
 class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
-  public function init() {
-    super.init();
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(

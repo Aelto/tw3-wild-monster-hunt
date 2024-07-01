@@ -1,0 +1,43 @@
+#define const HuntSeedOffset_difficulty = 10;
+
+// Stores the data about the currently active hunt
+class WMH_HuntManager {
+  private var factory: WMH_HuntSeedFactory;
+  private var seed: int;
+
+  private var is_in_progress: bool;
+
+  public function init(): WMH_HuntManager {
+    this.is_in_progress = false;
+
+    return this;
+  }
+
+  public function getSeed(): int {
+    return this.seed;
+  }
+
+  public function onHuntStarted(factory: WMH_HuntSeedFactory) {
+    this.factory = factory;
+    this.seed = (
+      factory.level.value
+      * (factory.index + 1)
+      + factory.timeoffset
+    ) as int;
+
+    this.is_in_progress = true;
+  }
+
+  public function difficulty(): int {
+    var seed: int = this.seed + HuntSeedOffset_difficulty!;
+
+    var max: int = (this.factory.level.value + 2) as int;
+    var min: int = Max((this.factory.level.value - 2) as int, 0);
+
+    return RandNoiseF(
+      seed,
+      max as float,
+      min as float
+    ) as int;
+  }
+}

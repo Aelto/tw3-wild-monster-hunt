@@ -1,0 +1,16 @@
+// Stores persistent data about the mode
+class WMH_Storage {
+  private var level: WMH_Level;
+
+  public function init(): WMH_Storage {
+    return this;
+  }
+
+  public function setLevel(level: WMH_Level) {
+    this.level = level;
+  }
+
+  public function getLevel(): WMH_Level {
+    return this.level;
+  }
+}

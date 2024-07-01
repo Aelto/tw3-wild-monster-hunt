@@ -1,0 +1,3 @@
+function WMH_getGameTimeMinutes(): int {
+  return GameTimeMinutes(theGame.CalculateTimePlayed());
+}

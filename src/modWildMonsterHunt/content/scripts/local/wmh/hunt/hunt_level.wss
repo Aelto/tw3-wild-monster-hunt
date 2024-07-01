@@ -1,0 +1,3 @@
+struct WMH_Level {
+  var value: float;
+}
