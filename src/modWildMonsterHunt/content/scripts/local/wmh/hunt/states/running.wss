@@ -1,0 +1,17 @@
+state Running in WMH_HuntManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Running_main();
+  }
+
+  entry function Running_main() {
+    WMHINFO("WMH_HuntManagerStateRunning:Running_main()");
+
+    while (true) {
+      Sleep(15.0);
+
+      thePlayer.wmh.onSpawn(this, parent.seed);
+    }
+    
+  }
+}

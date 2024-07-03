@@ -5,10 +5,8 @@ class WMH_HuntManager {
   private var factory: WMH_HuntSeedFactory;
   private var seed: int;
 
-  private var is_in_progress: bool;
-
   public function init(): WMH_HuntManager {
-    this.is_in_progress = false;
+    this.GotoState('Waiting');
 
     return this;
   }
@@ -25,7 +23,15 @@ class WMH_HuntManager {
       + factory.timeoffset
     ) as int;
 
-    this.is_in_progress = true;
+    if (this.GetCurrentStateName() == 'Waiting') {
+      this.GotoState('Running');
+    }
+  }
+
+  public function onHuntFinished() {
+    if (this.GetCurrentStateName() == 'Running') {
+      this.GotoState('Waiting');
+    }
   }
 
   public function difficulty(): int {

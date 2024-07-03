@@ -1,5 +1,5 @@
 struct WMH_HuntSeedFactory {
-  /// represents the difficulty level of the hunt
+  /// represents the difficulty level of the player
   var level: WMH_Level;
 
   /// used to differentiate the multiple hunts that may be generated from
