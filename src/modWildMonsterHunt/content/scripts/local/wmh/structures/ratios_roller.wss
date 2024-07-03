@@ -25,9 +25,11 @@ class WMH_RatiosRoller {
     var i: int;
 
     for (i = 0; i < this.ratios.Size(); i += 1) {
-      if (rolled_value - this.ratios[i] <= 0) {
+      if (this.ratios[i] > 0 && rolled_value - this.ratios[i] <= 0) {
         return i;
       }
+
+      rolled_value -= this.ratios[i];
     }
 
     return this.ratios.Size() - 1;

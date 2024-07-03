@@ -22,7 +22,8 @@ statemachine class WMH_Bestiary {
     return this;
   }
 
-  public function onSpawn(seed: int) {
+  public function onSpawn(contract: WMH_ContractManager, seed: int) {
+    this.maybeRefresh(contract);
     this.spawnRandomEntry(seed);
   }
 
@@ -42,8 +43,6 @@ statemachine class WMH_Bestiary {
   private function spawnRandomEntry(
     seed: int
   ) {
-    this.maybeRefresh();
-
     var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points.getRandomValidSpawnPoint(seed);
 
     if (spawn_point) {
@@ -79,9 +78,9 @@ statemachine class WMH_Bestiary {
     }
   }
 
-  private function maybeRefresh() {
+  private function maybeRefresh(contract: WMH_ContractManager) {
     this.spawn_points.maybeRefresh();
-    this.active_view.maybeRefresh(this.entries, this.biomes);
+    this.active_view.maybeRefresh(this.entries, this.biomes, contract);
   }
 
   private function initEntries() {

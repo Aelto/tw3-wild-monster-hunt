@@ -10,7 +10,11 @@ state Running in WMH_HuntManager {
     while (true) {
       Sleep(15.0);
 
-      thePlayer.wmh.submitOnSpawn(parent, parent.seed);
+      thePlayer.wmh.submitOnSpawn(
+        parent,
+        parent.contract,
+        parent.seed + parent.getSecondsSinceStart()
+      );
     }
     
   }

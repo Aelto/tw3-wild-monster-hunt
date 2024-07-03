@@ -25,6 +25,23 @@ class WMH_BestiaryEntry {
     return this.strength > level.value;
   }
 
+  public function getCurrentRangeScaling(day_hour: float): float {
+    var preferences: WMH_SpawnPreferences;
+
+    for preferences: WMH_SpawnPreferences in this.preferences {
+      var time_range_scaling: float = preferences
+        .getTimeRangeScaling(day_hour);
+
+      if (time_range_scaling > 0) {
+        return time_range_scaling;
+      }
+    }
+
+    return 0;
+  }
+
+  // This can also be used to determine if an entry can spawn. If the ratio is
+  // greater than 0 than it can potentially spawn.
   public function canSpawn(
     biome: WMH_BiomeTags,
     day_hour: float,

@@ -1,3 +1,11 @@
+function WMH_getGameTimeNow(): GameTime {
+  return theGame.CalculateTimePlayed();
+}
+
 function WMH_getGameTimeMinutes(): int {
-  return GameTimeMinutes(theGame.CalculateTimePlayed());
+  return GameTimeMinutes(WMH_getGameTimeNow());
+}
+
+function WMH_getGameTimeSecondsSince(time: GameTime): int {
+  return GameTimeToSeconds(WMH_getGameTimeNow()) - GameTimeToSeconds(time);
 }

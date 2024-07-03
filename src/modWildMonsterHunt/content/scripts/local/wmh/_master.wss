@@ -32,9 +32,10 @@ statemachine class WMH_Master {
 
   public function submitOnSpawn(
     origin: WMH_HuntManager,
+    contract: WMH_ContractManager,
     seed: int
   ) {
-    this.bestiary.onSpawn(seed);
+    this.bestiary.onSpawn(contract, seed);
   }
 }
 

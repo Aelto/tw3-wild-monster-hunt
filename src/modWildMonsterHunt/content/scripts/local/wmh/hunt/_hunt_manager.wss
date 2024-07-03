@@ -4,10 +4,12 @@
 statemachine class WMH_HuntManager {
   private var master: WMH_Master;
 
-  private var contract: WMH_ContractManager;
+  protected var contract: WMH_ContractManager;
 
   protected var factory: WMH_HuntSeedFactory;
   protected var seed: int;
+
+  private var start_time: GameTime;
 
   public function init(master: WMH_Master): WMH_HuntManager {
     this.master = master;
@@ -37,6 +39,8 @@ statemachine class WMH_HuntManager {
       + this.factory.timeoffset
     ) as int;
 
+    this.start_time = WMH_getGameTimeNow();
+
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Running');
     }
@@ -64,5 +68,13 @@ statemachine class WMH_HuntManager {
       max as float,
       min as float
     ) as int;
+  }
+
+  protected function getSecondsSinceStart(): int {
+    if (this.GetCurrentStateName() != 'Running') {
+      return 0;
+    }
+
+    return WMH_getGameTimeSecondsSince(this.start_time);
   }
 }
