@@ -23,19 +23,6 @@ statemachine class WMH_Master {
     this.contract = (new WMH_ContractManager in this).init();
   }
 
-  public function onSpawn(
-    out hunt_manager: WMH_HuntManager,
-    seed: int
-  ) {
-    this.spawn_points.maybeRefresh();
-    this.bestiary.maybeRefresh(this.biomes);
-    this.bestiary.spawnRandomEntry(
-      this.biomes,
-      this.spawn_points,
-      seed
-    );
-  }
-
   public function onSettlementEnter() {
     this.bestiary.maybeRefresh(this.biomes);
     this.contract.onSettlementEnter(this.bestiary, this.storage);
@@ -53,4 +40,26 @@ statemachine class WMH_Master {
 
     this.hunt.onHuntStarted(hunt_seed_factory);
   }
+
+  public function submitOnSpawn(
+    out hunt_manager: WMH_HuntManager,
+    seed: int
+  ) {
+    this.spawn_points.maybeRefresh();
+    this.bestiary.maybeRefresh(this.biomes);
+    this.bestiary.spawnRandomEntry(
+      this.biomes,
+      this.spawn_points,
+      seed
+    );
+  }
+
+  public function submitOnHuntEnd(
+    out hunt_manager: WMH_HuntManager
+  ) {}
+  
+  public function submitOnHuntStart(
+    out hunt_manager: WMH_HuntManager
+  ) {}
 }
+
