@@ -1,0 +1,68 @@
+#define const HuntSeedOffset_difficulty = 10;
+
+// Stores the data about the currently active hunt
+statemachine class WMH_HuntManager {
+  private var master: WMH_Master;
+
+  private var contract: WMH_ContractManager;
+
+  protected var factory: WMH_HuntSeedFactory;
+  protected var seed: int;
+
+  public function init(master: WMH_Master): WMH_HuntManager {
+    this.master = master;
+
+    this.contract = (new WMH_ContractManager in this).init();
+    this.GotoState('Waiting');
+
+    return this;
+  }
+
+  public function getSeed(): int {
+    return this.seed;
+  }
+
+  public function onHuntStarted(storage: WMH_Storage) {
+    var index: int = 0;
+
+    this.factory = WMH_HuntSeedFactory(
+      storage.getLevel(),
+      index,
+      WMH_getGameTimeMinutes()
+    );
+
+    this.seed = (
+      this.factory.level.value
+      * (this.factory.index + 1)
+      + this.factory.timeoffset
+    ) as int;
+
+    if (this.GetCurrentStateName() == 'Waiting') {
+      this.GotoState('Running');
+    }
+  }
+
+  public function onHuntFinished(
+    bestiary: WMH_Bestiary,
+    storage: WMH_Storage
+  ) {
+    if (this.GetCurrentStateName() == 'Running') {
+      this.GotoState('Waiting');
+    }
+
+    this.contract.onHuntFinished(bestiary, storage);
+  }
+
+  public function difficulty(): int {
+    var seed: int = this.seed + HuntSeedOffset_difficulty!;
+
+    var max: int = (this.factory.level.value + 2) as int;
+    var min: int = Max((this.factory.level.value - 2) as int, 0);
+
+    return RandNoiseF(
+      seed,
+      max as float,
+      min as float
+    ) as int;
+  }
+}

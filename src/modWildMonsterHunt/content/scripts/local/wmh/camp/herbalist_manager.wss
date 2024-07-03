@@ -1,7 +1,11 @@
 class WMH_HerbalistManager {
+  private var camp: WMH_CampManager;
+
   private var extracting_cooldown: WMH_TickerGameTime;
 
-  public function init(): WMH_HerbalistManager {
+  public function init(camp: WMH_CampManager): WMH_HerbalistManager {
+    this.camp = camp;
+
     var one_minute: int = 60;
 
     this.extracting_cooldown = (new WMH_TickerGameTime in this).init(one_minute * 5);

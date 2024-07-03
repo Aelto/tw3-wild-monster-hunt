@@ -1,16 +1,29 @@
 statemachine class WMH_Bestiary {
-  public var active_view: WMH_BestiaryActiveView;
+  private var master: WMH_Master;
+
+  private var active_view: WMH_BestiaryActiveView;
+  private var spawn_points: WMH_SpawnPointManager;
+  private var biomes: WMH_BiomeManager;
+
   public var entries: array<WMH_BestiaryEntry>;
 
   protected var spawn_requests: array<WMH_SpawnRequest>;
 
-  public function init(): WMH_Bestiary {
-    this.active_view = new WMH_BestiaryActiveView in this;
-    this.active_view.init();
+  public function init(master: WMH_Master): WMH_Bestiary {
+    this.master = master;
+
+    this.spawn_points = (new WMH_SpawnPointManager in this).init();
+    this.active_view = (new WMH_BestiaryActiveView in this).init();
+    this.biomes = (new WMH_BiomeManager in this).init();
+
     this.initEntries();
     this.GotoState('Waiting');
 
     return this;
+  }
+
+  public function onSpawn(seed: int) {
+    this.spawnRandomEntry(seed);
   }
 
   public function getEliteEntries(level: WMH_Level): array<WMH_BestiaryEntry> {
@@ -26,16 +39,16 @@ statemachine class WMH_Bestiary {
     return output;
   }
 
-  public function spawnRandomEntry(
-    biome_manager: WMH_BiomeManager,
-    spawn_points_manager: WMH_SpawnPointManager,
+  private function spawnRandomEntry(
     seed: int
   ) {
-    var spawn_point: WMH_BiomeSpawnPoint = spawn_points_manager.getRandomValidSpawnPoint(seed);
+    this.maybeRefresh();
+
+    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points.getRandomValidSpawnPoint(seed);
 
     if (spawn_point) {
       var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
-        biome_manager,
+        this.biomes,
         spawn_point.biome_tags,
         spawn_point.biome_tags_bypass,
         seed
@@ -58,7 +71,7 @@ statemachine class WMH_Bestiary {
     }
   }
 
-  public function requestSpawn(request: WMH_SpawnRequest) {
+  private function requestSpawn(request: WMH_SpawnRequest) {
     this.spawn_requests.PushBack(request);
 
     if (this.GetCurrentStateName() == 'Waiting') {
@@ -66,8 +79,9 @@ statemachine class WMH_Bestiary {
     }
   }
 
-  public function maybeRefresh(biome_manager: WMH_BiomeManager) {
-    this.active_view.maybeRefresh(this.entries, biome_manager);
+  private function maybeRefresh() {
+    this.spawn_points.maybeRefresh();
+    this.active_view.maybeRefresh(this.entries, this.biomes);
   }
 
   private function initEntries() {

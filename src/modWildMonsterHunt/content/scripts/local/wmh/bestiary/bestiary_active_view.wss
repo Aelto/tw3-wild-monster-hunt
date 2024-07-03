@@ -8,8 +8,10 @@ class WMH_BestiaryActiveView {
   private var entries: array<WMH_BestiaryEntry>;
   private var refresh_ticker: WMH_Ticker;
 
-  public function init() {
+  public function init(): WMH_BestiaryActiveView {
     this.refresh_ticker = (new WMH_Ticker in this).init(60); // seconds
+
+    return this;
   }
 
   public function maybeRefresh(

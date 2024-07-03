@@ -4,13 +4,13 @@ class WMH_SettlementAreaTrigger extends CEntity {
 
 	event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
 		if (this.canTrigger()) {
-			thePlayer.wmh.onSettlementEnter();
+			thePlayer.wmh.submitOnSettlementEnter(this);
 		}
 	}
 
 	event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
 		if (this.canTrigger()) {
-			thePlayer.wmh.onSettlementExit();
+			thePlayer.wmh.submitOnSettlementExit(this);
 		}
 	}
 	

@@ -21,7 +21,7 @@ class WMH_ContractManager {
     return this;
   }
 
-  public function onSettlementEnter(
+  public function onHuntFinished(
     bestiary: WMH_Bestiary,
     storage: WMH_Storage
   ) {
@@ -30,7 +30,7 @@ class WMH_ContractManager {
       storage.getLevel(),
     );
 
-    this.finishExpiredContracts(bestiary, new_level);
+    this.finishExpiredContracts(new_level);
 
     var contracts_to_generate: int = 5 - this.pending_contracts.Size();
 
@@ -80,10 +80,7 @@ class WMH_ContractManager {
     return WMH_Level(level.value + completed_contracts.Size());
   }
 
-  private function finishExpiredContracts(
-    bestiary: WMH_Bestiary,
-    level: WMH_Level
-  ) {
+  private function finishExpiredContracts(level: WMH_Level) {
     var expired_contracts: array<WMH_Contract>;
 
     var contract: WMH_Contract;

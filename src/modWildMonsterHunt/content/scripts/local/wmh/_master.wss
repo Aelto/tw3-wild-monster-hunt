@@ -1,0 +1,40 @@
+statemachine class WMH_Master {
+  public var storage: WMH_Storage;
+  public var logger: WMH_Logger;
+
+  private var camp: WMH_CampManager;
+  private var bestiary: WMH_Bestiary;
+  private var hunt: WMH_HuntManager;
+
+  public function onCreate() {}
+
+  public function onLoad() {
+    this.storage = (new WMH_Storage in this).init();
+    this.logger = (new WMH_Logger in this).init();
+    WMHINFO("WMH_Master::OnLoad()");
+
+    this.camp = (new WMH_CampManager in this).init(this);
+    this.bestiary = (new WMH_Bestiary in this).init(this);
+    this.hunt = (new WMH_HuntManager in this).init(this);
+  }
+
+  public function submitOnSettlementEnter(
+    origin: WMH_SettlementAreaTrigger
+  ) {
+    this.hunt.onHuntFinished(this.bestiary, this.storage);
+  }
+
+  public function submitOnSettlementExit(
+    origin: WMH_SettlementAreaTrigger
+  ) {
+    this.hunt.onHuntStarted(this.storage);
+  }
+
+  public function submitOnSpawn(
+    origin: WMH_HuntManager,
+    seed: int
+  ) {
+    this.bestiary.onSpawn(seed);
+  }
+}
+

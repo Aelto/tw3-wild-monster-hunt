@@ -1,0 +1,11 @@
+class WMH_CampManager {
+  private var master: WMH_Master;
+
+  private var herbalist: WMH_HerbalistManager;
+
+  public function init(master: WMH_Master): WMH_CampManager {
+    this.herbalist = (new WMH_HerbalistManager in this).init(this);
+
+    return this;
+  }
+}
