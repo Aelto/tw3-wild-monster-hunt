@@ -1,28 +1,38 @@
 // Keeps track of the spawn points around the player, and which of them are
 // available for respawn.
 class WMH_SpawnPointManager {
+  private var region_spawn_points: array<WMH_BiomeSpawnPoint>;
   private var nearby_spawn_points: array<WMH_BiomeSpawnPoint>;
-  private var refresh_ticker: WMH_Ticker;
+
+  private var nearby_refresh_ticker: WMH_Ticker;
+  private var region_refresh_ticker: WMH_Ticker;
 
   public function init(): WMH_SpawnPointManager {
-    this.refresh_ticker = (new WMH_Ticker in this).init(60); // seconds
+    this.nearby_refresh_ticker = (new WMH_Ticker in this).init(60); // seconds
+    this.region_refresh_ticker = (new WMH_Ticker in this).init(180); // seconds
 
     return this;
   }
 
   public function maybeRefresh() {
-    if (!this.refresh_ticker.validate()) {
-      return;
+    if (this.nearby_refresh_ticker.validate()) {
+      var radius: float = 500;
+      var max: int = 500;
+      this.nearby_spawn_points = this.findNearbySpawnPoints(radius, max);
+      WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
     }
 
     WMHINFO("WMH_SpawnPointManager, refreshing nearby spawn points");
 
-    var radius: float = 50;
-    var max: int = 50;
-    this.nearby_spawn_points = this.findNearbySpawnPoints(radius, max);
+    if (this.region_refresh_ticker.validate()) {
+      var radius: float = 4000;
+      var max: int = 500;
+      this.region_spawn_points = this.findNearbySpawnPoints(radius, max);
+      WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
+    }
   }
 
-  public function getRandomValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
+  public function getRandomNearbyValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
     var valid_spawn_points: array<WMH_BiomeSpawnPoint> = this
       .getValidSpawnPoints();
 
@@ -35,6 +45,19 @@ class WMH_SpawnPointManager {
     var index: int = RandNoiseF(seed, size) as int;
 
     return valid_spawn_points[index];
+  }
+
+  public function getRegionValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {
+    var output: array<WMH_BiomeSpawnPoint>;
+
+    var point: WMH_BiomeSpawnPoint;
+    for point: WMH_BiomeSpawnPoint in this.region_spawn_points {
+      if (point.canRespawn()) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
   }
 
   private function getValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {

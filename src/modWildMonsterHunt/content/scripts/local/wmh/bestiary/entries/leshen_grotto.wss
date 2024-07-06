@@ -22,7 +22,7 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
       .withTimeRange(WMH_TimeRangeScaling(0.4, 1.1, 0.4))
       .withMandatoryBiomeTags(
         WMH_BiomeTags(
-          /*roomWide*/ false,
+          /*roomWide*/ true,
           /*altitudeHigh*/ false,
           /*humidityHigh*/ false,
           /*vegetationHigh*/ false,

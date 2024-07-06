@@ -1,4 +1,4 @@
-statemachine class WMH_Master {
+class WMH_Master {
   public var storage: WMH_Storage;
   public var logger: WMH_Logger;
 

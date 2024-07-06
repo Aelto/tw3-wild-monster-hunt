@@ -43,7 +43,7 @@ statemachine class WMH_Bestiary {
   private function spawnRandomEntry(
     seed: int
   ) {
-    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points.getRandomValidSpawnPoint(seed);
+    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points.getRandomNearbyValidSpawnPoint(seed);
 
     if (spawn_point) {
       var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
@@ -103,6 +103,35 @@ statemachine class WMH_Bestiary {
     bentry_Grotto.init(WMH_BestiaryId(index));
     this.entries.PushBack(bentry_Grotto);
     index += 1;
+  }
+
+  
+  private function getAvailableSpawnPointsForEntry(
+    bentry: WMH_BestiaryEntry,
+    spawn_points: array<WMH_BiomeSpawnPoint>
+  ): array<WMH_BiomeSpawnPoint> {
+    var output: array<WMH_BiomeSpawnPoint>;
+
+    var day_hour: int = this.biomes.getDayHour();
+    var weather: WMH_WeatherType = this.biomes.getWeatherType();
+    var global_biome: WMH_BiomeTags = this.biomes.getGlobalBiome();
+
+    var point: WMH_BiomeSpawnPoint;
+    for point: WMH_BiomeSpawnPoint in spawn_points {
+      var can_spawn: bool = bentry.canSpawn(
+        point.biome_tags,
+        day_hour,
+        weather,
+        global_biome,
+        point.biome_tags_bypass,
+      );
+
+      if (can_spawn) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
   }
 }
 

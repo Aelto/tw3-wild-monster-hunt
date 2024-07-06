@@ -24,6 +24,10 @@ class WMH_Logger {
         LogChannel('WMHERR', message);
         this.bufferMessage("[WMHERR] " + message);
         break;
+      case WMHLL_Hud:
+        LogChannel('WMHHUD', message);
+        this.bufferMessage("[WMHERR] " + message);
+        break;
     }
   }
 
@@ -56,6 +60,7 @@ enum WMH_LogLevel {
 
 function WMHINFO(message: string) {
   #ifdef DEBUG {
+    LogChannel('WMHINFO', message);
     thePlayer.wmh.logger.log(message, WMHLL_Info);
   };
 }

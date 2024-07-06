@@ -11,7 +11,7 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 	
 
 	event OnInteractionActivated( interactionComponentName : string, activator : CEntity ) {		
-		thePlayer.DisplayHudMessage("WMH_RefillableContainer");
+		// thePlayer.DisplayHudMessage("WMH_RefillableContainer");
 		super.OnInteractionActivated(interactionComponentName, activator);
 	}
 	
