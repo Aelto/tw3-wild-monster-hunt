@@ -1,34 +1,27 @@
-class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryRotfiend extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl1.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "characters\npc_entities\monsters\rotfiend_lvl1.w2ent",,
+        "gameplay\journal\bestiary\bestiarygreaterrotfiend.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl2.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "characters\npc_entities\monsters\rotfiend_lvl2.w2ent",1,
+        "gameplay\journal\bestiary\bestiarygreaterrotfiend.journal"
       )
     );
 
-    this.templates.PushBack(
-      WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl3.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
-      )
-    );
-
-    this.difficulty_scaling.minimum_count_easy = 2;
+    this.difficulty_scaling.minimum_count_easy = 1;
     this.difficulty_scaling.maximum_count_easy = 3;
-    this.difficulty_scaling.minimum_count_medium = 3;
+    this.difficulty_scaling.minimum_count_medium = 2;
     this.difficulty_scaling.maximum_count_medium = 4;
     this.difficulty_scaling.minimum_count_hard = 3;
-    this.difficulty_scaling.maximum_count_hard = 5;
+    this.difficulty_scaling.maximum_count_hard = 6;
 
     this.preferences.PushBack(
       (new WMH_SpawnPreferences in this)
@@ -57,11 +50,11 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
           /*underground*/ false
         )
       )
-      .withBiomeTagsBypass('Ghoul')
+      .withBiomeTagsBypass('Rotfiend')
     );
   }
 
   public function getLocName(): string {
-    return "Ghoul";
+    return "Rotfiend";
   }
 }

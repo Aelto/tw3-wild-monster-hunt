@@ -1,34 +1,27 @@
-class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryWight extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl1.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "dlc\bob\data\characters\npc_entities\monsters\spooncollector.w2ent",1,
+        "dlc\bob\journal\bestiary\wicht.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl2.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "dlc\bob\data\characters\npc_entities\monsters\wicht.w2ent",2,
+        "dlc\bob\journal\bestiary\wicht.journal"
       )
     );
 
-    this.templates.PushBack(
-      WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl3.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
-      )
-    );
-
-    this.difficulty_scaling.minimum_count_easy = 2;
-    this.difficulty_scaling.maximum_count_easy = 3;
-    this.difficulty_scaling.minimum_count_medium = 3;
-    this.difficulty_scaling.maximum_count_medium = 4;
-    this.difficulty_scaling.minimum_count_hard = 3;
-    this.difficulty_scaling.maximum_count_hard = 5;
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 1;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 1;
+    this.difficulty_scaling.minimum_count_hard = 1;
+    this.difficulty_scaling.maximum_count_hard = 1;
 
     this.preferences.PushBack(
       (new WMH_SpawnPreferences in this)
@@ -57,11 +50,11 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
           /*underground*/ false
         )
       )
-      .withBiomeTagsBypass('Ghoul')
+      .withBiomeTagsBypass('Wight')
     );
   }
 
   public function getLocName(): string {
-    return "Ghoul";
+    return "Wight";
   }
 }

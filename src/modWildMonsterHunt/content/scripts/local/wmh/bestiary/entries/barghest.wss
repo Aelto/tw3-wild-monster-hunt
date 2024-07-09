@@ -1,0 +1,54 @@
+
+class WMH_BestiaryEntryBarghest extends WMH_BestiaryEntry {
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "dlc\bob\data\characters\npc_entities\monsters\barghest.w2ent",,
+        "dlc\bob\journal\bestiary\barghests.journal"
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 1;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 2;
+    this.difficulty_scaling.minimum_count_hard = 2;
+    this.difficulty_scaling.maximum_count_hard = 2;
+
+    this.preferences.PushBack(
+      (new WMH_SpawnPreferences in this)
+      .withTimeRange(WMH_TimeRangeScaling(0.4, 0, 1.2))
+      .withMandatoryBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ false,
+          /*vegetationHigh*/ false,
+          
+          /*lightLow*/ true,
+          /*structuresHigh*/ false,
+          /*underground*/ false
+        )
+      )
+      .withForbiddenBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ true,
+          /*vegetationHigh*/ true,
+          
+          /*lightLow*/ false,
+          /*structuresHigh*/ false,
+          /*underground*/ true
+        )
+      )
+      .withBiomeTagsBypass('Barghest')
+    );
+  }
+
+  public function getLocName(): string {
+    return "Barghest";
+  }
+}

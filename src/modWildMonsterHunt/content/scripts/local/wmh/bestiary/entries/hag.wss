@@ -1,34 +1,41 @@
-class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryHag extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl1.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "characters\npc_entities\monsters\hag_grave_lvl1.w2ent",,
+        "gameplay\journal\bestiary\gravehag.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl2.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "characters\npc_entities\monsters\hag_water_lvl1.w2ent",,
+        "gameplay\journal\bestiary\waterhag.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\ghoul_lvl3.w2ent",,
-        "gameplay\journal\bestiary\bestiaryghoul.journal"
+        "characters\npc_entities\monsters\hag_water_lvl2.w2ent",,
+        "gameplay\journal\bestiary\waterhag.journal"
       )
     );
 
-    this.difficulty_scaling.minimum_count_easy = 2;
-    this.difficulty_scaling.maximum_count_easy = 3;
-    this.difficulty_scaling.minimum_count_medium = 3;
-    this.difficulty_scaling.maximum_count_medium = 4;
-    this.difficulty_scaling.minimum_count_hard = 3;
-    this.difficulty_scaling.maximum_count_hard = 5;
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "characters\npc_entities\monsters\hag_water_mh.w2ent",,
+        "gameplay\journal\bestiary\bestiarymonsterhuntmh203.journal"
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 1;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 1;
+    this.difficulty_scaling.minimum_count_hard = 1;
+    this.difficulty_scaling.maximum_count_hard = 1;
 
     this.preferences.PushBack(
       (new WMH_SpawnPreferences in this)
@@ -57,11 +64,11 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
           /*underground*/ false
         )
       )
-      .withBiomeTagsBypass('Ghoul')
+      .withBiomeTagsBypass('Hag')
     );
   }
 
   public function getLocName(): string {
-    return "Ghoul";
+    return "Hag";
   }
 }

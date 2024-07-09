@@ -1,51 +1,57 @@
-class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl1.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
+        "living_world\enemy_templates\nml_deserters_axe_normal.w2ent",,
+        
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl2.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
+        "living_world\enemy_templates\nml_deserters_bow.w2ent",3,
+        
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl3.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
+        "living_world\enemy_templates\nml_deserters_sword_easy.w2ent",,
+        
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl4__dead.w2ent", 2,
-        "gameplay\journal\bestiary\drowner.journal"
+        "living_world\enemy_templates\novigrad_bandit_shield_1haxe.w2ent",,
+        
       )
     );
 
-    this.difficulty_scaling.minimum_count_easy = 2;
-    this.difficulty_scaling.maximum_count_easy = 3;
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "living_world\enemy_templates\novigrad_bandit_shield_1hclub.w2ent",,
+        
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 3;
+    this.difficulty_scaling.maximum_count_easy = 4;
     this.difficulty_scaling.minimum_count_medium = 3;
-    this.difficulty_scaling.maximum_count_medium = 4;
+    this.difficulty_scaling.maximum_count_medium = 5;
     this.difficulty_scaling.minimum_count_hard = 4;
-    this.difficulty_scaling.maximum_count_hard = 5;
-
+    this.difficulty_scaling.maximum_count_hard = 6;
 
     this.preferences.PushBack(
       (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.9, 0.8, 1))
+      .withTimeRange(WMH_TimeRangeScaling(0.5, 1.0, 0.5))
       .withMandatoryBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
           /*altitudeHigh*/ false,
-          /*humidityHigh*/ true,
+          /*humidityHigh*/ false,
           /*vegetationHigh*/ false,
           
           /*lightLow*/ false,
@@ -56,7 +62,7 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
       .withForbiddenBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
-          /*altitudeHigh*/ true,
+          /*altitudeHigh*/ false,
           /*humidityHigh*/ false,
           /*vegetationHigh*/ false,
           
@@ -65,6 +71,11 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
           /*underground*/ false
         )
       )
+      .withBiomeTagsBypass('Human')
     );
+  }
+
+  public function getLocName(): string {
+    return "Human";
   }
 }

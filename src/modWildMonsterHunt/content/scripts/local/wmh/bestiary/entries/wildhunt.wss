@@ -1,0 +1,95 @@
+class WMH_BestiaryEntryWildhunt extends WMH_BestiaryEntry {
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "quests\part_2\quest_files\q403_battle\characters\q403_wild_hunt_2h_axe.w2ent",,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "quests\part_2\quest_files\q403_battle\characters\q403_wild_hunt_2h_halberd.w2ent",2,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "quests\part_2\quest_files\q403_battle\characters\q403_wild_hunt_2h_hammer.w2ent",1,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "quests\part_2\quest_files\q403_battle\characters\q403_wild_hunt_2h_spear.w2ent",2,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "quests\part_2\quest_files\q403_battle\characters\q403_wild_hunt_2h_sword.w2ent",1,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "characters\npc_entities\monsters\wildhunt_minion_lvl1.w2ent",,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "characters\npc_entities\monsters\wildhunt_minion_lvl2.w2ent",1,
+        "gameplay\journal\bestiary\whminion.journal"
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 3;
+    this.difficulty_scaling.maximum_count_easy = 4;
+    this.difficulty_scaling.minimum_count_medium = 4;
+    this.difficulty_scaling.maximum_count_medium = 6;
+    this.difficulty_scaling.minimum_count_hard = 5;
+    this.difficulty_scaling.maximum_count_hard = 7;
+
+    this.preferences.PushBack(
+      (new WMH_SpawnPreferences in this)
+      .withTimeRange(WMH_TimeRangeScaling(0.5, 1.0, 0.5))
+      .withMandatoryBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ false,
+          /*vegetationHigh*/ false,
+          
+          /*lightLow*/ false,
+          /*structuresHigh*/ false,
+          /*underground*/ false
+        )
+      )
+      .withForbiddenBiomeTags(
+        WMH_BiomeTags(
+          /*roomWide*/ false,
+          /*altitudeHigh*/ false,
+          /*humidityHigh*/ false,
+          /*vegetationHigh*/ false,
+          
+          /*lightLow*/ false,
+          /*structuresHigh*/ false,
+          /*underground*/ false
+        )
+      )
+      .withBiomeTagsBypass('Wildhunt')
+    );
+  }
+
+  public function getLocName(): string {
+    return "Wildhunt";
+  }
+}

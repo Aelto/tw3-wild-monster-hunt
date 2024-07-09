@@ -1,51 +1,43 @@
-class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryEndrega extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl1.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
+        "characters\npc_entities\monsters\endriaga_lvl1__worker.w2ent",,
+        "gameplay\journal\bestiary\bestiaryendriag.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl2.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
+        "characters\npc_entities\monsters\endriaga_lvl2__tailed.w2ent",2,
+        "gameplay\journal\bestiary\endriagatruten.journal"
       )
     );
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl3.w2ent",,
-        "gameplay\journal\bestiary\drowner.journal"
-      )
-    );
-
-    this.templates.PushBack(
-      WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\drowner_lvl4__dead.w2ent", 2,
-        "gameplay\journal\bestiary\drowner.journal"
+        "characters\npc_entities\monsters\endriaga_lvl3__spikey.w2ent",1,
+        "gameplay\journal\bestiary\endriagaworker.journal"
       )
     );
 
     this.difficulty_scaling.minimum_count_easy = 2;
     this.difficulty_scaling.maximum_count_easy = 3;
-    this.difficulty_scaling.minimum_count_medium = 3;
+    this.difficulty_scaling.minimum_count_medium = 2;
     this.difficulty_scaling.maximum_count_medium = 4;
-    this.difficulty_scaling.minimum_count_hard = 4;
+    this.difficulty_scaling.minimum_count_hard = 3;
     this.difficulty_scaling.maximum_count_hard = 5;
-
 
     this.preferences.PushBack(
       (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.9, 0.8, 1))
+      .withTimeRange(WMH_TimeRangeScaling(0.5, 1.0, 0.5))
       .withMandatoryBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
           /*altitudeHigh*/ false,
-          /*humidityHigh*/ true,
+          /*humidityHigh*/ false,
           /*vegetationHigh*/ false,
           
           /*lightLow*/ false,
@@ -56,7 +48,7 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
       .withForbiddenBiomeTags(
         WMH_BiomeTags(
           /*roomWide*/ false,
-          /*altitudeHigh*/ true,
+          /*altitudeHigh*/ false,
           /*humidityHigh*/ false,
           /*vegetationHigh*/ false,
           
@@ -65,6 +57,11 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
           /*underground*/ false
         )
       )
+      .withBiomeTagsBypass('Endrega')
     );
+  }
+
+  public function getLocName(): string {
+    return "Endrega";
   }
 }

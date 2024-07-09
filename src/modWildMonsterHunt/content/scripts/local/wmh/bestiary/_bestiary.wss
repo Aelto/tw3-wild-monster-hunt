@@ -1,3 +1,5 @@
+
+
 statemachine class WMH_Bestiary {
   private var master: WMH_Master;
 
@@ -115,23 +117,71 @@ statemachine class WMH_Bestiary {
   private function initEntries() {
     var index: int = 0;
 
-    var bentry_Ghoul: WMH_BestiaryEntryGhoul = 
-      (new WMH_BestiaryEntryGhoul in this);
-    bentry_Ghoul.init(WMH_BestiaryId(index));
-    this.entries.PushBack(bentry_Ghoul);
-    index += 1;
+    #define function registerBestiaryEntry(entry_name) {
+      var bentry_entry_name: WMH_BestiaryEntryentry_name =
+        (new WMH_BestiaryEntryentry_name in this);
+      bentry_entry_name.init(WMH_BestiaryId(index));
+      this.entries.PushBack(bentry_entry_name);
+      index += 1;
+    };
 
-    var bentry_Drowner: WMH_BestiaryEntryDrowner =
-      (new WMH_BestiaryEntryDrowner in this);
-    bentry_Drowner.init(WMH_BestiaryId(index));
-    this.entries.PushBack(bentry_Drowner);
-    index += 1;
-
-    var bentry_Grotto: WMH_BestiaryEntryLeshenGrotto =
-      (new WMH_BestiaryEntryLeshenGrotto in this);
-    bentry_Grotto.init(WMH_BestiaryId(index));
-    this.entries.PushBack(bentry_Grotto);
-    index += 1;
+    registerBestiaryEntry!(Alghoul)
+    registerBestiaryEntry!(Arachas)
+    registerBestiaryEntry!(Barghest)
+    registerBestiaryEntry!(Basilisk)
+    registerBestiaryEntry!(Bear)
+    registerBestiaryEntry!(Berserker)
+    registerBestiaryEntry!(Boar)
+    registerBestiaryEntry!(Bruxa)
+    registerBestiaryEntry!(Bruxacity)
+    registerBestiaryEntry!(Centipede)
+    registerBestiaryEntry!(Chort)
+    registerBestiaryEntry!(Cockatrice)
+    registerBestiaryEntry!(Cyclop)
+    registerBestiaryEntry!(Detlaff)
+    registerBestiaryEntry!(Dracolizard)
+    registerBestiaryEntry!(Drowner)
+    registerBestiaryEntry!(Echinops)
+    registerBestiaryEntry!(Ekimmara)
+    registerBestiaryEntry!(Elemental)
+    registerBestiaryEntry!(Endrega)
+    registerBestiaryEntry!(Fiend)
+    registerBestiaryEntry!(Fleder)
+    registerBestiaryEntry!(Fogling)
+    registerBestiaryEntry!(Forktail)
+    registerBestiaryEntry!(Gargoyle)
+    registerBestiaryEntry!(Garkain)
+    registerBestiaryEntry!(Ghoul)
+    registerBestiaryEntry!(Giant)
+    registerBestiaryEntry!(Golem)
+    registerBestiaryEntry!(Gravier)
+    registerBestiaryEntry!(Gryphon)
+    registerBestiaryEntry!(Hag)
+    registerBestiaryEntry!(Harpy)
+    registerBestiaryEntry!(Human)
+    registerBestiaryEntry!(Katakan)
+    registerBestiaryEntry!(Kikimore)
+    registerBestiaryEntry!(Leshen)
+    registerBestiaryEntry!(LeshenGrotto)
+    registerBestiaryEntry!(Nekker)
+    registerBestiaryEntry!(Nightwraith)
+    registerBestiaryEntry!(Noonwraith)
+    registerBestiaryEntry!(Panther)
+    registerBestiaryEntry!(Rotfiend)
+    registerBestiaryEntry!(Sharley)
+    registerBestiaryEntry!(Siren)
+    registerBestiaryEntry!(Skelbear)
+    registerBestiaryEntry!(Skeleton)
+    registerBestiaryEntry!(Skeltroll)
+    registerBestiaryEntry!(Skelwolf)
+    registerBestiaryEntry!(Spider)
+    registerBestiaryEntry!(Troll)
+    registerBestiaryEntry!(Werewolf)
+    registerBestiaryEntry!(Wight)
+    registerBestiaryEntry!(Wildhunt)
+    registerBestiaryEntry!(Wolf)
+    registerBestiaryEntry!(Wraith)
+    registerBestiaryEntry!(Wyvern)
   }
 
   

@@ -142,14 +142,14 @@ class WMH_SpawnPreferences {
 }
 
 struct WMH_TimeRangeScaling {
-  // from 20:00 to 04:00
-  var multiplier_night: float;
-
   // from 04:00 to 12:00
   var multiplier_morning: float;
 
   // from 12:00 to 20:00
   var multiplier_afternoon: float;
+
+  // from 20:00 to 04:00
+  var multiplier_night: float;
 }
 
 enum WMH_WeatherType {
