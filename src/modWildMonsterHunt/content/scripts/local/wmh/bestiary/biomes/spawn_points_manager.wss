@@ -14,8 +14,12 @@ class WMH_SpawnPointManager {
     return this;
   }
 
-  public function maybeRefresh() {
-    if (this.nearby_refresh_ticker.validate()) {
+  public function onHuntStarted() {
+    this.maybeRefresh(true);
+  }
+
+  public function maybeRefresh(optional ignore_tickers: bool) {
+    if (ignore_tickers || this.nearby_refresh_ticker.validate()) {
       var radius: float = 500;
       var max: int = 500;
       this.nearby_spawn_points = this.findNearbySpawnPoints(radius, max);
@@ -24,7 +28,7 @@ class WMH_SpawnPointManager {
 
     WMHINFO("WMH_SpawnPointManager, refreshing nearby spawn points");
 
-    if (this.region_refresh_ticker.validate()) {
+    if (ignore_tickers || this.region_refresh_ticker.validate()) {
       var radius: float = 4000;
       var max: int = 500;
       this.region_spawn_points = this.findNearbySpawnPoints(radius, max);

@@ -28,6 +28,7 @@ class WMH_Master {
     origin: WMH_SettlementAreaTrigger
   ) {
     this.hunt.onHuntStarted(this.storage);
+    this.bestiary.onHuntStarted();
   }
 
   public function submitOnSpawn(

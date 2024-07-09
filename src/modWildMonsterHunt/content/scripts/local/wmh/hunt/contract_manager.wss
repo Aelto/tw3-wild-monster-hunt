@@ -8,12 +8,8 @@ struct WMH_Contract {
 
 // Keeps track of the currently active contract targets the player has
 class WMH_ContractManager {
-  private var pending_contracts: array<WMH_Contract>;
 
-  // stores the creatures that were killed during the current hunt, and that
-  // should result in completed contracts the next time the player enters a
-  // settlement.
-  private var killed_creatures: array<WMH_BestiaryId>;
+  private var pending_contracts: array<WMH_PendingContract>;
 
   public function init(): WMH_ContractManager {
     todo!("load contracts from storage")
@@ -21,12 +17,20 @@ class WMH_ContractManager {
     return this;
   }
 
+  public function onHuntStarted(bestiary: WMH_Bestiary) {
+    var contract: WMH_PendingContract;
+    for contract: WMH_PendingContract in this.pending_contracts {
+      contract.onHuntStarted(bestiary);
+    }
+  }
+
   public function onHuntFinished(
     bestiary: WMH_Bestiary,
-    storage: WMH_Storage
+    storage: WMH_Storage,
+    killed_creatures: array<WMH_BestiaryId>
   ) {
     var new_level: WMH_Level = this.finishCompletedContracts(
-      this.killed_creatures,
+      killed_creatures,
       storage.getLevel(),
     );
 
@@ -45,15 +49,10 @@ class WMH_ContractManager {
     storage.setLevel(new_level);
   }
 
-  public function onCreatureKilled(id: WMH_BestiaryId) {
-    this.killed_creatures.PushBack(id);
-  }
-
   public function isTargetted(id: WMH_BestiaryId): bool {
-    var i: int;
-
-    for (i = 0; i < this.pending_contracts.Size(); i += 1) {
-      if (this.pending_contracts[i].target.id.value == id.value) {
+    var contract: WMH_PendingContract;
+    for contract: WMH_PendingContract in this.pending_contracts {
+      if (contract.isTargetted(id)) {
         return true;
       }
     }
@@ -61,7 +60,7 @@ class WMH_ContractManager {
     return false;
   }
 
-  private function onContractCompleted(contract: WMH_Contract) {
+  private function onContractCompleted(contract: WMH_PendingContract) {
     WMHHUD("Contract completed.");
 
     todo!("grant rewards")
@@ -71,20 +70,20 @@ class WMH_ContractManager {
     killed_creatures: array<WMH_BestiaryId>,
     level: WMH_Level
   ): WMH_Level {
-    var completed_contracts: array<WMH_Contract>;
+    var completed_contracts: array<WMH_PendingContract>;
 
     var id: WMH_BestiaryId;
     for id: WMH_BestiaryId in killed_creatures {
-      var contract: WMH_Contract;
+      var contract: WMH_PendingContract;
       
-      for contract: WMH_Contract in this.pending_contracts {
-        if (contract.target.id.value == id.value) {
+      for contract: WMH_PendingContract in this.pending_contracts {
+        if (contract.isTargetted(id)) {
           completed_contracts.PushBack(contract);
         }
       }
     }
 
-    for contract: WMH_Contract in completed_contracts {
+    for contract: WMH_PendingContract in completed_contracts {
       this.pending_contracts.Remove(contract);
       this.onContractCompleted(contract);
     }
@@ -93,16 +92,16 @@ class WMH_ContractManager {
   }
 
   private function finishExpiredContracts(level: WMH_Level) {
-    var expired_contracts: array<WMH_Contract>;
+    var expired_contracts: array<WMH_PendingContract>;
 
-    var contract: WMH_Contract;
-    for contract: WMH_Contract in this.pending_contracts {
-      if (this.isContractExpired(contract)) {
+    var contract: WMH_PendingContract;
+    for contract: WMH_PendingContract in this.pending_contracts {
+      if (contract.isContractExpired()) {
         expired_contracts.PushBack(contract);
       }
     }
 
-    for contract: WMH_Contract in expired_contracts {
+    for contract: WMH_PendingContract in expired_contracts {
       this.pending_contracts.Remove(contract);
     }
   }
@@ -127,14 +126,11 @@ class WMH_ContractManager {
         now
       );
 
-      this.pending_contracts.PushBack(contract);
+      this.pending_contracts.PushBack(
+        (new WMH_PendingContract in this).init(contract)
+      );
+
       WMHHUD("New contract: " + bentry.getLocName());
     }
-  }
-
-  private function isContractExpired(contract: WMH_Contract): bool {
-    var now: int = WMH_getGameTimeMinutes();
-
-    return now - contract.created_at_minutes >= ContractDurationMinutes!;
   }
 }

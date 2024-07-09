@@ -11,6 +11,11 @@ statemachine class WMH_HuntManager {
 
   private var start_time: GameTime;
 
+  // stores the creatures that were killed during the current hunt, and that
+  // should result in completed contracts the next time the player enters a
+  // settlement.
+  private var killed_creatures: array<WMH_BestiaryId>;
+
   public function init(master: WMH_Master): WMH_HuntManager {
     this.master = master;
 
@@ -40,6 +45,7 @@ statemachine class WMH_HuntManager {
     ) as int;
 
     this.start_time = WMH_getGameTimeNow();
+    this.killed_creatures.Clear();
 
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Running');
@@ -54,7 +60,11 @@ statemachine class WMH_HuntManager {
       this.GotoState('Waiting');
     }
 
-    this.contract.onHuntFinished(bestiary, storage);
+    this.contract.onHuntFinished(bestiary, storage, this.killed_creatures);
+  }
+
+  public function onCreatureKilled(id: WMH_BestiaryId) {
+    this.killed_creatures.PushBack(id);
   }
 
   public function difficulty(): int {

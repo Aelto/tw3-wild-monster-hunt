@@ -22,6 +22,10 @@ statemachine class WMH_Bestiary {
     return this;
   }
 
+  public function onHuntStarted() {
+    this.spawn_points.onHuntStarted();
+  }
+
   public function onSpawn(contract: WMH_ContractManager, seed: int) {
     this.maybeRefresh(contract);
     this.spawnRandomEntry(seed);
@@ -38,6 +42,18 @@ statemachine class WMH_Bestiary {
     }
 
     return output;
+  }
+
+  // returns all of the spawn points (from the entire map) that would allow the
+  // entry to spawn.
+  public function getAvailableRegionSpawnPoints(
+    bentry: WMH_BestiaryEntry
+  ): array<WMH_BiomeSpawnPoint> {
+    return this
+      .getAvailableSpawnPointsForEntry(
+        bentry,
+        this.spawn_points.getRegionValidSpawnPoints()
+      );
   }
 
   private function spawnRandomEntry(
