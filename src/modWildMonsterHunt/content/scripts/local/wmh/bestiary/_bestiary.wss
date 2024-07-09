@@ -31,6 +31,19 @@ statemachine class WMH_Bestiary {
     this.spawnRandomEntry(seed);
   }
 
+  public function onSpawnContractTarget(
+    bentry: WMH_BestiaryEntry,
+    location: WMH_BiomeSpawnPoint,
+    seed: int
+  ) {
+    this.requestSpawn(
+      (new WMH_SpawnRequest in this)
+        .withBestiaryEntry(bentry)
+        .withPosition(location.GetWorldPosition())
+        .withSeed(seed)
+    );
+  }
+
   public function getEliteEntries(level: WMH_Level): array<WMH_BestiaryEntry> {
     var output: array<WMH_BestiaryEntry>;
 

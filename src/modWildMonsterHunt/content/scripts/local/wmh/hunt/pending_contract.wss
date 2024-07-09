@@ -7,6 +7,8 @@ class WMH_PendingContract {
   // points available in the level.
   var available_locations: array<WMH_BiomeSpawnPoint>;
 
+  var was_spawned: bool;
+
   public function init(contract: WMH_Contract): WMH_PendingContract {
     this.contract = contract;
 
@@ -16,6 +18,49 @@ class WMH_PendingContract {
   public function onHuntStarted(bestiary: WMH_Bestiary) {
     this.available_locations = bestiary
       .getAvailableRegionSpawnPoints(this.contract.target);
+
+    this.was_spawned = false;
+  }
+
+  // try to spawn on any of the available locations
+  public function onSpawn(seed: int) {
+    if (this.was_spawned) {
+      return;
+    }
+
+    seed = seed
+         + this.contract.created_at_minutes
+         + this.contract.target.id.value
+         + this.contract.index;
+
+    // the target spawns on 1 pre-determined location for the contract.
+    var index: int = RandNoiseF(
+      seed,
+      this.available_locations.Size()
+    ) as int;
+
+    var location: WMH_BiomeSpawnPoint = this.available_locations[index];
+
+    var max_distance: float = 150 * 150;
+    var distance: float = VecDistanceSquared2D(
+      thePlayer.GetWorldPosition(),
+      location.GetWorldPosition()
+    );
+
+    if (distance <= max_distance) {
+      thePlayer.wmh.submitOnSpawnContractTarget(
+        this,
+        this.contract.target,
+        location,
+        seed
+      );
+
+
+      // note that we do not check for its validity before, we don't want
+      // regular spawns to postpone the appearance of the target.
+      location.consume();
+      this.was_spawned = true;
+    }
   }
 
   public function isContractExpired(): bool {

@@ -4,11 +4,14 @@ struct WMH_Contract {
   var target: WMH_BestiaryEntry;
 
   var created_at_minutes: int;
+
+  // to differentiate otherwise similar contracts that were generated in the
+  // same time span.
+  var index: int;
 }
 
 // Keeps track of the currently active contract targets the player has
 class WMH_ContractManager {
-
   private var pending_contracts: array<WMH_PendingContract>;
 
   public function init(): WMH_ContractManager {
@@ -47,6 +50,12 @@ class WMH_ContractManager {
     }
 
     storage.setLevel(new_level);
+  }
+
+  public function onSpawn(seed: int) {
+    for contract: WMH_PendingContract in this.pending_contracts {
+      contract.onSpawn(seed);
+    }
   }
 
   public function isTargetted(id: WMH_BestiaryId): bool {
@@ -123,7 +132,8 @@ class WMH_ContractManager {
 
       var contract: WMH_Contract = WMH_Contract(
         bentry,
-        now
+        now,
+        i
       );
 
       this.pending_contracts.PushBack(

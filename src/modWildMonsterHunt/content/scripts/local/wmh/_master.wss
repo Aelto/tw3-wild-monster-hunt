@@ -36,7 +36,17 @@ class WMH_Master {
     contract: WMH_ContractManager,
     seed: int
   ) {
+    this.hunt.onSpawn(seed);
     this.bestiary.onSpawn(contract, seed);
+  }
+
+  public function submitOnSpawnContractTarget(
+    origin: WMH_PendingContract,
+    bentry: WMH_BestiaryEntry,
+    location: WMH_BiomeSpawnPoint,
+    seed: int
+  ) {
+    this.bestiary.onSpawnContractTarget(bentry, location, seed);
   }
 }
 

@@ -67,6 +67,10 @@ statemachine class WMH_HuntManager {
     this.killed_creatures.PushBack(id);
   }
 
+  public function onSpawn(seed: int) {
+    this.contract.onSpawn(seed);
+  }
+
   public function difficulty(): int {
     var seed: int = this.seed + HuntSeedOffset_difficulty!;
 
