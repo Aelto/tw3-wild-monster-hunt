@@ -25,46 +25,36 @@ class WMH_BestiaryEntry {
     return this.strength > level.value;
   }
 
-  public function getCurrentRangeScaling(day_hour: float): float {
-    var preferences: WMH_SpawnPreferences;
-
-    for preferences: WMH_SpawnPreferences in this.preferences {
-      var time_range_scaling: float = preferences
-        .getTimeRangeScaling(day_hour);
-
-      if (time_range_scaling > 0) {
-        return time_range_scaling;
-      }
-    }
-
-    return 0;
-  }
-
   // This can also be used to determine if an entry can spawn. If the ratio is
   // greater than 0 than it can potentially spawn.
   public function canSpawn(
     biome: WMH_BiomeTags,
     day_hour: float,
     weather: WMH_WeatherType,
-    optional global_biome: WMH_BiomeTags,
     optional biome_tags_bypass: array<name>
   ): bool {
     var preferences: WMH_SpawnPreferences;
 
-    for preferences: WMH_SpawnPreferences in this.preferences {
-      if (
-        preferences.isWeatherValid(weather)
-        && preferences.isTimeValid(day_hour)
-        && (
-          preferences.isBiomeBypassed(biome_tags_bypass)
-          || preferences.isBiomeValid(biome, global_biome)
-        )
-      ) {
-        return true;
-      }
+    if (
+      IsNameValid(this.biome_tags_bypass)
+      && biome_tags_bypass.Contains(this.biome_tags_bypass)
+    ) {
+      return true;
     }
 
-    return false;
+    return this.getSpawnRatio(
+      biome
+      weather,
+      day_hour
+    ) > 0;
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+    return 1.0;
   }
 
   public function buildSpawnList(seed: int): array<string> {

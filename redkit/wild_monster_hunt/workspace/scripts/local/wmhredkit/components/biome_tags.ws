@@ -13,3 +13,15 @@ struct WMH_BiomeTags {
   
   editable var underground: bool;
 }
+
+function WMH_mergeBiomeTags(a: WMH_BiomeTags, b: WMH_BiomeTags): WMH_BiomeTags {
+	return WMH_BiomeTags(
+		a.roomWide || b.roomWide,
+		a.altitudeHigh || b.altitudeHigh,
+		a.humidityHigh || b.humidityHigh,
+		a.vegetationHigh || b.humidityHigh,
+		a.lightLow || b.lightLow,
+		a.structuresHigh || b.structuresHigh,
+		a.underground || b.underground
+	);
+}

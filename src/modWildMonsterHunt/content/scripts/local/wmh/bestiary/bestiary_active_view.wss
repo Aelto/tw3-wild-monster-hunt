@@ -7,10 +7,6 @@
 class WMH_BestiaryActiveView {
   private var entries: array<WMH_BestiaryEntry>;
 
-  // caches the spawn ratios for each entry as it may vary based on the
-  // weather, time, and contracts.
-  private var entries_ratios: array<float>;
-
   private var refresh_ticker: WMH_Ticker;
 
   public function init(): WMH_BestiaryActiveView {
@@ -42,27 +38,24 @@ class WMH_BestiaryActiveView {
     var current: WMH_BestiaryEntry;
 
     this.entries.Clear();
-    this.entries_ratios.Clear();
 
     // build a list with just the entries that we allow to spawn
     for current: WMH_BestiaryEntry in entries {
-      // this is where additional filtering can be done, for example based on
-      // the player's progression through the game or if the species are in
-      // the player's bestiary.
 
       // targetted entries have more chances to spawn
       var is_targetted_f: float = contract.isTargetted(current.id) as float;
-      var ratio: float = current.getCurrentRangeScaling(day_hour);
-
-      if (ratio > 0) {
-        this.entries.PushBack(current);
-        this.entries_ratios.PushBack(ratio * (5.0 * is_targetted_f));
-      }
-
+      
+      // this is where additional filtering can be done, for example based on
+      // the player's progression through the game or if the species are in
+      // the player's bestiary.
+      //
+      // at the moment there is no filtering done at all.
+      this.entries.PushBack(current);
     }
   }
 
   public function getRandomEntry(
+    contract: WMH_ContractManager,
     biome_manager: WMH_BiomeManager,
     biome_tags: WMH_BiomeTags,
     biome_tags_bypass: array<name>,
@@ -70,7 +63,10 @@ class WMH_BestiaryActiveView {
   ): WMH_BestiaryEntry {
     var weather: WMH_WeatherType = biome_manager.getWeatherType();
     var day_hour: int = biome_manager.getDayHour();
-    var global_biome: WMH_BiomeTags = biome_manager.getGlobalBiome();
+    var biome: WMH_BiomeTags = WMH_mergeBiomeTags(
+      biome_tags,
+      biome_manager.getGlobalBiome()
+    );
 
     var roller: WMH_RatiosRoller = new WMH_RatiosRoller in this;
 
@@ -81,18 +77,24 @@ class WMH_BestiaryActiveView {
     for (i = 0; i < this.entries.Size(); i += 1) {
       var current: WMH_BestiaryEntry = this.entries[i];
 
-      var can_spawn_f: float = current.canSpawn(
-        biome_tags,
+      // todo: the biome_tags_bypass is not verified during this step.
+      //  ~> what ratio should a bypassed entry get?
+
+      var ratio: float = current.getSpawnRatio(
+        biome,
         day_hour,
         weather,
-        global_biome,
         biome_tags_bypass
       ) as float;
+
+      if (contract.isTargetted(current.id)) {
+        ratio *= 10;
+      }
 
       // the ratios are pre-computed, so depending on whether the entry can
       // spawn for the more precise conditions now we simply set the
       // pre-computed ratio to 0 if it cannot.
-      roller.addRatio(this.entries_ratios[i] * can_spawn_f);
+      roller.addRatio(ratio);
     }
 
     var index: int = roller.roll(seed);

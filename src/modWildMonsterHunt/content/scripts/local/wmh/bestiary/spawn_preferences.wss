@@ -15,6 +15,7 @@ class WMH_SpawnPreferences {
     this.biome_tags_mandatory = other.biome_tags_mandatory;
     this.biome_tags_forbidden = other.biome_tags_forbidden;
     this.biome_tags_bypass = other.biome_tags_bypass;
+    this.weather_type = other.weather_type;
 
     return this;
   }
@@ -50,15 +51,7 @@ class WMH_SpawnPreferences {
   }
 
   public function getTimeRangeScaling(hours: float): float {
-    if (hours > 20 && hours < 4) {
-      return this.time_range.multiplier_night;
-    }
-
-    if (hours > 4 && hours < 12) {
-      return this.time_range.multiplier_morning;
-    }
-
-    return this.time_range.multiplier_afternoon;
+    return WMH_getScaling(this.time_range, hours);
   }
 
   public function isTimeValid(hours: float): bool {
@@ -150,6 +143,20 @@ struct WMH_TimeRangeScaling {
 
   // from 20:00 to 04:00
   var multiplier_night: float;
+}
+
+function WMH_getScaling(range: WMH_TimeRangeScaling, hours: float): float {
+  // if these values are changed, make sure to edit the
+  // `pref_rule` macro as well
+  if (hours > 20 || hours < 4) {
+    return range.multiplier_night;
+  }
+
+  if (hours > 4 && hours < 12) {
+    return range.multiplier_morning;
+  }
+
+  return range.multiplier_afternoon;
 }
 
 enum WMH_WeatherType {
