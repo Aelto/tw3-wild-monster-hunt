@@ -1,0 +1,50 @@
+#define function pref_rule(code) {
+  #pragma find rain
+  #pragma replace (weather == WMH_WeatherType_Rain)
+
+  #pragma find clear
+  #pragma replace (weather == WMH_WeatherType_Clear)
+
+  #pragma find snow
+  #pragma replace (weather == WMH_WeatherType_Snow)
+
+  #pragma find humidity
+  #pragma replace tags.humidityHigh
+
+  #pragma find wide
+  #pragma replace tags.roomWide
+
+  #pragma find altitude
+  #pragma replace tags.altitudeHigh
+
+  #pragma find vegetation
+  #pragma replace tags.vegetationHigh
+
+  #pragma find lightlow
+  #pragma replace tags.lightLow
+
+  #pragma find underground
+  #pragma replace tags.underground
+
+  #pragma find structures
+  #pragma replace tags.structuresHigh
+
+
+  #pragma find morning
+  #pragma replace (day_hour > 4 && day_hour < 12)
+  #pragma find afternoon
+  #pragma replace (day_hour > 12 && day_hour < 20)
+  #pragma find night
+  #pragma replace (day_hour > 20 || day_hour < 4)
+
+  #pragma find if
+  #pragma replace if (
+
+  #pragma find =>
+  #pragma replace ) { return WMH_getScaling(WMH_TimeRangeScaling(
+
+  #pragma find ;
+  #pragma replace ), day_hour); }
+
+  code
+};
