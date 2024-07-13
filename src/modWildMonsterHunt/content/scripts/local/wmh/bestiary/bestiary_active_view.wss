@@ -82,9 +82,8 @@ class WMH_BestiaryActiveView {
 
       var ratio: float = current.getSpawnRatio(
         biome,
-        day_hour,
         weather,
-        biome_tags_bypass
+        day_hour
       ) as float;
 
       if (contract.isTargetted(current.id)) {

@@ -72,10 +72,11 @@ statemachine class WMH_Bestiary {
   }
 
   private function spawnRandomEntry(
-    contract: WMH_ContractManager
+    contract: WMH_ContractManager,
     seed: int
   ) {
-    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points.getRandomNearbyValidSpawnPoint(seed);
+    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points
+      .getRandomNearbyValidSpawnPoint(seed);
 
     if (spawn_point) {
       var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(

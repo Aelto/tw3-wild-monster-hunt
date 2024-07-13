@@ -5,11 +5,10 @@ struct WMH_BestiaryId {
 class WMH_BestiaryEntry {
   public var id: WMH_BestiaryId;
 
-  protected var preferences: array<WMH_SpawnPreferences>;
   protected var difficulty_scaling: WMH_DifficultyScaling;
   protected var templates: array<WMH_EnemyTemplate>;
 
-  protected var biome_tags_bypass: name;
+  protected var biome_tag_bypass: name;
 
   public var strength: float;
 
@@ -33,17 +32,15 @@ class WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     optional biome_tags_bypass: array<name>
   ): bool {
-    var preferences: WMH_SpawnPreferences;
-
     if (
-      IsNameValid(this.biome_tags_bypass)
-      && biome_tags_bypass.Contains(this.biome_tags_bypass)
+      IsNameValid(this.biome_tag_bypass)
+      && biome_tags_bypass.Contains(this.biome_tag_bypass)
     ) {
       return true;
     }
 
     return this.getSpawnRatio(
-      biome
+      biome,
       weather,
       day_hour
     ) > 0;
