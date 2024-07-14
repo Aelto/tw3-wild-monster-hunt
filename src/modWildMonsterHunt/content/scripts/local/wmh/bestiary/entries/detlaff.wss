@@ -26,26 +26,14 @@ class WMH_BestiaryEntryDetlaff extends WMH_BestiaryEntry {
   ): float {
 
     pref_rule!({{
-      if rain && humidity && vegetation && !underground
-        => 1.5, 1.5, 1.5;
-
-      if rain && vegetation && !underground
-        => 1.0, 1.0, 1.0;
-
-      if vegetation && humidity && !underground
-        => 1.0, 1.0, 1.0;
-
-      if vegetation || humidity && !underground
-        => 0.5, 0.5, 0.5;
-
-      if underground && wide
-        => 0.0, 0.0, 1.0;
+      if !underground
+        => 0.01, 0.01, 0.01;
     }})
 
     return 0;
   }
 
   public function getLocName(): string {
-    return "Detlaff";
+    return "Higher Vampire";
   }
 }

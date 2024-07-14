@@ -27,20 +27,8 @@ class WMH_BestiaryEntryBerserker extends WMH_BestiaryEntry {
   ): float {
 
     pref_rule!({{
-      if rain && humidity && vegetation && !underground
-        => 1.5, 1.5, 1.5;
-
-      if rain && vegetation && !underground
+      if !underground
         => 1.0, 1.0, 1.0;
-
-      if vegetation && humidity && !underground
-        => 1.0, 1.0, 1.0;
-
-      if vegetation || humidity && !underground
-        => 0.5, 0.5, 0.5;
-
-      if underground && wide
-        => 0.0, 0.0, 1.0;
     }})
 
     return 0;
