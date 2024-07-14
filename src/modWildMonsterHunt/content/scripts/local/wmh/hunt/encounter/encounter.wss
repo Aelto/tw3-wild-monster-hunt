@@ -20,9 +20,17 @@ class WMH_Encounter {
     return this.entities.Size() <= 0;
   }
 
-  public function onDestroy() {
+  public function onDestroy(optional notifyKills: bool) {
     for entity: CEntity in this.entities {
       entity.Destroy();
+    }
+
+    this.entities.Clear();
+
+    if (notifyKills) {
+      for bentry: WMH_BestiaryEntry in this.entries {
+        thePlayer.wmh.submitOnCreatureKilled(this, bentry);
+      }
     }
   }
 }

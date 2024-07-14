@@ -17,7 +17,7 @@ class WMH_Master {
     this.bestiary = (new WMH_Bestiary in this).init(this);
     this.hunt = (new WMH_HuntManager in this).init(this);
     
-    // var a: int = "compile_fail";
+    var a: int = "compile_fail";
   }
 
   public function submitOnSettlementEnter(
@@ -60,6 +60,15 @@ class WMH_Master {
       .init(entries, entities);
 
     this.hunt.onEncounterSpawned(encounter);
+  }
+
+  public function submitOnCreatureKilled(
+    origin: WMH_Encounter,
+    bentry: WMH_BestiaryEntry
+  ) {
+    WMHINFO("submitOnCreatureKilled: id=" + bentry.id.value);
+
+    this.hunt.onCreatureKilled(bentry);
   }
 }
 
