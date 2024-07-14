@@ -23,35 +23,33 @@ class WMH_BestiaryEntryBruxa extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    this.preferences.PushBack(
-      (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.4, 0, 1.2))
-      .withMandatoryBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ true,
-          /*structuresHigh*/ false,
-          /*underground*/ false
-        )
-      )
-      .withForbiddenBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ true,
-          /*vegetationHigh*/ true,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ false
-        )
-      )
-      .withBiomeTagsBypass('Bruxa')
-    );
+    this.biome_tag_bypass = 'Bruxa';
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+
+    pref_rule!({{
+      if rain && humidity && vegetation && !underground
+        => 1.5, 1.5, 1.5;
+
+      if rain && vegetation && !underground
+        => 1.0, 1.0, 1.0;
+
+      if vegetation && humidity && !underground
+        => 1.0, 1.0, 1.0;
+
+      if vegetation || humidity && !underground
+        => 0.5, 0.5, 0.5;
+
+      if underground && wide
+        => 0.0, 0.0, 1.0;
+    }})
+
+    return 0;
   }
 
   public function getLocName(): string {

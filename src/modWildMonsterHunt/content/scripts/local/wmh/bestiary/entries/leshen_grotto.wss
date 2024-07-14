@@ -1,4 +1,4 @@
-// The subspecies of a leshen that can spawn in caves/grottos
+// The subspecies of a leshen that can only spawn in caves/grottos
 class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
@@ -17,34 +17,29 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    this.preferences.PushBack(
-      (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.4, 1.1, 0.4))
-      .withMandatoryBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ true,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ true
-        )
-      )
-      .withForbiddenBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ false
-        )
-      )
-      .withBiomeTagsBypass('LeshenGrotto')
-    );
+    this.biome_tag_bypass = 'LeshenGrotto';
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+
+    pref_rule!({{
+      if structures
+        => 0.0, 0.0, 0.0;
+
+      if vegetation && !underground
+        => 1.0, 1.0, 1.0;
+
+      if rain && underground
+        => 1.0, 1.0, 1.0;
+
+      if underground
+        => 0.0, 0.0, 1.0;
+    }})
+
+    return 0;
   }
 }

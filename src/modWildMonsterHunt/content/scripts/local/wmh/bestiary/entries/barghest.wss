@@ -17,35 +17,27 @@ class WMH_BestiaryEntryBarghest extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 2;
     this.difficulty_scaling.maximum_count_hard = 2;
 
-    this.preferences.PushBack(
-      (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.4, 0, 1.2))
-      .withMandatoryBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ true,
-          /*structuresHigh*/ false,
-          /*underground*/ false
-        )
-      )
-      .withForbiddenBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ true,
-          /*vegetationHigh*/ true,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ true
-        )
-      )
-      .withBiomeTagsBypass('Barghest')
-    );
+    this.biome_tag_bypass = 'Barghest';
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+
+    pref_rule!({{
+      if underground
+        => 0.0, 0.0, 0.0;
+
+      if rain && lowlight && structures
+        => 0.0, 0.0, 1.0;
+
+      if rain || lowlight || structures
+        => 0.0, 0.0, 0.2;
+    }})
+
+    return 0;
   }
 
   public function getLocName(): string {

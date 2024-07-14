@@ -31,34 +31,6 @@ class WMH_BestiaryEntryBear extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 2;
 
-    this.preferences.PushBack(
-      (new WMH_SpawnPreferences in this)
-      .withTimeRange(WMH_TimeRangeScaling(0.4, 1.1, 0.4))
-      .withMandatoryBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ true
-        )
-      )
-      .withForbiddenBiomeTags(
-        WMH_BiomeTags(
-          /*roomWide*/ false,
-          /*altitudeHigh*/ false,
-          /*humidityHigh*/ false,
-          /*vegetationHigh*/ false,
-          
-          /*lightLow*/ false,
-          /*structuresHigh*/ false,
-          /*underground*/ false
-        )
-      )
-      .withBiomeTagsBypass('Bear')
-    );
+    this.biome_tag_bypass = 'Bear';
   }
 }
