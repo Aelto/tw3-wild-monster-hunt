@@ -1,0 +1,28 @@
+// 
+class WMH_Encounter {
+  private var entries: array<WMH_BestiaryEntry>;
+  private var entities: array<CEntity>;
+
+  public function init(
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>
+  ): WMH_Encounter {
+    this.entries = entries;
+    this.entities = entities;
+
+    return this;
+  }
+
+  // returns `true` if it needs to be destroyed by the manager
+  public function onTick(): bool {
+    SUH_removeDeadEntities(this.entities);
+
+    return this.entities.Size() <= 0;
+  }
+
+  public function onDestroy() {
+    for entity: CEntity in this.entities {
+      entity.Destroy();
+    }
+  }
+}

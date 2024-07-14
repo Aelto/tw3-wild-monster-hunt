@@ -28,5 +28,7 @@ class WMH_SpawnRequest {
 
   public function onRequestFinished(entities: array<CEntity>) {
     WMHINFO("WMH_SpawnRequest::onRequestFinished, entities.Size() = " + entities.Size());
+
+    thePlayer.wmh.submitOnEncounterSpawned(this, this.entries, entities);
   }
 }

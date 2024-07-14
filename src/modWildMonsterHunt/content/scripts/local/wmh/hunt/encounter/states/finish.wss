@@ -1,0 +1,20 @@
+state Finish in WMH_EncounterManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Finish_main();
+  }
+
+  entry function Finish_main() {
+    WMHINFO("WMH_EncounterManagerStateFinish:Finish_main()");
+    this.destroyEncounters();
+    parent.GotoState('Waiting');
+  }
+
+  latent function destroyEncounters() {
+    for encounter: WMH_Encounter in parent.encounters {
+      encounter.onDestroy();
+    }
+
+    parent.encounters.Clear();
+  }
+}

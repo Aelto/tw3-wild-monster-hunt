@@ -1,0 +1,20 @@
+state Confirm in WMH_EncounterManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Confirm_main();
+  }
+
+  entry function Confirm_main() {
+    WMHINFO("WMH_EncounterManagerStateConfirm:Confirm_main()");
+
+    if (parent.encounters.Size() <= 0) {
+      WMHINFO("WMH_EncounterManagerStateConfirm - no more encounters");
+
+      parent.GotoState('Waiting');
+    }
+    else {
+      Sleep(15.0);
+      parent.GotoState('Running');
+    }
+  }
+}

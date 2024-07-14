@@ -1,0 +1,10 @@
+state Waiting in WMH_EncounterManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {
+    WMHINFO("WMH_EncounterManagerStateWaiting:Waiting_main()");
+  }
+}

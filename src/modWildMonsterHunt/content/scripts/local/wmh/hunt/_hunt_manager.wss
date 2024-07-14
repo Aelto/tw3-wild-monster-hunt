@@ -4,6 +4,7 @@
 statemachine class WMH_HuntManager {
   private var master: WMH_Master;
 
+  protected var encounters: WMH_EncounterManager;
   protected var contract: WMH_ContractManager;
 
   protected var factory: WMH_HuntSeedFactory;
@@ -19,6 +20,7 @@ statemachine class WMH_HuntManager {
   public function init(master: WMH_Master): WMH_HuntManager {
     this.master = master;
 
+    this.encounters = (new WMH_EncounterManager in this).init();
     this.contract = (new WMH_ContractManager in this).init();
     this.GotoState('Waiting');
 
@@ -61,6 +63,7 @@ statemachine class WMH_HuntManager {
     }
 
     this.contract.onHuntFinished(bestiary, storage, this.killed_creatures);
+    this.encounters.onHuntFinished();
   }
 
   public function onCreatureKilled(id: WMH_BestiaryId) {
@@ -69,6 +72,10 @@ statemachine class WMH_HuntManager {
 
   public function onSpawn(seed: int) {
     this.contract.onSpawn(seed);
+  }
+
+  public function onEncounterSpawned(encounter: WMH_Encounter) {
+    this.encounters.onEncounterSpawned(encounter);
   }
 
   public function difficulty(): int {

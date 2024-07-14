@@ -1,0 +1,22 @@
+state Running in WMH_EncounterManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Running_main();
+  }
+
+  entry function Running_main() {
+    WMHINFO("WMH_EncounterManagerStateRunning:Running_main()");
+
+    parent.GotoState('Confirm');
+  }
+
+  latent function tickEncounters() {
+    for encounter: WMH_Encounter in parent.encounters {
+      var should_destroy: bool = encounter.onTick();
+
+      if (should_destroy) {
+        encounter.onDestroy();
+      }
+    }
+  }
+}

@@ -16,6 +16,8 @@ class WMH_Master {
     this.camp = (new WMH_CampManager in this).init(this);
     this.bestiary = (new WMH_Bestiary in this).init(this);
     this.hunt = (new WMH_HuntManager in this).init(this);
+    
+    // var a: int = "compile_fail";
   }
 
   public function submitOnSettlementEnter(
@@ -47,6 +49,17 @@ class WMH_Master {
     seed: int
   ) {
     this.bestiary.onSpawnContractTarget(bentry, location, seed);
+  }
+
+  public function submitOnEncounterSpawned(
+    origin: WMH_SpawnRequest,
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>
+  ) {
+    var encounter: WMH_Encounter = (new WMH_Encounter in thePlayer.wmh)
+      .init(entries, entities);
+
+    this.hunt.onEncounterSpawned(encounter);
   }
 }
 

@@ -1,0 +1,20 @@
+statemachine class WMH_EncounterManager {
+  protected var encounters: array<WMH_Encounter>;
+
+  public function init(): WMH_EncounterManager {
+    this.GotoState('Waiting');
+    return this;
+  }
+
+  public function onEncounterSpawned(encounter: WMH_Encounter) {
+    this.encounters.PushBack(encounter);
+
+    if (this.GetCurrentStateName() == 'Waiting') {
+      this.GotoState('Running');
+    }
+  }
+
+  public function onHuntFinished() {
+    this.GotoState('Finish');
+  }
+}
