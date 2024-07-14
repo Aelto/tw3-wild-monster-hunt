@@ -7,4 +7,4 @@ set redkitDepotScripts=%gamePath%\depot\scripts
 REM do not update anything below this line
 set modPath=%cd%\..
 set modName=modWildMonsterHunt
-set modKitPath=D:\programs\witcher_3_mod_tools\bin\x64
+set redkitPath=D:\programs\Steam\steamapps\common\Witcher 3 Editor\bin\x64_RedKit
