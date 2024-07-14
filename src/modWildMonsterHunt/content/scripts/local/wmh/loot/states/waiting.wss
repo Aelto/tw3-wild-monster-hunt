@@ -1,0 +1,22 @@
+state Waiting in WMH_LootManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {
+    WMHINFO("WMH_LootManagerStateWaiting:Waiting_main()");
+
+    if (parent.loot_requests.Size() > 0) {
+      parent.GotoState('Running');
+    }
+
+    while (true) {
+      Sleep(10);
+
+      if (parent.loot_requests.Size() > 0) {
+        parent.GotoState('Running');
+      }
+    }
+  }
+}

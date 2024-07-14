@@ -1,0 +1,4 @@
+struct WMH_LootEntry {
+  var item: name;
+  var level: int;
+}

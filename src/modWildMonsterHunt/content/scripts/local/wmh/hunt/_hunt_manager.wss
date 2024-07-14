@@ -46,6 +46,8 @@ statemachine class WMH_HuntManager {
       + this.factory.timeoffset
     ) as int;
 
+    WMH_setHuntSeedFact(this.seed);
+
     this.start_time = WMH_getGameTimeNow();
     this.killed_creatures.Clear();
 
@@ -98,4 +100,12 @@ statemachine class WMH_HuntManager {
 
     return WMH_getGameTimeSecondsSince(this.start_time);
   }
+}
+
+function WMH_setHuntSeedFact(seed: int) {
+  FactsSet("WMH_hunt_seed", seed);
+}
+
+function WMH_getHuntSeedFact(): int {
+  return FactsQueryLatestValue("WMH_hunt_seed");
 }

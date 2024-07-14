@@ -1,0 +1,60 @@
+state Running in WMH_LootManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Running_main();
+  }
+
+  entry function Running_main() {
+    WMHINFO("WMH_LootManagerStateRunning:Running_main()");
+
+    while (parent.loot_requests.Size() > 0) {
+      var request: WMH_LootRequest = parent.loot_requests.PopBack();
+
+      this.addLoot(request);
+      SleepOneFrame();
+    }
+    for request: WMH_LootRequest in parent.loot_requests {
+      
+    }
+
+    parent.GotoState('Waiting');
+  }
+
+  private function addLoot(out request: WMH_LootRequest) {
+    var index: int;
+    var items_count: int;
+
+    var tags_count: int = request.tags.Size();
+
+    while (items_count < tags_count) {
+      index = RandNoiseF(request.seed, tags_count) as int;
+      
+      var can_add: bool = RandNoiseF(request.seed + index, tags_count + 1)
+                        // the +1 means there is a chance to have 0 items
+                        >= 1 + items_count;
+
+      can_add = true;
+      if (!can_add) {
+        break;
+      }
+
+      this.addRandomItemFromCategory(
+        request.inventory,
+        parent.loot_by_category[index],
+        request.seed + index
+      );
+
+      items_count += 1;
+    }
+  }
+
+  private function addRandomItemFromCategory(
+    inventory: CInventoryComponent,
+    out category: array<name>,
+    seed: int
+  ) {
+    var item_index: int = RandNoiseF(seed, category.Size()) as int;
+
+    inventory.AddAnItem(category[item_index], 1);
+  }
+}

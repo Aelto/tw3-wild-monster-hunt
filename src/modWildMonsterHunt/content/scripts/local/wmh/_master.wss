@@ -5,6 +5,7 @@ class WMH_Master {
   private var camp: WMH_CampManager;
   private var bestiary: WMH_Bestiary;
   private var hunt: WMH_HuntManager;
+  private var loot: WMH_LootManager;
 
   public function onCreate() {}
 
@@ -16,8 +17,9 @@ class WMH_Master {
     this.camp = (new WMH_CampManager in this).init(this);
     this.bestiary = (new WMH_Bestiary in this).init(this);
     this.hunt = (new WMH_HuntManager in this).init(this);
+    this.loot = (new WMH_LootManager in this).init();
     
-    var a: int = "compile_fail";
+    // var a: int = "compile_fail";
   }
 
   public function submitOnSettlementEnter(
@@ -69,6 +71,14 @@ class WMH_Master {
     WMHINFO("submitOnCreatureKilled: id=" + bentry.id.value);
 
     this.hunt.onCreatureKilled(bentry);
+  }
+
+  public function submitOnContainerRefill(
+    origin: WMH_RefillableContainer,
+    inventory: CInventoryComponent,
+    seed: int
+  ) {
+    this.loot.onContainerRefill(inventory, origin.loot_tags, seed);
   }
 }
 

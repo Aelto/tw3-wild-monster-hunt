@@ -1,0 +1,46 @@
+statemachine class WMH_LootManager {
+  protected var loot_requests: array<WMH_LootRequest>;
+
+  // it uses the value of WMH_LootTag as the first index.
+  protected var loot_by_category: array<array<name>>;
+
+  public function init(): WMH_LootManager {
+    this.GotoState('Loading');
+    return this;
+  }
+
+  public function onContainerRefill(
+    inventory: CInventoryComponent,
+    out tags: array<WMH_LootTag>,
+    seed: int
+  ) {
+
+    this.addLootRequest(
+      WMH_LootRequest(
+        inventory,
+        tags,
+        seed
+      )
+    );
+  }
+
+  private function addLootRequest(request: WMH_LootRequest) {
+    WMHINFO("addLootRequest, seed = " + request.seed);
+
+    this.loot_requests.PushBack(request);
+
+    if (this.GetCurrentStateName() == 'Waiting') {
+      this.GotoState('Running');
+    }
+  }
+
+  protected function registerLoot(category: WMH_LootTag, level: int, item: name) {
+    this.loot_by_category[category].PushBack(item);
+  }
+}
+
+struct WMH_LootRequest {
+  var inventory: CInventoryComponent;
+  var tags: array<WMH_LootTag>;
+  var seed: int;
+}
