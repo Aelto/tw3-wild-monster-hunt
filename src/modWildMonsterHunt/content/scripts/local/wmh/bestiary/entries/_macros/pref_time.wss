@@ -1,5 +1,5 @@
-// a way to define preferences for entries that are mostly dependent on biomes
-#define function pref_rule(code) {
+// a way to define preferences for entries that are mostly dependent on time
+#define function pref_time(code) {
   #pragma find rain
   #pragma replace (weather == WMH_WeatherType_Rain)
 
@@ -32,20 +32,29 @@
 
 
   #pragma find morning
-  #pragma replace (day_hour > 4 && day_hour < 12)
+  #pragma replace if (day_hour > 4 && day_hour < 12)
   #pragma find afternoon
-  #pragma replace (day_hour > 12 && day_hour < 20)
+  #pragma replace if (day_hour > 12 && day_hour < 20)
   #pragma find night
-  #pragma replace (day_hour > 20 || day_hour < 4)
+  #pragma replace if (day_hour > 20 || day_hour < 4)
 
-  #pragma find if
-  #pragma replace if (
+  #pragma find exit
+  #pragma replace return scaling;
+  #pragma find nospawn
+  #pragma replace { return 0; }
 
-  #pragma find =>
-  #pragma replace ) { return WMH_getScaling(WMH_TimeRangeScaling(
+  #pragma find +=
+  #pragma replace { scaling +=
+  #pragma find *=
+  #pragma replace { scaling *=
+  #pragma find -=
+  #pragma replace { scaling -=
+  #pragma find ,
+  #pragma replace ; }
 
-  #pragma find ;
-  #pragma replace ), day_hour); }
+  var scaling: float = 0;
 
   code
+
+  return scaling;
 };

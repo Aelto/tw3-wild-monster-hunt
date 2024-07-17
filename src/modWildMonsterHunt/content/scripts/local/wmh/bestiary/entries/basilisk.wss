@@ -35,12 +35,25 @@ class WMH_BestiaryEntryBasilisk extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+    pref_time!({{
+      if (altitude || underground) nospawn
 
-    return 0;
+      morning {
+        if (wide && clear) += 0.5,
+        if (vegetation) += 0.5,
+      }
+
+      afternoon {
+        if (wide && clear) += 1.0,
+        if (vegetation) += 0.1,
+      }
+
+      night {
+        if (wide) *= 0.1,
+        if (rain) *= 0.1,
+        if (vegetation) += 1.0,
+      }
+    }});
   }
 
   public function getLocName(): string {

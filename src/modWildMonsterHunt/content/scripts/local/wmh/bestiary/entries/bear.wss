@@ -33,4 +33,39 @@ class WMH_BestiaryEntryBear extends WMH_BestiaryEntry {
 
     this.biome_tag_bypass = 'Bear';
   }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+
+    pref_time!({{
+      morning {
+        if (underground) += 0.3,
+        if (underground && rain) += 0.3,
+        if (structures) += 0.3,
+      }
+
+      afternoon {
+        if (underground) {
+          if (rain) += 0.5,
+          else nospawn
+        }
+        
+        if (structures) += 0.5,
+        if (vegetation) += 0.5,
+        if (humidity) += 0.5,
+      }
+
+      night {
+        if (underground) += 1.0,
+        if (!underground) *= 0.1,
+      }
+    }});
+  }
+
+  public function getLocName(): string {
+    return "Bear";
+  }
 }

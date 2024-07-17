@@ -27,7 +27,11 @@ class WMH_BestiaryEntryBerserker extends WMH_BestiaryEntry {
   ): float {
 
     pref_rule!({{
-      if !underground
+      if structures
+        => 0.3, 0.3, 0.3;
+
+      // berserkers can be found pretty much anywhere
+      if !structures
         => 1.0, 1.0, 1.0;
     }})
 
