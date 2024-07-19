@@ -38,13 +38,28 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      morning {
+        if (underground) += 1.0,
+        if (lightlow) += 0.2,
+        if (structures) += 0.2,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+        if (rain) *= 2.0,
+      }
 
-    return 0;
+      afternoon {
+        if (underground || rain) += 1.0,
+        if (lightlow && (vegetation || structures)) += 0.2,
+        if (structures) += 0.2,
+      }
+
+      night {
+        if (structures) += 3.0,
+        if (vegetation) += 0.2,
+        if (lightlow) += 0.1,
+        if (rain) *= 1.2,
+      }
+    }});
   }
 
   public function getLocName(): string {

@@ -31,13 +31,18 @@ class WMH_BestiaryEntryWight extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      morning nospawn
+      afternoon nospawn
+      if (underground) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      night {
+        if (lightlow) += 0.2,
+        if (structures) += 0.4,
 
-    return 0;
+        if (!rain) *= 1.2,
+      }
+    }});
   }
 
   public function getLocName(): string {

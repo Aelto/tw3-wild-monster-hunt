@@ -45,12 +45,24 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (altitude) nospawn
+      if (underground && !humidity) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (humidity) += 1.0,
+      if (rain) += 0.5,
 
-    return 0;
+      morning {
+        if (structures) *= 1.5,
+      }
+
+      afternoon {
+        if (wide) *= 1.5,
+      }
+
+      night {
+        if (vegetation) *= 1.5,
+      }
+    }});
   }
 }

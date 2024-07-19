@@ -52,13 +52,30 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      // bestiary:
+      // It is not true that they only appear at night
+      // Wraiths are usually encountered at night, near cemeteries, catacombs
+      // and other such burial places, or else near the places that were
+      // important to them in life: abandoned homes, crumbling castles or
+      // forgotten bridges.
+      if (!structures) nospawn
+      else += 0.8,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (humidity) += 0.2,
 
-    return 0;
+      morning {
+        if (clear) *= 0.1,
+      }
+
+      afternoon {
+        if (clear) *= 0.05,
+      }
+
+      night {
+        if (!clear) *= 1.5,
+      }
+    }});
   }
 
   public function getLocName(): string {

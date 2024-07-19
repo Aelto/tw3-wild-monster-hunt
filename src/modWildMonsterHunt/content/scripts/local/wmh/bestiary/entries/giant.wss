@@ -38,13 +38,22 @@ class WMH_BestiaryEntryGiant extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (altitude) += 1.0,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      // when raining they may descend lower than usual
+      if (!altitude && (rain || snow)) += 0.2,
 
-    return 0;
+      afternoon {
+        // less chances to see giants in structures in the afternoon, where they
+        // are usually found roaming around hunting.
+        if (structures) *= 0.5,
+      }
+
+      night {
+        if (!altitude) nospawn
+      }
+    }});
   }
 
   public function getLocName(): string {

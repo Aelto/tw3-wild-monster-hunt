@@ -52,13 +52,8 @@ class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+    // humans can be anywhere
+    return 0.1;
   }
 
   public function getLocName(): string {

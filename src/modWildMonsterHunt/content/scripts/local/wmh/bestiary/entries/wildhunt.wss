@@ -66,13 +66,11 @@ class WMH_BestiaryEntryWildhunt extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+      if (snow && structures) += 0.05,
+    }});
   }
 
   public function getLocName(): string {

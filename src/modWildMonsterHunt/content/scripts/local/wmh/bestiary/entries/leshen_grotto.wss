@@ -25,21 +25,11 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (!underground || !wide) nospawn
+      else += 0.1,
 
-    pref_rule!({{
-      if structures
-        => 0.0, 0.0, 0.0;
-
-      if vegetation && !underground
-        => 1.0, 1.0, 1.0;
-
-      if rain && underground
-        => 1.0, 1.0, 1.0;
-
-      if underground
-        => 0.0, 0.0, 1.0;
-    }})
-
-    return 0;
+      if (vegetation) += 2.0,
+    }});
   }
 }

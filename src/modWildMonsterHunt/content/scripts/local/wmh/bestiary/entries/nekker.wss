@@ -59,13 +59,16 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground) += 0.5,
+      if (vegetation) += 0.5,
+      if (!wide) += 0.2,
+      if (humidity) += 0.1,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+      night {
+        if (!underground) *= 0.2,
+      }
+    }});
   }
 
   public function getLocName(): string {

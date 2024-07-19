@@ -45,13 +45,18 @@ class WMH_BestiaryEntryHarpy extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    // harpies prefer wild, mountainous areas, full of rocky ledges they can
+    // build their nests on. However they always establish themselves near a
+    // human settlement. This is done for thus simple reason that they wouldn't
+    // be able to steal much from animals.
+    pref_time!({{
+      night nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (!structures || underground || rain) nospawn
+      else += 1.0,
 
-    return 0;
+      if (vegetation) *= 0.2,
+    }});
   }
 
   public function getLocName(): string {

@@ -31,13 +31,15 @@ class WMH_BestiaryEntryCentipede extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground) += 0.3,
+      if (vegetation) += 0.3,
+      if (structures) *= 0.1,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+      morning *= 0.8,
+      afternoon *= 0.5,
+      night *= 1.5,
+    }});
   }
 
   public function getLocName(): string {

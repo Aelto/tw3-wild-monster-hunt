@@ -24,13 +24,15 @@ class WMH_BestiaryEntryDetlaff extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      morning nospawn
+      afternoon nospawn
 
-    pref_rule!({{
-      if !underground
-        => 0.01, 0.01, 0.01;
-    }})
-
-    return 0;
+      night {
+        if (lightlow) += 0.1,
+        else += 0.05,
+      }
+    }});
   }
 
   public function getLocName(): string {

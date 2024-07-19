@@ -24,13 +24,20 @@ class WMH_BestiaryEntryTroll extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (altitude) += 0.3,
+      if (structures) += 0.3,
+      if (humidity) += 0.1,
+      if (vegetation) += 0.1,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      morning *= 1.5,
+      afternoon *= 2.0,
 
-    return 0;
+      night {
+        if (underground) += 1.0,
+        if (underground && wide) += 1.0,
+      }
+    }});
   }
 
   public function getLocName(): string {

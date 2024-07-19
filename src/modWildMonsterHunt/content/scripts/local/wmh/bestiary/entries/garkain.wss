@@ -31,13 +31,35 @@ class WMH_BestiaryEntryGarkain extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      morning {
+        if (underground) += 0.1,
+        if (lightlow) += 0.1,
+        if (vegetation) += 0.1,
+        
+        if (rain && !underground) *= 2.0,
+        if (structures) *= 1.5,
+      }
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      afternoon {
+        if (underground) += 0.1,
 
-    return 0;
+        // afternoon, requires both lightlow & vegetation
+        if (lightlow && vegetation) += 0.1,
+
+        if (rain && !underground) *= 2.0,
+        if (structures) *= 1.5,
+      }
+
+      night {
+        if (underground) += 0.05,
+        if (vegetation) += 0.1,
+        if (lightlow) += 0.1,
+
+        if (structures) *= 2.0,
+        if (rain) *= 1.2, // rain has less effect during nights
+      }
+    }});
   }
 
   public function getLocName(): string {

@@ -45,13 +45,33 @@ class WMH_BestiaryEntryGryphon extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    // Griffins were once only found high in the mountains, where they would
+    // hunt marmots and wild goats.
+    //
+    // When humans encroached on their lands, however, griffins soon discovered
+    // a new source of much more plentiful and easier-caught prey: cows, sheep
+    // and shepherds.
+    //
+    // Though still wary of main roads and towns (where folk with the means to
+    // hire a witcher are like to dwell),
+    pref_time!({{
+      if (structures || !wide) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      morning {
+        if (vegetation) += 0.2,
+      }
 
-    return 0;
+      afternoon {
+        if (altitude) += 0.8,
+        else += 0.1,
+
+        if (rain && vegetation) += 0.2,
+        if (rain && !vegetation) nospawn
+        if (!rain && vegetation) *= 0.2,
+      }
+
+      night nospawn
+    }});
   }
 
   public function getLocName(): string {

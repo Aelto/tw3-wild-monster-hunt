@@ -25,13 +25,14 @@ class WMH_BestiaryEntryChort extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground) += 0.3,
+      if (vegetation) += 0.5,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+      night {
+        if (structures) *= 1.2,
+      }
+    }});
   }
 
   public function getLocName(): string {

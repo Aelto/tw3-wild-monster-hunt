@@ -29,7 +29,7 @@ class WMH_RatiosRoller {
         return i;
       }
 
-      rolled_value -= this.ratios[i];
+      rolled_value -= MaxF(this.ratios[i], 0);
     }
 
     return this.ratios.Size() - 1;

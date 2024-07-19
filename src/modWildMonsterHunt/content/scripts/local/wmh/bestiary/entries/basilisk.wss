@@ -34,23 +34,30 @@ class WMH_BestiaryEntryBasilisk extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-
     pref_time!({{
       if (altitude || underground) nospawn
 
+      if (wide) += 1.0,
+      else nospawn
+
       morning {
-        if (wide && clear) += 0.5,
-        if (vegetation) += 0.5,
+        if (clear) += 0.3,
+        if (vegetation) += 0.3,
+
+        // if raining, less chances to be outside vegetation
+        if (rain && !vegetation) *= 0.1,
       }
 
       afternoon {
-        if (wide && clear) += 1.0,
-        if (vegetation) += 0.1,
+        if (clear) += 1.0,
+
+        if (vegetation) *= 0.8,
+
+        // if raining, less chances to be outside vegetation
+        if (rain && !vegetation) *= 0.1,
       }
 
       night {
-        if (wide) *= 0.1,
-        if (rain) *= 0.1,
         if (vegetation) += 1.0,
       }
     }});

@@ -39,7 +39,6 @@ class WMH_BestiaryEntryBear extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-
     pref_time!({{
       morning {
         if (underground) += 0.3,

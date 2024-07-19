@@ -38,12 +38,20 @@ class WMH_BestiaryEntryBruxacity extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+    pref_time!({{
+      afternoon nospawn
 
-    return 0;
+      morning {
+        if (lightlow) += 0.3,
+        if (underground) += 0.3,
+      }
+
+      night {
+        if (structures) += 0.3,
+        if (underground) += 0.3,
+        if (lightlow) += 0.3,
+      }
+    }});
   }
 
   public function getLocName(): string {

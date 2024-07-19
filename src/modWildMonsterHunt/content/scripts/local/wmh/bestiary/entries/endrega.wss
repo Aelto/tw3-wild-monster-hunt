@@ -38,13 +38,17 @@ class WMH_BestiaryEntryEndrega extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (vegetation) += 0.3,
+      if (lightlow) += 0.3,
+      if (humidity) += 0.3,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (rain) *= 1.5,
 
-    return 0;
+      morning *= 0.8,
+      afternoon *= 1.0,
+      night *= 0.2,
+    }});
   }
 
   public function getLocName(): string {

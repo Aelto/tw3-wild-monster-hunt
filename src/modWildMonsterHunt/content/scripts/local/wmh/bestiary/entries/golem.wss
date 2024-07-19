@@ -38,13 +38,9 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
-
-    return 0;
+    pref_time!({{
+      if (structures) += 0.1,
+    }});
   }
 
   public function getLocName(): string {

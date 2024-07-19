@@ -45,13 +45,30 @@ class WMH_BestiaryEntryEchinops extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (altitude) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      morning {
+        if (vegetation) += 0.1,
+        if (structures) *= 2.0,
+        if (humidity || rain) *= 1.5,
+      }
 
-    return 0;
+      afternoon {
+        if (!rain && !lightlow) nospawn
+
+        if (vegetation) += 0.1,
+        if (structures) *= 2.0,
+        if (humidity || rain) *= 1.5,
+        if (underground) *= 2.0,
+      }
+
+      night {
+        if (vegetation) += 0.1,
+        if (structures) *= 2.0,
+        if (humidity || rain) *= 1.5,
+      }
+    }});
   }
 
   public function getLocName(): string {

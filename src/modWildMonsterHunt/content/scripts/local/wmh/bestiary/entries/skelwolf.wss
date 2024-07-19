@@ -31,13 +31,23 @@ class WMH_BestiaryEntrySkelwolf extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground || !wide) nospawn
+      else += 0.5,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (altitude) += 0.3,
+      if (vegetation) += 0.1,
+      if (lightlow) += 0.1,
 
-    return 0;
+      if (structures) -= 0.3,
+      if (humidity) -= 0.1,
+
+
+      if (rain) *= 1.2,
+      morning *= 1.2,
+      afternoon *= 0.1,
+      night *= 2.0,
+    }});
   }
 
   public function getLocName(): string {

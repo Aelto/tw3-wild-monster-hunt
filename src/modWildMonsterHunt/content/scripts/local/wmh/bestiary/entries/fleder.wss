@@ -31,13 +31,21 @@ class WMH_BestiaryEntryFleder extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      morning {
+        if (!rain) nospawn
+      }
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      afternoon {
+        if (!rain) nospawn
+      }
 
-    return 0;
+      night {
+        if (structures) += 1,
+
+        if (lightlow) *= 2.0,
+      }
+    }});
   }
 
   public function getLocName(): string {

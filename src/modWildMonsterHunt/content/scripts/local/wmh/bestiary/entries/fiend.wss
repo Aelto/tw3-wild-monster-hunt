@@ -31,13 +31,18 @@ class WMH_BestiaryEntryFiend extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (vegetation) += 0.5,
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      afternoon {
+        if (underground) -= 0.5,
+      }
 
-    return 0;
+      night {
+        if (underground) += 0.3,
+        if (structures) *= 1.2,
+      }
+    }});
   }
 
   public function getLocName(): string {

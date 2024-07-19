@@ -31,13 +31,34 @@ class WMH_BestiaryEntryDracolizard extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
+    pref_time!({{
+      if (underground) nospawn
 
-    pref_rule!({{
-      if !underground
-        => 1.0, 1.0, 1.0;
-    }})
+      if (wide) += 1.0,
+      else nospawn
 
-    return 0;
+      morning {
+        if (clear) += 0.3,
+        if (vegetation) += 0.3,
+        if (structures) += 0.3,
+
+        // if raining, less chances to be outside vegetation
+        if (rain && !vegetation) *= 0.1,
+      }
+
+      afternoon {
+        if (clear) += 1.0,
+        if (vegetation) *= 0.8,
+
+        // if raining, less chances to be outside vegetation
+        if (rain && !vegetation) *= 0.1,
+      }
+
+      night {
+        if (vegetation) += 1.0,
+        if (lightlow) += 0.1,
+      }
+    }});
   }
 
   public function getLocName(): string {

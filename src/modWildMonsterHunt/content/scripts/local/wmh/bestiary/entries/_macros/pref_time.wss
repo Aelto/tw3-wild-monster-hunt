@@ -1,4 +1,12 @@
 // a way to define preferences for entries that are mostly dependent on time
+//
+// # Tips
+// - the `morning`, `afternoon` or `night` (aka timeblocks) blocks aren't mandatory
+// - if cases can be outside of timeblocks
+// - `*=` is useful for amplifying effects, they act a bit like indirect links
+//   to create cases where a creature is MOSTLY seen in a place/time by doing `*= 2,`
+//   or to create cases where a creature is LESS seen in a place/time by doing `*= 0.1`
+//
 #define function pref_time(code) {
   #pragma find rain
   #pragma replace (weather == WMH_WeatherType_Rain)
