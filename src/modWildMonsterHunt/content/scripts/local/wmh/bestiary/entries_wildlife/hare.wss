@@ -1,0 +1,39 @@
+class WMH_BestiaryEntryHare extends WMH_BestiaryEntry {
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "characters\npc_entities\animals\hare.w2ent", 5
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 5;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 5;
+    this.difficulty_scaling.minimum_count_hard = 1;
+    this.difficulty_scaling.maximum_count_hard = 5;
+
+    this.biome_tag_bypass = 'Hare';
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+    pref_rule!({{
+      if (underground || structure) nospawn
+
+      if (vegetation) += 1.0,
+      if (wide) -= 0.5,
+
+      if (snow || rain) *= 0.1
+    }});
+  }
+
+  public function getLocName(): string {
+    return "Hare";
+  }
+}

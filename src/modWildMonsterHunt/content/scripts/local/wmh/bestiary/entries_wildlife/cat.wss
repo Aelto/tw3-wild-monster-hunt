@@ -1,23 +1,21 @@
-
-class WMH_BestiaryEntryBoar extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryCat extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "dlc\ep1\data\characters\npc_entities\monsters\wild_boar_ep1.w2ent",,
-        "dlc\bob\journal\bestiary\ep2boar.journal"
+        "characters\npc_entities\animals\cat.w2ent", 5
       )
     );
 
     this.difficulty_scaling.minimum_count_easy = 1;
-    this.difficulty_scaling.maximum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 5;
     this.difficulty_scaling.minimum_count_medium = 1;
-    this.difficulty_scaling.maximum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 5;
     this.difficulty_scaling.minimum_count_hard = 1;
-    this.difficulty_scaling.maximum_count_hard = 2;
+    this.difficulty_scaling.maximum_count_hard = 5;
 
-    this.biome_tag_bypass = 'Boar';
+    this.biome_tag_bypass = 'Cat';
   }
 
   public function getSpawnRatio(
@@ -25,18 +23,25 @@ class WMH_BestiaryEntryBoar extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
+    pref_rule!({{
       if (underground) nospawn
-      
-      if (vegetation) += 0.5,
+      if (humidity) -= 2.0,
+
+      morning {
+        if (structures) += 0.3,
+        if (vegetation) += 0.3,
+        if (lightlow) += 0.1,
+      }
 
       night {
         if (structures) += 0.5,
+        if (vegetation) += 0.5,
+        if (lightlow) += 0.2,
       }
     }});
   }
 
   public function getLocName(): string {
-    return "Boar";
+    return "Cat";
   }
 }

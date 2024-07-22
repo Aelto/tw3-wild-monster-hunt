@@ -1,0 +1,45 @@
+class WMH_BestiaryEntryGoat extends WMH_BestiaryEntry {
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "characters\npc_entities\animals\goat.w2ent", 5
+      )
+    );
+
+    this.difficulty_scaling.minimum_count_easy = 1;
+    this.difficulty_scaling.maximum_count_easy = 5;
+    this.difficulty_scaling.minimum_count_medium = 1;
+    this.difficulty_scaling.maximum_count_medium = 5;
+    this.difficulty_scaling.minimum_count_hard = 1;
+    this.difficulty_scaling.maximum_count_hard = 5;
+
+    this.biome_tag_bypass = 'Goat';
+  }
+
+  public function getSpawnRatio(
+    tags: WMH_BiomeTags,
+    weather: WMH_WeatherType,
+    day_hour: float
+  ): float {
+    pref_rule!({{
+      if (underground) nospawn
+
+      if (altitude) += 1.0,
+      else -= 0.5,
+
+      if (vegetation) += 0.2,
+      if (wide) += 0.2,
+
+      if (humidity) *= 0.5,
+      if (snow) *= 2.0,
+
+      night nospawn
+    }});
+  }
+
+  public function getLocName(): string {
+    return "Goat";
+  }
+}
