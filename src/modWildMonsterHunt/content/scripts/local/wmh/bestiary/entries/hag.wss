@@ -50,7 +50,7 @@ class WMH_BestiaryEntryHag extends WMH_BestiaryEntry {
     //
     // Water hags are particularly active and dangerous during rainstorms
     pref_time!({{
-      if (altitude || undergrund) nospawn
+      if (altitude || underground) nospawn
 
       if (humidity) += 1.0,
       if (rain) += 0.5,

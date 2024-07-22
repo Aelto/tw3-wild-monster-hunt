@@ -86,7 +86,7 @@ statemachine class WMH_Bestiary {
         this.biomes,
         spawn_point.biome_tags,
         spawn_point.biome_tags_bypass,
-        seed + position.X - position.Y
+        seed + (position.X as int) - (position.Y as int)
       );
 
       if (bentry) {

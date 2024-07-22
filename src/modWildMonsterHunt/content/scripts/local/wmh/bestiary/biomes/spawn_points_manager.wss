@@ -26,8 +26,6 @@ class WMH_SpawnPointManager {
       WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
     }
 
-    WMHINFO("WMH_SpawnPointManager, refreshing nearby spawn points");
-
     if (ignore_tickers || this.region_refresh_ticker.validate()) {
       var radius: float = 4000;
       var max: int = 500;
@@ -70,10 +68,10 @@ class WMH_SpawnPointManager {
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
       var position: Vector = point.GetWorldPosition();
-      var point_seed: int = seed + position.X - position.Y;
+      var point_seed: int = seed + (position.X as int) - (position.Y as int);
 
       // regular nearby spawn points have a chance to be disabled for the hunt,
-      if (RandNoiseF(point_seed) <= 0.5) {
+      if (RandNoiseF(point_seed, 1.0) <= 0.5) {
         continue;
       }
 
