@@ -23,13 +23,13 @@ class WMH_BestiaryEntryHare extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_rule!({{
+    pref_time!({{
       if (underground || structure) nospawn
 
       if (vegetation) += 1.0,
       if (wide) -= 0.5,
 
-      if (snow || rain) *= 0.1
+      if (snow || rain) *= 0.1,
     }});
   }
 

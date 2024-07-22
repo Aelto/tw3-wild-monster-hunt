@@ -23,7 +23,7 @@ class WMH_BestiaryEntryBat extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_rule!({{
+    pref_time!({{
       if (underground) += 1.0,
       if (lightlow) += 0.3,
 

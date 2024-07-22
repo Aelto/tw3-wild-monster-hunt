@@ -23,11 +23,11 @@ class WMH_BestiaryEntryPigeon extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_rule!({{
+    pref_time!({{
       if (underground) nospawn
 
       if (altitude) nospawn
-      else += 0.5
+      else += 0.5,
     }});
   }
 

@@ -23,7 +23,7 @@ class WMH_BestiaryEntrySheep extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_rule!({{
+    pref_time!({{
       if (underground) nospawn
       if (humidity) nospawn
 

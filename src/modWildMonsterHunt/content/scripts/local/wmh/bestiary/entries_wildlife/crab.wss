@@ -23,10 +23,10 @@ class WMH_BestiaryEntryCrab extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_rule!({{
+    pref_time!({{
       if (underground || altitude || lightlow || structures) nospawn
 
-      if (humidity) += 0.5
+      if (humidity) += 0.5,
       else nospawn
     }});
   }
