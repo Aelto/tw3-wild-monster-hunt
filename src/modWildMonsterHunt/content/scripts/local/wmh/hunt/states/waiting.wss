@@ -5,6 +5,6 @@ state Waiting in WMH_HuntManager {
   }
 
   entry function Waiting_main() {
-    WMHINFO("WMH_HuntManagerStateWaiting::Waiting_main()");
+    // WMHINFO("WMH_HuntManagerStateWaiting::Waiting_main()");
   }
 }

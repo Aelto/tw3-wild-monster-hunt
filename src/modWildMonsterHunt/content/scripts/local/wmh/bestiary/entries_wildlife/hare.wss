@@ -24,7 +24,7 @@ class WMH_BestiaryEntryHare extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (underground || structure) nospawn
+      if (underground || structures) nospawn
 
       if (vegetation) += 1.0,
       if (wide) -= 0.5,

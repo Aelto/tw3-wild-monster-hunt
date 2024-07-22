@@ -5,7 +5,7 @@ state Waiting in WMH_LootManager {
   }
 
   entry function Waiting_main() {
-    WMHINFO("WMH_LootManagerStateWaiting:Waiting_main()");
+    // WMHINFO("WMH_LootManagerStateWaiting:Waiting_main()");
 
     if (parent.loot_requests.Size() > 0) {
       parent.GotoState('Running');

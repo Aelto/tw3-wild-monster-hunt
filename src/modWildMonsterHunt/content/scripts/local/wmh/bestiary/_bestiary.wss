@@ -8,7 +8,7 @@ statemachine class WMH_Bestiary {
   private var biomes: WMH_BiomeManager;
 
   public var entries: array<WMH_BestiaryEntry>;
-  public var wildlife: array<WMH_BestiaryEntry>;
+  public var entries_wildlife: array<WMH_BestiaryEntry>;
 
   protected var spawn_requests: array<WMH_SpawnRequest>;
 
@@ -32,6 +32,7 @@ statemachine class WMH_Bestiary {
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
     this.spawnRandomEntry(contract, hunt_seed);
+    this.spawnRandomWildlife(hunt_seed + 1);
   }
 
   public function onSpawnContractTarget(
@@ -107,6 +108,35 @@ statemachine class WMH_Bestiary {
     }
   }
 
+  private function spawnRandomWildlife(seed: int) {
+    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points
+      .getRandomNearbyValidSpawnPoint(seed);
+
+    if (spawn_point) {
+      var position: Vector = spawn_point.GetWorldPosition();
+
+      var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
+        this.biomes,
+        spawn_point.biome_tags,
+        spawn_point.biome_tags_bypass,
+        seed + (position.X as int) - (position.Y as int)
+      );
+
+      if (bentry) {
+        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+          .init()
+          .withPosition(spawn_point.GetWorldPosition())
+          .withBestiaryEntry(bentry)
+          .withSeed(seed);
+
+        this.requestSpawn(request);
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+      }
+    }
+  }
+
   private function requestSpawn(request: WMH_SpawnRequest) {
     this.spawn_requests.PushBack(request);
 
@@ -117,12 +147,22 @@ statemachine class WMH_Bestiary {
 
   private function maybeRefresh(contract: WMH_ContractManager) {
     this.spawn_points.maybeRefresh();
-    this.active_view.maybeRefresh(this.entries, this.biomes, contract);
+    this.active_view.maybeRefresh(
+      this.entries,
+      this.entries_wildlife,
+      this.biomes,
+      contract
+    );
   }
 
   private function initEntries() {
     var index: int = 0;
 
+    index = this.initEntries_0(index);
+    index = this.initEntries_1(index);
+  }
+
+  private function initEntries_0(index: int): int {
     #define function registerBestiaryEntry(entry_name) {
       var bentry_entry_name: WMH_BestiaryEntryentry_name =
         (new WMH_BestiaryEntryentry_name in this);
@@ -130,15 +170,6 @@ statemachine class WMH_Bestiary {
       this.entries.PushBack(bentry_entry_name);
       index += 1;
     };
-
-    #define function registerBestiaryEntryWildlife(entry_name) {
-      var bentry_entry_name: WMH_BestiaryEntryentry_name =
-        (new WMH_BestiaryEntryentry_name in this);
-      bentry_entry_name.init(WMH_BestiaryId(index));
-      this.wildlife.PushBack(bentry_entry_name);
-      index += 1;
-    };
-
     registerBestiaryEntry!(Alghoul)
     registerBestiaryEntry!(Arachas)
     registerBestiaryEntry!(Barghest)
@@ -197,6 +228,18 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntry!(Wraith)
     registerBestiaryEntry!(Wyvern)
 
+    return index;
+  }
+
+  private function initEntries_1(index: int): int {
+    #define function registerBestiaryEntryWildlife(entry_name) {
+      var bentry_entry_name: WMH_BestiaryEntryentry_name =
+        (new WMH_BestiaryEntryentry_name in this);
+      bentry_entry_name.init(WMH_BestiaryId(index));
+      this.entries_wildlife.PushBack(bentry_entry_name);
+      index += 1;
+    };
+
     // wildlife
     registerBestiaryEntryWildlife!(Bat)
     registerBestiaryEntryWildlife!(Cat)
@@ -231,6 +274,8 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntryWildlife!(Sparrow)
     registerBestiaryEntryWildlife!(Swallow)
     registerBestiaryEntryWildlife!(Toad)
+
+    return index;
   }
 
   

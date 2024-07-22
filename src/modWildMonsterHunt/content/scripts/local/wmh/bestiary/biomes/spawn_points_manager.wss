@@ -89,16 +89,18 @@ class WMH_SpawnPointManager {
   ): array<WMH_BiomeSpawnPoint> {
     var entities: array<CGameplayEntity>;
 
-    FindGameplayEntitiesInRange(
-      entities,
-      thePlayer,
-      radius,
-      count,
-      '',
-      FLAG_ExcludePlayer,
-      , // target
-      'WMH_BiomeSpawnPoint'
-    );
+    // FindGameplayEntitiesInRange(
+    //   entities,
+    //   thePlayer,
+    //   radius,
+    //   count,
+    //   '',
+    //   FLAG_ExcludePlayer,
+    //   , // target
+    //   'WMH_BiomeSpawnPoint'
+    // );
+
+    theGame.GetEntitiesByTag('WMH_BiomeSpawnPoint', entities);
 
     var output: array<WMH_BiomeSpawnPoint>;
     var i: int;

@@ -5,7 +5,7 @@ state Running in WMH_LootManager {
   }
 
   entry function Running_main() {
-    WMHINFO("WMH_LootManagerStateRunning:Running_main()");
+    // WMHINFO("WMH_LootManagerStateRunning:Running_main()");
 
     while (parent.loot_requests.Size() > 0) {
       var request: WMH_LootRequest = parent.loot_requests.PopBack();

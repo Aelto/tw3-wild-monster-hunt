@@ -5,7 +5,7 @@ state Running in WMH_HuntManager {
   }
 
   entry function Running_main() {
-    WMHINFO("WMH_HuntManagerStateRunning:Running_main()");
+    // WMHINFO("WMH_HuntManagerStateRunning:Running_main()");
 
     while (true) {
       Sleep(15.0);

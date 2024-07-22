@@ -6,6 +6,7 @@
 // data.
 class WMH_BestiaryActiveView {
   private var entries: array<WMH_BestiaryEntry>;
+  private var entries_wildlife: array<WMH_BestiaryEntry>;
 
   private var refresh_ticker: WMH_Ticker;
 
@@ -16,7 +17,8 @@ class WMH_BestiaryActiveView {
   }
 
   public function maybeRefresh(
-    entries: array<WMH_BestiaryEntry>,
+    out entries: array<WMH_BestiaryEntry>,
+    out entries_wildlife: array<WMH_BestiaryEntry>,
     biome_manager: WMH_BiomeManager,
     contract: WMH_ContractManager
   ) {
@@ -24,11 +26,12 @@ class WMH_BestiaryActiveView {
       return;
     }
 
-    this.updateView(entries, biome_manager, contract);
+    this.updateView(entries, entries_wildlife, biome_manager, contract);
   }
 
   private function updateView(
-    entries: array<WMH_BestiaryEntry>,
+    out entries: array<WMH_BestiaryEntry>,
+    out entries_wildlife: array<WMH_BestiaryEntry>,
     biome_manager: WMH_BiomeManager,
     contract: WMH_ContractManager,
   ) {
@@ -51,6 +54,10 @@ class WMH_BestiaryActiveView {
       //
       // at the moment there is no filtering done at all.
       this.entries.PushBack(current);
+    }
+
+    for current: WMH_BestiaryEntry in entries_wildlife {
+      this.entries_wildlife.PushBack(current);
     }
   }
 
@@ -90,9 +97,6 @@ class WMH_BestiaryActiveView {
         ratio *= 10;
       }
 
-      // the ratios are pre-computed, so depending on whether the entry can
-      // spawn for the more precise conditions now we simply set the
-      // pre-computed ratio to 0 if it cannot.
       roller.addRatio(ratio);
     }
 
@@ -103,5 +107,48 @@ class WMH_BestiaryActiveView {
     }
 
     return this.entries[index];
+  }
+
+  public function getRandomEntryWildlife(
+    biome_manager: WMH_BiomeManager,
+    biome_tags: WMH_BiomeTags,
+    biome_tags_bypass: array<name>,
+    seed: int
+  ): WMH_BestiaryEntry {
+    var weather: WMH_WeatherType = biome_manager.getWeatherType();
+    var day_hour: int = biome_manager.getDayHour();
+    var biome: WMH_BiomeTags = WMH_mergeBiomeTags(
+      biome_tags,
+      biome_manager.getGlobalBiome()
+    );
+
+    var roller: WMH_RatiosRoller = new WMH_RatiosRoller in this;
+
+    // 1.
+    // start by building a list of the entries that could spawn from the
+    // provided biome tags.
+    var i: int;
+    for (i = 0; i < this.entries_wildlife.Size(); i += 1) {
+      var current: WMH_BestiaryEntry = this.entries_wildlife[i];
+
+      // todo: the biome_tags_bypass is not verified during this step.
+      //  ~> what ratio should a bypassed entry get?
+
+      var ratio: float = current.getSpawnRatio(
+        biome,
+        weather,
+        day_hour
+      ) as float;
+
+      roller.addRatio(ratio);
+    }
+
+    var index: int = roller.roll(seed);
+
+    if (index < 0) {
+      return NULL;
+    }
+
+    return this.entries_wildlife[index];
   }
 }
