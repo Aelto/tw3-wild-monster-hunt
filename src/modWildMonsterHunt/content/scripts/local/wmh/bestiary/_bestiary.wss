@@ -246,7 +246,10 @@ statemachine class WMH_Bestiary {
 
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in spawn_points {
-      var can_spawn: bool = bentry.canSpawn(
+      // if the point has empty tags then everything can spawn there
+      var can_spawn: bool = WMH_biomeTagsEmpty(point.biome_tags);
+
+      can_spawn = can_spawn || bentry.canSpawn(
         WMH_mergeBiomeTags(point.biome_tags, global_biome),
         day_hour,
         weather,

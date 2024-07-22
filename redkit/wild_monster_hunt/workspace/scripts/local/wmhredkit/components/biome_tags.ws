@@ -25,3 +25,13 @@ function WMH_mergeBiomeTags(a: WMH_BiomeTags, b: WMH_BiomeTags): WMH_BiomeTags {
 		a.underground || b.underground
 	);
 }
+
+function WMH_biomeTagsEmpty(tags: WMH_BiomeTags): bool {
+  return !tags.roomWide
+      && !tags.altitudeHigh
+      && !tags.humidityHigh
+      && !tags.vegetationHigh
+      && !tags.lightLow
+      && !tags.structuresHigh
+      && !tags.underground;
+}
