@@ -25,8 +25,6 @@ statemachine class WMH_LootManager {
   }
 
   private function addLootRequest(request: WMH_LootRequest) {
-    WMHINFO("addLootRequest, seed = " + request.seed);
-
     this.loot_requests.PushBack(request);
 
     if (this.GetCurrentStateName() == 'Waiting') {

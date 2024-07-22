@@ -1,12 +1,10 @@
-class WMH_Logger {
-  private var debug_oneliner: WMH_OnelinerScreenDebugLog;
-  private var messages_buffer: array<string>;
+statemachine class WMH_Logger {
+  protected var debug_oneliner: SU_OnelinerScreen;
+  protected var messages_buffer: array<string>;
 
 
   public function init(): WMH_Logger {
-    this.debug_oneliner = (new WMH_OnelinerScreenDebugLog in this).init();
-    this.debug_oneliner.register();
-
+    this.GotoState('Loading');
     return this;
   }
 
@@ -32,22 +30,22 @@ class WMH_Logger {
   }
 
   private function bufferMessage(message: string) {
+    // var hud: CR4ScriptedHud = theGame.GetHud() as CR4ScriptedHud;
+	  // if(hud) {
+    //   var module : CR4HudModuleConsole;
+          
+    //   module = hud.GetHudModule("ConsoleModule") as CR4HudModuleConsole;
+    //   if (module) {
+    //     module.ConsoleMsg(message);
+    //   }
+    // }
+
     this.messages_buffer.Insert(0, message);
 
     var size: int = this.messages_buffer.Size();
     if (size > 20) {
       this.messages_buffer.PopBack();
     }
-
-    var oneliner_text: string;
-    var i: int;
-
-    for (i = size; i >= 0; i -= 1) {
-      oneliner_text += this.messages_buffer[i] + "<br/>";
-    }
-
-    this.debug_oneliner.text = oneliner_text;
-    this.debug_oneliner.update();
   }
 }
 
@@ -60,7 +58,6 @@ enum WMH_LogLevel {
 
 function WMHINFO(message: string) {
   #ifdef DEBUG {
-    LogChannel('WMHINFO', message);
     thePlayer.wmh.logger.log(message, WMHLL_Info);
   };
 }
@@ -75,4 +72,45 @@ function WMHERROR(message: string) {
 
 function WMHHUD(message: string) {
   thePlayer.wmh.logger.log(message, WMHLL_Hud);
+}
+
+state Loading in WMH_Logger {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Loading_main();
+  }
+
+  entry function Loading_main() {
+
+    Sleep(5);
+    parent.debug_oneliner = SU_onelinerScreen("", Vector(0.2, 1));
+    parent.GotoState('Running');
+  }
+}
+
+state Running in WMH_Logger {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Running_main();
+  }
+
+  entry function Running_main() {
+    while (true) {
+      Sleep(5.0);
+
+      if (parent.messages_buffer.Size() > 0) {
+        var oneliner_text: string = "";
+        var i: int;
+
+        for (i = parent.messages_buffer.Size(); i >= 0; i -= 1) {
+          oneliner_text += parent.messages_buffer[i] + "<br/>";
+        }
+
+        if (parent.debug_oneliner) {
+          parent.debug_oneliner.text = "<FONT size='16'>"+oneliner_text+"</FONT>";
+          parent.debug_oneliner.update();
+        }
+      }
+    }
+  }
 }
