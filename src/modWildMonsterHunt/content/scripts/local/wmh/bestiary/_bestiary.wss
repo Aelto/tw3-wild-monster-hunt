@@ -28,9 +28,9 @@ statemachine class WMH_Bestiary {
     this.spawn_points.onHuntStarted();
   }
 
-  public function onSpawn(contract: WMH_ContractManager, seed: int) {
+  public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
-    this.spawnRandomEntry(contract, seed);
+    this.spawnRandomEntry(contract, hunt_seed);
   }
 
   public function onSpawnContractTarget(
@@ -79,12 +79,14 @@ statemachine class WMH_Bestiary {
       .getRandomNearbyValidSpawnPoint(seed);
 
     if (spawn_point) {
+      var position: Vector = spawn_point.GetWorldPosition();
+
       var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
         contract,
         this.biomes,
         spawn_point.biome_tags,
         spawn_point.biome_tags_bypass,
-        seed
+        seed + position.X - position.Y
       );
 
       if (bentry) {

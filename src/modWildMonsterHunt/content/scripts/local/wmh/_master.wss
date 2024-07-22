@@ -38,10 +38,11 @@ class WMH_Master {
   public function submitOnSpawn(
     origin: WMH_HuntManager,
     contract: WMH_ContractManager,
-    seed: int
+    hunt_seed: int,
+    instant_seed: int
   ) {
-    this.hunt.onSpawn(seed);
-    this.bestiary.onSpawn(contract, seed);
+    this.hunt.onSpawn(hunt_seed);
+    this.bestiary.onSpawn(contract, hunt_seed);
   }
 
   public function submitOnSpawnContractTarget(
