@@ -1,0 +1,22 @@
+class WMH_WildlifeManager {
+  public function init(): WMH_WildlifeManager {
+    return this;
+  }
+
+  private function requestSwarmExample() {
+    var swarms: array<CEntity>;
+
+    theGame.GetEntitiesByTag('wmh_swarm', swarms);
+
+    for entity: CEntity in swarms {
+      var lair: CFlyingCrittersLairEntityScript = entity as CFlyingCrittersLairEntityScript;
+
+      if (lair) {
+        var count: int = 5; // bird count
+        var spawn_point_poi: name = 'FlyingSpawn1'; // some POI name
+
+        lair.RequestCreateGroup(count, spawn_point_poi);
+      }
+    }
+  }
+}

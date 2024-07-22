@@ -13,6 +13,7 @@ state Running in WMH_HuntManager {
       thePlayer.wmh.submitOnSpawn(
         parent,
         parent.contract,
+        parent.seed,
         parent.seed + parent.getSecondsSinceStart()
       );
     }
