@@ -1,5 +1,8 @@
 statemachine class WMH_Logger {
-  protected var debug_oneliner: SU_OnelinerScreen;
+  protected var debug_oneliner_0: SU_OnelinerScreen;
+  protected var debug_oneliner_1: SU_OnelinerScreen;
+  protected var debug_oneliner_2: SU_OnelinerScreen;
+  protected var debug_oneliner_3: SU_OnelinerScreen;
   protected var messages_buffer: array<string>;
 
 
@@ -83,7 +86,10 @@ state Loading in WMH_Logger {
   entry function Loading_main() {
 
     Sleep(5);
-    parent.debug_oneliner = SU_onelinerScreen("", Vector(0.2, 1));
+    parent.debug_oneliner_0 = SU_onelinerScreen("", Vector(0.2, 0.8));
+    parent.debug_oneliner_1 = SU_onelinerScreen("", Vector(0.4, 0.8));
+    parent.debug_oneliner_2 = SU_onelinerScreen("", Vector(0.6, 0.8));
+    parent.debug_oneliner_3 = SU_onelinerScreen("", Vector(0.8, 0.8));
     parent.GotoState('Running');
   }
 }
@@ -96,21 +102,40 @@ state Running in WMH_Logger {
 
   entry function Running_main() {
     while (true) {
-      Sleep(5.0);
+      Sleep(2.5);
 
       if (parent.messages_buffer.Size() > 0) {
-        var oneliner_text: string = "";
-        var i: int;
-
-        for (i = parent.messages_buffer.Size(); i >= 0; i -= 1) {
-          oneliner_text += parent.messages_buffer[i] + "<br/>";
+        if (parent.debug_oneliner_0) {
+          parent.debug_oneliner_0.text = this.buildOnelinerTest(0, 5);
+          parent.debug_oneliner_0.update();
         }
 
-        if (parent.debug_oneliner) {
-          parent.debug_oneliner.text = "<FONT size='16'>"+oneliner_text+"</FONT>";
-          parent.debug_oneliner.update();
+        if (parent.debug_oneliner_1) {
+          parent.debug_oneliner_1.text = this.buildOnelinerTest(5, 10);
+          parent.debug_oneliner_1.update();
+        }
+
+        if (parent.debug_oneliner_2) {
+          parent.debug_oneliner_2.text = this.buildOnelinerTest(10, 15);
+          parent.debug_oneliner_2.update();
+        }
+
+        if (parent.debug_oneliner_3) {
+          parent.debug_oneliner_3.text = this.buildOnelinerTest(15, 20);
+          parent.debug_oneliner_3.update();
         }
       }
     }
+  }
+
+  private function buildOnelinerTest(from: int, to: int): string {
+    var output: string;
+    var i: int;
+
+    for (i = from; i < to && i < parent.messages_buffer.Size(); i += 1) {
+      output += parent.messages_buffer[i] + "<br/>";
+    }
+
+    return "<FONT size='16'>"+output+"</FONT>";
   }
 }
