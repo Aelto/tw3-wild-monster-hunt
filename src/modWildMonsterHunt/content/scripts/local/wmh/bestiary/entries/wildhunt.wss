@@ -58,6 +58,7 @@ class WMH_BestiaryEntryWildhunt extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 5;
     this.difficulty_scaling.maximum_count_hard = 7;
 
+    this.strength = 6;
     this.biome_tag_bypass = 'Wildhunt';
   }
 

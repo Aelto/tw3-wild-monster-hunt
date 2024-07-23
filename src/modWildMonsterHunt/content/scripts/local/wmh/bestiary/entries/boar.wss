@@ -17,6 +17,7 @@ class WMH_BestiaryEntryBoar extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 2;
 
+    this.strength = 2;
     this.biome_tag_bypass = 'Boar';
   }
 

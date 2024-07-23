@@ -28,6 +28,7 @@ class WMH_BestiaryEntryKikimore extends WMH_BestiaryEntry {
 
     // 1.
     // underground
+    this.strength = 6;
     this.biome_tag_bypass = 'Kikimore';
   }
 

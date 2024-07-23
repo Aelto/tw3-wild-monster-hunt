@@ -30,7 +30,7 @@ class WMH_BestiaryEntryLeshen extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    // leshens at night are in caverns
+    this.strength = 15;
     this.biome_tag_bypass = 'Leshen';
   }
 

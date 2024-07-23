@@ -23,6 +23,7 @@ class WMH_BestiaryEntrySkelwolf extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 3;
     this.difficulty_scaling.maximum_count_hard = 6;
 
+    this.strength = 2.25;
     this.biome_tag_bypass = 'Skelwolf';
   }
 

@@ -16,6 +16,7 @@ class WMH_BestiaryEntrySkelbear extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 2;
 
+    this.strength = 3.5;
     this.biome_tag_bypass = 'Skelbear';
   }
 

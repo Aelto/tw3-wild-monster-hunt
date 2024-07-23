@@ -44,6 +44,7 @@ class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 4;
     this.difficulty_scaling.maximum_count_hard = 6;
 
+    this.strength = 2.25;
     this.biome_tag_bypass = 'Human';
   }
 
