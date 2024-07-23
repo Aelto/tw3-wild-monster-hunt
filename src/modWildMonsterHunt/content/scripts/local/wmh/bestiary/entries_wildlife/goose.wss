@@ -23,16 +23,18 @@ class WMH_BestiaryEntryGoose extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
-      if (underground) nospawn
+    return 1.0;
 
-      if (wide) += 0.3,
-      if (humidity) += 0.3,
-      if (snow) *= 1.2,
-      if (rain) *= 0.8,
+    // pref_time!({{
+    //   if (underground) nospawn
 
-      night nospawn
-    }});
+    //   if (wide) += 0.3,
+    //   if (humidity) += 0.3,
+    //   if (snow) *= 1.2,
+    //   if (rain) *= 0.8,
+
+    //   night nospawn
+    // }});
   }
 
   public function getLocName(): string {

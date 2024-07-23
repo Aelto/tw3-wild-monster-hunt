@@ -27,7 +27,7 @@ class WMH_BestiaryEntryBerserker extends WMH_BestiaryEntry {
   ): float {
     pref_time!({{
       if (structures) += 0.3,
-      if (!structures) += 1.0,
+      if (!structures) += 0.1,
     }});
   }
 

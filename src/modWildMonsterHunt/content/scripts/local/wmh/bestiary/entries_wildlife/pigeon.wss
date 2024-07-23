@@ -23,12 +23,14 @@ class WMH_BestiaryEntryPigeon extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
-      if (underground) nospawn
+    return 0;
 
-      if (altitude) nospawn
-      else += 0.5,
-    }});
+    // pref_time!({{
+    //   if (underground) nospawn
+
+    //   if (altitude) nospawn
+    //   else += 0.5,
+    // }});
   }
 
   public function getLocName(): string {
