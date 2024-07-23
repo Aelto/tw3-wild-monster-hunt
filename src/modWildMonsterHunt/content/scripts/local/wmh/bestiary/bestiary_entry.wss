@@ -20,8 +20,13 @@ class WMH_BestiaryEntry {
     return "Unknown";
   }
 
-  public function isElite(level: WMH_Level): bool {
-    return this.strength > level.value;
+  public function canBeTarget(level: WMH_Level): bool {
+    // in the early levels we only target the small monsters
+    if (level.value < NoonWraithStrength! && this.strength < NoonWraithStrength!) {
+      return true;
+    }
+
+    return this.strength >= level.value - 1 && this.strength <= level.value + 1;
   }
 
   // This can also be used to determine if an entry can spawn. If the ratio is

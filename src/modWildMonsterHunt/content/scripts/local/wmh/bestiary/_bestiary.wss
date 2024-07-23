@@ -50,13 +50,38 @@ statemachine class WMH_Bestiary {
     );
   }
 
+  // The elite entries are the closest ones to the given WMH_Level
   public function getEliteEntries(level: WMH_Level): array<WMH_BestiaryEntry> {
     var output: array<WMH_BestiaryEntry>;
+    var fallback: WMH_BestiaryEntry;
 
-    var bentry: WMH_BestiaryEntry;
-    for bentry: WMH_BestiaryEntry in this.entries {
-      if (bentry.isElite(level)) {
-        output.PushBack(bentry);
+    while (output.Size() < 5) {
+      for bentry: WMH_BestiaryEntry in this.entries {
+        if (!fallback) {
+          fallback = bentry;
+        }
+
+        if (bentry.canBeTarget(level)) {
+          output.PushBack(bentry);
+        }
+        // the target could no be target, but it's stored as a possible fallback
+        // if after looping through all targets we couldn't get 5 valid entries
+        //
+        // over time this should get us the strongest target below the WMH_Level
+        else if (
+          fallback.strength < level.value 
+          && fallback.strength > bentry.strength
+        ) {
+          fallback = bentry;
+        }
+      }
+
+      if (fallback) {
+        // adjust the level to be around the fallback's strength, that should
+        // open the door to new elite targets.
+        level.value = fallback.strength;
+      } else {
+        break;
       }
     }
 

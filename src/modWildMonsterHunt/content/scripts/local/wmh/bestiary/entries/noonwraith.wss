@@ -1,3 +1,5 @@
+#define const NoonWraithStrength = 6;
+
 class WMH_BestiaryEntryNoonwraith extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
@@ -37,7 +39,7 @@ class WMH_BestiaryEntryNoonwraith extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    this.strength = 6;
+    this.strength = NoonWraithStrength!;
     this.biome_tag_bypass = 'Noonwraith';
   }
 

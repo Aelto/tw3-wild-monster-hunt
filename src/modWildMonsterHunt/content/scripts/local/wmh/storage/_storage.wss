@@ -3,7 +3,7 @@ class WMH_Storage {
 
   public function init(): WMH_Storage {
     if (!this.general) {
-      this.general = new WMH_Storage in this;
+      this.general = new WMH_StorageGeneral in this;
     }
 
     return this;
