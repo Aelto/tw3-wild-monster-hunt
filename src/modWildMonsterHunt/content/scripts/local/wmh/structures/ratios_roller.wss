@@ -14,6 +14,7 @@ class WMH_RatiosRoller {
   private var total: float;
 
   public function addRatio(ratio: float): WMH_RatiosRoller {
+    ratio = MaxF(ratio, 0);
     this.ratios.PushBack(ratio);
     this.total += ratio;
 
@@ -29,7 +30,7 @@ class WMH_RatiosRoller {
         return i;
       }
 
-      rolled_value -= MaxF(this.ratios[i], 0);
+      rolled_value -= this.ratios[i];
     }
 
     return this.ratios.Size() - 1;
