@@ -204,6 +204,7 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntry!(Ghoul)
     registerBestiaryEntry!(Giant)
     registerBestiaryEntry!(Golem)
+    registerBestiaryEntry!(GolemIce)
     registerBestiaryEntry!(Gravier)
     registerBestiaryEntry!(Gryphon)
     registerBestiaryEntry!(Hag)

@@ -1,17 +1,10 @@
-class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryGolemIce extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\golem_lvl1.w2ent",,
-        "gameplay\journal\bestiary\bestiarygolem.journal"
-      )
-    );
-
-    this.templates.PushBack(
-      WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\golem_lvl3.w2ent",,
+        "characters\npc_entities\monsters\golem_lvl2__ifryt.w2ent",,
         "gameplay\journal\bestiary\bestiarygolem.journal"
       )
     );
@@ -24,7 +17,7 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
     this.difficulty_scaling.maximum_count_hard = 1;
 
     this.strength = 10;
-    this.biome_tag_bypass = 'Golem';
+    this.biome_tag_bypass = 'GolemIce';
   }
 
   public function getSpawnRatio(
@@ -33,11 +26,14 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
+      if (!altitude) nospawn
+
       if (structures) += 0.1,
+      if (snow) *= 1.5,
     }});
   }
 
   public function getLocName(): string {
-    return "Golem";
+    return "Ice Golem";
   }
 }
