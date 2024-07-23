@@ -1,0 +1,3 @@
+class WMH_StorageGeneral {
+  public var level: WMH_Level;
+}

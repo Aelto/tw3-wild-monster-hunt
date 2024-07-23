@@ -37,7 +37,7 @@ statemachine class WMH_HuntManager {
     var index: int = 0;
 
     this.factory = WMH_HuntSeedFactory(
-      storage.getLevel(),
+      storage.general.level,
       index,
       WMH_getGameTimeMinutes()
     );

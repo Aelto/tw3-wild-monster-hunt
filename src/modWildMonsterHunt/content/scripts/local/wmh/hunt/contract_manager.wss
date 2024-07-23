@@ -34,7 +34,7 @@ class WMH_ContractManager {
   ) {
     var new_level: WMH_Level = this.finishCompletedContracts(
       killed_creatures,
-      storage.getLevel(),
+      storage.general.level,
     );
 
     this.finishExpiredContracts(new_level);
@@ -49,7 +49,7 @@ class WMH_ContractManager {
       );
     }
 
-    storage.setLevel(new_level);
+    storage.general.level = new_level;
   }
 
   public function onSpawn(seed: int) {
@@ -139,8 +139,6 @@ class WMH_ContractManager {
       this.pending_contracts.PushBack(
         (new WMH_PendingContract in this).init(contract)
       );
-
-      WMHHUD("New contract: " + bentry.getLocName());
     }
   }
 }

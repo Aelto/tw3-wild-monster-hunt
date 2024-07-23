@@ -12,6 +12,8 @@ class WMH_PendingContract {
   public function init(contract: WMH_Contract): WMH_PendingContract {
     this.contract = contract;
 
+    WMHHUD("New contract: " + contract.target.getLocName());
+
     return this;
   }
 

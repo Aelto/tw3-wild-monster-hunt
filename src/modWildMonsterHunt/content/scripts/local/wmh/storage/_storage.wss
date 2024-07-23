@@ -1,0 +1,11 @@
+class WMH_Storage {
+  public var general: WMH_StorageGeneral;
+
+  public function init(): WMH_Storage {
+    if (!this.general) {
+      this.general = new WMH_Storage in this;
+    }
+
+    return this;
+  }
+}
