@@ -113,7 +113,7 @@ class WMH_BestiaryEntry {
 
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
-    todo!("inventory.AddMoney(1)")
+    // todo!("inventory.AddMoney(1)")
   }
 }
 

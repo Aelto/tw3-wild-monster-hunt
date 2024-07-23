@@ -31,8 +31,10 @@ statemachine class WMH_Bestiary {
 
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
-    this.spawnRandomEntry(contract, hunt_seed);
-    this.spawnRandomWildlife(hunt_seed + 1);
+    // this.spawnRandomEntry(contract, hunt_seed);
+    // this.spawnRandomWildlife(hunt_seed + 1);
+
+    this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
   }
 
   public function onSpawnContractTarget(
@@ -43,7 +45,7 @@ statemachine class WMH_Bestiary {
     this.requestSpawn(
       (new WMH_SpawnRequest in this)
         .withBestiaryEntry(bentry)
-        .withPosition(location.GetWorldPosition())
+        .withSpawnPoint(location)
         .withSeed(seed)
     );
   }
@@ -73,66 +75,69 @@ statemachine class WMH_Bestiary {
       );
   }
 
-  private function spawnRandomEntry(
+  private function spawnNearbyAvailableSpawnPoints(
     contract: WMH_ContractManager,
-    seed: int
+    hunt_seed: int
   ) {
-    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points
-      .getRandomNearbyValidSpawnPoint(seed);
+    var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
+      .getValidSpawnPoints();
 
-    if (spawn_point) {
+    for spawn_point: WMH_BiomeSpawnPoint in spawn_points {
       var position: Vector = spawn_point.GetWorldPosition();
+      var point_seed: int = hunt_seed + (position.X as int) - (position.Y as int);
 
-      var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
-        contract,
-        this.biomes,
-        spawn_point.biome_tags,
-        spawn_point.biome_tags_bypass,
-        seed + (position.X as int) - (position.Y as int)
-      );
+      // regular nearby spawn points have a chance to be disabled for the hunt,
+      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0) <= 0.5;
 
-      if (bentry) {
-        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-          .init()
-          .withPosition(spawn_point.GetWorldPosition())
-          .withBestiaryEntry(bentry)
-          .withSeed(seed);
+      // if a point isn't allowed to spawn creatures, it may spawn wildlife
+      var can_spawn_wildlife: bool = !can_spawn_monsters
+                                  && RandNoiseF(point_seed + 1, 1.0) <= 0.5;
 
-        this.requestSpawn(request);
+      if (can_spawn_monsters) {
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
+          contract,
+          this.biomes,
+          spawn_point.biome_tags,
+          spawn_point.biome_tags_bypass,
+          point_seed
+        );
+
+        if (bentry) {
+          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+            .init()
+            .withSpawnPoint(spawn_point)
+            .withBestiaryEntry(bentry)
+            .withSeed(point_seed);
+
+          this.requestSpawn(request);
+          spawn_point.consume();
+        }
+        else {
+          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        }
       }
-      else {
-        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
-      }
-    } else {
-      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid spawn point");
-    }
-  }
 
-  private function spawnRandomWildlife(seed: int) {
-    var spawn_point: WMH_BiomeSpawnPoint = this.spawn_points
-      .getRandomNearbyValidSpawnPoint(seed);
+      if (can_spawn_wildlife) {
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
+          this.biomes,
+          spawn_point.biome_tags,
+          spawn_point.biome_tags_bypass,
+          point_seed
+        );
 
-    if (spawn_point) {
-      var position: Vector = spawn_point.GetWorldPosition();
+        if (bentry) {
+          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+            .init()
+            .withSpawnPoint(spawn_point)
+            .withBestiaryEntry(bentry)
+            .withSeed(point_seed);
 
-      var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
-        this.biomes,
-        spawn_point.biome_tags,
-        spawn_point.biome_tags_bypass,
-        seed + (position.X as int) - (position.Y as int)
-      );
-
-      if (bentry) {
-        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-          .init()
-          .withPosition(spawn_point.GetWorldPosition())
-          .withBestiaryEntry(bentry)
-          .withSeed(seed);
-
-        this.requestSpawn(request);
-      }
-      else {
-        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+          this.requestSpawn(request);
+          spawn_point.consume();
+        }
+        else {
+          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        }
       }
     }
   }
@@ -336,6 +341,7 @@ state Spawning in WMH_Bestiary {
 
       if (request) {
         this.performSpawnRequest(request);
+        SleepOneFrame();
       }
     }
 
@@ -349,7 +355,7 @@ state Spawning in WMH_Bestiary {
     for bentry: WMH_BestiaryEntry in request.entries {
       this.spawnTemplates(
         bentry,
-        request.position,
+        request.GetWorldPosition(),
         request.seed,
         /*out*/ entities
       );

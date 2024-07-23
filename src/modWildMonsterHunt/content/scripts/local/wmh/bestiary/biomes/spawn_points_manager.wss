@@ -37,9 +37,9 @@ class WMH_SpawnPointManager {
     }
   }
 
-  public function getRandomNearbyValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
+  public function UNUSED_getRandomNearbyValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
     var valid_spawn_points: array<WMH_BiomeSpawnPoint> = this
-      .getValidSpawnPoints(seed);
+      .getValidSpawnPoints();
 
     var size: int = valid_spawn_points.Size();
 
@@ -65,18 +65,12 @@ class WMH_SpawnPointManager {
     return output;
   }
 
-  private function getValidSpawnPoints(seed: int): array<WMH_BiomeSpawnPoint> {
+  public function getValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {
     var output: array<WMH_BiomeSpawnPoint>;
 
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
       var position: Vector = point.GetWorldPosition();
-      var point_seed: int = seed + (position.X as int) - (position.Y as int);
-
-      // regular nearby spawn points have a chance to be disabled for the hunt,
-      if (RandNoiseF(point_seed, 1.0) <= 0.5) {
-        continue;
-      }
 
       if (point.canRespawn()) {
         output.PushBack(point);

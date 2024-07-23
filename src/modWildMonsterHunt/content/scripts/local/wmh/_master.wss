@@ -56,11 +56,12 @@ class WMH_Master {
 
   public function submitOnEncounterSpawned(
     origin: WMH_SpawnRequest,
+    spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>
   ) {
     var encounter: WMH_Encounter = (new WMH_Encounter in thePlayer.wmh)
-      .init(entries, entities);
+      .init(spawn_point, entries, entities);
 
     this.hunt.onEncounterSpawned(encounter);
   }

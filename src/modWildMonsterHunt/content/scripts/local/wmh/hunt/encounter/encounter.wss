@@ -1,12 +1,15 @@
 // 
 class WMH_Encounter {
   private var entries: array<WMH_BestiaryEntry>;
+  private var spawn_point: WMH_BiomeSpawnPoint;
   private var entities: array<CEntity>;
 
   public function init(
+    spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>
   ): WMH_Encounter {
+    this.spawn_point = spawn_point;
     this.entries = entries;
     this.entities = entities;
 
@@ -26,6 +29,7 @@ class WMH_Encounter {
     }
 
     this.entities.Clear();
+    this.spawn_point.liberate();
 
     if (notifyKills) {
       for bentry: WMH_BestiaryEntry in this.entries {

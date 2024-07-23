@@ -14,7 +14,12 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		return this.respawn_ticker.hasExpired();
 	}
 	
+	// to be used when the location is used as a spawn point,
 	public function consume() {
+		this.respawn_ticker.lock();
+	}
+
+	public function liberate() {
 		this.respawn_ticker.reset();
 	}
 }
