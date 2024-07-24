@@ -4,6 +4,8 @@ statemachine class WMH_LootManager {
   // it uses the value of WMH_LootTag as the first index.
   protected var loot_by_category: array<array<name>>;
 
+  protected var maximum_loot_level: WMH_Level;
+
   public function init(): WMH_LootManager {
     this.GotoState('Loading');
     return this;
@@ -24,6 +26,13 @@ statemachine class WMH_LootManager {
     );
   }
 
+  public function onHuntFinished(storage: WMH_Storage) {
+    this.maximum_loot_level = storage.general.level;
+
+    // this will cause the loot lists to bne refreshed
+    this.GotoState('Loading');
+  }
+
   private function addLootRequest(request: WMH_LootRequest) {
     this.loot_requests.PushBack(request);
 
@@ -32,7 +41,7 @@ statemachine class WMH_LootManager {
     }
   }
 
-  protected function registerLoot(category: WMH_LootTag, level: int, item: name) {
+  protected function registerLoot(category: WMH_LootTag, _level: int, item: name) {
     this.loot_by_category[category].PushBack(item);
   }
 }

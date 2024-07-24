@@ -26,6 +26,7 @@ class WMH_Master {
     origin: WMH_SettlementAreaTrigger
   ) {
     this.hunt.onHuntFinished(this.bestiary, this.storage);
+    this.loot.onHuntFinished(this.storage);
   }
 
   public function submitOnSettlementExit(
