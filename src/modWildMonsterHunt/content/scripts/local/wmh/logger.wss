@@ -15,7 +15,7 @@ statemachine class WMH_Logger {
     switch (level) {
       case WMHLL_Info:
         LogChannel('WMHINFO', message);
-        this.bufferMessage("[WMHINFO] " + message);
+        this.bufferMessage(message);
         break;
       case WMHLL_Warning:
         LogChannel('WMHWARN', message);

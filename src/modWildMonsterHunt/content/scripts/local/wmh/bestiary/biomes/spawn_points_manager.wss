@@ -26,14 +26,14 @@ class WMH_SpawnPointManager {
         var radius: float = 4000;
         var max: int = 500;
         this.region_spawn_points = this.findNearbySpawnPoints(radius, max);
-        WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
+        // WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
       }
     }
 
     if (ignore_tickers || this.nearby_refresh_ticker.validate()) {
       var radius: float = 500;
       this.nearby_spawn_points = this.buildNearbySpawnPointsFromRegion(radius);
-      WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
+      // WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
     }
   }
 
@@ -52,12 +52,12 @@ class WMH_SpawnPointManager {
     return valid_spawn_points[index];
   }
 
-  public function getRegionValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {
+  public function getRegionValidSpawnPoints(optional ignore_respawn: bool): array<WMH_BiomeSpawnPoint> {
     var output: array<WMH_BiomeSpawnPoint>;
 
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in this.region_spawn_points {
-      if (point.canRespawn()) {
+      if (ignore_respawn || point.canRespawn()) {
         output.PushBack(point);
       }
     }
@@ -65,14 +65,14 @@ class WMH_SpawnPointManager {
     return output;
   }
 
-  public function getValidSpawnPoints(): array<WMH_BiomeSpawnPoint> {
+  public function getValidSpawnPoints(optional ignore_respawn: bool): array<WMH_BiomeSpawnPoint> {
     var output: array<WMH_BiomeSpawnPoint>;
 
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
       var position: Vector = point.GetWorldPosition();
 
-      if (point.canRespawn()) {
+      if (ignore_respawn || point.canRespawn()) {
         output.PushBack(point);
       }
     }
@@ -85,18 +85,6 @@ class WMH_SpawnPointManager {
     count: int
   ): array<WMH_BiomeSpawnPoint> {
     var entities: array<CEntity>;
-
-    // FindGameplayEntitiesInRange(
-    //   entities,
-    //   thePlayer,
-    //   radius,
-    //   count,
-    //   '',
-    //   FLAG_ExcludePlayer,
-    //   , // target
-    //   'WMH_BiomeSpawnPoint'
-    // );
-
 
     theGame.GetEntitiesByTag('WMH_BiomeSpawnPoint', entities);
 

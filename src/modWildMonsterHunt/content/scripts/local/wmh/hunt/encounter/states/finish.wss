@@ -5,7 +5,7 @@ state Finish in WMH_EncounterManager {
   }
 
   entry function Finish_main() {
-    WMHINFO("WMH_EncounterManagerStateFinish:Finish_main()");
+    // WMHINFO("WMH_EncounterManagerStateFinish:Finish_main()");
     this.destroyEncounters();
     parent.GotoState('Waiting');
   }

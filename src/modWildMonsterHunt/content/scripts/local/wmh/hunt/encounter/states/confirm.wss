@@ -5,10 +5,10 @@ state Confirm in WMH_EncounterManager {
   }
 
   entry function Confirm_main() {
-    WMHINFO("WMH_EncounterManagerStateConfirm:Confirm_main()");
+    // WMHINFO("WMH_EncounterManagerStateConfirm:Confirm_main()");
 
     if (parent.encounters.Size() <= 0) {
-      WMHINFO("WMH_EncounterManagerStateConfirm - no more encounters");
+      // WMHINFO("WMH_EncounterManagerStateConfirm - no more encounters");
 
       parent.GotoState('Waiting');
     }

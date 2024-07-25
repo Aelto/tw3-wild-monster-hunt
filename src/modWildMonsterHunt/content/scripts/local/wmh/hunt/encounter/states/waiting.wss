@@ -5,6 +5,6 @@ state Waiting in WMH_EncounterManager {
   }
 
   entry function Waiting_main() {
-    WMHINFO("WMH_EncounterManagerStateWaiting:Waiting_main()");
+    // WMHINFO("WMH_EncounterManagerStateWaiting:Waiting_main()");
   }
 }
