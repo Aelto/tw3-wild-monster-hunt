@@ -52,9 +52,16 @@ class WMH_ContractManager {
     storage.general.level = new_level;
   }
 
-  public function onSpawn(seed: int) {
+  public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
     for contract: WMH_PendingContract in this.pending_contracts {
-      contract.onSpawn(seed);
+      contract.onSpawn(bestiary, seed);
+    }
+
+    // the order in the function calls is important, we want the spawnpoints to
+    // be used for spawning creatures first then the ones that were skipped will
+    // have a chance to spawn clues.
+    for contract: WMH_PendingContract in this.pending_contracts {
+      contract.onSpawn_clues(bestiary, seed);
     }
   }
 

@@ -1,0 +1,24 @@
+class WMH_EncounterClues extends WMH_Encounter {
+  public function initClues(
+    spawn_point: WMH_BiomeSpawnPoint,
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>
+  ): WMH_EncounterClues {
+    this.spawn_point = spawn_point;
+    this.entries = entries;
+    this.entities = entities;
+
+    return this;
+  }
+
+  // returns `true` if it needs to be destroyed by the manager
+  public function onTick(): bool {
+    return false;
+  }
+
+  public function onDestroy(optional notifyKills: bool) {
+    for entity: CEntity in this.entities {
+      entity.Destroy();
+    }
+  }
+}

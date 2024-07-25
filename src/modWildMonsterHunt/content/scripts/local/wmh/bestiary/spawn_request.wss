@@ -1,6 +1,7 @@
 class WMH_SpawnRequest {
   public var entries: array<WMH_BestiaryEntry>;
   public var spawn_point: WMH_BiomeSpawnPoint;
+  public var heading: float;
   public var seed: int;
 
   public function init(): WMH_SpawnRequest {
@@ -25,8 +26,14 @@ class WMH_SpawnRequest {
     return this;
   }
 
+  public function withHeading(heading: float): WMH_SpawnRequest {
+    this.heading = heading;
+
+    return this;
+  }
+
   public function onRequestFinished(entities: array<CEntity>) {
-    WMHINFO("WMH_SpawnRequest::onRequestFinished, entities.Size() = " + entities.Size());
+    // WMHINFO("WMH_SpawnRequest::onRequestFinished, entities.Size() = " + entities.Size());
 
     thePlayer.wmh.submitOnEncounterSpawned(
       this,
@@ -40,5 +47,18 @@ class WMH_SpawnRequest {
   // directly instead of a spawn point, it should be seamless.
   public function GetWorldPosition(): Vector {
     return this.spawn_point.GetWorldPosition();
+  }
+}
+
+class WMH_SpawnRequestClues extends WMH_SpawnRequest {
+  public function onRequestFinished(entities: array<CEntity>) {
+    WMHINFO("WMH_SpawnRequestClues::onRequestFinished, entities.Size() = " + entities.Size());
+
+    thePlayer.wmh.submitOnCluesSpawned(
+      this,
+      this.spawn_point,
+      this.entries,
+      entities
+    );
   }
 }

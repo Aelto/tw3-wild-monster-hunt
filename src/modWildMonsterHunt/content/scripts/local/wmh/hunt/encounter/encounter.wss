@@ -1,8 +1,8 @@
 // 
 class WMH_Encounter {
-  private var entries: array<WMH_BestiaryEntry>;
-  private var spawn_point: WMH_BiomeSpawnPoint;
-  private var entities: array<CEntity>;
+  protected var entries: array<WMH_BestiaryEntry>;
+  protected var spawn_point: WMH_BiomeSpawnPoint;
+  protected var entities: array<CEntity>;
 
   public function init(
     spawn_point: WMH_BiomeSpawnPoint,
