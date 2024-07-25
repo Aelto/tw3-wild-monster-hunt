@@ -1,0 +1,34 @@
+class WMH_BestiaryClues extends WMH_BestiaryEntry {
+  public var parent_bentry: WMH_BestiaryEntry;
+
+  public function init(id: WMH_BestiaryId) {
+    super.init(id);
+
+    this.templates.PushBack(
+      WMH_EnemyTemplate(
+        "dlc\dlcwild_monster_hunt\data\gameplay\monster_clue_nekker.w2ent"
+      )
+    );
+
+    // these numbers will be used to calculate how many clues are spawned
+    this.difficulty_scaling.minimum_count_easy = 3;
+    this.difficulty_scaling.maximum_count_easy = 6;
+    this.difficulty_scaling.minimum_count_medium = 3;
+    this.difficulty_scaling.maximum_count_medium = 6;
+    this.difficulty_scaling.minimum_count_hard = 3;
+    this.difficulty_scaling.maximum_count_hard = 6;
+  }
+
+  public function onEntitySpawned(entity: CEntity) {
+    var clues: WMH_MonsterClue = entity as WMH_MonsterClue;
+
+    // assign the localized name of the creature this clue is from
+    if (clues) {
+      clues.localized_entry_name = this.parent_bentry.getLocName();
+    }
+  }
+
+  public function getLocName(): string {
+    return "Clues";
+  }
+}
