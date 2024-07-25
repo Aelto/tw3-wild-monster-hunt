@@ -33,4 +33,8 @@ class WMH_BestiaryEntryLeshenGrotto extends WMH_BestiaryEntry {
       if (vegetation) += 2.0,
     }});
   }
+
+  public function getLocName(): string {
+    return "Spriggan";
+  }
 }

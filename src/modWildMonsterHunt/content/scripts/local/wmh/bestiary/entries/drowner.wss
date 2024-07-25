@@ -66,4 +66,8 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
       }
     }});
   }
+
+  public function getLocName(): string {
+    return "Drowner";
+  }
 }
