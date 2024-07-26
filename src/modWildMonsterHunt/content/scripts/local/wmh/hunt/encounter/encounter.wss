@@ -25,7 +25,9 @@ class WMH_Encounter {
 
   public function onDestroy(optional notifyKills: bool) {
     for entity: CEntity in this.entities {
-      entity.Destroy();
+      if (entity) {
+        entity.Destroy();
+      }
     }
 
     this.entities.Clear();
