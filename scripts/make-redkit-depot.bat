@@ -17,6 +17,9 @@ XCOPY "%modpath%\tw3-shared-utils\%depname%\" "%modpath%\deps\mods\%depname%\" /
 set depname=mod_sharedutils_dialogChoices
 XCOPY "%modpath%\tw3-shared-utils\%depname%\" "%modpath%\deps\mods\%depname%\" /e /s /y
 
+set depname=mod_sharedutils_damagemodifiers
+XCOPY "%modpath%\tw3-shared-utils\%depname%\" "%modpath%\deps\mods\%depname%\" /e /s /y
+
 set depname=mod_sharedutils_oneliners
 XCOPY "%modpath%\tw3-shared-utils\%depname%\" "%modpath%\deps\mods\%depname%\" /e /s /y
 
@@ -34,6 +37,9 @@ set depname=mod_sharedutils_glossary
 XCOPY "%modpath%\tw3-shared-utils\%depname%\content\scripts\local\" "%modpath%\deps\scripts\local\" /e /s /y
 
 set depname=mod_sharedutils_dialogChoices
+XCOPY "%modpath%\tw3-shared-utils\%depname%\content\scripts\local\" "%modpath%\deps\scripts\local\" /e /s /y
+
+set depname=mod_sharedutils_damagemodifiers
 XCOPY "%modpath%\tw3-shared-utils\%depname%\content\scripts\local\" "%modpath%\deps\scripts\local\" /e /s /y
 
 set depname=mod_sharedutils_oneliners

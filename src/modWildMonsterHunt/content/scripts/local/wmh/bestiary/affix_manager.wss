@@ -46,6 +46,8 @@ class WMH_AffixManager {
         (level.value / 25) * 0.05
       );
     }
+
+    return this;
   }
 
   public function applyToNpc(npc: CNewNPC) {
@@ -57,11 +59,11 @@ class WMH_AffixManager {
     }
 
     if (this.damage_modifier != 1.0) {
-      var su_modifier = SU_BaseDamageModifier;
+      var su_modifier: SU_BaseDamageModifier;
 
       su_modifier.damage_dealt_modifier = this.damage_modifier;
 
-      NPC.sharedutils_damage_modifiers.PushBack(su_modifier);
+      npc.sharedutils_damage_modifiers.PushBack(su_modifier);
     }
 
     if (this.health_regen_percent > 0) {
@@ -81,7 +83,7 @@ class WMH_AffixManager {
   public function toLocString(): string {
     var output: string;
 
-    if (this.damage_dealt_modifier != 1.0) {
+    if (this.damage_modifier != 1.0) {
       output += "Vicious ";
     }
 
