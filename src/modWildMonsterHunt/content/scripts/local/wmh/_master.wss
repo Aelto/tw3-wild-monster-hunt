@@ -33,7 +33,8 @@ class WMH_Master {
     origin: WMH_SettlementAreaTrigger
   ) {
     this.hunt.onHuntStarted(this.storage);
-    this.bestiary.onHuntStarted();
+    this.hunt.contract.onHuntStarted(this.bestiary);
+    this.bestiary.spawn_points.onHuntStarted();
   }
 
   public function submitOnSpawn(

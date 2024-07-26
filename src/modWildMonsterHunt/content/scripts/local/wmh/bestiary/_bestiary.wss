@@ -3,9 +3,11 @@
 statemachine class WMH_Bestiary {
   private var master: WMH_Master;
 
-  private var active_view: WMH_BestiaryActiveView;
-  private var spawn_points: WMH_SpawnPointManager;
-  private var biomes: WMH_BiomeManager;
+  // the sub-components are public but only access them directly to submit
+  // events from the master class.
+  public var active_view: WMH_BestiaryActiveView;
+  public var spawn_points: WMH_SpawnPointManager;
+  public var biomes: WMH_BiomeManager;
 
   public var entries: array<WMH_BestiaryEntry>;
   public var entries_wildlife: array<WMH_BestiaryEntry>;
@@ -23,10 +25,6 @@ statemachine class WMH_Bestiary {
     this.GotoState('Waiting');
 
     return this;
-  }
-
-  public function onHuntStarted() {
-    this.spawn_points.onHuntStarted();
   }
 
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
