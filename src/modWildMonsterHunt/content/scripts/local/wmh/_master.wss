@@ -53,7 +53,12 @@ class WMH_Master {
     location: WMH_BiomeSpawnPoint,
     seed: int
   ) {
-    this.bestiary.onSpawnContractTarget(bentry, location, seed);
+    this.bestiary.onSpawnContractTarget(
+      bentry,
+      location,
+      origin.affix_manager,
+      seed
+    );
   }
 
   public function submitOnSpawnClues(

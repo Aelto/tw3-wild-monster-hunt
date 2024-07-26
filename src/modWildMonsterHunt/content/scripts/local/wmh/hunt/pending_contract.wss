@@ -14,8 +14,21 @@ struct WMH_PendingContractLocation {
   var previous_clue_location: Vector;
 }
 
+struct WMH_Contract {
+  var target: WMH_BestiaryEntry;
+
+  var level: WMH_Level;
+
+  var created_at_minutes: int;
+
+  // to differentiate otherwise similar contracts that were generated in the
+  // same time span.
+  var index: int;
+}
+
 class WMH_PendingContract {
   var contract: WMH_Contract;
+  var affix_manager: WMH_AffixManager;
 
   // Dynamic, you may leave it empty as it will be defined during gameplay.
   //
@@ -27,8 +40,10 @@ class WMH_PendingContract {
 
   public function init(contract: WMH_Contract): WMH_PendingContract {
     this.contract = contract;
+    this.affix_manager = (new WMH_AffixManager in this)
+      .init(this.contract.level, this.getContractSeed());
 
-    WMHHUD("New contract: " + contract.target.getLocName());
+    WMHHUD("New contract: " + this.toTargetLocName());
 
     return this;
   }
@@ -71,6 +86,19 @@ class WMH_PendingContract {
 
   public function isTargetted(id: WMH_BestiaryId): bool {
     return this.contract.target.id.value == id.value;
+  }
+
+  public function getContractSeed(): int {
+    return this.contract.target.id
+         + this.contract.level.value
+         - this.contract.created_at_minutes
+         + index;
+  }
+
+  public function toTargetLocName(): string {
+    return this.affix_manager.toLocString()
+         + " "
+         + this.contract.target.getLocName();
   }
 
   private function getTargetLocationIndex(hunt_seed: int): int {

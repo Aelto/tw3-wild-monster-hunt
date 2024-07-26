@@ -38,12 +38,14 @@ statemachine class WMH_Bestiary {
   public function onSpawnContractTarget(
     bentry: WMH_BestiaryEntry,
     location: WMH_BiomeSpawnPoint,
+    affix_manager: WMH_AffixManager,
     seed: int
   ) {
     this.requestSpawn(
       (new WMH_SpawnRequest in this)
         .withBestiaryEntry(bentry)
         .withSpawnPoint(location)
+        .withAffixes(affix_manager)
         .withSeed(seed)
     );
   }
@@ -408,6 +410,7 @@ state Spawning in WMH_Bestiary {
         bentry,
         request.GetWorldPosition(),
         request.heading,
+        request.affix_manager,
         request.seed,
         /*out*/ entities
       );
@@ -420,6 +423,7 @@ state Spawning in WMH_Bestiary {
     bentry: WMH_BestiaryEntry,
     position: Vector,
     heading: float,
+    affix_manager: WMH_AffixManager,
     seed: int,
     out entities: array<CEntity>
   ) {
@@ -470,6 +474,14 @@ state Spawning in WMH_Bestiary {
       );
 
       bentry.onEntitySpawned(created_entity);
+
+      var npc: CNewNPC = created_entity as CNewNPC;
+      if (npc) {
+        if (affix_manager) {
+          affix_manager.applyToNpc(npc);
+        }
+      }
+
       entities.PushBack(created_entity);
     }
   }

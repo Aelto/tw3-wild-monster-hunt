@@ -4,6 +4,8 @@ class WMH_SpawnRequest {
   public var heading: float;
   public var seed: int;
 
+  public var affix_manager: WMH_AffixManager;
+
   public function init(): WMH_SpawnRequest {
     return this;
   }
@@ -28,6 +30,12 @@ class WMH_SpawnRequest {
 
   public function withHeading(heading: float): WMH_SpawnRequest {
     this.heading = heading;
+
+    return this;
+  }
+
+  public function withAffixes(affix_manager: WMH_AffixManager): WMH_SpawnRequest {
+    this.affix_manager = affix_manager;
 
     return this;
   }

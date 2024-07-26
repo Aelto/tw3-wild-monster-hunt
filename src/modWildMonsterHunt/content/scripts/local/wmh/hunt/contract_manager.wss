@@ -1,15 +1,5 @@
 #define const ContractDurationMinutes = 60 * 5;
 
-struct WMH_Contract {
-  var target: WMH_BestiaryEntry;
-
-  var created_at_minutes: int;
-
-  // to differentiate otherwise similar contracts that were generated in the
-  // same time span.
-  var index: int;
-}
-
 // Keeps track of the currently active contract targets the player has
 class WMH_ContractManager {
   private var pending_contracts: array<WMH_PendingContract>;
@@ -80,7 +70,7 @@ class WMH_ContractManager {
     var output: array<string>;
 
     for pending: WMH_PendingContract in this.pending_contracts {
-      output.PushBack(pending.contract.target.getLocName());
+      output.PushBack(pending.toTargetLocName());
     }
 
     return output;
@@ -89,7 +79,11 @@ class WMH_ContractManager {
   private function onContractCompleted(contract: WMH_PendingContract) {
     WMHHUD("Contract completed.");
 
-    todo!("grant rewards")
+    thePlayer.AddMoney(
+      contract.target.strength
+      // at level 25 the rewards are doubled
+      * (1 + contract.level.value / 25)
+    );
   }
 
   private function finishCompletedContracts(
@@ -149,6 +143,11 @@ class WMH_ContractManager {
 
       var contract: WMH_Contract = WMH_Contract(
         bentry,
+        // set a level to the contract with a small variance
+        WMH_Level(MaxF(
+          level.value + (RandNoiseF(seed, 2.0) - 1.0),
+          0
+        )),
         now,
         i
       );

@@ -1,0 +1,98 @@
+class WMH_AffixManager {
+  private var health_modifier: float;
+  private var damage_modifier: float;
+
+  // %hp per minute
+  private var health_regen_percent: float;
+
+  public function init(level: WMH_Level, seed: int): WMH_AffixManager {
+    var count: int = 0;
+
+    // at level 25 (value for a shaelmar), the creature should have 50% chance
+    // to get at least one affix.
+    var base_chance: float = 0.5 * (1 + level.value / 25);
+
+    // every time an affix is added, `count` is increased. Then current_chance
+    // is updated to slowly decrease
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 1, base_chance) > 0.5) {
+      count += 1;
+
+      this.health_modifier = 1 + RandNoiseF(
+        seed + 2,
+        // at level 25, the creature can have a maximum bonus of 50% health
+        (level.value / 25) * 0.5
+      );
+    }
+
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 3, base_chance) > 0.5 + count * 0.1) {
+      count += 1;
+
+      this.health_modifier = 1 + RandNoiseF(
+        seed + 4,
+        // at level 25, the creature can have a maximum bonus of 25% damage
+        (level.value / 25) * 0.25
+      );
+    }
+
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 5, base_chance) > 0.5 + count * 0.1) {
+      count += 1;
+
+      this.health_regen_percent = RandNoiseF(
+        seed + 6,
+        // at level 25, the creature can have a maximum of 5% HP per minute
+        (level.value / 25) * 0.05
+      );
+    }
+  }
+
+  public function applyToNpc(npc: CNewNPC) {
+    if (this.health_modifier != 1.0) {
+      npc.abilityManager.SetStatPointMax(
+        BCS_Vitality,
+        npc.GetMaxHealth() * (1 / this.health_modifier)
+      );
+    }
+
+    if (this.damage_modifier != 1.0) {
+      var su_modifier = SU_BaseDamageModifier;
+
+      su_modifier.damage_dealt_modifier = this.damage_modifier;
+
+      NPC.sharedutils_damage_modifiers.PushBack(su_modifier);
+    }
+
+    if (this.health_regen_percent > 0) {
+      var params: SCustomEffectParams;
+
+      params.effectType = EET_AutoEssenceRegen;
+      params.creator = NULL;
+
+      params.effectValue.valueMultiplicative = (this.health_regen_percent) / (60);
+      params.sourceName = "wmh_regenerative_affix";
+      params.duration = -1;
+      
+      npc.AddEffectCustom(params);
+    }
+  }
+
+  public function toLocString(): string {
+    var output: string;
+
+    if (this.damage_dealt_modifier != 1.0) {
+      output += "Vicious ";
+    }
+
+    if (this.health_modifier != 1.0) {
+      output += "Hearty ";
+    }
+
+    if (this.health_regen_percent > 0) {
+      output += "Regenerative ";
+    }
+
+    return output;
+  }
+}
