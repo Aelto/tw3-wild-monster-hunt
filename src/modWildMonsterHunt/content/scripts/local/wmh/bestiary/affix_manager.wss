@@ -1,9 +1,13 @@
 class WMH_AffixManager {
   private var health_modifier: float;
+  default health_modifier = 1.0;
+
   private var damage_modifier: float;
+  default damage_modifier = 1.0;
 
   // %hp per minute
   private var health_regen_percent: float;
+  default health_regen_percent = 0.0;
 
   public function init(level: WMH_Level, seed: int): WMH_AffixManager {
     var count: int = 0;
@@ -15,7 +19,7 @@ class WMH_AffixManager {
     // every time an affix is added, `count` is increased. Then current_chance
     // is updated to slowly decrease
     var current_chance: float = base_chance / (1 + count);
-    if (RandNoiseF(seed + 1, base_chance) > 0.5) {
+    if (RandNoiseF(seed + 1, current_chance) > 0.5) {
       count += 1;
 
       this.health_modifier = 1 + RandNoiseF(
@@ -26,7 +30,7 @@ class WMH_AffixManager {
     }
 
     var current_chance: float = base_chance / (1 + count);
-    if (RandNoiseF(seed + 3, base_chance) > 0.5 + count * 0.1) {
+    if (RandNoiseF(seed + 3, current_chance) > 0.5) {
       count += 1;
 
       this.health_modifier = 1 + RandNoiseF(
@@ -37,7 +41,7 @@ class WMH_AffixManager {
     }
 
     var current_chance: float = base_chance / (1 + count);
-    if (RandNoiseF(seed + 5, base_chance) > 0.5 + count * 0.1) {
+    if (RandNoiseF(seed + 5, current_chance) > 0.5) {
       count += 1;
 
       this.health_regen_percent = RandNoiseF(
