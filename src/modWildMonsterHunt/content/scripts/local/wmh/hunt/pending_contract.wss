@@ -96,8 +96,8 @@ class WMH_PendingContract {
   }
 
   public function toTargetLocName(): string {
+    // note: the affixes are prefixed by a space
     return this.affix_manager.toLocString()
-         + " "
          + this.contract.target.getLocName();
   }
 
