@@ -2,10 +2,10 @@ class WMH_Master {
   public var storage: WMH_Storage;
   public var logger: WMH_Logger;
 
-  private var camp: WMH_CampManager;
-  private var bestiary: WMH_Bestiary;
-  private var hunt: WMH_HuntManager;
-  private var loot: WMH_LootManager;
+  public var camp: WMH_CampManager;
+  public var bestiary: WMH_Bestiary;
+  public var hunt: WMH_HuntManager;
+  public var loot: WMH_LootManager;
 
   public function onCreate() {}
 
@@ -43,7 +43,7 @@ class WMH_Master {
     hunt_seed: int,
     instant_seed: int
   ) {
-    this.hunt.encounters.onSpawn(bestiary, hunt_seed);
+    this.hunt.contract.onSpawn(bestiary, hunt_seed);
     this.bestiary.onSpawn(contract, hunt_seed);
   }
 

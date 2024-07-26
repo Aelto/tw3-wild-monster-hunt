@@ -76,6 +76,16 @@ class WMH_ContractManager {
     return false;
   }
 
+  public function getPendingTargetsName(): array<string> {
+    var output: array<string>;
+
+    for pending: WMH_PendingContract in this.pending_contracts {
+      output.PushBack(pending.contract.target.getLocName());
+    }
+
+    return output;
+  }
+
   private function onContractCompleted(contract: WMH_PendingContract) {
     WMHHUD("Contract completed.");
 
