@@ -154,7 +154,7 @@ class WMH_PendingContract {
     var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
       .getAvailableNearbySpawnPoints(this.contract.target);
 
-      WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
+      // WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
 
     var target_index: int = this.getTargetLocationIndex(hunt_seed);
     var target_location_copy: WMH_PendingContractLocation = this
@@ -166,7 +166,7 @@ class WMH_PendingContract {
       }
 
       var position: Vector = point.GetWorldPosition();
-      WMHINFO("BiomeCluesPoint @ " + VecToString(position));
+      // WMHINFO("BiomeCluesPoint @ " + VecToString(position));
 
       // this point is the target, no need to spawn clues there
       if (position == target_location_copy.spawn_point.GetWorldPosition()) {
@@ -182,7 +182,7 @@ class WMH_PendingContract {
         continue;
       }
 
-      WMHINFO("BiomeCluesPoint - RandNoiseF success");
+      // WMHINFO("BiomeCluesPoint - RandNoiseF success");
 
       var point_to_target_heading: float = VecHeading(
         target_location_copy.spawn_point.GetWorldPosition() - position
@@ -216,7 +216,7 @@ class WMH_PendingContract {
         continue;
       }
 
-      WMHINFO("BiomeCluesPoint - heading_difference success");
+      // WMHINFO("BiomeCluesPoint - heading_difference success");
 
       thePlayer.wmh.submitOnSpawnClues(
         this,
