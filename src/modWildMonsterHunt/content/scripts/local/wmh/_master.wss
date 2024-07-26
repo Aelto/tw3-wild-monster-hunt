@@ -111,5 +111,16 @@ class WMH_Master {
   ) {
     this.loot.onContainerRefill(inventory, origin.loot_tags, seed);
   }
+
+  public function submitOnDeath(origin: CR4PlayerStateUnconscious) {
+    var destination: CEntity = theGame.GetEntityByTag('WMH_FeintRespawn');
+
+    if (destination) {
+      thePlayer.TeleportWithRotation(
+        destination.GetWorldPosition()
+        destination.GetWorldRotation()
+      );
+    }
+  }
 }
 

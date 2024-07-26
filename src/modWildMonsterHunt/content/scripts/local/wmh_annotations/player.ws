@@ -16,18 +16,13 @@ function OnDeath(damageAction: W3DamageAction) {
 
 // 2) wrap the hideweapon of the state to introduce timeflow & teleport the
 // player back to the FeintRespawn location.
-@wrapMethod(CR4PlayerStateUnconscious)
+@wrapMethod(Unconscious)
 function HideWeapon() {
   wrappedMethod();
 
-  if (thePlayer.wmh.isInHunt()) {
+  if (thePlayer.wmh.hunt.isInHunt()) {
     this.TimeFlow();
-
-    var destination: CEntity = theGame.GetEntityByTag('WMH_FeintRespawn');
-
-    if (destination) {
-      thePlayer.Teleport(destination.GetWorldPosition());
-    }
+    thePlayer.wmh.submitOnDeath(this);
   }
 }
 //#endregion
