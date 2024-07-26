@@ -87,8 +87,12 @@ statemachine class WMH_HuntManager {
     ) as int;
   }
 
+  public function isInHunt(): bool {
+    return this.GetCurrentStateName() == 'Running';
+  }
+
   protected function getSecondsSinceStart(): int {
-    if (this.GetCurrentStateName() != 'Running') {
+    if (!this.isInHunt()) {
       return 0;
     }
 
