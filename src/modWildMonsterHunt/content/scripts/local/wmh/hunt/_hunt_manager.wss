@@ -91,6 +91,10 @@ statemachine class WMH_HuntManager {
     return this.GetCurrentStateName() == 'Running';
   }
 
+  public function onPlayerDeath() {
+    this.killed_creatures.Clear();
+  }
+
   protected function getSecondsSinceStart(): int {
     if (!this.isInHunt()) {
       return 0;
