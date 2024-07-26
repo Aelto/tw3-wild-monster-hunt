@@ -4,9 +4,9 @@
 statemachine class WMH_HuntManager {
   private var master: WMH_Master;
 
-  protected var encounters: WMH_EncounterManager;
-  protected var contract: WMH_ContractManager;
-  protected var wildlife: WMH_WildlifeManager;
+  public var encounters: WMH_EncounterManager;
+  public var contract: WMH_ContractManager;
+  public var wildlife: WMH_WildlifeManager;
 
   protected var factory: WMH_HuntSeedFactory;
   protected var seed: int;
@@ -72,18 +72,6 @@ statemachine class WMH_HuntManager {
 
   public function onCreatureKilled(bentry: WMH_BestiaryEntry) {
     this.killed_creatures.PushBack(bentry.id);
-  }
-
-  public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
-    this.contract.onSpawn(bestiary, seed);
-  }
-
-  public function onEncounterSpawned(encounter: WMH_Encounter) {
-    this.encounters.onEncounterSpawned(encounter);
-  }
-
-  public function onCluesSpawned(encounter_clues: WMH_EncounterClues) {
-    this.encounters.onCluesSpawned(encounter_clues);
   }
 
   public function difficulty(): int {

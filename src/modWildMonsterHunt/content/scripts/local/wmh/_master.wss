@@ -42,7 +42,7 @@ class WMH_Master {
     hunt_seed: int,
     instant_seed: int
   ) {
-    this.hunt.onSpawn(bestiary, hunt_seed);
+    this.hunt.encounters.onSpawn(bestiary, hunt_seed);
     this.bestiary.onSpawn(contract, hunt_seed);
   }
 
@@ -74,7 +74,7 @@ class WMH_Master {
     var encounter: WMH_Encounter = (new WMH_Encounter in thePlayer.wmh)
       .init(spawn_point, entries, entities);
 
-    this.hunt.onEncounterSpawned(encounter);
+    this.hunt.encounters.onEncounterSpawned(encounter);
   }
 
   public function submitOnCluesSpawned(
@@ -86,7 +86,7 @@ class WMH_Master {
     var encounter: WMH_EncounterClues = (new WMH_EncounterClues in thePlayer.wmh)
       .initClues(spawn_point, entries, entities);
 
-    this.hunt.onCluesSpawned(encounter);
+    this.hunt.encounters.onCluesSpawned(encounter);
   }
 
   public function submitOnCreatureKilled(
