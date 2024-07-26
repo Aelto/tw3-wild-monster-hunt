@@ -54,7 +54,7 @@ class WMH_NoticeBoard extends W3NoticeBoard {
         this
       );
 
-      oneliner.render_distance = 5.0;
+      oneliner.render_distance = 5;
 
       oneliner.offset = MatrixGetTranslation(
         MatrixBuiltRotation(

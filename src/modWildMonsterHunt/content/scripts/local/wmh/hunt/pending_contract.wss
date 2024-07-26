@@ -88,11 +88,12 @@ class WMH_PendingContract {
     return this.contract.target.id.value == id.value;
   }
 
-  public function getContractSeed(): int {
-    return this.contract.target.id
-         + this.contract.level.value
+  public function getContractSeed(optional offset: int): int {
+    return offset
+         + this.contract.target.id.value
+         + (this.contract.level.value as int)
          - this.contract.created_at_minutes
-         + index;
+         + this.contract.index;
   }
 
   public function toTargetLocName(): string {
@@ -102,10 +103,7 @@ class WMH_PendingContract {
   }
 
   private function getTargetLocationIndex(hunt_seed: int): int {
-    var seed: int = hunt_seed
-         + this.contract.created_at_minutes
-         + this.contract.target.id.value
-         + this.contract.index;
+    var seed: int = this.getContractSeed(hunt_seed);
 
     // the target spawns on 1 pre-determined location for the contract.
     var index: int = RandNoiseF(

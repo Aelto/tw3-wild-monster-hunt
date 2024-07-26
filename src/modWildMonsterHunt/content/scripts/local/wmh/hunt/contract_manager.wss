@@ -76,13 +76,15 @@ class WMH_ContractManager {
     return output;
   }
 
-  private function onContractCompleted(contract: WMH_PendingContract) {
+  private function onContractCompleted(pending: WMH_PendingContract) {
     WMHHUD("Contract completed.");
 
     thePlayer.AddMoney(
-      contract.target.strength
-      // at level 25 the rewards are doubled
-      * (1 + contract.level.value / 25)
+      (
+        pending.contract.target.strength
+        // at level 25 the rewards are doubled
+        * (1 + pending.contract.level.value / 25)
+      ) as int
     );
   }
 
