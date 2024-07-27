@@ -14,7 +14,7 @@ class WMH_Ticker {
   }
 
   public function reset(optional cooldown_seconds: float) {
-    this.unlock();
+    this.internal_unlock();
 
     this.trigger_timestamp = SUH_now();
     
@@ -29,11 +29,8 @@ class WMH_Ticker {
   }
 
   public function unlock() {
-    if (this.isLocked()) {
-      this.reset();
-      this.trigger_timestamp -= this.lock_elapsed;
-      this.lock_elapsed = 0;
-    }
+    this.reset();
+    this.internal_unlock();
   }
 
   public function isLocked(): bool {
@@ -54,6 +51,13 @@ class WMH_Ticker {
     }
     else {
       return false;
+    }
+  }
+
+  private function internal_unlock() {
+    if (this.isLocked()) {
+      this.trigger_timestamp -= this.lock_elapsed;
+      this.lock_elapsed = 0;
     }
   }
 }
