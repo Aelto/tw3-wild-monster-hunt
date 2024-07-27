@@ -1,4 +1,4 @@
-class WMH_BestiaryEntryGryphon extends WMH_BestiaryEntry {
+class WMH_BestiaryEntryGriffin extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
 
@@ -38,7 +38,7 @@ class WMH_BestiaryEntryGryphon extends WMH_BestiaryEntry {
     this.difficulty_scaling.maximum_count_hard = 1;
 
     this.strength = 13.5;
-    this.biome_tag_bypass = 'Gryphon';
+    this.biome_tag_bypass = 'Griffin';
   }
 
   public function getSpawnRatio(
