@@ -101,7 +101,7 @@ state Running in WMH_Logger {
   }
 
   entry function Running_main() {
-    while (true) {
+    while (false) {
       Sleep(2.5);
 
       if (parent.messages_buffer.Size() > 0) {
