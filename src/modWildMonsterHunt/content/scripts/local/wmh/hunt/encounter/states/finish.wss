@@ -13,6 +13,7 @@ state Finish in WMH_EncounterManager {
   latent function destroyEncounters() {
     for encounter: WMH_Encounter in parent.encounters {
       encounter.onDestroy();
+      SleepOneFrame();
     }
 
     parent.encounters.Clear();

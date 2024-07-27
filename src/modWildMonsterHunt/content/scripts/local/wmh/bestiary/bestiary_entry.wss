@@ -41,10 +41,7 @@ class WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     optional biome_tags_bypass: array<name>
   ): bool {
-    if (
-      IsNameValid(this.biome_tag_bypass)
-      && biome_tags_bypass.Contains(this.biome_tag_bypass)
-    ) {
+    if (this.isBiomeBypassed(biome_tags_bypass)) {
       return true;
     }
 
@@ -55,6 +52,11 @@ class WMH_BestiaryEntry {
     ) > 0;
   }
 
+  public function isBiomeBypassed(out biome_tags_bypass: array<name>): bool {
+    return IsNameValid(this.biome_tag_bypass)
+        && biome_tags_bypass.Contains(this.biome_tag_bypass);
+  }
+
   public function getSpawnRatio(
     tags: WMH_BiomeTags,
     weather: WMH_WeatherType,
@@ -63,7 +65,7 @@ class WMH_BestiaryEntry {
     return 0.0;
   }
 
-  public function buildSpawnList(seed: int): array<string> {
+  public function buildSpawnList(seed: int): array<WMH_SpawnTemplateAndCount> {
     var spawn_count: int = RandNoiseF(
       seed,
       // todo: use other difficulties than medium
@@ -80,15 +82,18 @@ class WMH_BestiaryEntry {
       active_templates.PushBack(this.templates[i]);
     }
 
-    var output_templates: array<string>;
+    var output_templates: array<WMH_SpawnTemplateAndCount>;
+    var active_templates_size: int = active_templates.Size();
 
-    while (true) {
-      var active_templates_size: int = active_templates.Size();
+    var attempts: int = Max(active_templates_size * 2, 10);
+    while (attempts > 0) {
+      attempts -= 1;
+      active_templates_size = active_templates.Size();
       if (active_templates_size <= 0) {
         break;
       }
 
-      if (output_templates.Size() >= spawn_count) {
+      if (spawn_count <= 0) {
         break;
       }
 
@@ -98,17 +103,35 @@ class WMH_BestiaryEntry {
       ) as int;
 
       var selected_template: WMH_EnemyTemplate = active_templates[index];
-
       WMHINFO("buildSpawnList() - adding " + selected_template.template);
 
-      output_templates.PushBack(selected_template.template);
-      active_templates[index].max -= 1;
+      var found: bool = false;
+      var should_erase: bool = false;
+      for (i = 0; i < output_templates.Size(); i += 1) {
+        if (!found && output_templates[i].template == selected_template.template) {
+          found = true;
+
+          if (output_templates[i].count < selected_template.max) {
+            output_templates[i].count += 1;
+          }
+          else {
+            should_erase = true;
+          }
+        }
+      }
+
+      if (!found) {
+        output_templates.PushBack(
+          WMH_SpawnTemplateAndCount(selected_template.template, 1)
+        );
+      }
 
       // reached the limit of this template per group
-      if (active_templates[index].max <= 0) {
-        // remove it from the available templates
+      if (should_erase) {
         active_templates.EraseFast(index);
       }
+
+      spawn_count -= 1;
     }
 
     return output_templates;

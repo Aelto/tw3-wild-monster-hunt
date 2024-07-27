@@ -259,7 +259,7 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntry!(Golem)
     registerBestiaryEntry!(GolemIce)
     registerBestiaryEntry!(Gravier)
-    registerBestiaryEntry!(Gryphon)
+    registerBestiaryEntry!(Griffin)
     registerBestiaryEntry!(Hag)
     registerBestiaryEntry!(Harpy)
     registerBestiaryEntry!(Human)
@@ -304,35 +304,37 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntryWildlife!(Cat)
     registerBestiaryEntryWildlife!(Chicken)
     registerBestiaryEntryWildlife!(Cow)
-    registerBestiaryEntryWildlife!(Crab)
-    registerBestiaryEntryWildlife!(Crow)
     registerBestiaryEntryWildlife!(Deer)
     registerBestiaryEntryWildlife!(Deer_roe)
     registerBestiaryEntryWildlife!(Dog)
-    registerBestiaryEntryWildlife!(Fish_kingfish)
-    registerBestiaryEntryWildlife!(Fish_mackerel)
-    registerBestiaryEntryWildlife!(Fish_roach)
-    registerBestiaryEntryWildlife!(Fish_tuna)
     registerBestiaryEntryWildlife!(Goat)
-    registerBestiaryEntryWildlife!(Goose)
-    registerBestiaryEntryWildlife!(Goose_leader)
     registerBestiaryEntryWildlife!(Guard_dog)
     registerBestiaryEntryWildlife!(Hare)
     registerBestiaryEntryWildlife!(Mountain_goat)
     registerBestiaryEntryWildlife!(Mouse)
-    registerBestiaryEntryWildlife!(Owl)
     registerBestiaryEntryWildlife!(Pig)
     registerBestiaryEntryWildlife!(Pigeon)
     registerBestiaryEntryWildlife!(Ram)
     registerBestiaryEntryWildlife!(Rat)
     registerBestiaryEntryWildlife!(Rooster)
-    registerBestiaryEntryWildlife!(Seagull)
     registerBestiaryEntryWildlife!(Sheep)
     registerBestiaryEntryWildlife!(Snow_deer)
     registerBestiaryEntryWildlife!(Snow_rabbit)
+    /*
+    registerBestiaryEntryWildlife!(Crab)
+    registerBestiaryEntryWildlife!(Crow)
+    registerBestiaryEntryWildlife!(Fish_kingfish)
+    registerBestiaryEntryWildlife!(Fish_mackerel)
+    registerBestiaryEntryWildlife!(Fish_roach)
+    registerBestiaryEntryWildlife!(Fish_tuna)
+    registerBestiaryEntryWildlife!(Goose)
+    registerBestiaryEntryWildlife!(Goose_leader)
+    registerBestiaryEntryWildlife!(Owl)
+    registerBestiaryEntryWildlife!(Seagull)
     registerBestiaryEntryWildlife!(Sparrow)
     registerBestiaryEntryWildlife!(Swallow)
     registerBestiaryEntryWildlife!(Toad)
+    */
 
     return index;
   }
@@ -427,7 +429,7 @@ state Spawning in WMH_Bestiary {
     seed: int,
     out entities: array<CEntity>
   ) {
-    var templates: array<string> = bentry.buildSpawnList(seed);
+    var templates: array<WMH_SpawnTemplateAndCount> = bentry.buildSpawnList(seed);
 
     var group_positions: array<Vector> = WMH_getGroupPositions(
       position,
@@ -440,7 +442,7 @@ state Spawning in WMH_Bestiary {
 
     var i: int;
     for (i = 0; i < templates.Size(); i += 1) {
-      var template_path: string = templates[i];
+      var template_path: string = templates[i].template;
 
       WMHINFO("template = " + template_path);
 
@@ -448,6 +450,7 @@ state Spawning in WMH_Bestiary {
       var entity_template: CEntityTemplate = LoadResourceAsync(
         template_path, true
       ) as CEntityTemplate;
+      SleepOneFrame();
 
       WMH_FixZAxis(/*out*/ group_positions[i]);
 
@@ -465,26 +468,34 @@ state Spawning in WMH_Bestiary {
 
       var persistance: EPersistanceMode = PM_DontPersist;
 
-      var created_entity: CEntity = theGame.CreateEntity(
-        entity_template,
-        group_positions[i],
-        current_rotation,,,,
-        persistance,
-        tags_array
-      );
+      var i_1: int = 0;
+      for (i_1 = 0; i_1 < templates[i].count; i_1 += 1) {
+        var created_entity: CEntity = theGame.CreateEntity(
+          entity_template,
+          group_positions[i],
+          current_rotation,,,,
+          persistance,
+          tags_array
+        );
 
-      bentry.onEntitySpawned(created_entity);
+        bentry.onEntitySpawned(created_entity);
 
-      var npc: CNewNPC = created_entity as CNewNPC;
-      if (npc) {
-        if (affix_manager) {
-          affix_manager.applyToNpc(npc);
+        var npc: CNewNPC = created_entity as CNewNPC;
+        if (npc) {
+          if (affix_manager) {
+            affix_manager.applyToNpc(npc);
+          }
         }
-      }
 
-      entities.PushBack(created_entity);
+        entities.PushBack(created_entity);
+      }
     }
   }
+}
+
+struct WMH_SpawnTemplateAndCount {
+  var template: string;
+  var count: int;
 }
 
 

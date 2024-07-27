@@ -18,6 +18,8 @@ state Running in WMH_EncounterManager {
       if (should_destroy) {
         encounter.onDestroy(true);
       }
+
+      SleepOneFrame();
     }
   }
 }
