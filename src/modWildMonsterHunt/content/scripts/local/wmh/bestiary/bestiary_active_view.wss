@@ -93,6 +93,10 @@ class WMH_BestiaryActiveView {
         day_hour
       ) as float;
 
+      if (current.strength > 5) {
+        ratio = ratio / current.strength;
+      }
+
       if (contract.isTargetted(current.id)) {
         ratio *= 10;
       }
