@@ -39,13 +39,14 @@ class WMH_BestiaryEntryPanther extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
-      if (underground) nospawn
+    return 0.0;
+    // pref_time!({{
+    //   if (underground) nospawn
 
-      if (vegetation) += 1.0,
+    //   if (vegetation) += 1.0,
 
-      night *= 2.0,
-    }});
+    //   night *= 2.0,
+    // }});
   }
 
   public function getLocName(): string {
