@@ -140,7 +140,7 @@ statemachine class WMH_Bestiary {
       var point_seed: int = hunt_seed + (position.X as int) - (position.Y as int);
 
       // regular nearby spawn points have a chance to be disabled for the hunt,
-      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0) <= 0.5;
+      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0) <= 0.8;
 
       // if a point isn't allowed to spawn creatures, it may spawn wildlife
       var can_spawn_wildlife: bool = !can_spawn_monsters
