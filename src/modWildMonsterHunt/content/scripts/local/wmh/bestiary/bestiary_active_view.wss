@@ -97,6 +97,10 @@ class WMH_BestiaryActiveView {
         ratio *= 10;
       }
 
+      if (current.isBiomeBypassed(biome_tags_bypass)) {
+        ratio *= 20;
+      }
+
       roller.addRatio(ratio);
     }
 
