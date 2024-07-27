@@ -25,12 +25,15 @@ class WMH_BestiaryEntryGolemIce extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
-      if (!altitude) nospawn
+    // disabled for the moment, ifryt spams the log file with errors about buffs
+    return 0.0;
 
-      if (structures) += 0.1,
-      if (snow) *= 1.5,
-    }});
+    // pref_time!({{
+    //   if (!altitude) nospawn
+
+    //   if (structures) += 0.1,
+    //   if (snow) *= 1.5,
+    // }});
   }
 
   public function getLocName(): string {

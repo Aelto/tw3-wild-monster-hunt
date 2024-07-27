@@ -23,7 +23,7 @@ class WMH_BestiaryEntryGoose extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    return 1.0;
+    return 0.0;
 
     // pref_time!({{
     //   if (underground) nospawn

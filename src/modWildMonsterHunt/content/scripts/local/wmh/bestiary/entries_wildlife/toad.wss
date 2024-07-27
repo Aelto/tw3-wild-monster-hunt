@@ -23,9 +23,7 @@ class WMH_BestiaryEntryToad extends WMH_BestiaryEntry {
     weather: WMH_WeatherType,
     day_hour: float
   ): float {
-    pref_time!({{
-      
-    }});
+    return 0.0;
   }
 
   public function getLocName(): string {
