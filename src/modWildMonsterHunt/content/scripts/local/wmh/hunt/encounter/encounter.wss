@@ -20,7 +20,11 @@ class WMH_Encounter {
   public function onTick(): bool {
     SUH_removeDeadEntities(this.entities);
 
-    return this.entities.Size() <= 0;
+    return this.entities.Size() <= 0
+        || VecDistanceSquared2D(
+            thePlayer.GetWorldPosition(),
+            this.spawn_point.GetWorldPosition()
+          ) > 250 * 250;
   }
 
   public function onDestroy(optional notifyKills: bool) {
