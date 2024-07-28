@@ -33,7 +33,7 @@ class WMH_BestiaryEntryFiend extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (vegetation) += 0.5,
+      if (vegetation) += 0.1,
 
       afternoon {
         if (underground) -= 0.5,

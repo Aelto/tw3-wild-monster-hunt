@@ -33,7 +33,7 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (structures) += 0.1,
+      if (structures) += 0.05,
     }});
   }
 
