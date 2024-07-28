@@ -84,18 +84,11 @@ class WMH_BestiaryActiveView {
     for (i = 0; i < this.entries.Size(); i += 1) {
       var current: WMH_BestiaryEntry = this.entries[i];
 
-      // todo: the biome_tags_bypass is not verified during this step.
-      //  ~> what ratio should a bypassed entry get?
-
       var ratio: float = current.getSpawnRatio(
         biome,
         weather,
         day_hour
       ) as float;
-
-      if (current.strength > 5) {
-        ratio = ratio / current.strength;
-      }
 
       if (contract.isTargetted(current.id)) {
         ratio *= 10;
@@ -103,6 +96,9 @@ class WMH_BestiaryActiveView {
 
       if (current.isBiomeBypassed(biome_tags_bypass)) {
         ratio *= 20;
+      } else {
+        // the stronger a creature is the lower its chances of appearing
+        ratio = ratio / MaxF(1.0, current.strength * 0.1);
       }
 
       roller.addRatio(ratio);
