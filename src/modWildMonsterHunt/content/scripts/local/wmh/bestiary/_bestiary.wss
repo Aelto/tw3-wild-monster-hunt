@@ -135,16 +135,32 @@ statemachine class WMH_Bestiary {
     var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
       .getValidSpawnPoints();
 
+    var region_spawns_count: int = this.spawn_points
+      .getRegionSpawnPointsCount();
+
+    if (region_spawns_count <= 0) {
+      return;
+    }
+
+    var allowed_spawns_per_region: int = Min(49, region_spawns_count) + 1;
+
+    var monster_spawn_chance: float = 
+      // we get the ratio of allowed spawns compared to the available
+      // spawns in the region
+      ((allowed_spawns_per_region as float) / (region_spawns_count as float));
+
     for spawn_point: WMH_BiomeSpawnPoint in spawn_points {
       var position: Vector = spawn_point.GetWorldPosition();
       var point_seed: int = hunt_seed + (position.X as int) - (position.Y as int);
 
+      WMHINFO("monster_spawn_chance = " + monster_spawn_chance + " roll = " + RandNoiseF(point_seed + 0, 1.0));
+
       // regular nearby spawn points have a chance to be disabled for the hunt,
-      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0) <= 0.8;
+      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0) <= monster_spawn_chance;
 
       // if a point isn't allowed to spawn creatures, it may spawn wildlife
       var can_spawn_wildlife: bool = !can_spawn_monsters
-                                  && RandNoiseF(point_seed + 1, 1.0) <= 0.5;
+                                  && RandNoiseF(point_seed + 1, 1.0) <= 0.2;
 
       if (can_spawn_monsters) {
         var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(

@@ -65,6 +65,10 @@ class WMH_SpawnPointManager {
     return output;
   }
 
+  public function getRegionSpawnPointsCount(): int {
+    return this.region_spawn_points.Size();
+  }
+
   public function getValidSpawnPoints(optional ignore_respawn: bool): array<WMH_BiomeSpawnPoint> {
     var output: array<WMH_BiomeSpawnPoint>;
 
