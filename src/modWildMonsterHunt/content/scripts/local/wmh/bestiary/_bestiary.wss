@@ -450,7 +450,7 @@ state Spawning in WMH_Bestiary {
     var group_positions: array<Vector> = WMH_getGroupPositions(
       position,
       templates.Size(),
-      /*density*/ 0.01
+      /*density*/ 2
     );
 
     var tags_array: array<name>;
@@ -468,7 +468,7 @@ state Spawning in WMH_Bestiary {
       ) as CEntityTemplate;
       SleepOneFrame();
 
-      WMH_FixZAxis(/*out*/ group_positions[i]);
+      // WMH_FixZAxis(/*out*/ group_positions[i]);
 
       var current_rotation: EulerAngles;
 
@@ -553,9 +553,9 @@ function WMH_getGroupPositions(initial_position: Vector, count: int, density: fl
     // return false means it could not find ground position
     // in this case, take the default position
     // if return true, then pos_fin is updated with the correct position
-    if (!WMH_getGroundPosition(pos_fin)) {
-      pos_fin = initial_position;
-    }
+    // if (!WMH_getGroundPosition(pos_fin)) {
+    //   pos_fin = initial_position;
+    // }
 
     output_positions.PushBack(pos_fin);
   }
