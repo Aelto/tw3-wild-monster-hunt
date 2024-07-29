@@ -36,19 +36,19 @@ class WMH_BestiaryEntryCockatrice extends WMH_BestiaryEntry {
     pref_time!({{
       if (altitude || underground) nospawn
 
-      if (wide) += 1.0,
+      if (wide) += 0.2,
       else nospawn
 
       morning {
-        if (clear) += 0.3,
-        if (vegetation) += 0.3,
+        if (clear) += 0.1,
+        if (vegetation) += 0.1,
 
         // if raining, less chances to be outside vegetation
         if (rain && !vegetation) *= 0.1,
       }
 
       afternoon {
-        if (clear) += 1.0,
+        if (clear) += 0.2,
 
         if (vegetation) *= 0.8,
 
@@ -57,7 +57,7 @@ class WMH_BestiaryEntryCockatrice extends WMH_BestiaryEntry {
       }
 
       night {
-        if (vegetation) += 1.0,
+        if (vegetation) += 0.2,
       }
     }});
   }

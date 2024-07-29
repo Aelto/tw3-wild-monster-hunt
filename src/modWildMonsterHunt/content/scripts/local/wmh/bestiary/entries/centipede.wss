@@ -34,7 +34,7 @@ class WMH_BestiaryEntryCentipede extends WMH_BestiaryEntry {
   ): float {
     pref_time!({{
       if (underground) += 0.3,
-      if (vegetation) += 0.3,
+      if (vegetation) += 0.1,
       if (structures) *= 0.1,
 
       morning *= 0.8,
