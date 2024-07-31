@@ -29,7 +29,7 @@ statemachine class WMH_LootManager {
   public function onHuntFinished(storage: WMH_Storage) {
     this.maximum_loot_level = storage.general.level;
 
-    // this will cause the loot lists to bne refreshed
+    // this will cause the loot lists to be refreshed
     this.GotoState('Loading');
   }
 

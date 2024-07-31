@@ -1,4 +1,8 @@
 state Loading in WMH_LootManager {
+  // needed in some of the methods, to avoid calling GetWitcherPlayer non stop
+  // it is cached.
+  var witcher: W3PlayerWitcher;
+
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
     this.Loading_main();
@@ -15,12 +19,27 @@ state Loading in WMH_LootManager {
       parent.loot_by_category.PushBack(empty);
     }
 
+    this.witcher = GetWitcherPlayer();
+
     this.registerLootFood();
     this.registerLootGear();
     this.registerLootHerb();
     this.registerLootAlchemy();
     this.registerLootMaterial();
     this.registerLootOre();
+
+    this.registerRecipesMisc();
+    this.registerRecipesTier1();
+    this.registerRecipesTier2();
+    this.registerRecipesTier3();
+    this.registerSchematicsMisc();
+    this.registerSchematicsTier0();
+    this.registerSchematicsTier1();
+    this.registerSchematicsTier2();
+    this.registerSchematicsTier3();
+    this.registerSchematicsTier4();
+    this.registerSchematicsTier5();
+    this.registerSchematicsTierNGP();
 
     parent.GotoState('Waiting');
   }
@@ -971,6 +990,636 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold sapphire necklace');
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold emerald necklace');
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold diamond necklace');
+    }
+  }
+
+  function registerRecipesMisc() {
+    this.tryAddRecipe('Recipe Dye Turquoise');
+    this.tryAddRecipe('Recipe for Sharley Lure');
+    this.tryAddRecipe('Recipe for Mutation Serum');
+    this.tryAddRecipe('recipe_for_yennefers_omelette');
+    this.tryAddRecipe('recipe_for_scrambled_eggs');
+    this.tryAddRecipe('Recipe for Alraune Reagent');
+    this.tryAddRecipe('Recipe Dye Gray');
+    this.tryAddRecipe('Recipe Dye Brown');
+    this.tryAddRecipe('Recipe Dye Red');
+    this.tryAddRecipe('Recipe Dye Green');
+    this.tryAddRecipe('Recipe Dye Blue');
+    this.tryAddRecipe('Recipe Dye Black');
+    this.tryAddRecipe('Recipe Dye White');
+    this.tryAddRecipe('Recipe Dye Orange');
+    this.tryAddRecipe('Recipe Dye Pink');
+    this.tryAddRecipe('Recipe Dye Yellow');
+    this.tryAddRecipe('Recipe Dye Purple');
+  }
+
+  function registerRecipesTier1() {
+    if (parent.maximum_loot_level.value < 10) {
+      return;
+    }
+
+    this.tryAddRecipe('Recipe for Maribor Forest 1');
+    this.tryAddRecipe('Recipe for Tawny Owl 1');
+    this.tryAddRecipe('Recipe for White Gull 1');
+    this.tryAddRecipe('Recipe for White Raffards Decoction 1');
+    this.tryAddRecipe('Recipe for Beast Oil 1');
+    this.tryAddRecipe('Recipe for Cursed Oil 1');
+    this.tryAddRecipe('Recipe for Hybrid Oil 1');
+    this.tryAddRecipe('Recipe for Insectoid Oil 1');
+    this.tryAddRecipe('Recipe for Magicals Oil 1');
+    this.tryAddRecipe('Recipe for Vampire Oil 1');
+    this.tryAddRecipe('Recipe for Draconide Oil 1');
+    this.tryAddRecipe('Recipe for Ogre Oil 1');
+    this.tryAddRecipe('Recipe for Relic Oil 1');
+    this.tryAddRecipe('Recipe for Dancing Star 1');
+    this.tryAddRecipe('Recipe for White Frost 1');
+    this.tryAddRecipe('Recipe for Dwarven spirit 1');
+    this.tryAddRecipe('Recipe Lesser Mutagen Red to Blue');
+    this.tryAddRecipe('Recipe Lesser Mutagen Red to Green');
+    this.tryAddRecipe('Recipe Lesser Mutagen Blue to Red');
+    this.tryAddRecipe('Recipe Lesser Mutagen Blue to Green');
+    this.tryAddRecipe('Recipe Lesser Mutagen Green to Red');
+    this.tryAddRecipe('Recipe Lesser Mutagen Green to Blue');
+    this.tryAddRecipe('Recipe for Thunderbolt 1');
+    this.tryAddRecipe('Recipe for Killer Whale 1');
+    this.tryAddRecipe('Recipe for Dwimeritium Bomb 1');
+    this.tryAddRecipe('Recipe for Full Moon 1');
+    this.tryAddRecipe('Recipe for Bear Pheromone Potion 1');
+    this.tryAddRecipe('Recipe for Drowner Pheromone Potion 1');
+    this.tryAddRecipe('Recipe for Nekker Pheromone Potion 1');
+    this.tryAddRecipe('Recipe for Blizzard 1');
+    this.tryAddRecipe('Recipe for Black Blood 1');
+    this.tryAddRecipe('Recipe for Silver Dust Bomb 1');
+    this.tryAddRecipe('Recipe for Devils Puffball 1');
+    this.tryAddRecipe('Recipe for Dragons Dream 1');
+  }
+
+  function registerRecipesTier2() {
+    if (parent.maximum_loot_level.value < 20) {
+      return;
+    }
+
+    this.tryAddRecipe('Recipe Mutagen Red to Blue');
+    this.tryAddRecipe('Recipe Mutagen Red to Green');
+    this.tryAddRecipe('Recipe Mutagen Blue to Red');
+    this.tryAddRecipe('Recipe Mutagen Blue to Green');
+    this.tryAddRecipe('Recipe Mutagen Green to Red');
+    this.tryAddRecipe('Recipe Mutagen Green to Blue');
+    this.tryAddRecipe('Recipe for Vermilion');
+    this.tryAddRecipe('Recipe for Rubedo');
+    this.tryAddRecipe('Recipe for Rebis');
+    this.tryAddRecipe('Recipe for Grapeshot 2');
+    this.tryAddRecipe('Recipe for White Raffards Decoction 2');
+    this.tryAddRecipe('Recipe for Samum 2');
+    this.tryAddRecipe('Recipe for Silver Dust Bomb 2');
+    this.tryAddRecipe('Recipe for Black Blood 2');
+    this.tryAddRecipe('Recipe for Blizzard 2');
+    this.tryAddRecipe('Recipe for Cat 2');
+    this.tryAddRecipe('Recipe for Full Moon 2');
+    this.tryAddRecipe('Recipe for Golden Oriole 2');
+    this.tryAddRecipe('Recipe for Maribor Forest 2');
+    this.tryAddRecipe('Recipe for Thunderbolt 2');
+    this.tryAddRecipe('Recipe for Swallow 2');
+    this.tryAddRecipe('Recipe for Tawny Owl 2');
+    this.tryAddRecipe('Recipe for White Honey 2');
+    this.tryAddRecipe('Recipe for White Frost 2');
+    this.tryAddRecipe('Recipe for Dwimeritium Bomb 2');
+    this.tryAddRecipe('Recipe for Dancing Star 2');
+    this.tryAddRecipe('Recipe for Beast Oil 2');
+    this.tryAddRecipe('Recipe for Cursed Oil 2');
+    this.tryAddRecipe('Recipe for Hybrid Oil 2');
+    this.tryAddRecipe('Recipe for Insectoid Oil 2');
+    this.tryAddRecipe('Recipe for Magicals Oil 2');
+    this.tryAddRecipe('Recipe for Necrophage Oil 2');
+    this.tryAddRecipe('Recipe for Specter Oil 2');
+    this.tryAddRecipe('Recipe for Vampire Oil 2');
+    this.tryAddRecipe('Recipe for Draconide Oil 2');
+    this.tryAddRecipe('Recipe for Ogre Oil 2');
+    this.tryAddRecipe('Recipe for Relic Oil 2');
+    this.tryAddRecipe('Recipe for Devils Puffball 2');
+    this.tryAddRecipe('Recipe for Dragons Dream 2');
+  }
+
+  function registerRecipesTier3() {
+    if (parent.maximum_loot_level.value < 30) {
+      return;
+    }
+
+    this.tryAddRecipe('Recipe Greater Mutagen Red to Blue');
+    this.tryAddRecipe('Recipe Greater Mutagen Red to Green');
+    this.tryAddRecipe('Recipe Greater Mutagen Blue to Red');
+    this.tryAddRecipe('Recipe Greater Mutagen Blue to Green');
+    this.tryAddRecipe('Recipe Greater Mutagen Green to Red');
+    this.tryAddRecipe('Recipe Greater Mutagen Green to Blue');
+    this.tryAddRecipe('Recipe for Greater mutagen red');
+    this.tryAddRecipe('Recipe for Greater mutagen green');
+    this.tryAddRecipe('Recipe for Greater mutagen blue');
+    this.tryAddRecipe('Recipe for White Raffards Decoction 3');
+    this.tryAddRecipe('Recipe for Beast Oil 3');
+    this.tryAddRecipe('Recipe for Cursed Oil 3');
+    this.tryAddRecipe('Recipe for Hanged Man Venom 3');
+    this.tryAddRecipe('Recipe for Hybrid Oil 3');
+    this.tryAddRecipe('Recipe for Insectoid Oil 3');
+    this.tryAddRecipe('Recipe for Magicals Oil 3');
+    this.tryAddRecipe('Recipe for Necrophage Oil 3');
+    this.tryAddRecipe('Recipe for Specter Oil 3');
+    this.tryAddRecipe('Recipe for Vampire Oil 3');
+    this.tryAddRecipe('Recipe for Ogre Oil 3');
+    this.tryAddRecipe('Recipe for Relic Oil 3');
+    this.tryAddRecipe('Recipe for Dancing Star 3');
+    this.tryAddRecipe('Recipe for Devils Puffball 3');
+    this.tryAddRecipe('Recipe for Dragons Dream 3');
+    this.tryAddRecipe('Recipe for Grapeshot 3');
+    this.tryAddRecipe('Recipe for Black Blood 3');
+    this.tryAddRecipe('Recipe for Silver Dust Bomb 3');
+    this.tryAddRecipe('Recipe for Blizzard 3');
+    this.tryAddRecipe('Recipe for Cat 3');
+    this.tryAddRecipe('Recipe for Dwimeritium Bomb 3');
+    this.tryAddRecipe('Recipe for White Frost 3');
+    this.tryAddRecipe('Recipe for Thunderbolt 3');
+    this.tryAddRecipe('Recipe for White Honey 3');
+    this.tryAddRecipe('Recipe for Full Moon 3');
+    this.tryAddRecipe('Recipe for Golden Oriole 3');
+    this.tryAddRecipe('Recipe for Petris Philtre 3');
+    this.tryAddRecipe('Recipe for Swallow 3');
+    this.tryAddRecipe('Recipe for Tawny Owl 3');
+  }
+
+  function registerSchematicsMisc() {
+    this.tryAddSchematic('Meteorite silver plate schematic');
+    this.tryAddSchematic('Glowing ingot schematic');
+    this.tryAddSchematic('Dwimeryte ore schematic');
+    this.tryAddSchematic('Dwimeryte plate schematic');
+    this.tryAddSchematic('Infused dust schematic');
+    this.tryAddSchematic('Infused crystal schematic');
+    this.tryAddSchematic('Draconide infused leather schematic');
+    this.tryAddSchematic('Nickel ore schematic');
+    this.tryAddSchematic('Cupronickel ore schematic');
+    this.tryAddSchematic('Copper ore schematic');
+    this.tryAddSchematic('Copper ingot schematic');
+    this.tryAddSchematic('Copper plate schematic');
+    this.tryAddSchematic('Green gold ore schematic');
+    this.tryAddSchematic('Green gold ingot schematic');
+    this.tryAddSchematic('Green gold plate schematic');
+    this.tryAddSchematic('Orichalcum ore schematic');
+    this.tryAddSchematic('Orichalcum ingot schematic');
+    this.tryAddSchematic('Orichalcum plate schematic');
+    this.tryAddSchematic('Dwimeryte enriched ore schematic');
+    this.tryAddSchematic('Dwimeryte enriched ingot schematic');
+    this.tryAddSchematic('Dwimeryte enriched plate schematic');
+    this.tryAddSchematic('Boots 2 schematic');
+    this.tryAddSchematic('No Mans Land sword 3 schematic');
+    this.tryAddSchematic('Scoiatael sword 2 schematic');
+    this.tryAddSchematic('Scoiatael sword 3 schematic');
+    this.tryAddSchematic('Novigraadan sword 1 schematic');
+    this.tryAddSchematic('Novigraadan sword 4 schematic');
+    this.tryAddSchematic('Heavy Boots 2 schematic');
+    this.tryAddSchematic('Heavy Boots 1 schematic');
+    this.tryAddSchematic('Pants 1 schematic');
+    this.tryAddSchematic('Heavy Pants 2 schematic');
+    this.tryAddSchematic('Short sword 1 schematic');
+    this.tryAddSchematic('Short sword 2 schematic');
+    this.tryAddSchematic('No Mans Land sword 1 schematic');
+    this.tryAddSchematic('No Mans Land sword 2 schematic');
+    this.tryAddSchematic('Nilfgaardian sword 1 schematic');
+    this.tryAddSchematic('Light Armor 1 schematic');
+    this.tryAddSchematic('Skellige sword 2 schematic');
+    this.tryAddSchematic('Viper Steel sword schematic');
+    this.tryAddSchematic('No Mans Land sword 4 schematic');
+    this.tryAddSchematic('Nilfgaardian sword 4 schematic');
+    this.tryAddSchematic('Inquisitor sword 1 schematic');
+    this.tryAddSchematic('Inquisitor sword 2 schematic');
+    this.tryAddSchematic('Silver sword 1 schematic');
+    this.tryAddSchematic('Silver sword 2 schematic');
+    this.tryAddSchematic('Dwarven sword 1 schematic');
+    this.tryAddSchematic('Dwarven sword 2 schematic');
+    this.tryAddSchematic('Boots 4 schematic');
+    this.tryAddSchematic('Gnomish sword 2 schematic');
+    this.tryAddSchematic('Silver sword 3 schematic');
+    this.tryAddSchematic('Pants 3 schematic');
+    this.tryAddSchematic('Silver sword 4 schematic');
+    this.tryAddSchematic('Pants 4 schematic');
+    this.tryAddSchematic('Silver sword 6 schematic');
+    this.tryAddSchematic('Heavy Pants 1 schematic');
+    this.tryAddSchematic('Silver sword 7 schematic');
+    this.tryAddSchematic('Heavy Pants 4 schematic');
+    this.tryAddSchematic('Elven silver sword 2 schematic');
+    this.tryAddSchematic('Gloves 1 schematic');
+    this.tryAddSchematic('Dwarven silver sword 1 schematic');
+    this.tryAddSchematic('Gloves 2 schematic');
+    this.tryAddSchematic('Dwarven silver sword 2 schematic');
+    this.tryAddSchematic('Gloves 3 schematic');
+    this.tryAddSchematic('Gnomish silver sword 1 schematic');
+    this.tryAddSchematic('Gloves 4 schematic');
+    this.tryAddSchematic('Gnomish silver sword 2 schematic');
+    this.tryAddSchematic('Heavy Gloves 1 schematic');
+    this.tryAddSchematic('Heavy Gloves 2 schematic');
+    this.tryAddSchematic('Heavy Gloves 3 schematic');
+    this.tryAddSchematic('Heavy Gloves 4 schematic');
+    this.tryAddSchematic('Heavy Boots 3 schematic');
+    this.tryAddSchematic('Heavy Boots 4 schematic');
+    this.tryAddSchematic('Light Armor 2 schematic');
+    this.tryAddSchematic('Light Armor 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 steel sword 3 schematic');
+    this.tryAddSchematic('Knights Geralt steel sword 3 schematic');
+    this.tryAddSchematic('Hanza steel sword 3 schematic');
+    this.tryAddSchematic('Toussaint steel sword 3 schematic');
+    this.tryAddSchematic('Guard Lvl1 Gloves 3 schematic');
+    this.tryAddSchematic('Guard Lvl1 Pants 3 schematic');
+    this.tryAddSchematic('Guard Lvl1 A Gloves 3 schematic');
+    this.tryAddSchematic('Guard Lvl1 A Boots 3 schematic');
+    this.tryAddSchematic('Guard Lvl1 A Pants 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 Armor 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 Gloves 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 Boots 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 Pants 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 A Armor 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 A Gloves 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 A Boots 3 schematic');
+    this.tryAddSchematic('Guard Lvl2 A Pants 3 schematic');
+    this.tryAddSchematic('Knight Geralt Armor 3 schematic');
+    this.tryAddSchematic('Knight Geralt Gloves 3 schematic');
+    this.tryAddSchematic('Knight Geralt Boots 3 schematic');
+    this.tryAddSchematic('Knight Geralt Pants 3 schematic');
+    this.tryAddSchematic('Knight Geralt A Armor 3 schematic');
+    this.tryAddSchematic('Knight Geralt A Gloves 3 schematic');
+    this.tryAddSchematic('Knight Geralt A Boots 3 schematic');
+    this.tryAddSchematic('Knight Geralt A Pants 3 schematic');
+    this.tryAddSchematic('mq4005 Silver sword 6 schematic');
+    this.tryAddSchematic('th1010_schematic_armor');
+    this.tryAddSchematic('Crafted Burning Rose Sword schematic');
+    this.tryAddSchematic('Crafted Ofir Steel Sword schematic');
+    this.tryAddSchematic('Glyph binding schematic');
+    this.tryAddSchematic('Glyph mending schematic');
+    this.tryAddSchematic('Glyph warding schematic');
+    this.tryAddSchematic('Glyph reinforcement schematic');
+    this.tryAddSchematic('Crafted Ofir Armor schematic');
+    this.tryAddSchematic('Crafted Ofir Pants schematic');
+    this.tryAddSchematic('Concealment Kit schematic');
+    this.tryAddSchematic('Crafted Burning Rose Armor schematic');
+    this.tryAddSchematic('Arbitrator schematic');
+    this.tryAddSchematic('Beannshie schematic');
+    this.tryAddSchematic('Blackunicorn schematic');
+    this.tryAddSchematic('Blasting powder schematic');
+    this.tryAddSchematic('Boots 1 schematic');
+    this.tryAddSchematic('Boots 3 schematic');
+    this.tryAddSchematic('Boots 7 schematic');
+    this.tryAddSchematic('Dark iron ingot schematic');
+    this.tryAddSchematic('Dark steel ingot schematic');
+    this.tryAddSchematic('Dark steel plate schematic');
+    this.tryAddSchematic('Draconide leather schematic');
+    this.tryAddSchematic('Dwimeryte ingot schematic');
+    this.tryAddSchematic('Elven silver sword 1 schematic');
+    this.tryAddSchematic('Glyph aard schematic');
+    this.tryAddSchematic('Glyph axii schematic');
+    this.tryAddSchematic('Glyph igni schematic');
+    this.tryAddSchematic('Gnomish sword 1 schematic');
+    this.tryAddSchematic('Haft schematic');
+    this.tryAddSchematic('Hardened leather schematic');
+    this.tryAddSchematic('Hardened timber schematic');
+    this.tryAddSchematic('Harpy schematic');
+    this.tryAddSchematic('Heavy Armor 1 schematic');
+    this.tryAddSchematic('Heavy Armor 2 schematic');
+    this.tryAddSchematic('Heavy Armor 3 schematic');
+    this.tryAddSchematic('Heavy Armor 4 schematic');
+    this.tryAddSchematic('Heavy Boots 7 schematic');
+    this.tryAddSchematic('Heavy Boots 8 schematic');
+    this.tryAddSchematic('Heavy Pants 3 schematic');
+    this.tryAddSchematic('Infused shard schematic');
+    this.tryAddSchematic('Iron ingot schematic');
+    this.tryAddSchematic('Leather schematic');
+    this.tryAddSchematic('Leather squares schematic');
+    this.tryAddSchematic('Light Armor 4 schematic');
+    this.tryAddSchematic('Light Armor 5 schematic');
+    this.tryAddSchematic('Light Armor 6 schematic');
+    this.tryAddSchematic('Light Armor 7 schematic');
+    this.tryAddSchematic('Light Armor 8 schematic');
+    this.tryAddSchematic('Linen schematic');
+    this.tryAddSchematic('Longclaw schematic');
+    this.tryAddSchematic('Medium Armor 1 schematic');
+    this.tryAddSchematic('Medium Armor 2 schematic');
+    this.tryAddSchematic('Medium Armor 3 schematic');
+    this.tryAddSchematic('Medium Armor 4 schematic');
+    this.tryAddSchematic('Meteorite ingot schematic');
+    this.tryAddSchematic('Meteorite silver ingot schematic');
+    this.tryAddSchematic('Negotiator schematic');
+    this.tryAddSchematic('Pants 2 schematic');
+    this.tryAddSchematic('Relic Heavy 3 schematic');
+    this.tryAddSchematic('Resin schematic');
+    this.tryAddSchematic('Silk schematic');
+    this.tryAddSchematic('Silver ingot schematic');
+    this.tryAddSchematic('Silver ore schematic');
+    this.tryAddSchematic('Silver plate schematic');
+    this.tryAddSchematic('Skellige sword 1 schematic');
+    this.tryAddSchematic('Steel ingot schematic');
+    this.tryAddSchematic('Steel plate schematic');
+    this.tryAddSchematic('String schematic');
+    this.tryAddSchematic('Thread schematic');
+    this.tryAddSchematic('Thyssen Armor schematic');
+    this.tryAddSchematic('Viper Silver sword schematic');
+    this.tryAddSchematic('Weeper schematic');
+  }
+
+  function registerSchematicsTier0() {
+    this.tryAddSchematic('Smithing tools schematic');
+    this.tryAddSchematic('Gryphon Armor schematic');
+    this.tryAddSchematic('Gryphon Boots schematic');
+    this.tryAddSchematic('Gryphon Gloves schematic');
+    this.tryAddSchematic('Gryphon Pants schematic');
+    this.tryAddSchematic('Gryphon School steel sword schematic');
+    this.tryAddSchematic('Gryphon School silver sword schematic');
+    this.tryAddSchematic('Gryphon School steel sword Upgrade schematic');
+    this.tryAddSchematic('Gryphon School silver sword Upgrade schematic');
+    this.tryAddSchematic('Wolf Armor schematic');
+    this.tryAddSchematic('Wolf Gloves schematic');
+    this.tryAddSchematic('Wolf Pants schematic');
+    this.tryAddSchematic('Wolf Boots schematic');
+    this.tryAddSchematic('Wolf School steel sword schematic');
+    this.tryAddSchematic('Wolf School silver sword schematic');
+    this.tryAddSchematic('Red Wolf School steel sword Upgrade schematic');
+    this.tryAddSchematic('Bear Armor schematic');
+    this.tryAddSchematic('Bear Boots schematic');
+    this.tryAddSchematic('Bear Gloves schematic');
+    this.tryAddSchematic('Bear Pants schematic');
+    this.tryAddSchematic('Bear School Crossbow schematic');
+    this.tryAddSchematic('Bear School steel sword schematic');
+    this.tryAddSchematic('Bear School silver sword schematic');
+    this.tryAddSchematic('Lynx Armor schematic');
+    this.tryAddSchematic('Lynx Boots schematic');
+    this.tryAddSchematic('Lynx Gloves schematic');
+    this.tryAddSchematic('Lynx Pants schematic');
+    this.tryAddSchematic('Lynx School Crossbow schematic');
+    this.tryAddSchematic('Lynx School silver sword schematic');
+    this.tryAddSchematic('Lynx School steel sword schematic');
+    this.tryAddSchematic('Rune dazhbog lesser schematic');
+    this.tryAddSchematic('Rune devana lesser schematic');
+    this.tryAddSchematic('Rune zoria lesser schematic');
+    this.tryAddSchematic('Rune morana lesser schematic');
+    this.tryAddSchematic('Rune triglav lesser schematic');
+    this.tryAddSchematic('Rune svarog lesser schematic');
+    this.tryAddSchematic('Rune veles lesser schematic');
+    this.tryAddSchematic('Rune perun lesser schematic');
+    this.tryAddSchematic('Rune elemental lesser schematic');
+    this.tryAddSchematic('Rune stribog lesser schematic');
+    this.tryAddSchematic('Runestone lesser schematic');
+    this.tryAddSchematic('Glyph quen lesser schematic');
+    this.tryAddSchematic('Glyph binding lesser schematic');
+    this.tryAddSchematic('Glyph mending lesser schematic');
+    this.tryAddSchematic('Glyph reinforcement lesser schematic');
+    this.tryAddSchematic('Glyph warding lesser schematic');
+    this.tryAddSchematic('Glyph aard lesser schematic');
+    this.tryAddSchematic('Glyph axii lesser schematic');
+    this.tryAddSchematic('Glyph igni lesser schematic');
+    this.tryAddSchematic('Glyph infusion lesser schematic');
+  }
+
+  function registerSchematicsTier1() {
+    if (parent.maximum_loot_level.value < 10) {
+      return;
+    }
+
+    this.tryAddSchematic('Smithing tools dwarven schematic');
+    this.tryAddSchematic('Whetstone dwarven schematic');
+    this.tryAddSchematic('WeaponRepairKit_1 schematic');
+    this.tryAddSchematic('ArmorRepairKit_1 schematic');
+    this.tryAddSchematic('Wolf School steel sword Upgrade schematic 1');
+    this.tryAddSchematic('Wolf School silver sword Upgrade schematic 1');
+    this.tryAddSchematic('Green gold ore schematic 1');
+    this.tryAddSchematic('Orichalcum ore schematic 1');
+    this.tryAddSchematic('Witcher Wolf Jacket Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Wolf Gloves Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Wolf Pants Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Wolf Boots Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Bear Jacket Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Bear Boots Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Bear Pants Upgrade schematic 1');
+    this.tryAddSchematic('Bear School silver sword Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Gryphon Jacket Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Gryphon Boots Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Gryphon Pants Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Gryphon Gloves Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Lynx Jacket Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Lynx Boots Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Lynx Pants Upgrade schematic 1');
+    this.tryAddSchematic('Witcher Lynx Gloves Upgrade schematic 1');
+    this.tryAddSchematic('Lynx School steel sword Upgrade schematic 1');
+    this.tryAddSchematic('Red Wolf School steel sword schematic 1');
+    this.tryAddSchematic('Red Wolf School silver sword schematic 1');
+    this.tryAddSchematic('Witcher Red Wolf Jacket schematic 1');
+    this.tryAddSchematic('Witcher Red Wolf Gloves schematic 1');
+    this.tryAddSchematic('Witcher Red Wolf Boots schematic 1');
+    this.tryAddSchematic('Witcher Red Wolf Pants schematic 1');
+    this.tryAddSchematic('Serpent Steel Sword schematic 1');
+    this.tryAddSchematic('Serpent Silver Sword schematic 1');
+    this.tryAddSchematic('Bear School steel sword Upgrade schematic 1');
+    this.tryAddSchematic('Dark steel ingot schematic 1');
+    this.tryAddSchematic('Dwimeryte ingot schematic 1');
+    this.tryAddSchematic('Gryphon School silver sword Upgrade schematic 1');
+    this.tryAddSchematic('Gryphon School steel sword Upgrade schematic 1');
+    this.tryAddSchematic('Lynx School silver sword Upgrade schematic 1');
+    this.tryAddSchematic('Silver ingot schematic 1');
+    this.tryAddSchematic('Starting Armor Upgrade schematic 1');
+    this.tryAddSchematic('Steel ingot schematic 1');
+    this.tryAddSchematic('Witcher Bear Gloves Upgrade schematic 1');
+  }
+
+  function registerSchematicsTier2() {
+    if (parent.maximum_loot_level.value < 20) {
+      return;
+    }
+
+    this.tryAddSchematic('Rune stribog schematic');
+    this.tryAddSchematic('Rune dazhbog schematic');
+    this.tryAddSchematic('Rune devana schematic');
+    this.tryAddSchematic('Rune zoria schematic');
+    this.tryAddSchematic('Rune morana schematic');
+    this.tryAddSchematic('Rune triglav schematic');
+    this.tryAddSchematic('Rune svarog schematic');
+    this.tryAddSchematic('Rune veles schematic');
+    this.tryAddSchematic('Rune perun schematic');
+    this.tryAddSchematic('Rune elemental schematic');
+    this.tryAddSchematic('Rune pierog schematic');
+    this.tryAddSchematic('Rune tvarog schematic');
+    this.tryAddSchematic('Witcher Wolf Jacket Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Wolf Gloves Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Wolf Pants Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Wolf Boots Upgrade schematic 2');
+    this.tryAddSchematic('Wolf School steel sword Upgrade schematic 2');
+    this.tryAddSchematic('Wolf School silver sword Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Bear Jacket Upgrade schematic 2');
+    this.tryAddSchematic('Bear School silver sword Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Gryphon Jacket Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Lynx Jacket Upgrade schematic 2');
+    this.tryAddSchematic('Lynx School steel sword Upgrade schematic 2');
+    this.tryAddSchematic('Lynx School silver sword Upgrade schematic 2');
+    this.tryAddSchematic('Serpent Silver Sword schematic 2');
+    this.tryAddSchematic('Witcher Red Wolf Jacket Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Red Wolf Gloves Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Red Wolf Boots Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Red Wolf Pants Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Gryphon Pants Upgrade schematic 2');
+    this.tryAddSchematic('Bear School steel sword Upgrade schematic 2');
+    this.tryAddSchematic('Gryphon School silver sword Upgrade schematic 2');
+    this.tryAddSchematic('Gryphon School steel sword Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Bear Boots Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Bear Gloves Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Bear Pants Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Gryphon Boots Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Gryphon Gloves Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Lynx Boots Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Lynx Gloves Upgrade schematic 2');
+    this.tryAddSchematic('Witcher Lynx Pants Upgrade schematic 2');
+  }
+
+  function registerSchematicsTier3() {
+    if (parent.maximum_loot_level.value < 30) {
+      return;
+    }
+
+    this.tryAddSchematic('Witcher Lynx Pants Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Wolf Jacket Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Wolf Gloves Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Wolf Pants Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Wolf Boots Upgrade schematic 3');
+    this.tryAddSchematic('Wolf School steel sword Upgrade schematic 3');
+    this.tryAddSchematic('Wolf School silver sword Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Bear Jacket Upgrade schematic 3');
+    this.tryAddSchematic('Bear School silver sword Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Gryphon Jacket Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Lynx Jacket Upgrade schematic 3');
+    this.tryAddSchematic('Lynx School steel sword Upgrade schematic 3');
+    this.tryAddSchematic('Lynx School silver sword Upgrade schematic 3');
+    this.tryAddSchematic('Serpent Silver Sword schematic 3');
+    this.tryAddSchematic('Bear School steel sword Upgrade schematic 3');
+    this.tryAddSchematic('Gryphon School silver sword Upgrade schematic 3');
+    this.tryAddSchematic('Gryphon School steel sword Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Bear Boots Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Bear Gloves Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Bear Pants Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Gryphon Boots Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Gryphon Gloves Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Gryphon Pants Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Lynx Boots Upgrade schematic 3');
+    this.tryAddSchematic('Witcher Lynx Gloves Upgrade schematic 3');
+  }
+
+  function registerSchematicsTier4() {
+    if (parent.maximum_loot_level.value < 40) {
+      return;
+    }
+
+    this.tryAddSchematic('WeaponRepairKit_2 schematic');
+    this.tryAddSchematic('ArmorRepairKit_2 schematic');
+    this.tryAddSchematic('Whetstone elven schematic');
+    this.tryAddSchematic('Smithing tools elven schematic');
+    this.tryAddSchematic('Rune stribog greater schematic');
+    this.tryAddSchematic('Rune dazhbog greater schematic');
+    this.tryAddSchematic('Rune devana greater schematic');
+    this.tryAddSchematic('Rune zoria greater schematic');
+    this.tryAddSchematic('Rune morana greater schematic');
+    this.tryAddSchematic('Rune triglav greater schematic');
+    this.tryAddSchematic('Rune svarog greater schematic');
+    this.tryAddSchematic('Rune veles greater schematic');
+    this.tryAddSchematic('Rune perun greater schematic');
+    this.tryAddSchematic('Rune elemental greater schematic');
+    this.tryAddSchematic('Glyph binding greater schematic');
+    this.tryAddSchematic('Glyph mending greater schematic');
+    this.tryAddSchematic('Glyph reinforcement greater schematic');
+    this.tryAddSchematic('Glyph warding greater schematic');
+    this.tryAddSchematic('Glyph aard greater schematic');
+    this.tryAddSchematic('Glyph axii greater schematic');
+    this.tryAddSchematic('Glyph infusion greater schematic');
+    this.tryAddSchematic('Runestone greater schematic');
+    this.tryAddSchematic('EP1 Witcher Armor schematic');
+    this.tryAddSchematic('EP1 Witcher Boots schematic');
+    this.tryAddSchematic('EP1 Witcher Gloves schematic');
+    this.tryAddSchematic('EP1 Witcher Pants schematic');
+    this.tryAddSchematic('EP1 Viper School steel sword schematic');
+    this.tryAddSchematic('EP1 Crafted Witcher Silver Sword schematic');
+    this.tryAddSchematic('EP1 Viper School silver sword schematic');
+
+    this.tryAddSchematic('Lynx School steel sword Upgrade schematic 4');
+    this.tryAddSchematic('Lynx School silver sword Upgrade schematic 4');
+    this.tryAddSchematic('Witcher Lynx Jacket Upgrade schematic 4');
+    this.tryAddSchematic('Witcher Gryphon Jacket Upgrade schematic 4');
+    this.tryAddSchematic('Bear School steel sword Upgrade schematic 4');
+    this.tryAddSchematic('Bear School silver sword Upgrade schematic 4');
+    this.tryAddSchematic('Witcher Bear Jacket Upgrade schematic 4');
+    this.tryAddSchematic('Wolf School steel sword Upgrade schematic 4');
+    this.tryAddSchematic('Wolf School silver sword Upgrade schematic 4');
+    this.tryAddSchematic('Witcher Wolf Jacket Upgrade schematic 4');
+  }
+
+  function registerSchematicsTier5() {
+    if (parent.maximum_loot_level.value < 50) {
+      return;
+    }
+
+    this.tryAddSchematic('Whetstone gnomish schematic');
+    this.tryAddSchematic('Smithing tools dwarven schematic');
+    this.tryAddSchematic('WeaponRepairKit_3 schematic');
+    this.tryAddSchematic('ArmorRepairKit_3 schematic');
+    this.tryAddSchematic('Witcher Lynx Gloves Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Lynx Boots Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Lynx Pants Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Gryphon Gloves Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Gryphon Boots Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Gryphon Pants Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Bear Gloves Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Bear Boots Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Bear Pants Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Wolf Gloves Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Wolf Boots Upgrade schematic 5');
+    this.tryAddSchematic('Witcher Wolf Pants Upgrade schematic 5');
+  }
+
+  function registerSchematicsTierNGP() {
+    if (parent.maximum_loot_level.value < 60) {
+      return;
+    }
+
+    this.tryAddSchematic('NGP Wolf Armor schematic');
+    this.tryAddSchematic('NGP Wolf Gloves schematic');
+    this.tryAddSchematic('NGP Wolf Pants schematic');
+    this.tryAddSchematic('NGP Wolf Boots schematic');
+    this.tryAddSchematic('NGP Wolf School steel sword schematic');
+    this.tryAddSchematic('NGP Wolf School steel sword Upgrade schematic');
+    this.tryAddSchematic('NGP Wolf School steel sword Upgrade schematic');
+    this.tryAddSchematic('NGP Wolf School steel sword Upgrade schematic');
+    this.tryAddSchematic('NGP Wolf School silver sword schematic');
+
+    this.tryAddSchematic('NGP Witcher Wolf Jacket Upgrade schematic 1');
+    this.tryAddSchematic('NGP Witcher Wolf Gloves Upgrade schematic 1');
+    this.tryAddSchematic('NGP Witcher Wolf Pants Upgrade schematic 1');
+    this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 1');
+
+    this.tryAddSchematic('NGP Witcher Wolf Jacket Upgrade schematic 2');
+    this.tryAddSchematic('NGP Witcher Wolf Gloves Upgrade schematic 2');
+    this.tryAddSchematic('NGP Witcher Wolf Pants Upgrade schematic 2');
+    this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 2');
+
+    this.tryAddSchematic('NGP Witcher Wolf Jacket Upgrade schematic 3');
+    this.tryAddSchematic('NGP Witcher Wolf Gloves Upgrade schematic 3');
+    this.tryAddSchematic('NGP Witcher Wolf Pants Upgrade schematic 3');
+    this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 3');
+  }
+
+  private function tryAddRecipe(recipe: name): bool {
+    if (
+      this.witcher.CanLearnAlchemyRecipe(recipe)
+      && !this.witcher.WMH_isRecipeKnown(recipe)
+    ) {
+      // the loot level is not important, we short-circuit the functions if the
+      // tier is too high instead so this method is never called.
+      parent.registerLoot(WMH_LootTag_Recipe, 0, recipe);
+    }
+  }
+
+  private function tryAddSchematic(schematic: name): bool {
+    if (!this.witcher.WMH_isSchematicKnown()) {
+      // the loot level is not important, we short-circuit the functions if the
+      // tier is too high instead so this method is never called.
+      parent.registerLoot(WMH_LootTag_Schematic, 0, recipe);
     }
   }
 }
