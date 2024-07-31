@@ -22,10 +22,13 @@ class WMH_ContractManager {
     storage: WMH_Storage,
     killed_creatures: array<WMH_BestiaryId>
   ) {
-    var new_level: WMH_Level = this.finishCompletedContracts(
+    // side-effect: the storage is mutated from this
+    this.finishCompletedContracts(
       killed_creatures,
-      storage.general.level,
+      storage,
     );
+
+    var new_level: WMH_Level = storage.general.level;
 
     this.finishExpiredContracts(new_level);
 
@@ -38,8 +41,6 @@ class WMH_ContractManager {
         contracts_to_generate
       );
     }
-
-    storage.general.level = new_level;
   }
 
   public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
@@ -76,7 +77,10 @@ class WMH_ContractManager {
     return output;
   }
 
-  private function onContractCompleted(pending: WMH_PendingContract) {
+  private function onContractCompleted(
+    pending: WMH_PendingContract,
+    storage: WMH_Storage
+  ) {
     WMHHUD("Contract completed.");
 
     thePlayer.AddMoney(
@@ -86,12 +90,23 @@ class WMH_ContractManager {
         * (1 + pending.contract.level.value / 25)
       ) as int
     );
+
+    // the formula makes that any contract of the same level grants 100% of a
+    // level as experience. Then as the general.level increases it will require
+    // stronger and stronger contracts to level up.
+    storage.general.level += MinF(
+      (pending.contract.level.value + 1)
+      / (storage.general.level + 1),
+
+      // the maximum of levels that we can get from a single contract:
+      2
+    );
   }
 
   private function finishCompletedContracts(
     killed_creatures: array<WMH_BestiaryId>,
-    level: WMH_Level
-  ): WMH_Level {
+    storage: WMH_Storage
+  ) {
     var completed_contracts: array<WMH_PendingContract>;
 
     var id: WMH_BestiaryId;
@@ -107,10 +122,8 @@ class WMH_ContractManager {
 
     for contract: WMH_PendingContract in completed_contracts {
       this.pending_contracts.Remove(contract);
-      this.onContractCompleted(contract);
+      this.onContractCompleted(contract, storage);
     }
-
-    return WMH_Level(level.value + completed_contracts.Size());
   }
 
   private function finishExpiredContracts(level: WMH_Level) {
