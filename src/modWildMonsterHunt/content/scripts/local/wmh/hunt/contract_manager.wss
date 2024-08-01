@@ -67,11 +67,11 @@ class WMH_ContractManager {
     return false;
   }
 
-  public function getPendingTargetsName(): array<string> {
+  public function getPendingTargetsNameHtml(): array<string> {
     var output: array<string>;
 
     for pending: WMH_PendingContract in this.pending_contracts {
-      output.PushBack(pending.toTargetLocName());
+      output.PushBack(pending.toTargetLocNameHtml());
     }
 
     return output;

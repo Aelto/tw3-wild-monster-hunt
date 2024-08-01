@@ -21,7 +21,7 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   }
 
   private timer function setupContractOnelinersTimer(delta: float, id: int) {
-    var target_names: array<string> = this.contract_manager.getPendingTargetsName();
+    var target_names: array<string> = this.contract_manager.getPendingTargetsNameHtml();
     var oneliner: SU_OnelinerEntity;
     var i: int = 0;
 
