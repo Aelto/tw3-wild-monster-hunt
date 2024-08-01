@@ -94,9 +94,9 @@ class WMH_ContractManager {
     // the formula makes that any contract of the same level grants 100% of a
     // level as experience. Then as the general.level increases it will require
     // stronger and stronger contracts to level up.
-    storage.general.level += MinF(
+    storage.general.level.value += MinF(
       (pending.contract.level.value + 1)
-      / (storage.general.level + 1),
+      / (storage.general.level.value + 1),
 
       // the maximum of levels that we can get from a single contract:
       2

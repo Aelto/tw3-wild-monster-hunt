@@ -1604,7 +1604,7 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 3');
   }
 
-  private function tryAddRecipe(recipe: name): bool {
+  private function tryAddRecipe(recipe: name) {
     if (
       this.witcher.CanLearnAlchemyRecipe(recipe)
       && !this.witcher.WMH_isRecipeKnown(recipe)
@@ -1615,11 +1615,11 @@ state Loading in WMH_LootManager {
     }
   }
 
-  private function tryAddSchematic(schematic: name): bool {
-    if (!this.witcher.WMH_isSchematicKnown()) {
+  private function tryAddSchematic(schematic: name) {
+    if (!this.witcher.WMH_isSchematicKnown(schematic)) {
       // the loot level is not important, we short-circuit the functions if the
       // tier is too high instead so this method is never called.
-      parent.registerLoot(WMH_LootTag_Schematic, 0, recipe);
+      parent.registerLoot(WMH_LootTag_Schematic, 0, schematic);
     }
   }
 }
