@@ -12,4 +12,14 @@ class WMH_HerbalistManager {
 
     return this;
   }
+
+  public function getIngredientsForRecipe(recipe: name) {
+    var alchemy_recipe: SAlchemyRecipe = getAlchemyRecipeFromName(recipe);
+    var ingredients: array<SItemParts> = alchemy_recipe.requiredIngredients;
+
+    for part: SItemParts in ingredients {
+      var itemName: name = part.itemName;
+      var quantity: int = part.quantity;
+    }
+  }
 }
