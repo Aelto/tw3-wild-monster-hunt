@@ -165,5 +165,12 @@ class WMH_Master {
       inventory.SingletonItemRemoveAmmo(item, 1);
     }
   }
+
+  public function submitOnMilestoneContractCompleted(
+    origin: WMH_MilestoneContract,
+    seed: int
+  ) {
+    this.loot.onMilestoneContractCompleted(seed);
+  }
 }
 

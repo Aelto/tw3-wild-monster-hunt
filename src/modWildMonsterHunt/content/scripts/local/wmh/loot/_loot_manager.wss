@@ -33,6 +33,23 @@ statemachine class WMH_LootManager {
     this.GotoState('Loading');
   }
 
+  public function onMilestoneContractCompleted(seed: int) {
+    var tags: array<WMH_LootTag>;
+
+    var count: int = 4;
+    while (count > 0) {
+      count -= 1;
+
+      var item: name = this.popRandomItem(WMH_LootTag_Schematic, seed);
+
+      if (item == '') {
+        break;
+      }
+
+      GetWitcherPlayer().AddCraftingSchematic(item);
+    }
+  }
+
   private function addLootRequest(request: WMH_LootRequest) {
     this.loot_requests.PushBack(request);
 
@@ -43,6 +60,24 @@ statemachine class WMH_LootManager {
 
   protected function registerLoot(category: WMH_LootTag, _level: int, item: name) {
     this.loot_by_category[category].PushBack(item);
+  }
+
+  // mutates the array from the category by popping the item out of the list
+  // and returning it. Mostly useful for recipes that are given straight to the
+  // player
+  private popRandomItem(category: WMH_LootTag, seed: int): name {
+    var max: int = this.loot_by_category[category].Size();
+
+    if (max <= 0) {
+      return '';
+    }
+
+    var item_index: int = RandNoiseF(seed, max) as int;
+    var item: name = this.loot_by_category[category][item_index];
+
+    this.loot_by_category[category].EraseFast(item_index);
+
+    return item;
   }
 }
 
