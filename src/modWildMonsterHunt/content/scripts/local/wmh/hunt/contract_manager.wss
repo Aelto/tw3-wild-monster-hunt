@@ -83,18 +83,21 @@ class WMH_ContractManager {
   ) {
     WMHHUD("Contract completed.");
 
-    // the formula makes that any contract of the same level grants 100% of a
-    // level as experience. Then as the general.level increases it will require
-    // stronger and stronger contracts to level up.
-    storage.general.level.value += MinF(
-      (pending.contract.level.value + 1)
-      / (storage.general.level.value + 1),
-
-      // the maximum of levels that we can get from a single contract:
-      2
-    );
     pending.onContractCompleted();
 
+    // experience gain is locked until the milestone contract is completed.
+    if (!this.hasPendingMilestoneContract()) {
+      // the formula makes that any contract of the same level grants 100% of a
+      // level as experience. Then as the general.level increases it will require
+      // stronger and stronger contracts to level up.
+      storage.general.level.value += MinF(
+        (pending.contract.level.value + 1)
+        / (storage.general.level.value + 1),
+
+        // the maximum of levels that we can get from a single contract:
+        2
+      );
+    }
   }
 
   private function finishCompletedContracts(
@@ -118,6 +121,16 @@ class WMH_ContractManager {
       this.pending_contracts.Remove(contract);
       this.onContractCompleted(contract, storage);
     }
+  }
+
+  private function hasPendingMilestoneContract(): bool {
+    for contract: WMH_PendingContract in this.pending_contracts {
+      if (contract.getType() == WMH_PendingContractType_MILESTONE) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private function finishExpiredContracts(level: WMH_Level) {
