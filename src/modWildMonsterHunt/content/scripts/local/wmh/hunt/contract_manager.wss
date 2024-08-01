@@ -106,7 +106,27 @@ class WMH_ContractManager {
   ) {
     var completed_contracts: array<WMH_PendingContract>;
 
-    var id: WMH_BestiaryId;
+    // 1.0
+    // first complete the milestone contracts to unlock the XP
+    for contract: WMH_PendingContract in this.pending_contracts {
+      var milestone: WMH_MilestoneContract = contract as WMH_MilestoneContract;
+
+      if (milestone) {
+        for id: WMH_BestiaryId in killed_creatures {
+          if (milestone.isTargetted(id)) {
+            completed_contracts.PushBack(milestone);
+          }
+        }
+      }
+    }
+
+    for contract: WMH_PendingContract in completed_contracts {
+      this.pending_contracts.Remove(contract);
+      this.onContractCompleted(contract, storage);
+    }
+
+    // 2.0
+    // then complete the regular pending contracts
     for id: WMH_BestiaryId in killed_creatures {
       var contract: WMH_PendingContract;
       

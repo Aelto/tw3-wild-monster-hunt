@@ -1,0 +1,37 @@
+
+
+class WMH_MilestoneContract extends WMH_PendingContract {
+  private var milestone_level: WMH_Level;
+
+  public function initMilestoneContract(contract: WMH_Contract, milestone_level: WMH_Level): WMH_MilestoneContract {
+    this.init(contract);
+    this.milestone_level = milestone_level;
+
+    return this;
+  }
+
+  public function isContractExpired(): bool {
+    // milestone contracts do not expire
+    return false;
+  }
+
+  public function getContractSeed(optional offset: int): int {
+    return super.getContractSeed(offset)
+         - (this.milestone_level.value as int);
+  }
+
+  public function toTargetLocNameHtml(): string {
+    return "<font color='FFEE8C'>" + super.toTargetLocNameHtml() + "</font>";
+  }
+
+  public function getType(): WMH_PendingContractType {
+    return WMH_PendingContractType_MILESTONE;
+  }
+
+  public function onContractCompleted() {
+    super.onContractCompleted();
+
+    thePlayer.wmh
+      .submitOnMilestoneContractCompleted(this, this.getContractSeed());
+  }
+}
