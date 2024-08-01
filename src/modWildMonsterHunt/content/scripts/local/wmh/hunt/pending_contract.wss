@@ -26,6 +26,11 @@ struct WMH_Contract {
   var index: int;
 }
 
+enum WMH_PendingContractType {
+  WMH_PendingContractType_DEFAULT = 0,
+  WMH_PendingContractType_MILESTONE = 1,
+}
+
 class WMH_PendingContract {
   var contract: WMH_Contract;
   var affix_manager: WMH_AffixManager;
@@ -100,6 +105,10 @@ class WMH_PendingContract {
     // note: the affixes are prefixed by a space
     return this.affix_manager.toLocString()
          + this.contract.target.getLocName();
+  }
+
+  public function getType(): WMH_PendingContractType {
+    return WMH_PendingContractType_DEFAULT;
   }
 
   private function getTargetLocationIndex(hunt_seed: int): int {
