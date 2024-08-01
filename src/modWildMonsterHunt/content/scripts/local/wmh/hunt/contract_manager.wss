@@ -83,14 +83,6 @@ class WMH_ContractManager {
   ) {
     WMHHUD("Contract completed.");
 
-    thePlayer.AddMoney(
-      (
-        pending.contract.target.strength
-        // at level 25 the rewards are doubled
-        * (1 + pending.contract.level.value / 25)
-      ) as int
-    );
-
     // the formula makes that any contract of the same level grants 100% of a
     // level as experience. Then as the general.level increases it will require
     // stronger and stronger contracts to level up.
@@ -101,6 +93,8 @@ class WMH_ContractManager {
       // the maximum of levels that we can get from a single contract:
       2
     );
+    pending.onContractCompleted();
+
   }
 
   private function finishCompletedContracts(
