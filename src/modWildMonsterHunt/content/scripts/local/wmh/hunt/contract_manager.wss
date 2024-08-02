@@ -37,7 +37,7 @@ class WMH_ContractManager {
 
     var new_level: WMH_Level = storage.general.level;
 
-    this.finishExpiredContracts(new_level);
+    this.finishExpiredContracts(storage.contract, new_level);
 
     var milestones_to_generate: int = (new_level.value >= next_milestone.value) as int;
 
@@ -102,6 +102,16 @@ class WMH_ContractManager {
     return output;
   }
 
+  public function getPendingTargetsId(): array<WMH_BestiaryId> {
+    var output: array<WMH_BestiaryId>;
+
+    for pending: WMH_PendingContract in this.pending_contracts {
+      output.PushBack(pending.target.id);
+    }
+
+    return output;
+  }
+
   private function onContractCompleted(
     pending: WMH_PendingContract,
     storage: WMH_Storage,
@@ -113,6 +123,7 @@ class WMH_ContractManager {
 
     // experience gain is locked until the milestone contract is completed.
     if (!this.hasPendingMilestoneContract()) {
+      WMHINFO("onContractCompleted, old level = " +  storage.general.level.value);
       storage.general.level.value = MinF(
         maximum_level.value,
 
@@ -127,6 +138,7 @@ class WMH_ContractManager {
           2
         )
       );
+      WMHINFO("onContractCompleted, new level = " +  storage.general.level.value);
     }
   }
 
@@ -169,7 +181,7 @@ class WMH_ContractManager {
     }
 
     for contract: WMH_PendingContract in completed_contracts {
-      this.pending_contracts.Remove(contract);
+      this.removePendingContract(storage.contract, contract);
       this.onContractCompleted(contract, storage, maximum_level);
     }
   }
@@ -184,7 +196,7 @@ class WMH_ContractManager {
     return false;
   }
 
-  private function finishExpiredContracts(level: WMH_Level) {
+  private function finishExpiredContracts(storage_contract: WMH_StorageContract, level: WMH_Level) {
     var expired_contracts: array<WMH_PendingContract>;
 
     var contract: WMH_PendingContract;
@@ -195,8 +207,16 @@ class WMH_ContractManager {
     }
 
     for contract: WMH_PendingContract in expired_contracts {
-      this.pending_contracts.Remove(contract);
+      this.removePendingContract(storage_contract, contract);
     }
+  }
+
+  private function removePendingContract(
+    storage_contract: WMH_StorageContract,
+    contract: WMH_PendingContract
+  ) {
+    this.pending_contracts.Remove(contract);
+    storage_contract.pending_contracts.Remove(contract.contract);
   }
 
   private function generateNewPendingContracts(
