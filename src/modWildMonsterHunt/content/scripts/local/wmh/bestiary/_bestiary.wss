@@ -39,12 +39,14 @@ statemachine class WMH_Bestiary {
     bentry: WMH_BestiaryEntry,
     location: WMH_BiomeSpawnPoint,
     affix_manager: WMH_AffixManager,
+    encounter_tag: name,
     seed: int
   ) {
     this.requestSpawn(
       (new WMH_SpawnRequest in this)
         .withBestiaryEntry(bentry)
         .withSpawnPoint(location)
+        .withEncounterTag(encounter_tag)
         .withAffixes(affix_manager)
         .withSeed(seed)
     );
@@ -134,6 +136,18 @@ statemachine class WMH_Bestiary {
     var bentry: WMH_BestiaryEntry = elites[index];
 
     return bentry;
+  }
+
+  public function getEntryByBiomeTagByPass(tag: name): WMH_BestiaryEntry {
+    var null: WMH_BestiaryEntry;
+
+    for bentry: WMH_BestiaryEntry in this.entries {
+      if (bentry.biome_tag_bypass == tag) {
+        return bentry;
+      }
+    }
+
+    return null;
   }
 
   private function spawnNearbyAvailableSpawnPoints(

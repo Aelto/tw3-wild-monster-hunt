@@ -15,7 +15,7 @@ state Loading in WMH_LootManager {
     var i: int;
 
     parent.loot_by_category.Clear();
-    for (i = 0; i < EnumGetMax('WMH_LootTag'); i += 1) {
+    for (i = 0; i < EnumGetMax('WMH_LootTag') + 1; i += 1) {
       parent.loot_by_category.PushBack(empty);
     }
 

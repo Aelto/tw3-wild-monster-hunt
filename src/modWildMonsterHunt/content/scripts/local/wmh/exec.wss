@@ -2,6 +2,6 @@ exec function wmhcompletecontracts() {
   thePlayer.wmh.hunt.contract.onHuntFinished(
     thePlayer.wmh.bestiary,
     thePlayer.wmh.storage,
-    thePlayer.wmh.hunt.contract.getPendingTargetsId()
+    thePlayer.wmh.hunt.contract.getPendingTargetsKill()
   );
 }

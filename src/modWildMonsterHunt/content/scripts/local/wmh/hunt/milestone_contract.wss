@@ -1,14 +1,18 @@
 
 
 class WMH_MilestoneContract extends WMH_PendingContract {
+  default encounter_tag = "WMH_MilestoneContract";
+
   private var milestone_level: WMH_Level;
 
   public function initMilestoneContract(
     bestiary: WMH_Bestiary,
     contract: WMH_Contract
   ): WMH_MilestoneContract {
-    this.init(bestiary, contract);
-    this.initFromMilestoneLevel(contract.level);
+    this.affix_manager = new WMH_AffixManager in this;
+    this.contract = contract;
+
+    this.initFromMilestoneLevel(bestiary, contract.level);
 
     return this;
   }
@@ -34,13 +38,24 @@ class WMH_MilestoneContract extends WMH_PendingContract {
   public function onContractCompleted() {
     super.onContractCompleted();
 
+    WMHINFO(
+      "WMH_MilestoneContract::onContractCompleted(), level = "
+      + this.milestone_level.value
+    );
+
     thePlayer.wmh
       .submitOnMilestoneContractCompleted(this, this.getContractSeed());
   }
 
-  private function initFromMilestoneLevel(milestone_level: WMH_Level) {
+  private function initFromMilestoneLevel(
+    bestiary: WMH_Bestiary, 
+    milestone_level: WMH_Level
+  ) {
+
     switch (milestone_level.value) {
       case 0:
+        this.target = bestiary.getEntryByBiomeTagByPass('Drowner');
+        
         break;
     }
 

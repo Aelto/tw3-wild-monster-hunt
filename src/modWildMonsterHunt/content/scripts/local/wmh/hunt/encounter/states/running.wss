@@ -16,7 +16,7 @@ state Running in WMH_EncounterManager {
       var should_destroy: bool = encounter.onTick();
 
       if (should_destroy) {
-        encounter.onDestroy(true);
+        encounter.onDestroy();
       }
 
       SleepOneFrame();

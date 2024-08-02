@@ -8,7 +8,7 @@ class WMH_BestiaryEntry {
   protected var difficulty_scaling: WMH_DifficultyScaling;
   protected var templates: array<WMH_EnemyTemplate>;
 
-  protected var biome_tag_bypass: name;
+  public var biome_tag_bypass: name;
 
   public var strength: float;
 

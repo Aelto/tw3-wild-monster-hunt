@@ -16,7 +16,7 @@ class WMH_EncounterClues extends WMH_Encounter {
     return false;
   }
 
-  public function onDestroy(optional notifyKills: bool) {
+  public function onDestroy() {
     for entity: CEntity in this.entities {
       entity.Destroy();
     }

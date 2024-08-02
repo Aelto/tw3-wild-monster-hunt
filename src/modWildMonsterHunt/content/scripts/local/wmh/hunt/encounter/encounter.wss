@@ -3,12 +3,15 @@ class WMH_Encounter {
   protected var entries: array<WMH_BestiaryEntry>;
   protected var spawn_point: WMH_BiomeSpawnPoint;
   protected var entities: array<CEntity>;
+  protected var encounter_tag: name;
 
   public function init(
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
-    entities: array<CEntity>
+    entities: array<CEntity>,
+    optional encounter_tag: name,
   ): WMH_Encounter {
+    this.encounter_tag = encounter_tag;
     this.spawn_point = spawn_point;
     this.entries = entries;
     this.entities = entities;
@@ -27,7 +30,7 @@ class WMH_Encounter {
           ) > 250 * 250;
   }
 
-  public function onDestroy(optional notifyKills: bool) {
+  public function onDestroy() {
     for entity: CEntity in this.entities {
       if (entity) {
         entity.Destroy();
@@ -37,9 +40,14 @@ class WMH_Encounter {
     this.entities.Clear();
     this.spawn_point.liberate();
 
-    if (notifyKills) {
+    var notify: bool = VecDistanceSquared2D(
+      thePlayer.GetWorldPosition(),
+      this.spawn_point.GetWorldPosition()
+    ) > 40 * 40;
+
+    if (notify) {
       for bentry: WMH_BestiaryEntry in this.entries {
-        thePlayer.wmh.submitOnCreatureKilled(this, bentry);
+        thePlayer.wmh.submitOnCreatureKilled(this, bentry, this.encounter_tag);
       }
     }
   }

@@ -20,7 +20,7 @@ class WMH_ContractManager {
   public function onHuntFinished(
     bestiary: WMH_Bestiary,
     storage: WMH_Storage,
-    optional killed_creatures: array<WMH_BestiaryId>
+    optional killed_creatures: array<WMH_HuntKill>
   ) {
     var previous_level: WMH_Level = storage.general.level;
     var next_milestone: WMH_Level = WMH_Level(
@@ -102,11 +102,11 @@ class WMH_ContractManager {
     return output;
   }
 
-  public function getPendingTargetsId(): array<WMH_BestiaryId> {
-    var output: array<WMH_BestiaryId>;
+  public function getPendingTargetsKill(): array<WMH_HuntKill> {
+    var output: array<WMH_HuntKill>;
 
     for pending: WMH_PendingContract in this.pending_contracts {
-      output.PushBack(pending.target.id);
+      output.PushBack(WMH_HuntKill(pending.target.id, 'WMH_MilestoneContract'));
     }
 
     return output;
@@ -143,7 +143,7 @@ class WMH_ContractManager {
   }
 
   private function finishCompletedContracts(
-    killed_creatures: array<WMH_BestiaryId>,
+    killed_creatures: array<WMH_HuntKill>,
     storage: WMH_Storage,
     maximum_level: WMH_Level
   ) {
@@ -155,8 +155,13 @@ class WMH_ContractManager {
       var milestone: WMH_MilestoneContract = contract as WMH_MilestoneContract;
 
       if (milestone) {
-        for id: WMH_BestiaryId in killed_creatures {
-          if (milestone.isTargetted(id)) {
+        for kill: WMH_HuntKill in killed_creatures {
+          if (
+            // milestone contract require you kill the creature spawned by it
+            // directly as the creature has special affixes and all that.
+            kill.encounter_tag == 'WMH_MilestoneContract'
+            && milestone.isTargetted(kill.bestiary_id)
+          ) {
             completed_contracts.PushBack(milestone);
           }
         }
@@ -170,11 +175,11 @@ class WMH_ContractManager {
 
     // 2.0
     // then complete the regular pending contracts
-    for id: WMH_BestiaryId in killed_creatures {
+    for kill: WMH_HuntKill in killed_creatures {
       var contract: WMH_PendingContract;
       
       for contract: WMH_PendingContract in this.pending_contracts {
-        if (contract.isTargetted(id)) {
+        if (contract.isTargetted(kill.bestiary_id)) {
           completed_contracts.PushBack(contract);
         }
       }

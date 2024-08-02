@@ -35,6 +35,12 @@ class WMH_PendingContract {
   var contract: WMH_Contract;
   var affix_manager: WMH_AffixManager;
 
+  var target: WMH_BestiaryEntry;
+
+  var encounter_tag: name;
+  default encounter_tag = "WMH_PendingContract";
+
+
   // Dynamic, you may leave it empty as it will be defined during gameplay.
   //
   // Defines the available locations for the contract based on all the spawn
@@ -42,8 +48,6 @@ class WMH_PendingContract {
   var available_locations: array<WMH_PendingContractLocation>;
 
   var was_spawned: bool;
-
-  var target: WMH_BestiaryEntry;
 
   public function init(bestiary: WMH_Bestiary, contract: WMH_Contract): WMH_PendingContract {
     this.contract = contract;
@@ -160,6 +164,7 @@ class WMH_PendingContract {
           this,
           this.target,
           location.spawn_point,
+          this.encounter_tag,
           hunt_seed
         );
 

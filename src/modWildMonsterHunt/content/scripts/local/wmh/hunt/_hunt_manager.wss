@@ -1,5 +1,10 @@
 #define const HuntSeedOffset_difficulty = 10;
 
+struct WMH_HuntKill {
+  var bestiary_id: WMH_BestiaryId;
+  var encounter_tag: name;
+}
+
 // Stores the data about the currently active hunt
 statemachine class WMH_HuntManager {
   private var master: WMH_Master;
@@ -16,7 +21,7 @@ statemachine class WMH_HuntManager {
   // stores the creatures that were killed during the current hunt, and that
   // should result in completed contracts the next time the player enters a
   // settlement.
-  private var killed_creatures: array<WMH_BestiaryId>;
+  private var killed_creatures: array<WMH_HuntKill>;
 
   public function init(master: WMH_Master): WMH_HuntManager {
     this.master = master;
@@ -73,8 +78,11 @@ statemachine class WMH_HuntManager {
     this.encounters.onHuntFinished();
   }
 
-  public function onCreatureKilled(bentry: WMH_BestiaryEntry) {
-    this.killed_creatures.PushBack(bentry.id);
+  public function onCreatureKilled(
+    bentry: WMH_BestiaryEntry,
+    encounter_tag: name
+  ) {
+    this.killed_creatures.PushBack(WMH_HuntKill(bentry.id, encounter_tag));
   }
 
   public function difficulty(): int {

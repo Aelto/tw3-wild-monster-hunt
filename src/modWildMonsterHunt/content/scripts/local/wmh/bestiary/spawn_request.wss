@@ -1,6 +1,7 @@
 class WMH_SpawnRequest {
   public var entries: array<WMH_BestiaryEntry>;
   public var spawn_point: WMH_BiomeSpawnPoint;
+  public var encounter_tag: name;
   public var heading: float;
   public var seed: int;
 
@@ -40,6 +41,12 @@ class WMH_SpawnRequest {
     return this;
   }
 
+  public function withEncounterTag(encounter_tag: name): WMH_SpawnRequest {
+    this.encounter_tag = encounter_tag;
+
+    return this;
+  }
+
   public function onRequestFinished(entities: array<CEntity>) {
     // WMHINFO("WMH_SpawnRequest::onRequestFinished, entities.Size() = " + entities.Size());
 
@@ -47,6 +54,7 @@ class WMH_SpawnRequest {
       this,
       this.spawn_point,
       this.entries,
+      this.encounter_tag,
       entities
     );
   }
