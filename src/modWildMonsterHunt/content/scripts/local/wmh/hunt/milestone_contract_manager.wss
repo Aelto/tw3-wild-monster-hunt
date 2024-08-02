@@ -1,0 +1,15 @@
+// class WMH_MilestoneContractManager {
+//   public function getContractForLevel(storage: WMH_Storage): WMH_MilestoneContract {
+//     var output: WMH_MilestoneContract;
+
+//     switch (storage.contract.milestone_level) {
+//       case 0:
+//         break;
+
+//       default:
+//         break;
+//     }
+
+//     return output;
+//   }
+// }

@@ -4,8 +4,8 @@
 class WMH_ContractManager {
   private var pending_contracts: array<WMH_PendingContract>;
 
-  public function init(): WMH_ContractManager {
-    todo!("load contracts from storage")
+  public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {
+    this.onHuntFinished(bestiary, storage);
 
     return this;
   }
@@ -20,27 +20,52 @@ class WMH_ContractManager {
   public function onHuntFinished(
     bestiary: WMH_Bestiary,
     storage: WMH_Storage,
-    killed_creatures: array<WMH_BestiaryId>
+    optional killed_creatures: array<WMH_BestiaryId>
   ) {
+    var previous_level: WMH_Level = storage.general.level;
+    var next_milestone: WMH_Level = WMH_Level(
+      ((previous_level.value as int) / this.milestoneContractsInterval() + 1)
+      * this.milestoneContractsInterval()
+    );
+
     // side-effect: the storage is mutated from this
     this.finishCompletedContracts(
       killed_creatures,
       storage,
+      next_milestone
     );
 
     var new_level: WMH_Level = storage.general.level;
 
     this.finishExpiredContracts(new_level);
 
-    var contracts_to_generate: int = 5 - this.pending_contracts.Size();
+    var milestones_to_generate: int = (new_level.value >= next_milestone.value) as int;
+
+    var contracts_to_generate: int = 5
+                                   - this.pending_contracts.Size()
+                                   - milestones_to_generate;
+
+    if (milestones_to_generate > 0) {
+      this.generateNewPendingContracts(
+        bestiary,
+        storage.contract,
+        storage.contract.milestone_level,
+        1, // only generate one milestone at a time
+        WMH_PendingContractType_MILESTONE
+      );
+    }
 
     if (contracts_to_generate > 0) {
       this.generateNewPendingContracts(
         bestiary,
+        storage.contract,
         new_level,
-        contracts_to_generate
+        contracts_to_generate,
+        WMH_PendingContractType_DEFAULT
       );
     }
+
+    this.loadContractsFromStorage(bestiary, storage.contract);
   }
 
   public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
@@ -79,7 +104,8 @@ class WMH_ContractManager {
 
   private function onContractCompleted(
     pending: WMH_PendingContract,
-    storage: WMH_Storage
+    storage: WMH_Storage,
+    maximum_level: WMH_Level
   ) {
     WMHHUD("Contract completed.");
 
@@ -87,22 +113,27 @@ class WMH_ContractManager {
 
     // experience gain is locked until the milestone contract is completed.
     if (!this.hasPendingMilestoneContract()) {
-      // the formula makes that any contract of the same level grants 100% of a
-      // level as experience. Then as the general.level increases it will require
-      // stronger and stronger contracts to level up.
-      storage.general.level.value += MinF(
-        (pending.contract.level.value + 1)
-        / (storage.general.level.value + 1),
+      storage.general.level.value = MinF(
+        maximum_level.value,
 
-        // the maximum of levels that we can get from a single contract:
-        2
+        // the formula makes that any contract of the same level grants 100% of a
+        // level as experience. Then as the general.level increases it will require
+        // stronger and stronger contracts to level up.
+        storage.general.level.value + MinF(
+          (pending.contract.level.value + 1)
+          / (storage.general.level.value + 1),
+
+          // the maximum of levels that we can get from a single contract:
+          2
+        )
       );
     }
   }
 
   private function finishCompletedContracts(
     killed_creatures: array<WMH_BestiaryId>,
-    storage: WMH_Storage
+    storage: WMH_Storage,
+    maximum_level: WMH_Level
   ) {
     var completed_contracts: array<WMH_PendingContract>;
 
@@ -122,7 +153,7 @@ class WMH_ContractManager {
 
     for contract: WMH_PendingContract in completed_contracts {
       this.pending_contracts.Remove(contract);
-      this.onContractCompleted(contract, storage);
+      this.onContractCompleted(contract, storage, maximum_level);
     }
 
     // 2.0
@@ -139,7 +170,7 @@ class WMH_ContractManager {
 
     for contract: WMH_PendingContract in completed_contracts {
       this.pending_contracts.Remove(contract);
-      this.onContractCompleted(contract, storage);
+      this.onContractCompleted(contract, storage, maximum_level);
     }
   }
 
@@ -170,33 +201,51 @@ class WMH_ContractManager {
 
   private function generateNewPendingContracts(
     bestiary: WMH_Bestiary,
+    storage_contract: WMH_StorageContract,
     level: WMH_Level,
-    count: int
+    count: int,
+    contract_type: WMH_PendingContractType
   ) {
     var now: int = WMH_getGameTimeMinutes();
-    var elites: array<WMH_BestiaryEntry> = bestiary.getEliteEntries(level);
     
     var i: int;
     for (i = count; i > 0; i -= 1) {
-      var seed: int = now + i;
-
-      var target_index: int = RandNoiseF(seed, elites.Size() as float) as int;
-      var bentry: WMH_BestiaryEntry = elites[target_index];
-
-      var contract: WMH_Contract = WMH_Contract(
-        bentry,
-        // set a level to the contract with a small variance
-        WMH_Level(MaxF(
-          level.value + (RandNoiseF(seed, 2.0) - 1.0),
-          0
-        )),
-        now,
-        i
-      );
-
-      this.pending_contracts.PushBack(
-        (new WMH_PendingContract in this).init(contract)
+      storage_contract.pending_contracts.PushBack(
+        WMH_Contract(
+          level,
+          now,
+          i,
+          contract_type
+        )
       );
     }
+  }
+
+  private function loadContractsFromStorage(
+    bestiary: WMH_Bestiary,
+    storage_contract: WMH_StorageContract
+  ) {
+    this.pending_contracts.Clear();
+
+    for contract: WMH_Contract in storage_contract.pending_contracts {
+      if (contract.type == WMH_PendingContractType_MILESTONE) {
+        this.pending_contracts.PushBack(
+          (new WMH_MilestoneContract in this)
+            .initMilestoneContract(bestiary, contract)
+        );
+      }
+      else {
+        this.pending_contracts.PushBack(
+          (new WMH_PendingContract in this)
+            .init(bestiary, contract)
+        );
+      }
+    }
+  }
+
+  // returns how many WMH_Levels are needed before a new milestone contract is
+  // generated.
+  private function milestoneContractsInterval(): int {
+    return 5;
   }
 }

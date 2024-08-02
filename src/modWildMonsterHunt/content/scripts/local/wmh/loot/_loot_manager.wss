@@ -65,7 +65,7 @@ statemachine class WMH_LootManager {
   // mutates the array from the category by popping the item out of the list
   // and returning it. Mostly useful for recipes that are given straight to the
   // player
-  private popRandomItem(category: WMH_LootTag, seed: int): name {
+  private function popRandomItem(category: WMH_LootTag, seed: int): name {
     var max: int = this.loot_by_category[category].Size();
 
     if (max <= 0) {

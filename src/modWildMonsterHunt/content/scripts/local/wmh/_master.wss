@@ -10,7 +10,7 @@ class WMH_Master {
   public function onCreate() {}
 
   public function onLoad() {
-    this.storage = (new WMH_Storage in this).init();
+    WMH_initializeStorage(this);
     this.logger = (new WMH_Logger in this).init();
     WMHINFO("WMH_Master::OnLoad()");
 

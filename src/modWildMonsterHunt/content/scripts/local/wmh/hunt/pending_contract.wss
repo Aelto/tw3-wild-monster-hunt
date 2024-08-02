@@ -15,8 +15,6 @@ struct WMH_PendingContractLocation {
 }
 
 struct WMH_Contract {
-  var target: WMH_BestiaryEntry;
-
   var level: WMH_Level;
 
   var created_at_minutes: int;
@@ -24,6 +22,8 @@ struct WMH_Contract {
   // to differentiate otherwise similar contracts that were generated in the
   // same time span.
   var index: int;
+
+  var type: WMH_PendingContractType;
 }
 
 enum WMH_PendingContractType {
@@ -43,19 +43,27 @@ class WMH_PendingContract {
 
   var was_spawned: bool;
 
-  public function init(contract: WMH_Contract): WMH_PendingContract {
-    this.contract = contract;
-    this.affix_manager = (new WMH_AffixManager in this)
-      .init(this.contract.level, this.getContractSeed());
+  var target: WMH_BestiaryEntry;
 
-    WMHHUD("New contract: " + this.toTargetLocName());
+  public function init(bestiary: WMH_Bestiary, contract: WMH_Contract): WMH_PendingContract {
+    this.contract = contract;
+
+    this.target = bestiary.getRandomUnfilteredEliteEntry(
+      contract.level,
+      this.getContractSeed()
+    );
+
+    this.affix_manager = (new WMH_AffixManager in this)
+      .init(this.contract.level, this.getContractSeed(1));
+
+    WMHHUD("New contract: " + this.toTargetLocNameHtml());
 
     return this;
   }
 
   public function onHuntStarted(bestiary: WMH_Bestiary) {
     var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
-      .getAvailableRegionSpawnPoints(this.contract.target);
+      .getAvailableRegionSpawnPoints(this.target);
 
     var player_position: Vector = thePlayer.GetWorldPosition();
     
@@ -90,12 +98,11 @@ class WMH_PendingContract {
   }
 
   public function isTargetted(id: WMH_BestiaryId): bool {
-    return this.contract.target.id.value == id.value;
+    return this.target.id.value == id.value;
   }
 
   public function getContractSeed(optional offset: int): int {
     return offset
-         + this.contract.target.id.value
          + (this.contract.level.value as int)
          - this.contract.created_at_minutes
          + this.contract.index;
@@ -104,7 +111,7 @@ class WMH_PendingContract {
   public function toTargetLocNameHtml(): string {
     // note: the affixes are prefixed by a space
     return this.affix_manager.toLocString()
-         + this.contract.target.getLocName();
+         + this.target.getLocName();
   }
 
   public function getType(): WMH_PendingContractType {
@@ -114,7 +121,7 @@ class WMH_PendingContract {
   public function onContractCompleted() {
     thePlayer.AddMoney(
       (
-        this.contract.target.strength
+        this.target.strength
         // at level 25 the rewards are doubled
         * (1 + this.contract.level.value / 25)
       ) as int
@@ -151,7 +158,7 @@ class WMH_PendingContract {
       if (distance <= max_distance) {
         thePlayer.wmh.submitOnSpawnContractTarget(
           this,
-          this.contract.target,
+          this.target,
           location.spawn_point,
           hunt_seed
         );
@@ -171,7 +178,7 @@ class WMH_PendingContract {
 
     var clues_points: array<WMH_BiomeSpawnPoint>;
     var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
-      .getAvailableNearbySpawnPoints(this.contract.target);
+      .getAvailableNearbySpawnPoints(this.target);
 
       // WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
 
@@ -239,7 +246,7 @@ class WMH_PendingContract {
 
       thePlayer.wmh.submitOnSpawnClues(
         this,
-        this.contract.target,
+        this.target,
         point,
         // the heading to the target destination
         point_to_target_heading,

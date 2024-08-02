@@ -1,11 +1,19 @@
+// no methods on the storages
 class WMH_Storage {
   public var general: WMH_StorageGeneral;
+  public var contract: WMH_StorageContract;
+}
 
-  public function init(): WMH_Storage {
-    if (!this.general) {
-      this.general = new WMH_StorageGeneral in this;
-    }
+function WMH_initializeStorage(master: WMH_Master) {
+  if (!master.storage) {
+    master.storage = new WMH_Storage in master;
+  }
 
-    return this;
+  if (!master.storage.general) {
+    master.storage.general = new WMH_StorageGeneral in master;
+  }
+
+  if (!master.storage.contract) {
+    master.storage.contract = new WMH_StorageContract in master;
   }
 }

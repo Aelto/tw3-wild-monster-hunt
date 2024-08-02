@@ -3,9 +3,12 @@
 class WMH_MilestoneContract extends WMH_PendingContract {
   private var milestone_level: WMH_Level;
 
-  public function initMilestoneContract(contract: WMH_Contract, milestone_level: WMH_Level): WMH_MilestoneContract {
-    this.init(contract);
-    this.milestone_level = milestone_level;
+  public function initMilestoneContract(
+    bestiary: WMH_Bestiary,
+    contract: WMH_Contract
+  ): WMH_MilestoneContract {
+    this.init(bestiary, contract);
+    this.initFromMilestoneLevel(contract.level);
 
     return this;
   }
@@ -33,5 +36,14 @@ class WMH_MilestoneContract extends WMH_PendingContract {
 
     thePlayer.wmh
       .submitOnMilestoneContractCompleted(this, this.getContractSeed());
+  }
+
+  private function initFromMilestoneLevel(milestone_level: WMH_Level) {
+    switch (milestone_level.value) {
+      case 0:
+        break;
+    }
+
+    this.milestone_level = milestone_level;
   }
 }
