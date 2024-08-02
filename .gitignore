@@ -14,6 +14,22 @@ redkit/wild_monster_hunt/*
 
 redkit/wild_monster_hunt/workspace/*
 !redkit/wild_monster_hunt/workspace/scripts
+!redkit/wild_monster_hunt/workspace/dlc
 
 redkit/wild_monster_hunt/workspace/scripts/local/*
 !redkit/wild_monster_hunt/workspace/scripts/local/wmhredkit
+
+redkit/wild_monster_hunt/workspace/dlc/*
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt
+
+redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/*
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data
+
+redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/*
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/gameplay
+
+redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/gameplay/*
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/gameplay/definitions
+
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/gameplay/definitions/*
+!redkit/wild_monster_hunt/workspace/dlc/dlcwild_monster_hunt/data/gameplay/definitions/effects.xml
