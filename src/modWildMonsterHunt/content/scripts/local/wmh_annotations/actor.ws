@@ -24,7 +24,7 @@ function WMH_removeEffect(tag: name) {
 
   for (i = 0; i < this.effectManager.wmh_effects.Size(); i += 1) {
     if (this.effectManager.wmh_effects[i].tag == tag) {
-      to_remove.PushBack(this.effect.wmh_effects[i]);
+      to_remove.PushBack(this.effectManager.wmh_effects[i]);
     }
   }
 

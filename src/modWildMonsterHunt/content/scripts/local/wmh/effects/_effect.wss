@@ -1,8 +1,8 @@
 class WMH_Effect {
-  public tag: name;
+  public var tag: name;
   default tag = "WMH_Effect";
 
-  public ticker: WMH_Ticker;
+  public var ticker: WMH_Ticker;
 
 
   public function init(duration: float) {

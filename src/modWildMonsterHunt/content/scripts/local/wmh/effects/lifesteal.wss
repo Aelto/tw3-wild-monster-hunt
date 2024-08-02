@@ -3,16 +3,16 @@ class WMH_LifestealEffect extends WMH_Effect {
     target: CGameplayEntity,
     duration: float,
   ) {
-    this.owner = owner;
-    this.target = target;
-    this.duration = duration;
-    this.sourceName = "WMH_LifestealEffect";
-    this.targetEffectManager = effect_manager;
+    // this.owner = owner;
+    // this.target = target;
+    // this.duration = duration;
+    // this.sourceName = "WMH_LifestealEffect";
+    // this.targetEffectManager = effect_manager;
 
-    this.EntityHandleSet(this.creatorHandle, this.owner);
+    // this.EntityHandleSet(this.creatorHandle, this.owner);
 
-    this.isOnPlayer = target as CPlayer;
+    // this.isOnPlayer = target as CPlayer;
 
-    this.CalculateDuration(true);
+    // this.CalculateDuration(true);
   }
 }
