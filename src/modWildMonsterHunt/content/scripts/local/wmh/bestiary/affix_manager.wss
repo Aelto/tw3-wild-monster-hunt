@@ -88,15 +88,30 @@ class WMH_AffixManager {
     var output: string;
 
     if (this.damage_modifier != 1.0) {
-      output += "Vicious ";
+      if (this.damage_modifier >= 1.5) {
+        output += "Deadly ";
+      }
+      else {
+        output += "Vicious ";
+      }
     }
 
     if (this.health_modifier != 1.0) {
-      output += "Hearty ";
+      if (this.health_modifier > 1.5) {
+        output += "Invincible ";
+      }
+      else {
+        output += "Hearty ";
+      }
     }
 
     if (this.health_regen_percent > 0) {
-      output += "Regenerating ";
+      if (this.health_regen_percent > 0.1) {
+        output += "Immortal ";
+      }
+      else {
+        output += "Regenerating ";
+      }
     }
 
     return output;
