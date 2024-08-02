@@ -96,7 +96,7 @@ class WMH_AffixManager {
     }
 
     if (this.health_regen_percent > 0) {
-      output += "Regenerative ";
+      output += "Regenerating ";
     }
 
     return output;
