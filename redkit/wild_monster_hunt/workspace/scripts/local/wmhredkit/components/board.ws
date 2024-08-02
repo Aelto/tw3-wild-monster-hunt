@@ -2,6 +2,8 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   private var oneliners: array<SU_OnelinerEntity>;
   private var contract_manager: WMH_ContractManager;
 
+  private var update_cooldown: WMH_Ticker;
+
   event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
     super.OnAreaEnter(area, activator);
 
@@ -9,6 +11,8 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   }
 
   event OnInteractionActivated(interactionComponentName : string, activator : CEntity) {
+    super.OnInteractionActivated(interactionComponentName, activator);
+
     if (activator == thePlayer) {
       this.setupContractOneliners(thePlayer.wmh.hunt.contract);
     }
@@ -16,6 +20,10 @@ class WMH_NoticeBoard extends W3NoticeBoard {
 
   public function setupContractOneliners(contract_manager: WMH_ContractManager) {
     this.contract_manager = contract_manager;
+
+    if (!this.update_cooldown) {
+      this.update_cooldown = (new WMH_Ticker in this).init(5.0);
+    }
 
     this.AddTimer('setupContractOnelinersTimer', 2.0);
   }
@@ -32,6 +40,11 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     var rot_forward: EulerAngles;
     var mesh: CComponent;
 
+    if (!this.update_cooldown.validate()) {
+      this.AddTimer('setupContractOnelinersTimer', 1.0);
+      return;
+    }
+
     mesh = this.GetComponentByClassName('CStaticMeshComponent');
 
     if (mesh) {}
@@ -39,7 +52,15 @@ class WMH_NoticeBoard extends W3NoticeBoard {
       return;
     }
 
-    this.unregisterOneliners();
+    while (this.oneliners.Size() < target_names.Size()) {
+      this.oneliners.PushBack(
+        SU_onelinerEntity(
+          "",
+          this
+        )
+      );
+    }
+
     WMHINFO("WMH_NoticeBoard::setupContractOneliners()");
 
     forward = this.GetHeadingVector();
@@ -49,11 +70,8 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     for (i = 0; i < target_names.Size(); i += 1) {
       WMHINFO("target_name = " + target_names[i] + " i = " + i);
 
-      oneliner = SU_onelinerEntity(
-        target_names[i],
-        this
-      );
-
+      oneliner = this.oneliners[i];
+      oneliner.text = target_names[i];
       oneliner.render_distance = 5;
 
       oneliner.offset = MatrixGetTranslation(
@@ -69,6 +87,7 @@ class WMH_NoticeBoard extends W3NoticeBoard {
 
       oneliner.offset.W = 0;
       oneliner.offset.Z += 1.0;
+      oneliner.update();
     }
   }
 
