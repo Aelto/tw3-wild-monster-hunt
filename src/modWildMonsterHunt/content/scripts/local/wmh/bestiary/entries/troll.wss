@@ -44,4 +44,13 @@ class WMH_BestiaryEntryTroll extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Troll";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Sulfur', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }

@@ -90,4 +90,16 @@ class WMH_BestiaryEntrySpider extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Spider";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem(
+      'Quicksilver solution',
+      (RandNoiseF(seed, 1.0 + contract.level.value * 0.1) as int) + 1
+    );
+  }
 }

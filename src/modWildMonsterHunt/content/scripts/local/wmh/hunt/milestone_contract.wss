@@ -35,8 +35,8 @@ class WMH_MilestoneContract extends WMH_PendingContract {
     return WMH_PendingContractType_MILESTONE;
   }
 
-  public function onContractCompleted() {
-    super.onContractCompleted();
+  public function onContractCompleted(provider: WMH_RewardProvider) {
+    super.onContractCompleted(provider);
 
     WMHINFO(
       "WMH_MilestoneContract::onContractCompleted(), level = "

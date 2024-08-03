@@ -1,3 +1,4 @@
+@echo off
 call variables.cmd
 
 rmdir "%modpath%\release" /s /q

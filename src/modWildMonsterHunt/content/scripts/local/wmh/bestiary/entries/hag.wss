@@ -73,4 +73,13 @@ class WMH_BestiaryEntryHag extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Hag";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Calcium equum', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }

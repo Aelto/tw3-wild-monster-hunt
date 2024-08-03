@@ -68,4 +68,24 @@ class WMH_BestiaryEntryKikimore extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Kikimore";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem(
+      'Pigskin puffball',
+      (RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1
+    );
+    provider.appendItem(
+      'Ribleaf',
+      (RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1
+    );
+    provider.appendItem(
+      'Nostrix',
+      (RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1
+    );
+  }
 }

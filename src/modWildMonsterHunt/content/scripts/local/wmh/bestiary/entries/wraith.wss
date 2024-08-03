@@ -82,4 +82,13 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Wraith";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Saltpetre', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }

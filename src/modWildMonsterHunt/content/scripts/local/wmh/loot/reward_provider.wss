@@ -1,0 +1,117 @@
+
+struct WMH_ItemQuantity {
+  var item: name;
+  var quantity: int;
+}
+
+struct WMH_RewardGroup {
+  var reason: string;
+  var items: array<WMH_ItemQuantity>;
+}
+
+
+// A custom class to provide rewards to the player, it is used to slowly
+// accumulate items in order to generate a final report after giving them to
+// the player's inventory.
+class WMH_RewardProvider {
+  var groups: array<WMH_RewardGroup>;
+
+  private var active_group: string;
+
+  public function startGroup(group: string): WMH_RewardProvider {
+    this.active_group = group;
+
+    return this;
+  }
+
+  public function appendMoney(quantity: int): WMH_RewardProvider {
+    return this.addMoney(this.active_group, quantity);
+  }
+
+  public function appendItem(item: name, quantity: int): WMH_RewardProvider {
+    return this.addItem(this.active_group, item, quantity);
+  }
+
+  public function addMoney(reason: string, quantity: int): WMH_RewardProvider {
+    return this.addItem(reason, 'Crowns', quantity);
+  }
+
+  public function addItem(
+    reason: string,
+    item: name,
+    quantity: int
+  ): WMH_RewardProvider {
+    var i: int;
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      if (this.groups[i].reason == reason) {
+        var k: int;
+
+        // increase the quantity if the item is already in the list
+        for (k = 0; k < this.groups[i].items.Size(); k += 1) {
+          if (this.groups[i].items[k].item == item) {
+            this.groups[i].items[k].quantity += quantity;
+
+            return this;
+          }
+        }
+
+        // otherwise add a new entry
+        this.groups[i].items.PushBack(WMH_ItemQuantity(item, quantity));
+
+        return this;
+      }
+    }
+
+    // no group with the given name was found, add it
+    this.groups.PushBack(WMH_RewardGroup(reason));
+    this.groups[this.groups.Size() - 1].items
+      .PushBack(WMH_ItemQuantity(item, quantity));
+
+
+    return this;
+  }
+
+  public function toHtml(inventory: CInventoryComponent): string {
+    var message: string;
+    var i: int;
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      message += this.groups[i].reason;
+
+      var k: int;
+      for (k = 0; k < this.groups[i].items.Size(); k += 1) {
+        message += "<br/> <img src='img://"
+                 + inventory.GetItemIconPathByName(this.groups[i].items[k].item)
+                 + "' height='48' width='48' />"
+                 + "<font size='18'>" + this.groups[i].items[k].quantity
+                 + "x</font> "
+                 + GetLocStringByKeyExt(
+                  theGame.GetDefinitionsManager()
+                  .GetItemLocalisationKeyName(this.groups[i].items[k].item)
+                 );
+      }
+
+      message += "<br />";
+    }
+
+    return message;
+  }
+
+  public function transferItems(inventory: CInventoryComponent) {
+    var i: int;
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      var k: int;
+      for (k = 0; k < this.groups[i].items.Size(); k += 1) {
+        inventory.AddAnItem(
+          this.groups[i].items[k].item,
+          this.groups[i].items[k].quantity,
+          false,
+          false,
+          true // show as reward
+        );
+      }
+    }
+  }
+}

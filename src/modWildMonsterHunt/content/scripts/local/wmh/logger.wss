@@ -77,6 +77,12 @@ function WMHHUD(message: string) {
   thePlayer.wmh.logger.log(message, WMHLL_Hud);
 }
 
+function WMHPOPUP(message: string, optional duration: float) {
+  theGame
+  .GetGuiManager()
+  .ShowNotification(message, duration);
+}
+
 state Loading in WMH_Logger {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);

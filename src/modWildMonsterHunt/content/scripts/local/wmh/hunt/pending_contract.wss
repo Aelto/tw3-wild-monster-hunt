@@ -122,14 +122,23 @@ class WMH_PendingContract {
     return WMH_PendingContractType_DEFAULT;
   }
 
-  public function onContractCompleted() {
-    thePlayer.AddMoney(
-      (
-        this.target.strength
-        // at level 25 the rewards are doubled
-        * (1 + this.contract.level.value / 25)
-      ) as int
-    );
+  public function onContractCompleted(provider: WMH_RewardProvider) {
+    if (this.target) {
+      // the entry sets the group name as well
+      this.target.onContractCompleted(
+        provider,
+        this.contract,
+        this.getContractSeed(10)
+      );
+
+      provider.appendMoney(
+        (
+          this.target.strength
+          // at level 25 the rewards are doubled
+          * (1 + this.contract.level.value / 25)
+        ) as int
+      );
+    }
   }
 
   private function getTargetLocationIndex(hunt_seed: int): int {

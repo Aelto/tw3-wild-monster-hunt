@@ -54,4 +54,13 @@ class WMH_BestiaryEntryWolf extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Wolf";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Fur square', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }

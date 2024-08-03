@@ -143,6 +143,20 @@ class WMH_BestiaryEntry {
     (entity as CNewNPC).SetLevel(thePlayer.GetLevel());
   }
 
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    var prefix: string;
+
+    if (contract.type == WMH_PendingContractType_MILESTONE) {
+      prefix = " milestone";
+    }
+
+    provider.startGroup(this.getLocName() + prefix + " contract");
+  }
+
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
     // todo!("inventory.AddMoney(1)")

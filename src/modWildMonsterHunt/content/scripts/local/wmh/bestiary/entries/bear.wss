@@ -68,4 +68,13 @@ class WMH_BestiaryEntryBear extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return "Bear";
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Fur square', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }
