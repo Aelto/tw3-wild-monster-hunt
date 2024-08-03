@@ -1,0 +1,114 @@
+class WMH_HerbalistCauldron extends W3Container {
+  protected var popup_data: W3ItemSelectionPopupData;
+
+  // used to display real time information about what's in the cauldron,
+  protected var oneliner: SU_OnelinerEntity;
+
+  event OnSpawned( spawnData : SEntitySpawnData )
+  {
+    super.OnSpawned( spawnData );
+    
+    // always mark this container as quest container
+    SetIsQuestContainer( true );
+    // UpdateDecorationFocusHighlight();
+  }
+
+  event OnInteraction( actionName : string, activator : CEntity ) {
+    this.openItemSelectionMenu();
+  }
+
+  // Called when an item is taken from the container
+  event OnItemTaken(itemId: SItemUniqueId, quantity: int) {}
+  event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent ) {
+    this.updateOneliner();
+  }
+
+  private function openItemSelectionMenu() {
+    var itemSelectionPopup: CR4ItemSelectionPopup;  
+    var tags: array<name>;  
+    var firstTag: name;
+    
+    theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' );
+
+    // UI popup requires entity tag to be unique, decoration should not work if
+    // it's not  
+    tags = GetTags();
+    firstTag = tags[0];
+  
+    this.popup_data = new W3ItemSelectionPopupData in theGame.GetGuiManager();
+    this.popup_data.targetInventory = this.GetInventory();
+    this.popup_data.collectorTag = firstTag;
+    this.popup_data.overrideQuestItemRestrictions = true;
+    
+    // Following filter settings are modified per child class type
+    var tags: array<name>;
+    tags.PushBack('CraftingIngredient');
+    tags.PushBack('AlchemyIngredient');
+    tags.PushBack('alchemy_ingredient');
+
+    var forbidden: array<name>;
+    forbidden.PushBack('NoShow');
+    forbidden.PushBack('Body');
+    forbidden.PushBack('Quest');
+
+    var empty: array<name>;
+  
+    this.popup_data.filterTagsList = tags;
+    this.popup_data.filterForbiddenTagsList = forbidden;
+    this.popup_data.selectionMode = EISPM_Painting;
+    this.popup_data.checkTagsOR = true;
+    this.popup_data.categoryFilterList = empty;
+    
+    theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
+    AddTimer( 'ItemSelectionTimer', 0.1 );
+  }
+
+  timer function ItemSelectionTimer(delta: float , id: int) {
+    if (this.popup_data) {
+      AddTimer( 'ItemSelectionTimer', 0.1 );
+    }
+    else {
+      this.updateOneliner();
+    }
+  }
+
+  private function updateOneliner() {
+    if (!this.oneliner) {
+      this.oneliner = SU_onelinerEntity("", this);
+    }
+
+    var inventory: CInventoryComponent = this.GetInventory();
+    var items: array<SItemUniqueId>;
+
+    this.GetInventory().GetAllItems(items);
+
+    var message: string;
+    var total_prices: int;
+    for item: SItemUniqueId in items {
+      WMHINFO("item in cauldron: " + this.GetInventory().GetItemName(item));
+
+      total_prices = total_prices
+                   + inventory.GetItemPrice(item);
+                  //  + inventory.GetItemPriceDisassemble(item);
+
+    }
+
+    var points_per_product: int = 400;
+    var yields_count: int = total_prices / points_per_product;
+    var points_til_next: int = total_prices - points_per_product * yields_count;
+
+    message = "Items in pot: " + items.Size()
+    
+            + "<br/> Points until next product: " + points_til_next + "/"
+            + points_per_product;
+
+    if (yields_count > 0) {
+      message += "Products in queue: " + yields_count;
+    }
+
+    this.oneliner.text = message;
+    this.oneliner.offset = Vector(0, 0, 1.0, 0);
+    this.oneliner.render_distance = 5;
+    this.oneliner.update();
+  }
+}
