@@ -55,8 +55,66 @@ class WMH_MilestoneContract extends WMH_PendingContract {
     switch (milestone_level.value) {
       case 0:
         this.target = bestiary.getEntryByBiomeTagByPass('Drowner');
-        
+        this.affix_manager.health_modifier = 1.5;
         break;
+
+      case 1:
+        this.target = bestiary.getEntryByBiomeTagByPass('Ghoul');
+        this.affix_manager.damage_modifier = 1.3;
+        break;
+
+      case 2:
+        this.target = bestiary.getEntryByBiomeTagByPass('Nekker');
+        this.affix_manager.damage_modifier = 1.25;
+        this.affix_manager.health_modifier = 1.5;
+        break;
+
+      case 3:
+        this.target = bestiary.getEntryByBiomeTagByPass('Bear');
+        this.affix_manager.health_regen_percent = 0.1;
+        break;
+
+      case 4:
+        this.target = bestiary.getEntryByBiomeTagByPass('Wolf');
+        this.affix_manager.health_regen_percent = 0.1;
+        this.affix_manager.damage_modifier = 1.2;
+        break;
+
+      case 5:
+        this.target = bestiary.getEntryByBiomeTagByPass('Alghoul');
+        this.affix_manager.lifesteal_percent = 0.5;
+        break;
+
+      case 6:
+        this.target = bestiary.getEntryByBiomeTagByPass('Rotfiend');
+        this.affix_manager.health_regen_percent = 0.2;
+        this.affix_manager.health_modifier = 1.75;
+        break;
+
+      case 7:
+        this.target = bestiary.getEntryByBiomeTagByPass('Nekker');
+        this.affix_manager.lifesteal_percent = 0.5;
+        this.affix_manager.health_modifier = 2.0;
+        break;
+
+      case 8:
+        this.target = bestiary.getEntryByBiomeTagByPass('Endrega');
+        this.affix_manager.durability_loss_modifier = 0.5;
+        this.affix_manager.health_modifier = 1.5;
+        break;
+
+      case 9:
+        this.target = bestiary.getEntryByBiomeTagByPass('Bear');
+        this.affix_manager.durability_loss_modifier = 0.25;
+        this.affix_manager.lifesteal_percent = 0.75;
+        break;
+
+      case 10:
+        this.target = bestiary.getEntryByBiomeTagByPass('Fogling');
+        this.affix_manager.health_modifier = 2.0;
+        this.affix_manager.health_regen_percent = 0.4;
+        break;
+
     }
 
     this.milestone_level = milestone_level;
