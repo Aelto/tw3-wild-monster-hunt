@@ -1,17 +1,21 @@
 class WMH_Effect {
   public var tag: name;
-  default tag = "WMH_Effect";
+  default tag = 'WMH_Effect';
 
   public var ticker: WMH_Ticker;
+  private var infinite: bool;
 
+  public var intensity: float;
+  default intensity = 1.0;
 
   public function init(duration: float) {
     this.ticker = (new WMH_Ticker in this).init(duration);
+    this.infinite = duration < 0;
   }
 
   // override and `return super.tick(delta);` at the end
   public function tick(delta: float): bool {
-    return this.ticker.hasExpired();
+    return this.infinite || this.ticker.hasExpired();
   }
 }
 

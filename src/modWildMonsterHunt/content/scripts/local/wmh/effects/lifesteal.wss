@@ -1,18 +1,40 @@
 class WMH_LifestealEffect extends WMH_Effect {
-  public function initLifesteal(
-    target: CGameplayEntity,
-    duration: float,
-  ) {
-    // this.owner = owner;
-    // this.target = target;
-    // this.duration = duration;
-    // this.sourceName = "WMH_LifestealEffect";
-    // this.targetEffectManager = effect_manager;
+  default tag = 'WMH_LifestealEffect';
 
-    // this.EntityHandleSet(this.creatorHandle, this.owner);
+  public function initLifesteal(duration: float): WMH_LifestealEffect {
+    this.init(duration);
 
-    // this.isOnPlayer = target as CPlayer;
+    return this;
+  }
 
-    // this.CalculateDuration(true);
+  public function getModifier(): float {
+    return this.intensity;
+  }
+}
+
+@wrapMethod(W3PlayerWitcher)
+function OnTakeDamage(action: W3DamageAction) {
+  var result: bool = wrappedMethod(action);
+
+  if (!action.DealtDamage() || action.WasDodged() || action.IsDoTDamage()) {
+    return result;
+  }
+
+  var attacker: CActor = action.attacker as CActor;  
+
+  if (attacker) {
+    var effects: array<WMH_Effect> = attacker.WMH_getEffectsByTag('WMH_LifestealEffect');
+    var damage_amount: float = action.GetDamageDealt();
+    var total: float = 1.0;
+
+    for effect: WMH_Effect in effects {
+      var lifesteal: WMH_LifestealEffect = effect as WMH_LifestealEffect;
+
+      if (lifesteal) {
+        total *= lifesteal.getModifier();
+      }
+    }
+
+    attacker.Heal((total * damage_amount) as int);
   }
 }

@@ -1,13 +1,19 @@
 class WMH_AffixManager {
-  private var health_modifier: float;
+  public var health_modifier: float;
   default health_modifier = 1.0;
 
-  private var damage_modifier: float;
+  public var damage_modifier: float;
   default damage_modifier = 1.0;
 
   // %hp per minute
-  private var health_regen_percent: float;
+  public var health_regen_percent: float;
   default health_regen_percent = 0.0;
+
+  public var durability_loss_modifier: float;
+  default durability_loss_modifier = 1.0;
+
+  public var lifesteal_percent: float;
+  default lifesteal_percent = 0.0;
 
   public function init(level: WMH_Level, seed: int): WMH_AffixManager {
     var count: int = 0;
@@ -51,6 +57,29 @@ class WMH_AffixManager {
       );
     }
 
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 7, current_chance) > 0.5) {
+      count += 1;
+
+      this.durability_loss_modifier = 1 + RandNoiseF(
+        seed + 8,
+        // at level 25, the creature can have a maximum bonus of 50% durability
+        // loss
+        (level.value / 25) * 0.5
+      );
+    }
+
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 9, current_chance) > 0.5) {
+      count += 1;
+
+      this.lifesteal_percent = RandNoiseF(
+        seed + 10,
+        // at level 25, the creature can have a maximum of 10% lifesteal
+        (level.value / 25) * 0.10
+      );
+    }
+
     return this;
   }
 
@@ -82,6 +111,13 @@ class WMH_AffixManager {
       
       npc.AddEffectCustom(params);
     }
+
+    if (this.durability_loss_modifier > 1.0) {
+      npc.WMH_addEffect(
+        (new WMH_HardenedEffect in npc)
+        .initHardened(-1, this.durability_loss_modifier)
+      );
+    }
   }
 
   public function toLocString(): string {
@@ -112,6 +148,14 @@ class WMH_AffixManager {
       else {
         output += "Regenerating ";
       }
+    }
+
+    if (this.durability_loss_modifier > 1.0) {
+      output += "Hardened ";
+    }
+
+    if (this.lifesteal_percent > 0) {
+      output += "Bloodthirsty ";
     }
 
     return output;

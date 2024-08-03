@@ -1,0 +1,59 @@
+class WMH_HardenedEffect extends WMH_Effect {
+  default tag = 'WMH_HardenedEffect';
+
+  public function initHardened(duration: float, modifier: float): WMH_HardenedEffect {
+    this.init(duration);
+    this.intensity = modifier;
+
+    return this;
+  }
+
+  public function getModifier(): float {
+    return this.intensity;
+  }
+}
+
+@wrapMethod(W3DamageManagerProcessor)
+function ProcessActionDamage_ReduceDurability() {
+  if (playerAttacker) {
+    var victim: CActor = this.action.victim as CActor;
+
+    if (victim) {
+      var effects: array<WMH_Effect> = victim.WMH_getEffectsByTag('WMH_HardenedEffect');
+      var total: float = 1.0;
+
+      for effect: WMH_Effect in effects {
+        var hardened: WMH_HardenedEffect = effect as WMH_HardenedEffect;
+
+        if (hardened) {
+          // direct attack
+          if (
+            this.playerAttacker
+            && this.playerAttacker.inv.IsIdValid(this.weaponId)
+            && this.playerAttacker.inv.HasItemDurability(this.weaponId)
+          ) {
+            total *= hardened.getModifier();
+          }
+        }
+      }
+
+      // cache the value in a fact, it will be consumed on the next call to
+      // GetWeaponDurabilityLoseValue()
+      FactsSet("WMH_HardenedEffect", (total * 100) as int);
+    }
+  }
+
+  wrappedMethod();
+}
+
+@wrapMethod(W3GameParams)
+function GetWeaponDurabilityLoseValue(): float {
+  var modifier: float = (FactsQueryLatestValue("WMH_HardenedEffect") as float) * 0.01;
+  FactsRemove("WMH_HardenedEffect");
+
+  if (modifier <= 0) {
+    modifier = 1.0;
+  }
+
+  return wrappedMethod() * modifier;
+}
