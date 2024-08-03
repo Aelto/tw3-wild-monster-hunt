@@ -5,3 +5,7 @@ exec function wmhcompletecontracts() {
     thePlayer.wmh.hunt.contract.getPendingTargetsKill()
   );
 }
+
+exec function wmhmeldcauldron() {
+  thePlayer.wmh.submitOnMeldCauldron();
+}

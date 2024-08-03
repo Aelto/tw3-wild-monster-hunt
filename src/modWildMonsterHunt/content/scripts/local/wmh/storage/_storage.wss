@@ -2,6 +2,7 @@
 class WMH_Storage {
   public var general: WMH_StorageGeneral;
   public var contract: WMH_StorageContract;
+  public var herbalist: WMH_StorageHerbalist;
 }
 
 function WMH_initializeStorage(master: WMH_Master) {
@@ -15,5 +16,9 @@ function WMH_initializeStorage(master: WMH_Master) {
 
   if (!master.storage.contract) {
     master.storage.contract = new WMH_StorageContract in master;
+  }
+
+  if (!master.storage.herbalist) {
+    master.storage.herbalist = new WMH_StorageHerbalist in master;
   }
 }

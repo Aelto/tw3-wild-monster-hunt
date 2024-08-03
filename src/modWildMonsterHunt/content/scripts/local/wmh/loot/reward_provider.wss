@@ -77,7 +77,7 @@ class WMH_RewardProvider {
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
-      message += this.groups[i].reason;
+      message += "<u>" + this.groups[i].reason + "</u>";
 
       var k: int;
       for (k = 0; k < this.groups[i].items.Size(); k += 1) {

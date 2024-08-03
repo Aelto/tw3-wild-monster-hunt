@@ -23,3 +23,17 @@ class WMH_HerbalistManager {
     }
   }
 }
+
+@wrapMethod(CR4InventoryMenu)
+function OnConfigUI() {
+  var result: bool = wrappedMethod();
+
+  if (this._shopNpc.HasTag('WMH_Herbalist')) {
+    this._shopInv = new WMH_HerbalistGuiShopInventoryComponent in this;
+    this._shopInv.Initialize( this._shopNpc.GetInventory() );
+    this._playerInv.SetShopInvCmp( this._shopInv );
+    _shopInv.highlightItems(this.UpdatePinnedCraftingItemInfo());
+  }
+
+  return result;
+}

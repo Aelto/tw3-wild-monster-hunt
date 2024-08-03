@@ -148,6 +148,7 @@ class WMH_ContractManager {
   ) {
     var completed_contracts: array<WMH_PendingContract>;
     var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+    var completed_any: bool = false;
 
     // 1.0
     // first complete the milestone contracts to unlock the XP
@@ -171,6 +172,7 @@ class WMH_ContractManager {
     for contract: WMH_PendingContract in completed_contracts {
       this.pending_contracts.Remove(contract);
       this.onContractCompleted(provider, contract, storage, maximum_level);
+      completed_any = true;
     }
 
     // 2.0
@@ -188,10 +190,15 @@ class WMH_ContractManager {
     for contract: WMH_PendingContract in completed_contracts {
       this.removePendingContract(storage.contract, contract);
       this.onContractCompleted(provider, contract, storage, maximum_level);
+      completed_any = true;
     }
 
-    provider.transferItems(thePlayer.GetInventory());
-    WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+    if (completed_any) {
+      provider.transferItems(thePlayer.GetInventory());
+      WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+
+      thePlayer.wmh.submitOnMeldCauldron();
+    }
   }
 
   private function hasPendingMilestoneContract(): bool {

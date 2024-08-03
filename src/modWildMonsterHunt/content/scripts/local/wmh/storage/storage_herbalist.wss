@@ -1,0 +1,3 @@
+class WMH_StorageHerbalist {
+  public var melding_level: WMH_Level;
+}

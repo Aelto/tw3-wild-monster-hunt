@@ -1,3 +1,13 @@
+@addMethod(WMH_Master)
+function submitOnMeldCauldron() {
+  var entity: CEntity = theGame.GetEntityByTag('WMH_HerbalistCauldron');
+  var cauldron: WMH_HerbalistCauldron = entity as WMH_HerbalistCauldron;
+
+  if (cauldron) {
+    cauldron.onMeldCauldron();
+  }
+}
+
 class WMH_HerbalistCauldron extends W3Container {
   protected var popup_data: W3ItemSelectionPopupData;
 
@@ -10,16 +20,44 @@ class WMH_HerbalistCauldron extends W3Container {
     
     // always mark this container as quest container
     SetIsQuestContainer( true );
-    // UpdateDecorationFocusHighlight();
+    this.AddTimer('RefreshOnelinerTimer', 2.0);
   }
 
   event OnInteraction( actionName : string, activator : CEntity ) {
     this.openItemSelectionMenu();
   }
 
+  event OnInteractionActivated(actionName : string, activator : CEntity) {
+    // do not call super as it will probably disable the interaction.
+    // super.OnInteractionActivated(actionName, activator);
+    this.Enable(true, false, true);
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator : CEntity
+  ) {
+    this.Enable(true, false, true);
+    return true;
+  }
+
   // Called when an item is taken from the container
   event OnItemTaken(itemId: SItemUniqueId, quantity: int) {}
   event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent ) {
+    this.updateOneliner();
+  }
+
+  public function onMeldCauldron() {
+    var yields_count: int = this.getYieldsCount();
+
+    while (yields_count > 0) {
+      yields_count -= 1;
+
+      thePlayer.wmh.submitOnMeldItem();
+    }
+
+    this.GetInventory().RemoveAllItems();
+    this.Enable( true, false, true );
     this.updateOneliner();
   }
 
@@ -60,16 +98,41 @@ class WMH_HerbalistCauldron extends W3Container {
     this.popup_data.categoryFilterList = empty;
     
     theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
-    AddTimer( 'ItemSelectionTimer', 0.1 );
+    AddTimer( 'RefreshOnelinerTimer', 0.1 );
   }
 
-  timer function ItemSelectionTimer(delta: float , id: int) {
+  timer function RefreshOnelinerTimer(delta: float , id: int) {
     if (this.popup_data) {
-      AddTimer( 'ItemSelectionTimer', 0.1 );
+      this.AddTimer( 'RefreshOnelinerTimer', 0.1 );
     }
     else {
       this.updateOneliner();
     }
+  }
+
+  private function getPointsPerYield(): int {
+    return 10;
+  }
+
+  private function getCurrentTotalPoints(): int {
+    var inventory: CInventoryComponent = this.GetInventory();
+    var items: array<SItemUniqueId>;
+
+    this.GetInventory().GetAllItems(items);
+
+    var output: int;
+    for item: SItemUniqueId in items {
+      WMHINFO("item in cauldron: " + inventory.GetItemName(item));
+      WMHINFO("item price = " + inventory.GetItemPrice(item));
+
+      output += inventory.GetItemPrice(item) * inventory.GetItemQuantity(item);
+    }
+
+    return output;
+  }
+
+  private function getYieldsCount(): int {
+    return this.getCurrentTotalPoints() / this.getPointsPerYield();
   }
 
   private function updateOneliner() {
@@ -83,31 +146,35 @@ class WMH_HerbalistCauldron extends W3Container {
     this.GetInventory().GetAllItems(items);
 
     var message: string;
-    var total_prices: int;
-    for item: SItemUniqueId in items {
-      WMHINFO("item in cauldron: " + this.GetInventory().GetItemName(item));
-
-      total_prices = total_prices
-                   + inventory.GetItemPrice(item);
-                  //  + inventory.GetItemPriceDisassemble(item);
-
-    }
-
-    var points_per_product: int = 400;
+    var total_prices: int = this.getCurrentTotalPoints();
+    var points_per_product: int = this.getPointsPerYield();
     var yields_count: int = total_prices / points_per_product;
     var points_til_next: int = total_prices - points_per_product * yields_count;
-
-    message = "Items in pot: " + items.Size()
     
-            + "<br/> Points until next product: " + points_til_next + "/"
-            + points_per_product;
+    if (items.Size() > 0) {
+      var next_item: name = thePlayer.wmh.loot.getNextMeldItem(yields_count);
+      var next_item_loc: string = GetLocStringByKeyExt(
+        theGame.GetDefinitionsManager()
+        .GetItemLocalisationKeyName(next_item)
+      );
 
-    if (yields_count > 0) {
-      message += "Products in queue: " + yields_count;
+      message = "<font size='28'>" + next_item_loc + "</font>"
+              + "<br/> Points until next yield: "
+              + points_til_next + "/"
+              + "<font size='18'>" + points_per_product + "</font>";
+
+      if (yields_count > 0) {
+        message += "<br/>Products in queue: " + yields_count;
+      }
+    }
+    else {
+      message = "<u>The pot is empty</u><br/>Drop alchemy items for unique rewards."
+              + "<br/><font size='18'>Meld the items by completing contracts</font>"
+              + "<br/><font size='18'>Products are stored in the barrel nearby</font>";
     }
 
     this.oneliner.text = message;
-    this.oneliner.offset = Vector(0, 0, 1.0, 0);
+    this.oneliner.offset = Vector(0, 0, 1.8, 0);
     this.oneliner.render_distance = 5;
     this.oneliner.update();
   }
