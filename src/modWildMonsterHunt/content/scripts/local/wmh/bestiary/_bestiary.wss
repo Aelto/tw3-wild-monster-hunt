@@ -308,7 +308,9 @@ statemachine class WMH_Bestiary {
     registerBestiaryEntry!(Nekker)
     registerBestiaryEntry!(Nightwraith)
     registerBestiaryEntry!(Noonwraith)
+    /*
     registerBestiaryEntry!(Panther)
+    */
     registerBestiaryEntry!(Rotfiend)
     registerBestiaryEntry!(Sharley)
     registerBestiaryEntry!(Siren)
