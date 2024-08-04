@@ -51,13 +51,27 @@ class WMH_HerbalistCauldron extends W3Container {
     var yields_count: int = this.getYieldsCount();
 
     if (yields_count > 0) {
-      while (yields_count > 0) {
+      var cost: int = this.getCostPerYield();
+      var items_melded: int = 0;
+      while (yields_count > 0 && thePlayer.GetMoney() > cost) {
         yields_count -= 1;
 
+        thePlayer.RemoveMoney(cost);
         thePlayer.wmh.submitOnMeldItem();
+        items_melded += 1;
       }
 
-      this.GetInventory().RemoveAllItems();
+      if (items_melded > 0) {
+        WMHHUD(
+          "" 
+          + (cost * items_melded)
+          + " Crowns were used to meld "
+          + items_melded
+          + " items."
+        );
+
+        this.GetInventory().RemoveAllItems();
+      }
     }
 
     this.Enable( true, false, true );
@@ -114,7 +128,11 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   private function getPointsPerYield(): int {
-    return 10;
+    return 450;
+  }
+
+  private function getCostPerYield(): int {
+    return this.getPointsPerYield();
   }
 
   private function getCurrentTotalPoints(): int {
@@ -146,7 +164,7 @@ class WMH_HerbalistCauldron extends W3Container {
     var inventory: CInventoryComponent = this.GetInventory();
     var items: array<SItemUniqueId>;
 
-    this.GetInventory().GetAllItems(items);
+    inventory.GetAllItems(items);
 
     var message: string;
     var total_prices: int = this.getCurrentTotalPoints();
@@ -161,10 +179,16 @@ class WMH_HerbalistCauldron extends W3Container {
         .GetItemLocalisationKeyName(next_item)
       );
 
+      var crowns_icon: string = "<img src='img://"
+                      + inventory.GetItemIconPathByName('Crowns')
+                      + "' height='18' width='18' />";
+
       message = "<font size='28'>" + next_item_loc + "</font>"
-              + "<br/> Points until next yield: "
+              + "<br/>Next yield: "
               + points_til_next + "/"
-              + "<font size='18'>" + points_per_product + "</font>";
+              + "<font size='18'>" + points_per_product + "</font>"
+              + "<br/>Cost: " + this.getCostPerYield() + crowns_icon
+              + "/<font size='18'>yield</font>";
 
       if (yields_count > 0) {
         message += "<br/>Products in queue: " + yields_count;
