@@ -120,6 +120,12 @@ class WMH_ContractManager {
   ) {
     pending.onContractCompleted(provider);
 
+    var smith_merchants: array<WMH_SmithMerchant> = WMH_getSmithMerchants();
+
+    for smith: WMH_SmithMerchant in smith_merchants {
+      smith.onContractCompleted();
+    }
+
     // experience gain is locked until the milestone contract is completed.
     if (!this.hasPendingMilestoneContract()) {
       WMHINFO("onContractCompleted, old level = " +  storage.general.level.value);

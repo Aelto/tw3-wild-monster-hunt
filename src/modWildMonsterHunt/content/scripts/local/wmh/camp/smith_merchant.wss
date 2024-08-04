@@ -1,25 +1,56 @@
+function WMH_getSmithMerchants(): array<WMH_SmithMerchant> {
+  var entities: array<CEntity>;
+
+  theGame.GetEntitiesByTag('WMH_SmithMerchant', entities);
+
+  var output: array<WMH_SmithMerchant>;
+
+  for entity: CEntity in entites {
+    var smith: WMH_SmithMerchant = entity as WMH_SmithMerchant;
+
+    if (smith) {
+      output.PushBack(smith);
+    }
+  }
+
+  return output;
+}
+
 class WMH_SmithMerchant extends WMH_QuickMerchant {
   private var previous_refill_seed: int;
 	default previous_refill_seed = 0;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    super.OnSpawned(spawnData);
+
+    if (!spawnData.restored) {
+      this.setupInventory();
+    }
+  }
 
   event OnInteraction(actionName: string, activator: CEntity) {
     super.OnInteraction(actionName, activator);
     this.setupInventory();
   }
 
+  public function onContractCompleted() {
+    this.inventory.AddMoney(5);
+  }
+
   private function setupInventory() {
-    var inventory: CInventoryComponent = this.GetInventory();
-
-    if (this.previous_refill_seed <= 0) {
-      inventory.RemoveAllItems();
-    }
-
     var hunt_seed: int = WMH_getHuntSeedFact();
     if (this.previous_refill_seed > 0 && hunt_seed == this.previous_refill_seed) {
       return;
     }
 
     this.previous_refill_seed = hunt_seed;
+
+    var inventory: CInventoryComponent = this.GetInventory();
+
+    var initial_money: int = inventory.GetMoney();
+    inventory.RemoveAllItems();
+    inventory.SetMoney(initial_money);
+
     var general: WMH_StorageGeneral = WMH_getStorageGeneral();
 
     var every80Levels: int = general.level.value * 0.0125 as int;
