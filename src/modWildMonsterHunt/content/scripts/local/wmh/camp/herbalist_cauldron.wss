@@ -50,13 +50,16 @@ class WMH_HerbalistCauldron extends W3Container {
   public function onMeldCauldron() {
     var yields_count: int = this.getYieldsCount();
 
-    while (yields_count > 0) {
-      yields_count -= 1;
+    if (yields_count > 0) {
+      while (yields_count > 0) {
+        yields_count -= 1;
 
-      thePlayer.wmh.submitOnMeldItem();
+        thePlayer.wmh.submitOnMeldItem();
+      }
+
+      this.GetInventory().RemoveAllItems();
     }
 
-    this.GetInventory().RemoveAllItems();
     this.Enable( true, false, true );
     this.updateOneliner();
   }
