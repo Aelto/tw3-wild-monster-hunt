@@ -1,0 +1,58 @@
+class WMH_SmithMerchant extends WMH_QuickMerchant {
+  private var previous_refill_seed: int;
+	default previous_refill_seed = 0;
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    super.OnInteraction(actionName, activator);
+    this.setupInventory();
+  }
+
+  private function setupInventory() {
+    var inventory: CInventoryComponent = this.GetInventory();
+
+    if (this.previous_refill_seed <= 0) {
+      inventory.RemoveAllItems();
+    }
+
+    var hunt_seed: int = WMH_getHuntSeedFact();
+    if (this.previous_refill_seed > 0 && hunt_seed == this.previous_refill_seed) {
+      return;
+    }
+
+    this.previous_refill_seed = hunt_seed;
+    var general: WMH_StorageGeneral = WMH_getStorageGeneral();
+
+    var every80Levels: int = general.level.value * 0.0125 as int;
+    var every40Levels: int = general.level.value * 0.025 as int;
+    var every20Levels: int = general.level.value * 0.05 as int;
+    var every10Levels: int = general.level.value * 0.1 as int;
+    var every5Levels: int = general.level.value * 0.2 as int;
+
+    inventory.SetMoney(50 + every5Levels * 10);
+
+    inventory.AddAnItem('Clearing Potion', 1);
+    inventory.AddAnItem('Bottled water', 1 + every10Levels);
+    inventory.AddAnItem('Apple', 1 + every5Levels);
+    inventory.AddAnItem('Potatoes', 1 + every5Levels);
+    inventory.AddAnItem('Honeycomb', 2 + every10Levels);
+
+    inventory.AddAnItem('Blunt Bolt Legendary', 5 + every10Levels * 5); // ~10dmg
+    inventory.AddAnItem('Local pepper vodka', 1 + every20Levels);
+    inventory.AddAnItem('Temerian Rye', 1 + every20Levels);
+
+    if (every20Levels > 0) {
+      inventory.AddAnItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
+    }
+
+    if (every40Levels > 0) {
+      inventory.AddAnItem('Tracking Point Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
+      inventory.AddAnItem('Explosive Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
+      inventory.AddAnItem('Broadhead Bolt Legendary', 0 + every40Levels * 2); // bleed
+      
+      inventory.AddAnItem('Dwarven spirit', 0 + every40Levels);
+      inventory.AddAnItem('Cherry Cordial', 0 + every40Levels);
+      inventory.AddAnItem('Alcohest', 0 + every80Levels);
+      inventory.AddAnItem('Mandrake cordial', 0 + every80Levels);
+    }
+  }
+}
