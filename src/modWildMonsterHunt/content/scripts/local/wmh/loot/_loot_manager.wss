@@ -11,6 +11,7 @@ statemachine class WMH_LootManager {
   protected var loot_by_category: array<array<name>>;
 
   protected var maximum_loot_level: WMH_Level;
+  protected var maximum_recipe_level: WMH_Level;
 
   public function init(): WMH_LootManager {
     this.GotoState('Loading');
@@ -34,6 +35,7 @@ statemachine class WMH_LootManager {
 
   public function onHuntFinished(storage: WMH_Storage) {
     this.maximum_loot_level = storage.general.level;
+    this.maximum_recipe_level = storage.herbalist.melding_level;
 
     // this will cause the loot lists to be refreshed
     this.GotoState('Loading');

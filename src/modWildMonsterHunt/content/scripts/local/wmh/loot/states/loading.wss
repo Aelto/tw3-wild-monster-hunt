@@ -1014,10 +1014,6 @@ state Loading in WMH_LootManager {
   }
 
   function registerRecipesTier1() {
-    if (parent.maximum_loot_level.value < 10) {
-      return;
-    }
-
     this.tryAddRecipe('Recipe for Maribor Forest 1');
     this.tryAddRecipe('Recipe for Tawny Owl 1');
     this.tryAddRecipe('Recipe for White Gull 1');
@@ -1055,7 +1051,9 @@ state Loading in WMH_LootManager {
   }
 
   function registerRecipesTier2() {
-    if (parent.maximum_loot_level.value < 20) {
+    // 40 is the amount of recipes unlocked by melding, make sure it is lower
+    // than the lower amount of recipes in the lower tiers
+    if (parent.maximum_recipe_level.value < 40) {
       return;
     }
 
@@ -1101,7 +1099,9 @@ state Loading in WMH_LootManager {
   }
 
   function registerRecipesTier3() {
-    if (parent.maximum_loot_level.value < 30) {
+    // 80 is the amount of recipes unlocked by melding, make sure it is lower
+    // than the lower amount of recipes in the lower tiers
+    if (parent.maximum_recipe_level.value < 80) {
       return;
     }
 
