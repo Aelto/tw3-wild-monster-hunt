@@ -69,6 +69,16 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     inventory.AddAnItem('Local pepper vodka', 1 + every20Levels);
     inventory.AddAnItem('Temerian Rye', 1 + every20Levels);
 
+    inventory.AddAnItem('Whetstone', 1 + every20Levels);
+    inventory.AddAnItem('Whetstone elven', 1 + every40Levels);
+    inventory.AddAnItem('Whetstone dwarven', 1 + every80Levels);
+    inventory.AddAnItem('Whetstone gnomish', 1);
+
+    inventory.AddAnItem('Smithing tools', 1 + every20Levels);
+    inventory.AddAnItem('Smithing tools elven', 1 + every40Levels);
+    inventory.AddAnItem('Smithing tools dwarven', 1 + every80Levels);
+    inventory.AddAnItem('Smithing tools gnomish', 1);
+
     if (every20Levels > 0) {
       inventory.AddAnItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
     }
