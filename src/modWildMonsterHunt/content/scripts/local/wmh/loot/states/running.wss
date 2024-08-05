@@ -59,7 +59,7 @@ state Running in WMH_LootManager {
     var item: name = parent.getRandomItem(category, seed);
 
     if (IsNameValid(item)) {
-      inventory.AddAnItem(category[item_index], 1);
+      inventory.AddAnItem(item, 1);
     }
   }
 }

@@ -5,7 +5,7 @@ function WMH_getSmithMerchants(): array<WMH_SmithMerchant> {
 
   var output: array<WMH_SmithMerchant>;
 
-  for entity: CEntity in entites {
+  for entity: CEntity in entities {
     var smith: WMH_SmithMerchant = entity as WMH_SmithMerchant;
 
     if (smith) {
@@ -34,7 +34,7 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
   }
 
   public function onContractCompleted() {
-    this.inventory.AddMoney(5);
+    this.GetInventory().AddMoney(5);
   }
 
   private function setupInventory() {
