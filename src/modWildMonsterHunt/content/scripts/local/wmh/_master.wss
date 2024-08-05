@@ -7,6 +7,10 @@ class WMH_Master {
   public var hunt: WMH_HuntManager;
   public var loot: WMH_LootManager;
 
+  private var exit_debounce: WMH_Ticker;
+  private var enter_debounce: WMH_Ticker;
+
+
   public function onCreate() {}
 
   public function onLoad() {
@@ -18,6 +22,9 @@ class WMH_Master {
     this.bestiary = (new WMH_Bestiary in this).init(this);
     this.hunt = (new WMH_HuntManager in this).init(this);
     this.loot = (new WMH_LootManager in this).init();
+
+    this.exit_debounce = (new WMH_Ticker in this).init(5.0);
+    this.enter_debounce = (new WMH_Ticker in this).init(5.0);
     
     // var a: int = "compile_fail";
   }
@@ -25,17 +32,27 @@ class WMH_Master {
   public function submitOnSettlementEnter(
     origin: WMH_SettlementAreaTrigger
   ) {
-    this.hunt.onHuntFinished(this.bestiary, this.storage);
-    this.loot.onHuntFinished(this.storage);
+    WMHINFO("submitOnSettlementEnter");
+    if (this.enter_debounce.validate()) {
+      WMHINFO("submitOnSettlementEnter, debounce validated");
+
+      this.hunt.onHuntFinished(this.bestiary, this.storage);
+      this.loot.onHuntFinished(this.storage);
+    }
   }
 
   public function submitOnSettlementExit(
     origin: WMH_SettlementAreaTrigger
   ) {
-    this.hunt.onHuntStarted(this.storage);
-    this.hunt.contract.onHuntStarted(this.bestiary);
-    this.bestiary.spawn_points.onHuntStarted();
-    theGame.OnSpawnPlayerHorse();
+    WMHINFO("submitOnSettlementExit");
+    if (this.exit_debounce.validate()) {
+      WMHINFO("submitOnSettlementExit, debounce validated");
+
+      this.hunt.onHuntStarted(this.storage);
+      this.hunt.contract.onHuntStarted(this.bestiary);
+      this.bestiary.spawn_points.onHuntStarted();
+      theGame.OnSpawnPlayerHorse();
+    }
   }
 
   public function submitOnSpawn(
