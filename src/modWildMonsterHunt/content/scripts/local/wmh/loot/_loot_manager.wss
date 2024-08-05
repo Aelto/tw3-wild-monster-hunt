@@ -62,7 +62,12 @@ statemachine class WMH_LootManager {
     var item: name = this.popRandomItem(WMH_LootTag_Recipe, seed);
     WMHINFO("onMeldItem(), item = " + item);
 
-    if (item == '') {
+    // in case the lists are empty
+    if (!IsNameValid(item)) {
+      item = this.getRandomItem(WMH_LootTag_Alchemy, seed);
+    }
+
+    if (!IsNameValid(item)) {
       return;
     }
 
@@ -71,9 +76,6 @@ statemachine class WMH_LootManager {
 
     if (container) {
       container.addItem(item);
-    }
-    else {
-      GetWitcherPlayer().AddAlchemyRecipe(item);
     }
   }
 
@@ -106,10 +108,8 @@ statemachine class WMH_LootManager {
   // mutates the array from the category by popping the item out of the list
   // and returning it. Mostly useful for recipes that are given straight to the
   // player
-  private function popRandomItem(category: WMH_LootTag, seed: int): name {
+  protected function popRandomItem(category: WMH_LootTag, seed: int): name {
     var max: int = this.loot_by_category[category].Size();
-
-    WMHINFO("this.loot_by_category.Size() = " + this.loot_by_category[category].Size());
 
     if (max <= 0) {
       return '';
@@ -119,6 +119,19 @@ statemachine class WMH_LootManager {
     var item: name = this.loot_by_category[category][item_index];
 
     this.loot_by_category[category].EraseFast(item_index);
+
+    return item;
+  }
+
+  protected function getRandomItem(category: WMH_LootTag, seed: int): name {
+    var max: int = this.loot_by_category[category].Size();
+
+    if (max <= 0) {
+      return '';
+    }
+
+    var item_index: int = RandNoiseF(seed, max) as int;
+    var item: name = this.loot_by_category[category][item_index];
 
     return item;
   }

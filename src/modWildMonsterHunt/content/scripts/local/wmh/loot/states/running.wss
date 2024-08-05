@@ -44,7 +44,7 @@ state Running in WMH_LootManager {
       if (parent.loot_by_category.Size() > (category as int)) {
         this.addRandomItemFromCategory(
           request.inventory,
-          parent.loot_by_category[category],
+          category,
           request.seed + index
         );
       }
@@ -53,11 +53,10 @@ state Running in WMH_LootManager {
 
   private function addRandomItemFromCategory(
     inventory: CInventoryComponent,
-    out category: array<name>,
+    category: WMH_LootTag,
     seed: int
   ) {
-    var item_index: int = RandNoiseF(seed, category.Size()) as int;
-    var item: name = category[item_index];
+    var item: name = parent.getRandomItem(category, seed);
 
     if (IsNameValid(item)) {
       inventory.AddAnItem(category[item_index], 1);
