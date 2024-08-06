@@ -13,6 +13,10 @@ class WMH_HerbalistManager {
     return this;
   }
 
+  public function unlockHerbalist() {
+    FactsSet('WMH_HerbalistUnlocked', 1);
+  }
+
   public function getIngredientsForRecipe(recipe: name) {
     var alchemy_recipe: SAlchemyRecipe = getAlchemyRecipeFromName(recipe);
     var ingredients: array<SItemParts> = alchemy_recipe.requiredIngredients;

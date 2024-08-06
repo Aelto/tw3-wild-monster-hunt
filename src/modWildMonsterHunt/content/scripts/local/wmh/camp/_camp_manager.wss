@@ -8,4 +8,25 @@ class WMH_CampManager {
 
     return this;
   }
+
+  public function unlockGarden0() {
+    FactsSet('WMH_Garden0Unlocked', 1);
+  }
+
+  public function unlockGarden1() {
+    FactsSet('WMH_Garden1Unlocked', 1);
+  }
+
+  // armor repair bench
+  public function unlockArmors() {
+    FactsSet('WMH_ArmorsUnlocked', 1);
+  }
+
+  public function unlockWeapons() {
+    FactsSet('WMH_WeaponsUnlocked', 1);
+  }
+
+  public function unlockMerchant() {
+    FactsSet('WMH_MerchantUnlocked', 1);
+  }
 }
