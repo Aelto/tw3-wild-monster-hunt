@@ -1,0 +1,160 @@
+state DialogChoice in WMH_CampManager {
+  var camera: WMH_StaticCamera;
+
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.DialogChoice_main();
+  }
+
+  entry function DialogChoice_main() {
+    parent.dialog_hover_camera_0 = WMH_getStaticCamera();
+    parent.dialog_hover_camera_1 = WMH_getStaticCamera();
+    this.camera = WMH_getStaticCamera();
+    this.displayChoicesMain();
+    parent.GotoState('Waiting');
+  }
+
+  latent function displayChoicesMain() {
+    var choices: array<SSceneChoice>;
+
+    choices.PushBack(SSceneChoice(
+      "Improve Witcher camp",
+      true, // emphasis
+      false, // previouslyChoosen
+      false, // disabled
+      DialogAction_HOUSE,
+      'ImproveWitcherCamp'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Farewell.",
+      false,
+      true,
+      false,
+      DialogAction_EXIT,
+      'Cancel'
+    ));
+
+    while (true) {
+      this.camera.teleportAndLookAt(
+        Vector(732.089, 627.481, 505.123),
+        Vector(
+          724.006,
+          624.475,
+          499.528
+        )
+      );
+      this.camera.SetFov(40.0);
+
+      var position: Vector = thePlayer.GetWorldPosition();
+      var rotation: EulerAngles = rotation;
+      rotation.Yaw = 210;
+
+      theGame.FadeOut(0.5);
+      thePlayer.TeleportWithRotation(
+        Vector(724.10, 624.88, 500.05, position.W),
+        rotation
+      );
+      this.camera.start();
+      theGame.FadeInAsync(0.8);
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'ImproveWitcherCamp') {
+        this.displayChoicesImproveWitcherCamp();
+      }
+      else {
+        this.camera.Stop();
+        Sleep(0.25);
+        parent.GotoState('Waiting');
+        return;
+      }
+    }
+  }
+
+  private latent function displayChoicesImproveWitcherCamp() {
+    var choices: array<SSceneChoice>;
+
+    while (true) {
+      choices.PushBack(SSceneChoice(
+        "Hire herbalist",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockHerbalist'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Hire Merchant",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockMerchant'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Small garden plot",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockGarden0'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Large garden plot",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockGarden1'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Armor tools",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockArmors'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Weapon tools",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_HOUSE,
+        'UnlockWeapons'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_EXIT,
+        'Cancel'
+      ));
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'UnlockHerbalist') {}
+      else if (response.playGoChunk == 'UnlockMerchant') {}
+      else if (response.playGoChunk == 'UnlockArmors') {}
+      else if (response.playGoChunk == 'UnlockWeapons') {}
+      else if (response.playGoChunk == 'unlockGarden0') {}
+      else if (response.playGoChunk == 'unlockGarden1') {}
+      else {
+        parent.dialog_hover_camera_0.Stop();
+        parent.dialog_hover_camera_1.Stop();
+        return;
+      }
+    }
+
+  }
+}

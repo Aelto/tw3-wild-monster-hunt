@@ -1,0 +1,12 @@
+class WMH_CampManagerNPC extends WMH_QuickMerchant {
+  private var previous_refill_seed: int;
+	default previous_refill_seed = 0;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    super.OnSpawned(spawnData);
+  }
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    thePlayer.wmh.camp.startDialog();
+  }
+}

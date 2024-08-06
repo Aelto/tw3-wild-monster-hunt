@@ -1,32 +1,131 @@
-class WMH_CampManager {
+@wrapMethod(CR4HudModuleDialog)
+function OnDialogOptionSelected(index: int) {
+  var result: bool;
+
+  result = wrappedMethod(index);
+  if (thePlayer.wmh) {
+    if (thePlayer.wmh.camp) {
+      var choice: SSceneChoice = this.lastSetChoices[index];
+
+      thePlayer.wmh.camp.onDialogHover(choice);
+    }
+  }
+
+  return result;
+}
+
+
+statemachine class WMH_CampManager {
   private var master: WMH_Master;
 
   private var herbalist: WMH_HerbalistManager;
 
+  protected var dialog_hover_camera_0: WMH_StaticCamera;
+  protected var dialog_hover_camera_1: WMH_StaticCamera;
+  protected var camera_index: int;
+
   public function init(master: WMH_Master): WMH_CampManager {
     this.herbalist = (new WMH_HerbalistManager in this).init(this);
+    this.GotoState('Waiting');
 
     return this;
   }
 
-  public function unlockGarden0() {
+  public function onDialogHover(choice: SSceneChoice) {
+    if (this.GetCurrentStateName() != 'DialogChoice') {
+      return;
+    }
+
+    if (choice.playGoChunk == 'UnlockHerbalist') {
+      this.swapAndMoveCamera(
+        Vector(738.371, 635.173, 499.505, 0),
+        EulerAngles(-362.055, 15400.5, 0),
+        45.0
+      );
+    }
+    if (choice.playGoChunk == 'UnlockMerchant') {
+      this.swapAndMoveCamera(
+        Vector(723.572, 630.203, 499.606, 0),
+        EulerAngles(-355.014, 15355.1, 0),
+        25.0
+      );
+    }
+    if (choice.playGoChunk == 'UnlockGarden0') {
+      this.swapAndMoveCamera(
+        Vector(750.008, 627.179, 509.439, 0),
+        EulerAngles(-387.015, 15238.9, 0),
+        45.0
+      );
+    }
+    if (choice.playGoChunk == 'UnlockGarden1') {
+      this.swapAndMoveCamera(
+        Vector(730.812, 674.511, 507.323),
+        EulerAngles(-393.415, 15240.6, 0),
+        40.0
+        // Vector(730.378, 681.878, 506.585, 0),
+        // EulerAngles(-381.575, 15263.5, 0),
+        // 40.0
+      );
+    }
+    if (choice.playGoChunk == 'UnlockArmors') {
+      this.swapAndMoveCamera(
+        Vector(729.304, 632.865, 500.714, 0),
+        EulerAngles(-368.454, 15291.4, 0),
+        25.0
+      );
+    }
+    if (choice.playGoChunk == 'UnlockWeapons') {
+      this.swapAndMoveCamera(
+        Vector(726.204, 625.454, 501.816, 0),
+        EulerAngles(-378.054, 15403.1, 0),
+        25.0
+      );
+    }
+  }
+
+  public function startDialog() {
+    this.GotoState('DialogChoice');
+  }
+
+  private function swapAndMoveCamera(position: Vector, rotation: EulerAngles, fov: float) {
+    var camera: WMH_StaticCamera;
+    var other: WMH_StaticCamera;
+
+    if (this.camera_index <= 0) {
+      camera = this.dialog_hover_camera_0;
+      other = this.dialog_hover_camera_1;
+      this.camera_index = 1;
+    }
+    else {
+      camera = this.dialog_hover_camera_1;
+      other = this.dialog_hover_camera_0;
+      this.camera_index = 0;
+    }
+
+    camera.activationDuration = 1.5;
+    camera.deactivationDuration = 20;
+    camera.TeleportWithRotation(position, rotation);
+    camera.start();
+  }
+
+  protected function unlockGarden0() {
     FactsSet('WMH_Garden0Unlocked', 1);
   }
 
-  public function unlockGarden1() {
+  protected function unlockGarden1() {
     FactsSet('WMH_Garden1Unlocked', 1);
   }
 
   // armor repair bench
-  public function unlockArmors() {
+  protected function unlockArmors() {
     FactsSet('WMH_ArmorsUnlocked', 1);
   }
 
-  public function unlockWeapons() {
+  protected function unlockWeapons() {
     FactsSet('WMH_WeaponsUnlocked', 1);
   }
 
-  public function unlockMerchant() {
+  protected function unlockMerchant() {
     FactsSet('WMH_MerchantUnlocked', 1);
   }
 }
