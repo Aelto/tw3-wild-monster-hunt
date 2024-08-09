@@ -131,11 +131,20 @@ class WMH_PendingContract {
         this.getContractSeed(10)
       );
 
+      var difficulty: int = theGame.GetDifficultyLevel();
+
+      var money: int = WMH_difficultyScaleDownF(
+        this.target.strength
+        // at level 25 the rewards are doubled
+        * (1 + this.contract.level.value / 25),
+
+        // decreases it by 10% for every difficulty level
+        0.1
+      ) as int;
+
       provider.appendMoney(
         (
-          this.target.strength
-          // at level 25 the rewards are doubled
-          * (1 + this.contract.level.value / 25)
+          
         ) as int
       );
     }
