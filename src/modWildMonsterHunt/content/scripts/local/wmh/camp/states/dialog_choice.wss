@@ -76,69 +76,70 @@ state DialogChoice in WMH_CampManager {
   private latent function displayChoicesImproveWitcherCamp() {
     var choices: array<SSceneChoice>;
 
+    choices.PushBack(SSceneChoice(
+      "Hire herbalist",
+      true, // emphasis
+      parent.isHerbalistUnlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockHerbalist'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Hire Merchant",
+      true, // emphasis
+      parent.isMerchantUnlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockMerchant'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Small garden plot",
+      true, // emphasis
+      parent.isGarden0Unlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockGarden0'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Large garden plot",
+      true, // emphasis
+      parent.isGarden1Unlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockGarden1'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Armor tools",
+      true, // emphasis
+      parent.isArmorsUnlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockArmors'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Weapon tools",
+      true, // emphasis
+      parent.isWeaponsUnlocked(), // previouslyChoosen
+      false, // disabled
+      DialogAction_SHOPPING,
+      'UnlockWeapons'
+    ));
+
+    choices.PushBack(SSceneChoice(
+      "Cancel",
+      false,
+      true,
+      false,
+      DialogAction_GETBACK,
+      'Cancel'
+    ));
+
     while (true) {
-      choices.PushBack(SSceneChoice(
-        "Hire herbalist",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockHerbalist'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Hire Merchant",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockMerchant'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Small garden plot",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockGarden0'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Large garden plot",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockGarden1'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Armor tools",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockArmors'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Weapon tools",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_HOUSE,
-        'UnlockWeapons'
-      ));
-
-      choices.PushBack(SSceneChoice(
-        "Cancel",
-        false,
-        true,
-        false,
-        DialogAction_EXIT,
-        'Cancel'
-      ));
       // simulate right away a hover on the first choice:
       parent.onDialogHover(choices[0]);
 
