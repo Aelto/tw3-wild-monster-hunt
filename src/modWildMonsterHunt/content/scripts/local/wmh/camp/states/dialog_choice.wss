@@ -170,12 +170,108 @@ state DialogChoice in WMH_CampManager {
       var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
       SU_closeDialogChoiceInterface();
 
-      if (response.playGoChunk == 'UnlockHerbalist') {}
-      else if (response.playGoChunk == 'UnlockMerchant') {}
-      else if (response.playGoChunk == 'UnlockArmors') {}
-      else if (response.playGoChunk == 'UnlockWeapons') {}
-      else if (response.playGoChunk == 'unlockGarden0') {}
-      else if (response.playGoChunk == 'unlockGarden1') {}
+      if (response.playGoChunk == 'UnlockHerbalist') {
+        if (parent.isHerbalistUnlocked()) {
+          WMHHUD("You already have an Herbalist in your camp");
+          continue;
+        }
+
+        var cost: int = parent.unlockHerbalistPrice();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockHerbalist();
+        WMHHUD("Herbalist hired");
+      }
+      else if (response.playGoChunk == 'UnlockMerchant') {
+        if (parent.isMerchantUnlocked()) {
+          WMHHUD("You already have a Merchant in your camp");
+          continue;
+        }
+
+        var cost: int = parent.unlockMerchantPrice();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockMerchant();
+        WMHHUD("Merchant hired");
+      }
+      else if (response.playGoChunk == 'UnlockArmors') {
+        if (parent.isArmorsUnlocked()) {
+          WMHHUD("You already have armor tools in your camp");
+          continue;
+        }
+
+        var cost: int = parent.unlockArmorsPrice();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockArmors();
+        WMHHUD("Armor tools unlocked");
+      }
+      else if (response.playGoChunk == 'UnlockWeapons') {
+        if (parent.isWeaponsUnlocked()) {
+          WMHHUD("You already have weapon tools in your camp");
+          continue;
+        }
+
+        var cost: int = parent.unlockWeaponsPrice();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockWeapons();
+        WMHHUD("Weapon tools unlocked");
+      }
+      else if (response.playGoChunk == 'unlockGarden0') {
+        if (parent.isGarden0Unlocked()) {
+          WMHHUD("You are already cultivating the small garden plot");
+          continue;
+        }
+
+        var cost: int = parent.unlockGarden0Price();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockGarden0();
+        WMHHUD("Small garden plot unlocked");
+      }
+      else if (response.playGoChunk == 'unlockGarden1') {
+        if (parent.isGarden1Unlocked()) {
+          WMHHUD("You are already cultivating the large garden plot");
+          continue;
+        }
+
+        var cost: int = parent.unlockGarden1Price();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHHUD("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        parent.unlockGarden1();
+        WMHHUD("Large garden plot unlocked");
+      }
       else {
         parent.dialog_hover_camera_0.Stop();
         parent.dialog_hover_camera_1.Stop();
