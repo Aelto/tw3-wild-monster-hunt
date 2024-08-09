@@ -1,0 +1,13 @@
+// returns the difficulty level, as difficulty increases the returned integer
+// increases as well.
+function WMH_getDifficulty(): int {
+  return theGame.GetDifficultyLevel();
+}
+
+// scales down the value by the given scale_down for each point of difficulty
+function WMH_difficultyScaleDownF(
+  value: float,
+  scale_down_per_level: float
+): float {
+  return value * (1 - scale_down_per_level * WMH_getDifficulty());
+}
