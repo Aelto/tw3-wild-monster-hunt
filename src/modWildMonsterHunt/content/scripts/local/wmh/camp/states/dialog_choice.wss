@@ -139,6 +139,8 @@ state DialogChoice in WMH_CampManager {
         DialogAction_EXIT,
         'Cancel'
       ));
+      // simulate right away a hover on the first choice:
+      parent.onDialogHover(choices[0]);
 
       var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
       SU_closeDialogChoiceInterface();
