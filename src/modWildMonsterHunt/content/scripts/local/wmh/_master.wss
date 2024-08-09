@@ -162,8 +162,12 @@ class WMH_Master {
 
     var level: int = this.hunt.difficulty();
     var seed: int = this.hunt.getSeed();
-    // 40% lost at level 25, with a maximum of 80% at higher levels
-    var max_percent: float = MaxF(0.8, (level / 25) * 0.4);
+    // a maximum of 80% at higher levels
+    var max_percent: float = MaxF(
+      0.8,
+      // 30% lost at level 25, then scaled up by 25% per difficulty level
+      WMH_difficultyScaleUpF(level / 25 * 0.3, 0.25)
+    );
 
     var items_to_break: int = (
       consumables.Size()
