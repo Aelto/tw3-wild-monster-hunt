@@ -16,11 +16,17 @@ class WMH_AffixManager {
   default lifesteal_percent = 0.0;
 
   public function init(level: WMH_Level, seed: int): WMH_AffixManager {
+    var difficulty: int = WMH_getDifficulty();
     var count: int = 0;
 
     // at level 25 (value for a shaelmar), the creature should have 50% chance
     // to get at least one affix.
-    var base_chance: float = 0.5 * (1 + level.value / 25);
+    var base_chance: float = WMH_difficultyScaleUpPreF(
+      0.5 * (1 + level.value / 25),
+      // small chance increase as difficulty level goes up
+      0.05,
+      difficulty
+    );
 
     // every time an affix is added, `count` is increased. Then current_chance
     // is updated to slowly decrease
