@@ -36,8 +36,14 @@ class WMH_AffixManager {
 
       this.health_modifier = 1 + RandNoiseF(
         seed + 2,
-        // at level 25, the creature can have a maximum bonus of 50% health
-        (level.value / 25) * 0.5
+        // at level 25, difficulty 1:
+        // the creature can have a maximum bonus of 50% health
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.5,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
       );
     }
 
@@ -47,8 +53,14 @@ class WMH_AffixManager {
 
       this.health_modifier = 1 + RandNoiseF(
         seed + 4,
-        // at level 25, the creature can have a maximum bonus of 25% damage
-        (level.value / 25) * 0.25
+        // at level 25, difficulty 1:
+        // the creature can have a maximum bonus of 25% damage
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.25,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
       );
     }
 
@@ -58,8 +70,14 @@ class WMH_AffixManager {
 
       this.health_regen_percent = RandNoiseF(
         seed + 6,
-        // at level 25, the creature can have a maximum of 5% HP per minute
-        (level.value / 25) * 0.05
+        // at level 25 difficulty 1:
+        // the creature can have a maximum of 5% HP per minute
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.05,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
       );
     }
 
@@ -71,7 +89,12 @@ class WMH_AffixManager {
         seed + 8,
         // at level 25, the creature can have a maximum bonus of 50% durability
         // loss
-        (level.value / 25) * 0.5
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.5,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
       );
     }
 
@@ -81,8 +104,14 @@ class WMH_AffixManager {
 
       this.lifesteal_percent = RandNoiseF(
         seed + 10,
-        // at level 25, the creature can have a maximum of 10% lifesteal
-        (level.value / 25) * 0.10
+        // at level 25, difficulty 1:
+        // the creature can have a maximum of 10% lifesteal
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.10,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
       );
     }
 
