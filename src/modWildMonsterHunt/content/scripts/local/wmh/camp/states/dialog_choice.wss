@@ -77,7 +77,11 @@ state DialogChoice in WMH_CampManager {
     var choices: array<SSceneChoice>;
 
     choices.PushBack(SSceneChoice(
-      "Hire herbalist",
+      StrReplace(
+        "Hire herbalist ({{price}})",
+        "{{price}}",
+        parent.unlockHerbalistPrice()
+      ),
       true, // emphasis
       parent.isHerbalistUnlocked(), // previouslyChoosen
       false, // disabled
@@ -86,7 +90,11 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      "Hire Merchant",
+      StrReplace(
+        "Hire Merchant ({{price}})",
+        "{{price}}",
+        parent.unlockMerchantPrice()
+      ),
       true, // emphasis
       parent.isMerchantUnlocked(), // previouslyChoosen
       false, // disabled
@@ -95,7 +103,11 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      "Small garden plot",
+      StrReplace(
+        "Small garden plot ({{price}})",
+        "{{price}}",
+        parent.unlockGarden0Price()
+      ),
       true, // emphasis
       parent.isGarden0Unlocked(), // previouslyChoosen
       false, // disabled
@@ -104,7 +116,11 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      "Large garden plot",
+      StrReplace(
+        "Large garden plot ({{price}})",
+        "{{price}}",
+        parent.unlockGarden1Price()
+      ),
       true, // emphasis
       parent.isGarden1Unlocked(), // previouslyChoosen
       false, // disabled
@@ -113,7 +129,11 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      "Armor tools",
+      StrReplace(
+        "Armor tools ({{price}})",
+        "{{price}}",
+        parent.unlockArmorsPrice()
+      ),
       true, // emphasis
       parent.isArmorsUnlocked(), // previouslyChoosen
       false, // disabled
@@ -122,7 +142,11 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      "Weapon tools",
+      StrReplace(
+        "Weapon tools ({{price}})",
+        "{{price}}",
+        parent.unlockWeaponsPrice()
+      ),
       true, // emphasis
       parent.isWeaponsUnlocked(), // previouslyChoosen
       false, // disabled
