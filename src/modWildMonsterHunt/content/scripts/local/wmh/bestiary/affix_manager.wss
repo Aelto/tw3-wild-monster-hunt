@@ -51,7 +51,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 3, current_chance) > 0.5) {
       count += 1;
 
-      this.health_modifier = 1 + RandNoiseF(
+      this.damage_dealt_modifier = 1 + RandNoiseF(
         seed + 4,
         // at level 25, difficulty 1:
         // the creature can have a maximum bonus of 25% damage
@@ -122,7 +122,7 @@ class WMH_AffixManager {
     if (this.health_modifier != 1.0) {
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
-        npc.GetMaxHealth() * (1 / this.health_modifier)
+        npc.GetMaxHealth() * this.health_modifier
       );
     }
 
