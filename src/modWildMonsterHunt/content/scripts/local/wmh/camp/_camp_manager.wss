@@ -112,45 +112,79 @@ statemachine class WMH_CampManager {
     FactsSet('WMH_Garden0Unlocked', 1);
   }
 
+  protected function unlockGarden0Price(): int {
+    return 750;
+  }
+
   protected function isGarden0Unlocked(): bool {
     return FactsDoesExist('WMH_Garden0Unlocked');
+  }
+
+  //--
+
+  protected function isGarden1Unlocked(): bool {
+    return FactsDoesExist('WMH_Garden1Unlocked');
+  }
+
+  protected function unlockGarden1Price(): int {
+    return 1250;
   }
 
   protected function unlockGarden1() {
     FactsSet('WMH_Garden1Unlocked', 1);
   }
 
-  protected function isGarden1Unlocked(): bool {
-    return FactsDoesExist('WMH_Garden1Unlocked');
-  }
+  //--
 
   // armor repair bench
   protected function unlockArmors() {
     FactsSet('WMH_ArmorsUnlocked', 1);
   }
 
+  protected function unlockArmorsPrice(): int {
+    return 650;
+  }
+
   protected function isArmorsUnlocked(): bool {
     return FactsDoesExist('WMH_ArmorsUnlocked');
   }
+
+  //--
 
   protected function unlockWeapons() {
     FactsSet('WMH_WeaponsUnlocked', 1);
   }
 
+  protected function unlockWeaponsPrice(): int {
+    return 650;
+  }
+
   protected function isWeaponsUnlocked(): bool {
     return FactsDoesExist('WMH_WeaponsUnlocked');
   }
+  
+  //--
 
   protected function unlockMerchant() {
     FactsSet('WMH_MerchantUnlocked', 1);
+  }
+
+  protected function unlockMerchantPrice(): int {
+    return 500;
   }
 
   protected function isMerchantUnlocked(): bool {
     return FactsDoesExist('WMH_MerchantUnlocked');
   }
 
+  //--
+
   protected function unlockHerbalist() {
     FactsSet('WMH_HerbalistUnlocked', 1);
+  }
+
+  protected function unlockHerbalistPrice(): int {
+    return 500;
   }
 
   protected function isHerbalistUnlocked(): bool {
