@@ -1,0 +1,160 @@
+//! have a look at the `class CBTTaskGesturesManager` for a way to handle
+// gestures.
+
+// the animations are in the `animations/man/dialogs/` folder
+function WMH_actorPlayAnimation(actor: CActor, animation_name: name) {
+  var component: CAnimatedComponent = actor
+    .GetComponentByClassName('CAnimatedComponent');
+
+  if (component) {
+    var blend_in: float = 0.25;
+    var blend_out: float = 0.25;
+
+    component.PlaySlotAnimationAsync(
+      animation_name,
+      'NPC_ANIM_SLOT',
+      SAnimatedComponentSlotAnimationSettings(blend_in, blend_out)
+    );
+  }
+}
+
+function WMH_actorPlayAnimationAlt(actor: CActor, animation_name: name) {
+  var tree: CAIPlayAnimationSlotAction;
+  
+  tree = new CAIPlayAnimationSlotAction in actor;
+  tree.OnCreated();
+  tree.slotName = 'NPC_ANIM_SLOT';
+  tree.animName = animation_name;
+
+  l_actor.ForceAIBehavior(tree, BTAP_Emergency);
+}
+
+function WMH_conversationExample() {
+  var some_actor: CActor;
+
+  var conversation: (new WMH_ConversationManager in thePlayer).init();
+
+  conversation
+    .registerActor(some_actor)
+    .registerActor(thePlayer as CActor)
+    .selectActor(player_slot)
+    .playLine(
+      thePlayer,
+      1234567890,
+      WMH_AnimationCategory_Greetings,
+      // listeners play agreeing animation
+      WMH_AnimationCategory_Agree
+    )
+    .playLine(
+      some_actor
+      1234567890,
+      WMH_AnimationCategory_Greetings
+    )
+    .playLine(
+      thePlayer,
+      1234567890,
+      WMH_AnimationCategory_Goodbye,
+      // listeners play goodbye animation
+      WMH_AnimationCategory_Goodbye
+    );
+}
+
+
+enum WMH_AnimationCategory {
+  WMH_AnimationCategory_Idle = 0,
+  WMH_AnimationCategory_Greetings = 1,
+  WMH_AnimationCategory_Goodbye = 2,
+  WMH_AnimationCategory_Agree = 3,
+  WMH_AnimationCategory_Disagree = 4,
+  WMH_AnimationCategory_Explain = 5,
+  WMH_AnimationCategory_Question = 6,
+}
+
+statemachine class WMH_ConversationManager {
+  private cached_animations_by_category: array<array<name>>;
+  private var actors: array<CActor>;
+
+  public function init(): WMH_ContractManager {
+    this.loadAnimationCategories();
+
+    return this;
+  }
+
+  public function registerActor(actor: CActor): WMH_ConversationManager {
+    this.actors.PushBack(actor);
+
+    return this;
+  }
+
+  public latent function playLine(
+    actor: CActor,
+    line_id: int,
+    speaker_category: WMH_AnimationCategory,
+    optional listener_category: WMH_AnimationCategory
+  ): WMH_ConversationManager {
+    actor.PlayLine(line_id);
+    
+    WMH_actorPlayAnimation(
+      actor,
+      this.getAnimationFromCategory(speaker_category)
+    );
+
+    if (listener_category != WMH_AnimationCategory_Idle) {
+      for listener: CActor in this.actors {
+        if (listener != actor) {
+          WMH_actorPlayAnimation(
+            listener,
+            this.getAnimationFromCategory(listener_category)
+          );
+        }
+      }
+    }
+    
+    actor.WaitForEndOfSpeach();
+    return this;
+  }
+
+  private function loadAnimationCategories() {
+    var empty: array<name>;
+    var i: int;
+
+    for (i = 0; i < EnumGetMax('WMH_AnimationCategory') + 1; i += 1) {
+      this.cached_animations_by_category.PushBack(empty);
+    }
+
+    // WMH_AnimationCategory_Idle
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('');
+    
+    // WMH_AnimationCategory_Greetings
+    this.cached_animations_by_category[WMH_AnimationCategory_Greetings].PushBack('');
+    
+    // WMH_AnimationCategory_Goodbye
+    this.cached_animations_by_category[WMH_AnimationCategory_Goodbye].PushBack('');
+    
+    // WMH_AnimationCategory_Agree
+    this.cached_animations_by_category[WMH_AnimationCategory_Agree].PushBack('');
+    
+    // WMH_AnimationCategory_Disagree
+    this.cached_animations_by_category[WMH_AnimationCategory_Disagree].PushBack('');
+    
+    // WMH_AnimationCategory_Explain
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('');
+    
+    // WMH_AnimationCategory_Question
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('');
+    
+  }
+
+  private function getAnimationFromCategory(category: WMH_AnimationCategory): name {
+    var output: string;
+
+    var max: int = this.cached_animations_by_category[category].Size();
+
+    if (max <= 0) {
+      return "";
+    }
+
+    var index: int = RandRange(max);
+    return this.cached_animations_by_category[category][index];
+  }
+}

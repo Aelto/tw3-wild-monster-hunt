@@ -1,0 +1,32 @@
+@wrapMethod(CR4MapMenu)
+function UpdateActiveAreas() {
+  var flash_array: CScriptedFlashArray;
+
+  flash_array = GetMenuFlashValueStorage().CreateTempFlashArray();
+  flash_array.PushBackFlashObject(WMH_makeHubPin("myArea", Vector(10, 20)));
+
+  GetMenuFlashValueStorage().SetFlashArray("map.hubs.custom", l_flashArray);
+}
+
+function WMH_makeHubPin(area_name: string, position: Vector): CScriptedFlashObject {
+  var flash_object: CScriptedFlashObject;
+
+  flash_object = GetMenuFlashValueStorage().CreateTempFlashObject("Hub_Custom");
+  flash_object.SetMemberFlashBool("enabled", true);
+
+  flash_object.SetMemberFlashInt("x", position.X);
+  flash_object.SetMemberFlashInt("y", position.Y);
+
+  flash_object.SetMemberFlashString("worldName", area_name);
+  flash_object.SetMemberFlashString("realName", area_name);
+  flash_object.SetMemberFlashString("uiIcon", "img://icons/hub_" + area_name + ".png");
+
+
+
+  flash_object.SetMemberFlashBool("visible", isVisible);
+  flash_object.SetMemberFlashBool("isPlayer", isInArea);
+  flash_object.SetMemberFlashBool("isQuest", isQuest);
+  flash_object.SetMemberFlashNumber("recLevel", level);
+
+  return flash_object;
+}
