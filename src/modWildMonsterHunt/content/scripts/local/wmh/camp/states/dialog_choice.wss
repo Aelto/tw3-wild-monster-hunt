@@ -10,7 +10,21 @@ state DialogChoice in WMH_CampManager {
     parent.dialog_hover_camera_0 = WMH_getStaticCamera();
     parent.dialog_hover_camera_1 = WMH_getStaticCamera();
     this.camera = WMH_getStaticCamera();
+
+    parent.conversation = (new WMH_ConversationManager in this)
+      .init()
+      .registerActor(parent.camp_manager_npc as CActor)
+      .registerActor(thePlayer as CActor);
+
     this.displayChoicesMain();
+    parent.conversation
+      .playLine(
+        thePlayer,
+        452638, // Geralt choice: Farewell
+        WMH_AnimationCategory_Goodbye,
+        WMH_AnimationCategory_Goodbye
+      );
+
     parent.GotoState('Waiting');
   }
 
@@ -35,6 +49,8 @@ state DialogChoice in WMH_CampManager {
       'Cancel'
     ));
 
+    var say_greetings: bool = true;
+
     while (true) {
       this.camera.teleportAndLookAt(
         Vector(732.089, 627.481, 505.123),
@@ -58,16 +74,29 @@ state DialogChoice in WMH_CampManager {
       this.camera.start();
       theGame.FadeInAsync(0.8);
 
+      if (say_greetings) {
+        say_greetings = false;
+
+        parent.conversation.playLine(
+          thePlayer,
+          1127230, // 0x0011333e  Geralt: Greetings
+          WMH_AnimationCategory_Greetings,
+          // listeners play agreeing animation
+          WMH_AnimationCategory_Greetings
+        );
+      }
+
       var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
       SU_closeDialogChoiceInterface();
 
       if (response.playGoChunk == 'ImproveWitcherCamp') {
+        parent.conversation.startSimulatingConversation();
         this.displayChoicesImproveWitcherCamp();
+        parent.conversation.stopSimulatingConversation();
       }
       else {
         this.camera.Stop();
         Sleep(0.25);
-        parent.GotoState('Waiting');
         return;
       }
     }

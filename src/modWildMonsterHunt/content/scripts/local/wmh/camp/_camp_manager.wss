@@ -20,9 +20,15 @@ statemachine class WMH_CampManager {
 
   private var herbalist: WMH_HerbalistManager;
 
+  // TODO:
+  // all of the DialogChoice logic could be moved into the [WMH_CampManagerNPC]
+  // class instead
   protected var dialog_hover_camera_0: WMH_StaticCamera;
   protected var dialog_hover_camera_1: WMH_StaticCamera;
   protected var camera_index: int;
+
+  protected var camp_manager_npc: WMH_CampManagerNPC;
+  protected var conversation: WMH_ConversationManager;
 
   public function init(master: WMH_Master): WMH_CampManager {
     this.herbalist = (new WMH_HerbalistManager in this).init(this);
@@ -83,7 +89,8 @@ statemachine class WMH_CampManager {
     }
   }
 
-  public function startDialog() {
+  public function startDialog(camp_manager_npc: WMH_CampManagerNPC) {
+    this.camp_manager_npc = camp_manager_npc;
     this.GotoState('DialogChoice');
   }
 

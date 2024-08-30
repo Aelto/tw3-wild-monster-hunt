@@ -3,19 +3,38 @@
 
 // the animations are in the `animations/man/dialogs/` folder
 function WMH_actorPlayAnimation(actor: CActor, animation_name: name) {
-  var component: CAnimatedComponent = actor
-    .GetComponentByClassName('CAnimatedComponent');
+  WMHINFO("WMH_actorPlayAnimation, playing " + animation_name);
 
-  if (component) {
-    var blend_in: float = 0.25;
-    var blend_out: float = 0.25;
-
-    component.PlaySlotAnimationAsync(
-      animation_name,
-      'NPC_ANIM_SLOT',
-      SAnimatedComponentSlotAnimationSettings(blend_in, blend_out)
-    );
+  if (animation_name == '') {
+    return;
   }
+
+  var player_actor: CActor = thePlayer as CActor;
+  if (actor == player_actor) {
+    thePlayer
+      .GetRootAnimatedComponent()
+      .PlaySlotAnimationAsync(
+        animation_name,
+        'PLAYER_SLOT',
+        SAnimatedComponentSlotAnimationSettings(0.25, 1.0)
+      );
+  }
+  else {
+    var component: CAnimatedComponent = actor
+      .GetComponentByClassName('CAnimatedComponent') as CAnimatedComponent;
+
+    if (component) {
+      var blend_in: float = 0.25;
+      var blend_out: float = 1.0;
+
+      component.PlaySlotAnimationAsync(
+        animation_name,
+        'NPC_ANIM_SLOT',
+        SAnimatedComponentSlotAnimationSettings(blend_in, blend_out)
+      );
+    }
+  }
+
 }
 
 function WMH_actorPlayAnimationAlt(actor: CActor, animation_name: name) {
@@ -26,18 +45,18 @@ function WMH_actorPlayAnimationAlt(actor: CActor, animation_name: name) {
   tree.slotName = 'NPC_ANIM_SLOT';
   tree.animName = animation_name;
 
-  l_actor.ForceAIBehavior(tree, BTAP_Emergency);
+  actor.ForceAIBehavior(tree, BTAP_Emergency);
 }
 
-function WMH_conversationExample() {
+latent function WMH_conversationExample() {
   var some_actor: CActor;
 
-  var conversation: (new WMH_ConversationManager in thePlayer).init();
+  var conversation: WMH_ConversationManager = 
+    (new WMH_ConversationManager in thePlayer).init();
 
   conversation
     .registerActor(some_actor)
     .registerActor(thePlayer as CActor)
-    .selectActor(player_slot)
     .playLine(
       thePlayer,
       1234567890,
@@ -46,7 +65,7 @@ function WMH_conversationExample() {
       WMH_AnimationCategory_Agree
     )
     .playLine(
-      some_actor
+      some_actor,
       1234567890,
       WMH_AnimationCategory_Greetings
     )
@@ -71,11 +90,12 @@ enum WMH_AnimationCategory {
 }
 
 statemachine class WMH_ConversationManager {
-  private cached_animations_by_category: array<array<name>>;
-  private var actors: array<CActor>;
+  protected var cached_animations_by_category: array<array<name>>;
+  protected var actors: array<CActor>;
 
-  public function init(): WMH_ContractManager {
+  public function init(): WMH_ConversationManager {
     this.loadAnimationCategories();
+    this.GotoState('Waiting');
 
     return this;
   }
@@ -92,26 +112,50 @@ statemachine class WMH_ConversationManager {
     speaker_category: WMH_AnimationCategory,
     optional listener_category: WMH_AnimationCategory
   ): WMH_ConversationManager {
-    actor.PlayLine(line_id);
+    actor.PlayLine(line_id, /*subtitles*/ true);
     
     WMH_actorPlayAnimation(
       actor,
       this.getAnimationFromCategory(speaker_category)
     );
 
+    actor.WaitForEndOfSpeach();
+
     if (listener_category != WMH_AnimationCategory_Idle) {
-      for listener: CActor in this.actors {
-        if (listener != actor) {
-          WMH_actorPlayAnimation(
-            listener,
-            this.getAnimationFromCategory(listener_category)
-          );
-        }
+      this.playAnimationOnEveryone(listener_category, actor);
+    }
+
+    return this;
+  }
+
+  public function startSimulatingConversation(): WMH_ConversationManager {
+    if (this.GetCurrentStateName() != 'SimulateConversation') {
+      this.GotoState('SimulateConversation');
+    }
+
+    return this;
+  }
+
+  public function stopSimulatingConversation(): WMH_ConversationManager {
+    if (this.GetCurrentStateName() == 'SimulateConversation') {
+      this.GotoState('Waiting');
+    }
+
+    return this;
+  }
+
+  protected function playAnimationOnEveryone(
+    category: WMH_AnimationCategory,
+    optional except: CActor
+  ) {
+    for listener: CActor in this.actors {
+      if (!except || listener != except) {
+        WMH_actorPlayAnimation(
+          listener,
+          this.getAnimationFromCategory(category)
+        );
       }
     }
-    
-    actor.WaitForEndOfSpeach();
-    return this;
   }
 
   private function loadAnimationCategories() {
@@ -123,7 +167,17 @@ statemachine class WMH_ConversationManager {
     }
 
     // WMH_AnimationCategory_Idle
-    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_gesture_weight_shift_step_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_gesture_weight_shift_step_02');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_gesture_weight_shift_step_03');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_gesture_weight_shift_step_04');
+
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_idle_arm_relax');
+
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_idle_weight_shift_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_idle_weight_shift_02');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_idle_weight_shift_03');
+    this.cached_animations_by_category[WMH_AnimationCategory_Idle].PushBack('add_idle_weight_shift_04');
     
     // WMH_AnimationCategory_Greetings
     this.cached_animations_by_category[WMH_AnimationCategory_Greetings].PushBack('');
@@ -132,29 +186,88 @@ statemachine class WMH_ConversationManager {
     this.cached_animations_by_category[WMH_AnimationCategory_Goodbye].PushBack('');
     
     // WMH_AnimationCategory_Agree
-    this.cached_animations_by_category[WMH_AnimationCategory_Agree].PushBack('');
+    this.cached_animations_by_category[WMH_AnimationCategory_Agree].PushBack('add_reaction_agreeing_nod_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Agree].PushBack('add_reaction_agreeing_nod_02');
     
     // WMH_AnimationCategory_Disagree
-    this.cached_animations_by_category[WMH_AnimationCategory_Disagree].PushBack('');
+    this.cached_animations_by_category[WMH_AnimationCategory_Disagree].PushBack('add_reaction_shake_head_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Disagree].PushBack('add_reaction_shake_head_02');
     
     // WMH_AnimationCategory_Explain
-    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_02');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_03');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_04');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_05');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_06');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_explain_07');
+
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_01');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_02');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_03');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_04');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_05');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_06');
+    this.cached_animations_by_category[WMH_AnimationCategory_Explain].PushBack('add_gesture_slight_explain_07');
     
     // WMH_AnimationCategory_Question
-    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('');
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('add_gesture_question_03');
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('add_gesture_question_04');
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('add_gesture_question_05');
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('add_gesture_question_06');
+    this.cached_animations_by_category[WMH_AnimationCategory_Question].PushBack('add_gesture_question_07');
     
   }
 
-  private function getAnimationFromCategory(category: WMH_AnimationCategory): name {
-    var output: string;
+  protected function getAnimationFromCategory(category: WMH_AnimationCategory): name {
+    var output: name;
 
     var max: int = this.cached_animations_by_category[category].Size();
 
     if (max <= 0) {
-      return "";
+      return '';
     }
 
     var index: int = RandRange(max);
     return this.cached_animations_by_category[category][index];
+  }
+}
+
+state Waiting in WMH_ConversationManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {}
+}
+
+state SimulateConversation in WMH_ConversationManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.SimulateConversation_main();
+  }
+
+  entry function SimulateConversation_main() {
+    while (true) {
+      var delay: float = RandRangeF(5, 2);
+      Sleep(delay);
+
+      var max: int = parent.actors.Size();
+      if (max > 0) {
+        var index: int = RandRange(max);
+        var actor: CActor = parent.actors[index];
+        var category: WMH_AnimationCategory = RandRange(
+          EnumGetMax('WMH_AnimationCategory') + 1
+        );
+
+        WMHINFO(" index " + index + " category " + category);
+
+        WMH_actorPlayAnimation(
+          actor,
+          parent.getAnimationFromCategory(category)
+        );
+      }
+    }
   }
 }

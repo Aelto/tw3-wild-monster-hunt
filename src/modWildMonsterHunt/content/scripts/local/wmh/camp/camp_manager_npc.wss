@@ -7,6 +7,6 @@ class WMH_CampManagerNPC extends WMH_QuickMerchant {
   }
 
   event OnInteraction(actionName: string, activator: CEntity) {
-    thePlayer.wmh.camp.startDialog();
+    thePlayer.wmh.camp.startDialog(this);
   }
 }
