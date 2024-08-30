@@ -16,7 +16,7 @@ function WMH_actorPlayAnimation(actor: CActor, animation_name: name) {
       .PlaySlotAnimationAsync(
         animation_name,
         'PLAYER_SLOT',
-        SAnimatedComponentSlotAnimationSettings(0.25, 1.0)
+        SAnimatedComponentSlotAnimationSettings(1.0, 1.0)
       );
   }
   else {
@@ -24,7 +24,7 @@ function WMH_actorPlayAnimation(actor: CActor, animation_name: name) {
       .GetComponentByClassName('CAnimatedComponent') as CAnimatedComponent;
 
     if (component) {
-      var blend_in: float = 0.25;
+      var blend_in: float = 1.0;
       var blend_out: float = 1.0;
 
       component.PlaySlotAnimationAsync(
