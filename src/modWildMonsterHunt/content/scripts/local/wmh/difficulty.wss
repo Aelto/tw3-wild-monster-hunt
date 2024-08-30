@@ -17,7 +17,7 @@ function WMH_difficultyScaleUpF(
   value: float,
   scale_up_per_level: float
 ): float {
-  return value * (1 + scale_down_per_level * WMH_getDifficulty());
+  return value * (1 + scale_up_per_level * WMH_getDifficulty());
 }
 
 function WMH_difficultyScaleUpPreF(
@@ -26,5 +26,5 @@ function WMH_difficultyScaleUpPreF(
   difficulty: int
 
 ): float {
-  return value * (1 + scale_down_per_level * difficulty);
+  return value * (1 + scale_up_per_level * difficulty);
 }

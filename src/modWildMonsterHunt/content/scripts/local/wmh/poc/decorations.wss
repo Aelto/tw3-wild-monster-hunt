@@ -9,22 +9,23 @@
   - 
 */ 
 
-@addMethod(CR4Player)
-function WMH_DECO_clearDecorationPerks() {
-  if (this.abilityManager && this.abilityManager.IsInitialized()) {
-    this.abilityManager.WMH_DECO_clearDecorationPerks();
-  }
-}
-
 @addMethod(W3PlayerAbilityManager)
 function WMH_DECO_clearDecorationPerks() {
   this.tempSkills.Clear();
 }
 
+@addMethod(CR4Player)
+function WMH_DECO_clearDecorationPerks() {
+  if (this.abilityManager && this.abilityManager.IsInitialized()) {
+    (this.abilityManager as W3PlayerAbilityManager)
+      .WMH_DECO_clearDecorationPerks();
+  }
+}
+
 @wrapMethod(CR4Player)
 function OnEquippedItem(category: name, slot: name) {
   // 1) clear decoration perks,
-  WMH_DECO_clearDecorationPerks();
+  this.WMH_DECO_clearDecorationPerks();
   wrappedMethod(category, slot);
 
   // 2) iterate through items and apply decoration perks back
@@ -34,7 +35,7 @@ function OnEquippedItem(category: name, slot: name) {
 function WMH_grantPerksFromEquippedItems() {
   var witcher: W3PlayerWitcher = GetWitcherPlayer();
 
-  var items: array<SItemUniqueId> = thePlayer.GetEquippedItems();
+  var items: array<SItemUniqueId> = witcher.GetEquippedItems();
   var inventory: CInventoryComponent = thePlayer.GetInventory();
   var perks: array<ESkill>;
 

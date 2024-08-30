@@ -142,11 +142,7 @@ class WMH_PendingContract {
         0.1
       ) as int;
 
-      provider.appendMoney(
-        (
-          
-        ) as int
-      );
+      provider.appendMoney(money);
     }
   }
 

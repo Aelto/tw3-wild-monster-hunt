@@ -51,7 +51,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 3, current_chance) > 0.5) {
       count += 1;
 
-      this.damage_dealt_modifier = 1 + RandNoiseF(
+      this.damage_modifier = 1 + RandNoiseF(
         seed + 4,
         // at level 25, difficulty 1:
         // the creature can have a maximum bonus of 25% damage

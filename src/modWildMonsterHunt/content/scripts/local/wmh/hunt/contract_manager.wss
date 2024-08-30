@@ -1,5 +1,9 @@
 #define const ContractDurationMinutes = 60 * 5;
 
+function WMH_getContractManager(): WMH_ContractManager {
+  return thePlayer.wmh.hunt.contract;
+}
+
 // Keeps track of the currently active contract targets the player has
 class WMH_ContractManager {
   private var pending_contracts: array<WMH_PendingContract>;
