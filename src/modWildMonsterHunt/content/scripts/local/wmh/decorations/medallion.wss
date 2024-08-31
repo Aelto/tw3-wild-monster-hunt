@@ -1,0 +1,64 @@
+class WMH_Medallion {
+  private var inventory: CInventoryComponent;
+  private var item: SItemUniqueId;
+
+  public function init(
+    inventory: CInventoryComponent,
+    item: SItemUniqueId
+  ): WMH_Medallion {
+    this.inventory = inventory;
+    this.item = item;
+
+    return this;
+  }
+
+  public function getAppendCost(): int {
+    var count: int = this.getRunesCount();
+
+    return (count + 1) * 50;
+  }
+
+  public function tryAppendRune(rune: SItemUniqueId, optional debug: bool) {
+    var cost: int = this.getAppendCost();
+    if (!debug && thePlayer.GetMoney() < cost) {
+      WMHHUD("Insufficient funds for melding the rune");
+
+      return;
+    }
+
+    this.appendRune(rune);
+
+    if (!debug) {
+      thePlayer.RemoveMoney(cost);
+    }
+  }
+
+  public function getPerks(): array<ESkill> {
+    var count: int = this.getRunesCount();
+    var i: int;
+
+    var output: array<ESkill>;
+
+    for (i = 0; i < count; i += 1) {
+      output.PushBack(WMH_medallionGetPerk(this.inventory, this.item, i));
+    }
+
+    return output;
+  }
+
+  private function appendRune(rune: SItemUniqueId) {
+    var count: int = this.getRunesCount();
+
+    if (count >= 20) {
+      return;
+    }
+
+    var next_slot: int = count;
+    WMH_medallionSetRune(this.inventory, this.item, rune, next_slot);
+    WMH_medallionSetRunesCount(this.inventory, this.item, count + 1);
+  }
+
+  private function getRunesCount(): int {
+    return WMH_medallionRunesCount(this.inventory, this.item);
+  }
+}

@@ -1,0 +1,3 @@
+class WMH_StorageDecorations {
+  public var decoration_perks: array<ESkill>;
+}

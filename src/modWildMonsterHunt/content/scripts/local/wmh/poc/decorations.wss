@@ -1,130 +1,98 @@
-/*
-  NOTES:
-  - temporary skills are always considered equipped
-  - temporary skills don't seem to trigger the passive abilities
-    - if a skill is already learned and equipped and a temporary level is added
-      to it then the passive bonus won't change because of the temporary skill
-    - if needed have the runes provide passive abilities on top of the perks
-  - temporary skills are displayed in orange in the skills UI
-  - 
-*/ 
 
-@addMethod(W3PlayerAbilityManager)
-function WMH_DECO_clearDecorationPerks() {
-  this.tempSkills.Clear();
-}
 
-@addMethod(CR4Player)
-function WMH_DECO_clearDecorationPerks() {
-  if (this.abilityManager && this.abilityManager.IsInitialized()) {
-    (this.abilityManager as W3PlayerAbilityManager)
-      .WMH_DECO_clearDecorationPerks();
-  }
-}
+// function WMH_grantPerksFromEquippedItems() {
+//   var witcher: W3PlayerWitcher = GetWitcherPlayer();
 
-@wrapMethod(CR4Player)
-function OnEquippedItem(category: name, slot: name) {
-  // 1) clear decoration perks,
-  this.WMH_DECO_clearDecorationPerks();
-  wrappedMethod(category, slot);
+//   var items: array<SItemUniqueId> = witcher.GetEquippedItems();
+//   var inventory: CInventoryComponent = thePlayer.GetInventory();
+//   var perks: array<ESkill>;
 
-  // 2) iterate through items and apply decoration perks back
-  WMH_grantPerksFromEquippedItems();
-}
+//   for item: SItemUniqueId in items {
+//     WMH_itemToSkills(item, inventory, /*out*/ perks);
+//   }
 
-function WMH_grantPerksFromEquippedItems() {
-  var witcher: W3PlayerWitcher = GetWitcherPlayer();
+//   for perk: ESkill in perks {
+//     WMH_DECO_addDecorationPerk(perk);
+//   }
+// }
 
-  var items: array<SItemUniqueId> = witcher.GetEquippedItems();
-  var inventory: CInventoryComponent = thePlayer.GetInventory();
-  var perks: array<ESkill>;
+// function WMH_DECO_addDecorationPerk(skill: ESkill) {
+//   var is_temporary: bool = true;
 
-  for item: SItemUniqueId in items {
-    WMH_itemToSkills(item, inventory, /*out*/ perks);
-  }
+//   thePlayer.AddSkill(skill, is_temporary);
+// }
 
-  for perk: ESkill in perks {
-    WMH_DECO_addDecorationPerk(perk);
-  }
-}
+// function WMH_itemToSkills(
+//   item: SItemUniqueId,
+//   inventory: CInventoryComponent,
 
-function WMH_DECO_addDecorationPerk(skill: ESkill) {
-  var is_temporary: bool = true;
+//   out skills: array<ESkill>
+// ){
 
-  thePlayer.AddSkill(skill, is_temporary);
-}
+//   var enhancements: array<name>;
+//   inventory.GetItemEnhancementItems(item, enhancements);
 
-function WMH_itemToSkills(
-  item: SItemUniqueId,
-  inventory: CInventoryComponent,
+//   for enhancement: name in enhancements {
+//     var rune: SItemUniqueId = inventory.GetItemId(enhancement);
+//     var tags: array<name>;
 
-  out skills: array<ESkill>
-){
+//     tags.Clear();
+//     if (!inventory.GetItemTags(item, tags)) {
+//       continue;
+//     }
 
-  var enhancements: array<name>;
-  inventory.GetItemEnhancementItems(item, enhancements);
+//     for tag: name in tags {
+//       var skill: ESkill = SkillNameToEnum(tag);
 
-  for enhancement: name in enhancements {
-    var rune: SItemUniqueId = inventory.GetItemId(enhancement);
-    var tags: array<name>;
+//       if (skill  == S_SUndefined) {
+//         continue;
+//       }
 
-    tags.Clear();
-    if (!inventory.GetItemTags(item, tags)) {
-      continue;
-    }
+//       skills.PushBack(skill);
+//     }
+//   }
+// }
 
-    for tag: name in tags {
-      var skill: ESkill = SkillNameToEnum(tag);
+// function WMH_getItemDecorationSeed(
+//   inventory: CInventoryComponent,
+//   item: SItemUniqueId
+// ): int {
+//   return inventory.GetItemModifierInt(item, 'wmh_decoration_seed');
+// }
 
-      if (skill  == S_SUndefined) {
-        continue;
-      }
+// function WMH_setItemDecorationSeed(
+//   inventory: CInventoryComponent,
+//   item: SItemUniqueId,
+//   seed: int
+// ) {
+//   inventory.SetItemModifierInt(item, 'wmh_decoration_seed', seed);
+// }
 
-      skills.PushBack(skill);
-    }
-  }
-}
-
-function WMH_getItemDecorationSeed(
-  inventory: CInventoryComponent,
-  item: SItemUniqueId
-): int {
-  return inventory.GetItemModifierInt(item, 'wmh_decoration_seed');
-}
-
-function WMH_setItemDecorationSeed(
-  inventory: CInventoryComponent,
-  item: SItemUniqueId,
-  seed: int
-) {
-  inventory.SetItemModifierInt(item, 'wmh_decoration_seed', seed);
-}
-
-function WMH_getItemDecorationCount(
-  inventory: CInventoryComponent,
-  item: SItemUniqueId
-): int {
+// function WMH_getItemDecorationCount(
+//   inventory: CInventoryComponent,
+//   item: SItemUniqueId
+// ): int {
   
-  return Max(
-    inventory.GetItemModifierInt(item, 'wmh_decoration_count', 0),
-    0
-  );
-}
+//   return Max(
+//     inventory.GetItemModifierInt(item, 'wmh_decoration_count', 0),
+//     0
+//   );
+// }
 
-function WMH_setItemDecorationCount(
-  inventory: CInventoryComponent,
-  item: SItemUniqueId,
-  count: int
-) {
-  inventory.SetItemModifierInt(item, 'wmh_decoration_count', count);
-}
+// function WMH_setItemDecorationCount(
+//   inventory: CInventoryComponent,
+//   item: SItemUniqueId,
+//   count: int
+// ) {
+//   inventory.SetItemModifierInt(item, 'wmh_decoration_count', count);
+// }
 
-function WMH_getItemDecorationLevel(
-  inventory: CInventoryComponent,
-  item: SItemUniqueId
-): int {
-  return Max(
-    inventory.GetItemModifierInt(item, 'wmh_decoration_level', 1),
-    1
-  );
-}
+// function WMH_getItemDecorationLevel(
+//   inventory: CInventoryComponent,
+//   item: SItemUniqueId
+// ): int {
+//   return Max(
+//     inventory.GetItemModifierInt(item, 'wmh_decoration_level', 1),
+//     1
+//   );
+// }

@@ -1,0 +1,143 @@
+// NOTE:
+// Consider the functions from this file as private implementation, if you wish
+// to see the domain logic for the Medallion and the Rune melding process then
+// refer to the [WMH_Medallion] class and its methods.
+
+function WMH_medallionRunesCount(
+  inventory: CInventoryComponent,
+  item: SItemUniqueId
+): int {
+  return Max(
+    inventory.GetItemModifierInt(item, 'wmh_runes_count', 0),
+    0
+  );
+}
+
+function WMH_medallionSetRunesCount(
+  inventory: CInventoryComponent,
+  item: SItemUniqueId,
+  count: int
+) {
+  inventory.SetItemModifierInt(item, 'wmh_runes_count', count);
+}
+
+function WMH_medallionGetRuneSlotModifier(slot: int): name {
+  var output: name = 'wmh_runes_slot_0';
+
+  switch (slot) {
+    case 1:
+      output = 'wmh_runes_slot_1';
+      break;
+
+    case 2:
+      output = 'wmh_runes_slot_2';
+      break;
+
+    case 3:
+      output = 'wmh_runes_slot_3';
+      break;
+
+    case 4:
+      output = 'wmh_runes_slot_4';
+      break;
+
+    case 5:
+      output = 'wmh_runes_slot_5';
+      break;
+
+    case 6:
+      output = 'wmh_runes_slot_6';
+      break;
+
+    case 7:
+      output = 'wmh_runes_slot_7';
+      break;
+
+    case 8:
+      output = 'wmh_runes_slot_8';
+      break;
+
+    case 9:
+      output = 'wmh_runes_slot_9';
+      break;
+
+    case 10:
+      output = 'wmh_runes_slot_10';
+      break;
+
+    case 11:
+      output = 'wmh_runes_slot_11';
+      break;
+
+    case 12:
+      output = 'wmh_runes_slot_12';
+      break;
+
+    case 13:
+      output = 'wmh_runes_slot_13';
+      break;
+
+    case 14:
+      output = 'wmh_runes_slot_14';
+      break;
+
+    case 15:
+      output = 'wmh_runes_slot_15';
+      break;
+
+    case 16:
+      output = 'wmh_runes_slot_16';
+      break;
+
+    case 17:
+      output = 'wmh_runes_slot_17';
+      break;
+
+    case 18:
+      output = 'wmh_runes_slot_18';
+      break;
+
+    case 19:
+      output = 'wmh_runes_slot_19';
+      break;
+  }
+
+  return output;
+}
+
+function WMH_runeSetPerk(
+  inventory: CInventoryComponent,
+  item: SItemUniqueId,
+  perk: ESkill
+) {
+  inventory.SetItemModifierInt(item, 'wmh_rune_perk_0', perk as int);
+}
+
+function WMH_runeGetPerk(
+  inventory: CInventoryComponent,
+  item: SItemUniqueId,
+): ESkill {
+  return inventory.GetItemModifierInt(item, 'wmh_rune_perk_0') as ESkill;
+}
+
+function WMH_medallionSetRune(
+  inventory: CInventoryComponent,
+  medallion: SItemUniqueId,
+  rune: SItemUniqueId,
+  slot: int
+) {
+  var perk: ESkill = WMH_runeGetPerk(inventory, rune);
+  var slot_modifier: name = WMH_medallionGetRuneSlotModifier(slot);
+
+  inventory.SetItemModifierInt(medallion, slot_modifier, perk as int);
+}
+
+function WMH_medallionGetPerk(
+  inventory: CInventoryComponent,
+  medallion: SItemUniqueId,
+  slot: int
+): ESkill {
+  var slot_modifier: name = WMH_medallionGetRuneSlotModifier(slot);
+
+  return inventory.GetItemModifierInt(medallion, slot_modifier) as ESkill;
+}
