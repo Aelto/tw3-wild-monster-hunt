@@ -83,16 +83,41 @@ function GetBaseItemData(
     compareItemInv
   );
 
-  if (!itemInvComponent.ItemHasTag(item, 'WMH_Medallion')) {
-    return object;
+  if (itemInvComponent.ItemHasTag(item, 'WMH_Medallion')) {
+    var medallion: WMH_Medallion = (new WMH_Medallion in this)
+      .init(itemInvComponent, item);
+
+    var perks: array<ESkill> = medallion.getPerks();
+    var stats_list: CScriptedFlashArray = object.CreateFlashArray();
+    for perk: ESkill in perks {
+      var stat_object: CScriptedFlashObject = object.CreateFlashObject();
+
+      var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
+      var icon: string = "<img src='" + src + "' width='24' height='24' />";
+
+      var perk_name: string = GetLocStringByKeyExt(
+        thePlayer.GetSkillLocalisationKeyName(perk)
+      );
+
+      stat_object.SetMemberFlashString("id", "wmh_perk_id");
+      stat_object.SetMemberFlashString("name", "+1 " + perk_name);
+      stat_object.SetMemberFlashString("color", "#E1E1E1");				
+      stat_object.SetMemberFlashString("value", icon);
+      stat_object.SetMemberFlashString("valuePrefix", "");
+      stat_object.SetMemberFlashBool("isPercentageValue", false);
+      stat_object.SetMemberFlashNumber("floatValue", 1.0);
+      stats_list.PushBackFlashObject(stat_object);
+    }
+
+    object.SetMemberFlashArray("StatsList", stats_list);
   }
 
-  var medallion: WMH_Medallion = (new WMH_Medallion in this)
-    .init(itemInvComponent, item);
+  if (itemInvComponent.ItemHasTag(item, 'WMH_RuneOfPower')) {
+    var perk: ESkill = WMH_runeGetPerk(itemInvComponent, item);
 
-  var perks: array<ESkill> = medallion.getPerks();
-  var stats_list: CScriptedFlashArray = object.CreateFlashArray();
-  for perk: ESkill in perks {
+    WMHINFO("tooltip: perk = " + perk);
+
+    var stats_list: CScriptedFlashArray = object.CreateFlashArray();
     var stat_object: CScriptedFlashObject = object.CreateFlashObject();
 
     var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
@@ -102,24 +127,51 @@ function GetBaseItemData(
       thePlayer.GetSkillLocalisationKeyName(perk)
     );
 
-    // var perk_description: string = GetLocStringByKeyExt(
-    //   thePlayer.GetSkillLocalisationKeyDescription(perk)
-    // );
+    var perk_description: string = GetLocStringByKeyExt(
+      thePlayer.GetSkillLocalisationKeyDescription(perk)
+    );
 
     stat_object.SetMemberFlashString("id", "wmh_perk_id");
-    stat_object.SetMemberFlashString("name", "+1 " + perk_name);
+    stat_object.SetMemberFlashString(
+      "name",
+      "+1 " + perk_name
+    );
     stat_object.SetMemberFlashString("color", "#E1E1E1");				
     stat_object.SetMemberFlashString("value", icon);
     stat_object.SetMemberFlashString("valuePrefix", "");
     stat_object.SetMemberFlashBool("isPercentageValue", false);
     stat_object.SetMemberFlashNumber("floatValue", 1.0);
     stats_list.PushBackFlashObject(stat_object);
+
+    object.SetMemberFlashArray("StatsList", stats_list);
   }
 
-
-  object.SetMemberFlashArray("StatsList", stats_list);
-
   return object;
+}
+
+// flashObject.SetMemberFlashString( "iconPath",  _inv.GetItemIconPathByUniqueID(item) );
+
+@wrapMethod(W3GuiSelectItemComponent)
+function SetInventoryFlashObjectForItem(
+  item: SItemUniqueId,
+  out object: CScriptedFlashObject
+) {
+  wrappedMethod(item, object);
+
+  if (this._inv.ItemHasTag(item, 'WMH_RuneOfPower')) {
+    var perk: ESkill = WMH_runeGetPerk(this._inv, item);
+
+    var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
+    var perk_name: string = GetLocStringByKeyExt(
+      thePlayer.GetSkillLocalisationKeyName(perk)
+    );
+
+    object.SetMemberFlashString("iconPath", thePlayer.GetSkillIconPath(perk));
+    object.SetMemberFlashString(
+      "itemName",
+      "+1 to " + perk_name
+    );
+  }
 }
 
 function WMH_updateDecorationPerks() {

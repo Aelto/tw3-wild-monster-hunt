@@ -71,6 +71,7 @@ class WMH_HerbalistCauldron extends W3Container {
         );
 
         this.GetInventory().RemoveAllItems();
+        theSound.SoundEvent("gui_inventory_potion_attach");
       }
     }
 
@@ -115,6 +116,7 @@ class WMH_HerbalistCauldron extends W3Container {
     this.popup_data.categoryFilterList = empty;
     
     theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
+    theSound.SoundEvent("gui_pick_up_herbs");
     AddTimer( 'RefreshOnelinerTimer', 0.1 );
   }
 

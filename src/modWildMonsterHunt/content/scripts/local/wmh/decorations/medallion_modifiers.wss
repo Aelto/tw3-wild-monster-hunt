@@ -123,10 +123,9 @@ function WMH_runeGetPerk(
 function WMH_medallionSetRune(
   inventory: CInventoryComponent,
   medallion: SItemUniqueId,
-  rune: SItemUniqueId,
+  perk: ESkill,
   slot: int
 ) {
-  var perk: ESkill = WMH_runeGetPerk(inventory, rune);
   var slot_modifier: name = WMH_medallionGetRuneSlotModifier(slot);
 
   inventory.SetItemModifierInt(medallion, slot_modifier, perk as int);

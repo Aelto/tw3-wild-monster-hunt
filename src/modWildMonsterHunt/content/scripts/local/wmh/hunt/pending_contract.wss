@@ -147,10 +147,10 @@ class WMH_PendingContract {
       provider.appendMoney(money);
 
       var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
-                                 < Min(this.target.strength * 0.1, 0.5);
+        < MinF((this.target.strength as float) * 0.1, 0.5);
 
       if (can_drop_reagent) {
-        provider.appendItem("modwmh_melding_reagent", 1);
+        provider.appendItem('modwmh_melding_reagent', 1);
       }
     }
   }

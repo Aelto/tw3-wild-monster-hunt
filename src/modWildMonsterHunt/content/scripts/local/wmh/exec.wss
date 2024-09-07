@@ -13,6 +13,7 @@ exec function wmhmeldcauldron() {
 exec function wmhaddruneofpower() {
   thePlayer.inv.AddAnItem('modwmh_rune_of_power', 1);
   thePlayer.inv.AddAnItem('modwmh_trophy_medallion', 1);
+  thePlayer.inv.AddAnItem('modwmh_melding_reagent', 1);
 
   var rune: SItemUniqueId = thePlayer.inv.GetItemId('modwmh_rune_of_power');
   var medallion: WMH_Medallion = (new WMH_Medallion in thePlayer)
@@ -23,12 +24,4 @@ exec function wmhaddruneofpower() {
     rune,
     S_Magic_s06
   );
-  medallion.tryAppendRune(rune, true);
-
-  WMH_runeSetPerk(
-    thePlayer.inv,
-    rune,
-    S_Magic_s08
-  );
-  medallion.tryAppendRune(rune, true);
 }

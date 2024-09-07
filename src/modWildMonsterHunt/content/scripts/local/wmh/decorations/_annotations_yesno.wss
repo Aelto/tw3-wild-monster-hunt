@@ -1,0 +1,29 @@
+@wrapMethod(CR4GuiManager)
+function UserDialogCallback(message_id: int, action_id: EUserMessageAction) {
+  wrappedMethod(message_id, action_id);
+
+  if (message_id == 10245 && (action_id == UMA_Ok || action_id == UMA_Yes)) {
+    var entities: array<CGameplayEntity>;
+    
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer,
+      20,
+      1,
+      , // tag
+      , // queryFlags
+      , // target
+      'WMH_MedallionForge'
+    );
+
+    for entity: CGameplayEntity in entities {
+      var forge: WMH_MedallionForge = entity as WMH_MedallionForge;
+
+      if (forge) {
+        forge.continueMeldingProcess();
+
+        break;
+      }
+    }
+  }
+}

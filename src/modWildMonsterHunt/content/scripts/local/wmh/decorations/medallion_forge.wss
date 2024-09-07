@@ -1,0 +1,137 @@
+class WMH_MedallionForge extends W3Container {
+  protected var popup_data: W3ItemSelectionPopupData;
+  private var selected_medallion: WMH_Medallion;
+
+  event OnSpawned(spawnData: SEntitySpawnData)
+  {
+    super.OnSpawned(spawnData);
+    
+    // always mark this container as quest container
+    SetIsQuestContainer( true );
+  }
+
+  event OnInteractionActivated(actionName : string, activator : CEntity) {
+    // do not call super as it will probably disable the interaction.
+    // super.OnInteractionActivated(actionName, activator);
+    this.Enable(true, false, true);
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator : CEntity
+  ) {
+    this.Enable(true, false, true);
+    return true;
+  }
+
+  event OnInteraction(
+    actionName : string,
+    activator : CEntity
+  ) {
+    this.startMeldingProcess();
+  }
+
+  public function startMeldingProcess() {
+    this.promptUserMelding();
+  }
+
+  // called after the YES/NO prompt is answered YES
+  public function continueMeldingProcess() {
+    var trophy: SItemUniqueId = GetWitcherPlayer()
+      .GetHorseManager()
+      .GetItemInSlot(EES_HorseTrophy);
+
+    var inventory: CInventoryComponent = GetWitcherPlayer()
+      .GetHorseManager()
+      .GetInventoryComponent();
+
+    if (!inventory.ItemHasTag(trophy, 'WMH_Medallion')) {
+      WMHHUD("The trophy you are wearing is not a Medallion that can hold Runes of Power");
+
+      return;
+    }
+
+    var reagents_count: int = thePlayer.inv
+      .GetItemQuantityByName('modwmh_melding_reagent');
+
+    if (reagents_count < 1) {
+      WMHHUD("You lack the necessary Melding Reageants for the process");
+
+      return;
+    }
+
+    thePlayer.inv.RemoveItemByName('modwmh_melding_reagent', 1);
+
+    this.selected_medallion = (new WMH_Medallion in this)
+      .init(inventory, trophy);
+    this.openItemSelectionMenu();
+  }
+
+  timer function finishMeldingProcess(delta: float , id: int) {
+    var runes: array<SItemUniqueId> = this.GetInventory().GetItemsByTag('WMH_RuneOfPower');
+
+    var inventory: CInventoryComponent = this.GetInventory();
+
+    for rune: SItemUniqueId in runes {
+      this.selected_medallion.appendPerk(WMH_runeGetPerk(inventory, rune));
+    }
+
+    // consume the runes
+    this.GetInventory().RemoveAllItems();
+    theSound.SoundEvent("gui_inventory_weapon_attach");
+    WMH_updateDecorationPerks();
+  }
+
+  private function promptUserMelding() {
+    var data: W3MessagePopupData = new W3MessagePopupData in this;
+    data.titleText = "Medallion melding";
+    data.messageText = "Use Melding Reagents to meld Runes Of Power onto your currently equipped medallion?";
+
+    data.autoLocalize = false;
+    data.messageId = 10245; // random number to be unique
+    data.setActionsByType(UDB_OkCancel);
+
+    // relies on annotation to be notified if the user answers yes
+    theGame.RequestPopup('MessagePopup', data);
+  }
+
+  private function openItemSelectionMenu() {
+    var itemSelectionPopup: CR4ItemSelectionPopup;  
+    var tags: array<name>;  
+    var firstTag: name;
+    
+    theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' );
+
+    // UI popup requires entity tag to be unique, decoration should not work if
+    // it's not  
+    tags = GetTags();
+    firstTag = tags[0];
+  
+    this.popup_data = new W3ItemSelectionPopupData in this;
+    this.popup_data.targetInventory = this.GetInventory();
+    this.popup_data.collectorTag = firstTag;
+    this.popup_data.overrideQuestItemRestrictions = true;
+    
+    // Following filter settings are modified per child class type
+    var tags: array<name>;
+    tags.PushBack('WMH_RuneOfPower');
+
+    var forbidden: array<name>;
+    forbidden.PushBack('NoShow');
+    forbidden.PushBack('Body');
+    forbidden.PushBack('Quest');
+
+    var empty: array<name>;
+  
+    this.popup_data.filterTagsList = tags;
+    this.popup_data.filterForbiddenTagsList = forbidden;
+    this.popup_data.selectionMode = EISPM_Painting;
+    this.popup_data.checkTagsOR = true;
+    this.popup_data.categoryFilterList = empty;
+    
+    theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
+    AddTimer( 'finishMeldingProcess', 0.1 );
+  }
+}
+
+
