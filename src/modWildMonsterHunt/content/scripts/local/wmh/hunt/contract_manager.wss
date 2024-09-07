@@ -282,7 +282,7 @@ class WMH_ContractManager {
       else {
         this.pending_contracts.PushBack(
           (new WMH_PendingContract in this)
-            .init(bestiary, contract)
+            .init(bestiary, contract, true)
         );
       }
     }

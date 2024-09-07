@@ -27,7 +27,8 @@ statemachine class WMH_Logger {
         break;
       case WMHLL_Hud:
         LogChannel('WMHHUD', message);
-        this.bufferMessage("[WMHERR] " + message);
+        this.bufferMessage("[WMHUD] " + message);
+        GetWitcherPlayer().DisplayHudMessage(message);
         break;
     }
   }
