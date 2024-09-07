@@ -14,6 +14,7 @@ exec function wmhaddruneofpower() {
   thePlayer.inv.AddAnItem('modwmh_rune_of_power', 1);
   thePlayer.inv.AddAnItem('modwmh_trophy_medallion', 1);
   thePlayer.inv.AddAnItem('modwmh_melding_reagent', 1);
+  thePlayer.inv.AddAnItem('modwmh_trophy_medallion_recipe', 1);
 
   var rune: SItemUniqueId = thePlayer.inv.GetItemId('modwmh_rune_of_power');
   var medallion: WMH_Medallion = (new WMH_Medallion in thePlayer)

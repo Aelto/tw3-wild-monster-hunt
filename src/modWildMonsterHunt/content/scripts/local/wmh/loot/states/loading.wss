@@ -1604,6 +1604,14 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 3');
   }
 
+  function registerMeldingShematics() {
+    if (parent.maximum_loot_level.value < 30) {
+      return;
+    }
+
+    this.tryAddSchematic('modwmh_trophy_medallion_recipe');
+  }
+
   private function tryAddRecipe(recipe: name) {
     if (
       this.witcher.CanLearnAlchemyRecipe(recipe)
