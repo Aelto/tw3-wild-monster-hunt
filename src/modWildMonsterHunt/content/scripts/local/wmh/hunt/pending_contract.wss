@@ -49,7 +49,7 @@ class WMH_PendingContract {
 
   var was_spawned: bool;
 
-  public function init(bestiary: WMH_Bestiary, contract: WMH_Contract): WMH_PendingContract {
+  public function init(bestiary: WMH_Bestiary, contract: WMH_Contract, optional do_not_inform_gui: bool): WMH_PendingContract {
     this.contract = contract;
 
     this.target = bestiary.getRandomUnfilteredEliteEntry(
@@ -60,7 +60,9 @@ class WMH_PendingContract {
     this.affix_manager = (new WMH_AffixManager in this)
       .init(this.contract.level, this.getContractSeed(1));
 
-    WMHHUD("New contract: " + this.toTargetLocNameHtml());
+    if (!do_not_inform_gui) {
+      WMHHUD("New contract: " + this.toTargetLocNameHtml());
+    }
 
     return this;
   }
@@ -143,6 +145,13 @@ class WMH_PendingContract {
       ) as int;
 
       provider.appendMoney(money);
+
+      var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
+                                 < Min(this.target.strength * 0.1, 0.5);
+
+      if (can_drop_reagent) {
+        provider.appendItem("modwmh_melding_reagent", 1);
+      }
     }
   }
 
