@@ -79,6 +79,8 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     inventory.AddAnItem('Smithing tools dwarven', 1 + every80Levels);
     inventory.AddAnItem('Smithing tools gnomish', 1);
 
+    inventory.AddAnItem('modwmh_melding_reagent', 10);
+
     if (every20Levels > 0) {
       inventory.AddAnItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
     }
