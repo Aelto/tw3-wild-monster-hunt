@@ -1,37 +1,13 @@
-class WMH_MedallionForge extends W3Container {
+class WMH_MedallionForge extends WMH_InteractiveObject {
   private var selected_medallion: WMH_Medallion;
   private var prompt: WMH_ForgeYesNoPrompt;
 
-  event OnSpawned(spawnData: SEntitySpawnData)
-  {
-    super.OnSpawned(spawnData);
-    
-    // always mark this container as quest container
-    SetIsQuestContainer( true );
-  }
+  default object_name_loc_key = 'wmh_tropy_medallion_forge';
 
-  event OnInteractionActivated(actionName : string, activator : CEntity) {
-    // do not call super as it will probably disable the interaction.
-    // super.OnInteractionActivated(actionName, activator);
-    this.Enable(true, false, true);
-  }
-
-  event OnInteractionActivationTest(
-    interactionComponentName: string,
-    activator : CEntity
+  public function onAllowedInteraction(
+    action: string,
+    activator: CEntity
   ) {
-    this.Enable(true, false, true);
-    return true;
-  }
-
-  event OnInteraction(
-    actionName : string,
-    activator : CEntity
-  ) {
-    this.startMeldingProcess();
-  }
-
-  public function startMeldingProcess() {
     this.promptUserMelding();
   }
 
