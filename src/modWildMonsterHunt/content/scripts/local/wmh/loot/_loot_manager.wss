@@ -10,6 +10,9 @@ statemachine class WMH_LootManager {
   // it uses the value of WMH_LootTag as the first index.
   protected var loot_by_category: array<array<name>>;
 
+  protected var runes_of_power_perks: array<ESkill>;
+  protected var runes_of_power_perks_roller: WMH_RatiosRoller;
+
   protected var maximum_loot_level: WMH_Level;
   protected var maximum_recipe_level: WMH_Level;
 
@@ -23,12 +26,14 @@ statemachine class WMH_LootManager {
     out tags: array<WMH_LootTag>,
     seed: int
   ) {
+    var allow_runes_of_power: bool = true;
 
     this.addLootRequest(
       WMH_LootRequest(
         inventory,
         tags,
-        seed
+        seed,
+        allow_runes_of_power
       )
     );
   }
@@ -93,6 +98,34 @@ statemachine class WMH_LootManager {
     return item;
   }
 
+  public function giveRandomRuneOfPower(
+    inventory: CInventoryComponent,
+    seed: int,
+    optional count: int
+  ): array<SItemUniqueId> {
+    var runes: array<SItemUniqueId>;
+
+    if (this.runes_of_power_perks.Size() <= 0) {
+      return runes;
+    }
+
+    runes = inventory
+      .AddAnItem('modwmh_rune_of_power', Max(1, count));
+
+    var offset: int = 0;
+
+    for rune: SItemUniqueId in runes {
+      var index: int = this.runes_of_power_perks_roller.roll(seed + offset);
+      var perk: ESkill = this.runes_of_power_perks[index];
+
+      offset += 1;
+
+      WMH_runeSetPerk(inventory, rune, perk);
+    }
+
+    return runes;
+  }
+
   private function addLootRequest(request: WMH_LootRequest) {
     this.loot_requests.PushBack(request);
 
@@ -141,4 +174,5 @@ struct WMH_LootRequest {
   var inventory: CInventoryComponent;
   var tags: array<WMH_LootTag>;
   var seed: int;
+  var allow_runes_of_power: bool
 }

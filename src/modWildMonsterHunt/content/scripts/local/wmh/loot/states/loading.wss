@@ -41,6 +41,8 @@ state Loading in WMH_LootManager {
     this.registerSchematicsTier5();
     this.registerSchematicsTierNGP();
 
+    this.registerRopPerks();
+
     parent.GotoState('Waiting');
   }
 
@@ -1612,6 +1614,75 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('modwmh_trophy_medallion_recipe');
   }
 
+  function registerRopPerks() {
+    parent.runes_of_power_perks.Clear();
+    parent.runes_of_power_perks_roller = new WMH_RatiosRoller in parent;
+
+
+    this.addPerkRatio(S_Sword_s01, 0.3)//whirl
+    this.addPerkRatio(S_Sword_s02, 0.3)//rend
+    this.addPerkRatio(S_Sword_s03, 0.1)//precision
+    this.addPerkRatio(S_Sword_s04, 0.5)//overwhelm
+    this.addPerkRatio(S_Sword_s05, 0.1)//crippling strikes
+    this.addPerkRatio(S_Sword_s06, 0.1)//sunder armor
+    this.addPerkRatio(S_Sword_s07, 0.5)//crushing blows
+    this.addPerkRatio(S_Sword_s08, 1.0)//lightning reflex
+    this.addPerkRatio(S_Sword_s09, 0.5)//fleet footed
+    this.addPerkRatio(S_Sword_s10, 1.0)//arrow deflection
+    this.addPerkRatio(S_Sword_s11, 0.3)//counterattack
+    this.addPerkRatio(S_Sword_s12, 0.5)//preparation
+    this.addPerkRatio(S_Sword_s13, 0.5)//custom engineerin
+    this.addPerkRatio(S_Sword_s15, 0.5)//improvised speed
+    this.addPerkRatio(S_Sword_s16, 0.5)//resolve
+    this.addPerkRatio(S_Sword_s17, 0.5)//perfect balance
+    this.addPerkRatio(S_Sword_s18, 0.5)//second wind
+    this.addPerkRatio(S_Sword_s19, 0.5)//all out
+    this.addPerkRatio(S_Sword_s20, 0.5)//still mind
+    this.addPerkRatio(S_Sword_s21, 0.5)//fiery dancer
+
+    this.addPerkRatio(S_Magic_s01, 0.3)//wave
+    this.addPerkRatio(S_Magic_s02, 0.5)//burn
+    this.addPerkRatio(S_Magic_s03, 0.1)//shock
+    this.addPerkRatio(S_Magic_s04, 0.5)//channeling
+    this.addPerkRatio(S_Magic_s05, 0.5)//guard me!
+    this.addPerkRatio(S_Magic_s06, 0.1)//static discha
+    this.addPerkRatio(S_Magic_s07, 0.5)//disarm
+    this.addPerkRatio(S_Magic_s08, 1.0)//melt armor
+    this.addPerkRatio(S_Magic_s09, 0.1)//combustible
+    this.addPerkRatio(S_Magic_s10, 0.5)//glyph sustena
+    this.addPerkRatio(S_Magic_s11, 0.1)//supercharge
+    this.addPerkRatio(S_Magic_s12, 0.5)//aard passive 
+    this.addPerkRatio(S_Magic_s13, 0.5)//impulse
+    this.addPerkRatio(S_Magic_s14, 1.0)//discharge
+    this.addPerkRatio(S_Magic_s15, 0.5)//fade
+    this.addPerkRatio(S_Magic_s16, 0.5)//safe zone
+    this.addPerkRatio(S_Magic_s17, 1.0)//expression
+    this.addPerkRatio(S_Magic_s18, 0.1)//demotivate
+    this.addPerkRatio(S_Magic_s19, 0.1)//dominate
+    this.addPerkRatio(S_Magic_s20, 0.5)//dispersion
+
+    this.addPerkRatio(S_Alchemy_s01, 0.5)//resistances
+    this.addPerkRatio(S_Alchemy_s02, 0.5)//refreshment
+    this.addPerkRatio(S_Alchemy_s03, 0.5)//delayed recovery
+    this.addPerkRatio(S_Alchemy_s04, 0.1)//side effect
+    this.addPerkRatio(S_Alchemy_s05, 0.5)//protective coating
+    this.addPerkRatio(S_Alchemy_s06, 0.5)//fixative formula
+    this.addPerkRatio(S_Alchemy_s07, 0.5)//application
+    this.addPerkRatio(S_Alchemy_s08, 0.5)//efficiency
+    this.addPerkRatio(S_Alchemy_s09, 0.5)//bomb aim slowmo
+    this.addPerkRatio(S_Alchemy_s10, 0.5)//fragmentation casing
+    this.addPerkRatio(S_Alchemy_s11, 0.1)//cluster bomb
+    this.addPerkRatio(S_Alchemy_s12, 0.5)//by-product
+    this.addPerkRatio(S_Alchemy_s13, 0.5)//transmutation
+    this.addPerkRatio(S_Alchemy_s14, 0.5)//mutant
+    this.addPerkRatio(S_Alchemy_s15, 0.5)//condensation
+    this.addPerkRatio(S_Alchemy_s16, 1.0)//frenzy
+    this.addPerkRatio(S_Alchemy_s17, 0.1)//killing spree
+    this.addPerkRatio(S_Alchemy_s18, 0.5)//taster
+    this.addPerkRatio(S_Alchemy_s19, 0.5)//adrenaline surge
+    this.addPerkRatio(S_Alchemy_s20, 0.5)//ignore pain
+  }
+
   private function tryAddRecipe(recipe: name) {
     if (
       this.witcher.CanLearnAlchemyRecipe(recipe)
@@ -1629,5 +1700,10 @@ state Loading in WMH_LootManager {
       // tier is too high instead so this method is never called.
       parent.registerLoot(WMH_LootTag_Schematic, 0, schematic);
     }
+  }
+
+  private function addPerkRatio(perk: ESkill, ratio: float) {
+    parent.runes_of_power_perks.PushBack(perk);
+    parent.runes_of_power_perks_roller.addRatio(ratio);
   }
 }

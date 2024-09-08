@@ -13,9 +13,6 @@ state Running in WMH_LootManager {
       this.addLoot(request);
       SleepOneFrame();
     }
-    for request: WMH_LootRequest in parent.loot_requests {
-      
-    }
 
     parent.GotoState('Waiting');
   }
@@ -49,6 +46,19 @@ state Running in WMH_LootManager {
           request.inventory,
           category,
           request.seed + index
+        );
+      }
+    }
+
+    if (request.allow_runes_of_power) {
+      var can_add: bool = RandNoiseF(request.seed + 10, 1.0)
+                        // 5% chance
+                        <= 0.05;
+
+      if (can_add) {
+        parent.giveRandomRuneOfPower(
+          request.inventory,
+          request.seed
         );
       }
     }
