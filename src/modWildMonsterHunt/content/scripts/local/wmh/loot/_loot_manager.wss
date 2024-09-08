@@ -174,5 +174,5 @@ struct WMH_LootRequest {
   var inventory: CInventoryComponent;
   var tags: array<WMH_LootTag>;
   var seed: int;
-  var allow_runes_of_power: bool
+  var allow_runes_of_power: bool;
 }

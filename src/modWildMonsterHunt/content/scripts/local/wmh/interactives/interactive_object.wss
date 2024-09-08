@@ -1,0 +1,84 @@
+/// An abstract container that is always interactive
+abstract class WMH_InteractiveObject extends W3Container {
+  //#region private API
+  event OnInteractionActivated(actionName : string, activator : CEntity) {
+    // do not call super as it will probably disable the interaction.
+    // super.OnInteractionActivated(actionName, activator);
+    var is_interactive: bool = this.isInteractive();
+
+    this.Enable(is_interactive, false, is_interactive);
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator : CEntity
+  ) {
+    var is_interactive: bool = this.isInteractive();
+    
+    this.Enable(is_interactive, false, is_interactive);
+    return is_interactive;
+  }
+
+  event OnInteraction(
+    action: string,
+    activator : CEntity
+  ) {
+    // do not call super.OnInteraction();
+
+    if (this.isInteractive()) {
+      this.onAllowedInteraction(action, activator);
+    }
+    else {
+      this.onDisallowedInteraction(action, activator);
+    }
+  }
+
+  protected function isInteractive(): bool {
+    return true;
+  }
+
+  protected function isInteractionAllowed(): bool {
+    return this.isInteractive()
+        && !IsNameValid(this.required_fact)
+        || FactsDoesExist(this.required_fact);
+  }
+
+  protected function addInteractionRequiredFact() {
+    if (IsNameValid(this.required_fact)) {
+      FactsAdd(this.required_fact, 1, -1);
+    }
+  }
+
+  protected function getObjectName(): string {
+    return GetLocStringByKey(this.object_name_loc_key);
+  }
+  //#endregion
+
+  //#region public API, to override
+  public editable var required_fact: name;
+  hint required_fact = "If set to a value, the fact must exist before the OnAllowedInteraction event is triggered otherwise onDisallowedInteraction will be used. NOTE: It is also recommend you add this fact to the tags list of this entity.";
+
+  public editable var object_name_loc_key: name;
+  hint object_name_loc_key = "loc key to get the name of the object";
+
+  event OnSpawned(spawnData: SEntitySpawnData)
+  {
+    super.OnSpawned(spawnData);
+    
+    // always mark this container as quest container
+    SetIsQuestContainer( true );
+  }
+
+  public function onAllowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {}
+
+  public function onDisallowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {
+    WMHHUD("You cannot perform this now");
+  }
+  //#endregion
+}

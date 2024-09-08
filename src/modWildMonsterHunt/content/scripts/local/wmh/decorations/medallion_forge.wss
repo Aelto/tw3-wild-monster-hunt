@@ -1,6 +1,6 @@
 class WMH_MedallionForge extends W3Container {
-  protected var popup_data: W3ItemSelectionPopupData;
   private var selected_medallion: WMH_Medallion;
+  private var prompt: WMH_ForgeYesNoPrompt;
 
   event OnSpawned(spawnData: SEntitySpawnData)
   {
@@ -60,7 +60,7 @@ class WMH_MedallionForge extends W3Container {
       return;
     }
 
-    thePlayer.inv.RemoveItemByName('modwmh_melding_reagent', 1);
+    // the reagent is removed after the item selection
 
     this.selected_medallion = (new WMH_Medallion in this)
       .init(inventory, trophy);
@@ -74,6 +74,7 @@ class WMH_MedallionForge extends W3Container {
 
     for rune: SItemUniqueId in runes {
       this.selected_medallion.appendPerk(WMH_runeGetPerk(inventory, rune));
+      thePlayer.inv.RemoveItemByName('modwmh_melding_reagent', 1);
     }
 
     // consume the runes
@@ -83,55 +84,43 @@ class WMH_MedallionForge extends W3Container {
   }
 
   private function promptUserMelding() {
-    var data: W3MessagePopupData = new W3MessagePopupData in this;
-    data.titleText = "Medallion melding";
-    data.messageText = "Use Melding Reagents to meld Runes Of Power onto your currently equipped medallion?";
-
-    data.autoLocalize = false;
-    data.messageId = 10245; // random number to be unique
-    data.setActionsByType(UDB_OkCancel);
-
-    // relies on annotation to be notified if the user answers yes
-    theGame.RequestPopup('MessagePopup', data);
+    this.prompt = new WMH_ForgeYesNoPrompt in this;
+    prompt.forge = this;
+    prompt.display();
   }
 
   private function openItemSelectionMenu() {
-    var itemSelectionPopup: CR4ItemSelectionPopup;  
-    var tags: array<name>;  
-    var firstTag: name;
+    var all_tags: array<name> = GetTags();
+    var first_tag: name = all_tags[0];
     
-    theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' );
+    var item_tags: array<name>;
+    item_tags.PushBack('WMH_RuneOfPower');
 
-    // UI popup requires entity tag to be unique, decoration should not work if
-    // it's not  
-    tags = GetTags();
-    firstTag = tags[0];
-  
-    this.popup_data = new W3ItemSelectionPopupData in this;
-    this.popup_data.targetInventory = this.GetInventory();
-    this.popup_data.collectorTag = firstTag;
-    this.popup_data.overrideQuestItemRestrictions = true;
-    
-    // Following filter settings are modified per child class type
-    var tags: array<name>;
-    tags.PushBack('WMH_RuneOfPower');
+    WMH_displayItemSelection(
+      first_tag,
+      this.GetInventory(),
+      item_tags,
+      true
+    );
 
-    var forbidden: array<name>;
-    forbidden.PushBack('NoShow');
-    forbidden.PushBack('Body');
-    forbidden.PushBack('Quest');
-
-    var empty: array<name>;
-  
-    this.popup_data.filterTagsList = tags;
-    this.popup_data.filterForbiddenTagsList = forbidden;
-    this.popup_data.selectionMode = EISPM_Painting;
-    this.popup_data.checkTagsOR = true;
-    this.popup_data.categoryFilterList = empty;
-    
-    theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
     AddTimer( 'finishMeldingProcess', 0.1 );
   }
 }
 
+class WMH_ForgeYesNoPrompt extends WMH_YesNoPrompt {
+  public var forge: WMH_MedallionForge;
 
+  public function title(): string {
+    return "Medallion melding";
+  }
+
+  public function description(): string {
+    return "Use Melding Reagents to meld Runes Of Power onto your currently equipped medallion?";
+  }
+
+  public function onResponse(accepted: bool) {
+    if (accepted) {
+      this.forge.continueMeldingProcess();
+    }
+  }
+}

@@ -1,0 +1,36 @@
+function WMH_displayItemSelection(
+  // UI popup requires entity tag to be unique, decoration should not work if
+  // it's not  
+  container_tag: name,
+  container_inventory: CInventoryComponent,
+  item_tags: array<name>,
+  // if `false` then it will filter using the tags and a && condition
+  // if `true` then it will filter using the tags and a || condition
+  filtering_tags_or: bool
+)  {
+  theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' );
+
+  var popup_data: W3ItemSelectionPopupData;
+  popup_data = new W3ItemSelectionPopupData in container_inventory;
+  popup_data.targetInventory = container_inventory;
+  popup_data.collectorTag = container_tag;
+  popup_data.overrideQuestItemRestrictions = true;
+  
+  // Following filter settings are modified per child class type
+  var tags: array<name>;
+  tags.PushBack('WMH_RuneOfPower');
+
+  var forbidden: array<name>;
+  forbidden.PushBack('NoShow');
+  forbidden.PushBack('Body');
+  forbidden.PushBack('Quest');
+
+  var empty: array<name>;
+  popup_data.filterTagsList = item_tags;
+  popup_data.filterForbiddenTagsList = forbidden;
+  popup_data.selectionMode = EISPM_Painting;
+  popup_data.checkTagsOR = filtering_tags_or;
+  popup_data.categoryFilterList = empty;
+  
+  theGame.RequestPopup('ItemSelectionPopup', popup_data);
+}

@@ -1,0 +1,49 @@
+// A class that can be overridden to send a Yes/No prompt and get a callback
+// with the answer.
+abstract class WMH_YesNoPrompt {
+  public function display() {
+    var data: W3MessagePopupData = new W3MessagePopupData in this;
+    data.titleText = this.title();
+    data.messageText = this.description();
+
+    data.autoLocalize = false;
+    data.messageId = 10245; // random number to be unique
+    data.setActionsByType(UDB_OkCancel);
+
+    // relies on annotation to be notified if the user answers yes
+    var manager: CR4GuiManager = theGame.GetGuiManager();
+    if (manager) {
+      manager.wmh_yesno_prompt = this;
+    }
+
+    theGame.RequestPopup('MessagePopup', data);
+  }
+
+  public function title(): string {
+    return "Confirm";
+  }
+
+  public function description(): string {
+    return "Proceed with action?";
+  }
+
+  public function onResponse(accepted: bool) {}
+}
+
+@addField(CR4GuiManager)
+var wmh_yesno_prompt: WMH_YesNoPrompt;
+
+@wrapMethod(CR4GuiManager)
+function UserDialogCallback(message_id: int, action_id: EUserMessageAction) {
+  wrappedMethod(message_id, action_id);
+
+  if (this.wmh_yesno_prompt) {
+    if (message_id == 10245) {
+      this.wmh_yesno_prompt
+        .onResponse(action_id == UMA_Ok || action_id == UMA_Yes);
+      this.wmh_yesno_prompt = NULL;
+    }
+    
+  }
+
+}

@@ -1,0 +1,119 @@
+class WMH_RestorableObject extends WMH_InteractiveObject {
+  public editable var repair_tools_tag: name;
+  hint repair_tools_tag = "If set, the tag of the items that must be used to repair the object, otherwise the repair is free and only requires an interaction";
+
+  public editable var select_repair_tools: bool;
+  hint select_repair_tools = "If true, will display an item select panel so the player can pick the repair tools he wants to use";
+
+  protected function isRestored(): bool {
+    return this.isInteractionAllowed();
+  }
+
+  private function doesRequireRepairTools(): bool {
+    return IsNameValid(this.repair_tools_tag);
+  }
+
+  protected function restoreObject() {
+    this.addInteractionRequiredFact();
+    this.onRestoration();
+  }
+
+  public function tryRestoreObject() {
+    if (this.isRestored()) {
+      return;
+    }
+
+    // nothing required, repair directly
+    if (!this.doesRequireRepairTools()) {
+      this.restoreObject();
+      return;
+    }
+
+    // no selection required, pick first item with tag
+    if (!this.select_repair_tools) {
+      var items: array<SItemUniqueId> = thePlayer
+        .inv
+        .GetItemsByTag(this.repair_tools_tag);
+
+      if (items.Size() <= 0) {
+        var objname: string = this.getObjectName();
+        WMHHUD("You lack the necessary tools to repair this " + objname);
+
+        return;
+      }
+
+      var first: SItemUniqueId = items[0];
+
+      thePlayer.inv.GiveItemTo(
+        this.GetInventory(),
+        first,
+        1
+      );
+    }
+    
+    var item_tags: array<name>;
+    item_tags.PushBack(this.repair_tools_tag);
+
+    WMH_displayItemSelection(
+      this.required_fact, // use the required_fact as the unique tag
+      this.GetInventory(),
+      item_tags,
+      true
+    );
+
+    AddTimer( 'tryRestoreObjectPostItemSelection', 0.1 );
+  }
+
+  private timer function tryRestoreObjectPostItemSelection(delta: float , id: int) {
+    if (this.doesRequireRepairTools()) {
+      this.GetInventory().RemoveItemByTag(this.repair_tools_tag, 1);
+    }
+  }
+
+  protected function onDisallowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {
+    var prompt: WMH_RestorableObject_RepairPrompt =
+      new WMH_RestorableObject_RepairPrompt in this;
+
+    prompt.object = this;
+    prompt.title = "Repair " + this.getObjectName();
+
+    if (this.doesRequireRepairTools()) {
+      prompt.description = "Use repair tools on " + this.getObjectName() + "?";
+    }
+    else {
+      prompt.description = "Do you wish to repair this "
+        + this.getObjectName() + "?";
+    }
+    
+    prompt.display();
+  }
+
+  //#region public API, to override
+  public function onRestoration() {
+    WMHHUD(this.getObjectName() + " restored");
+  }
+  //#endregion
+}
+
+class WMH_RestorableObject_RepairPrompt extends WMH_YesNoPrompt {
+  var title: string;
+  var description: string;
+  var object: WMH_RestorableObject;
+
+  public function title(): string {
+    return this.title;
+  }
+
+  public function description(): string {
+    return this.description;
+  }
+
+  public function onResponse(accepted: bool) {
+    if (accepted) {
+      this.object.tryRestoreObject();
+    }
+  }
+}
