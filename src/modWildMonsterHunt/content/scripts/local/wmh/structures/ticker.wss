@@ -9,6 +9,7 @@ class WMH_Ticker {
 
   public function init(cooldown_seconds: float): WMH_Ticker {
     this.cooldown_seconds = cooldown_seconds;
+    this.trigger_timestamp = (cooldown_seconds + 1) * -1;
 
     return this;
   }
