@@ -6,7 +6,9 @@ function WMH_displayItemSelection(
   item_tags: array<name>,
   // if `false` then it will filter using the tags and a && condition
   // if `true` then it will filter using the tags and a || condition
-  filtering_tags_or: bool
+  filtering_tags_or: bool,
+
+  optional listener: WMH_ItemSelectionListener
 )  {
   theGame.GetGuiManager().SetLastOpenedCommonMenuName( 'None' );
 
@@ -15,10 +17,7 @@ function WMH_displayItemSelection(
   popup_data.targetInventory = container_inventory;
   popup_data.collectorTag = container_tag;
   popup_data.overrideQuestItemRestrictions = true;
-  
-  // Following filter settings are modified per child class type
-  var tags: array<name>;
-  tags.PushBack('WMH_RuneOfPower');
+  popup_data.wmh_item_selection_listener = listener;
 
   var forbidden: array<name>;
   forbidden.PushBack('NoShow');
@@ -33,4 +32,26 @@ function WMH_displayItemSelection(
   popup_data.categoryFilterList = empty;
   
   theGame.RequestPopup('ItemSelectionPopup', popup_data);
+}
+
+abstract class WMH_ItemSelectionListener {
+  public function OnCallSelectItem(item: SItemUniqueId): bool {
+    return true;
+  }
+}
+
+@addField(W3ItemSelectionPopupData)
+var wmh_item_selection_listener: WMH_ItemSelectionListener;
+
+@wrapMethod(CR4ItemSelectionPopup)
+function OnCallSelectItem(item: SItemUniqueId) {
+  if (this.m_DataObject.wmh_item_selection_listener) {
+    WMHINFO("selected item" + thePlayer.inv.GetItemName(item));
+    if (this.m_DataObject.wmh_item_selection_listener.OnCallSelectItem(item)) {
+      this.ClosePopup();
+    }
+  }
+  else {
+    wrappedMethod(item);
+  }
 }
