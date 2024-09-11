@@ -488,7 +488,7 @@ state Spawning in WMH_Bestiary {
     }
 
     if (request.aggression_target) {
-      SUH_makeEntitiesTargetPlayer();
+      SUH_makeEntitiesTargetPlayer(entities);
     }
 
     request.onRequestFinished(entities);

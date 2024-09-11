@@ -17,6 +17,8 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
   protected var spawn_strong_creature: bool;
   
   private var prompt: WMH_LureYesNoPrompt;
+  private var item_selection_listener: WMH_LureItemSelectionListener;
+  private var selected_item: SItemUniqueId;
 
   public function onAllowedInteraction(
     action: string,
@@ -42,21 +44,6 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
   }
 
   public function trySetupLure() {
-    var lures: array<SItemUniqueId> = thePlayer.inv
-      .GetItemsByName('modwmh_lure_container');
-
-    if (lures.Size() <= 0) {
-      var lure_container: string = GetLocStringByKey('wmh_lure_container');
-
-      return WMHHUD("You need a " + lure_container + " to set up a lure here");
-    }
-
-    thePlayer.inv.GiveItemTo(
-      this.GetInventory(),
-      lures[0],
-      1
-    );
-
     this.openItemSelectionMenu();
   }
 
@@ -65,17 +52,42 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     item_tags.PushBack('CraftingIngredient');
     item_tags.PushBack('AlchemyIngredient');
 
+    this.item_selection_listener = new WMH_LureItemSelectionListener in this;
+    this.item_selection_listener.lure = this;
+
     WMH_displayItemSelection(
       this.required_fact,
       this.GetInventory(),
       item_tags,
-      true
+      true,
+      this.item_selection_listener
     );
+  }
 
-    AddTimer('finishLureSetup', 0.1 );
+  public function onLureItemSelected(item: SItemUniqueId) {
+    this.selected_item = item;
+
+    // a timer is needed as the `Interact` key is pressed to select the item,
+    // which causes a second interaction
+    this.AddTimer('finishLureSetup', 0.1);
   }
 
   timer function finishLureSetup(delta: float , id: int) {
+    var inventory: CInventoryComponent = thePlayer.GetInventory();
+    var lures: array<SItemUniqueId> = inventory
+      .GetItemsByName('modwmh_lure_container');
+
+    if (lures.Size() <= 0) {
+      var lure_container: string = GetLocStringByKey('wmh_lure_container');
+
+      return WMHHUD("You need a " + lure_container + " to set up a lure here");
+    }
+
+    var price: int = inventory.GetItemPrice(this.selected_item);
+    this.spawn_strong_creature = price >= this.strong_creature_threshold;
+
+    inventory.RemoveItem(lures[0], 1);
+    inventory.RemoveItem(this.selected_item, 1);
 
     if (!this.respawn_ticker) {
       this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
@@ -83,7 +95,6 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
 
     this.respawn_ticker.reset();
     theSound.SoundEvent('gui_inventory_repair');
-    this.updateSpawnedCreatureTypeAndRemoveItems();
     this.GotoState('StartEvent');
   }
 
@@ -93,7 +104,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     return (position.X + position.Y) as int;
   }
 
-  private function updateSpawnedCreatureTypeAndRemoveItems() {
+  private function updateSpawnedCreatureTypeAndRemoveItems(): bool {
     var items: array<SItemUniqueId>;
     var total: int = 0;
 
@@ -101,11 +112,15 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     inventory.GetAllItems(items);
 
     for item: SItemUniqueId in items {
-      total += inventory.GetItemPrice(item);
+      if (!inventory.ItemHasTag(item, 'WMH_LureContainer')) {
+        total += inventory.GetItemPrice(item);
+      }
     }
 
     this.spawn_strong_creature = total >= this.strong_creature_threshold;
     inventory.RemoveAllItems();
+
+    return total > 0;
   }
 }
 
@@ -127,6 +142,16 @@ class WMH_LureYesNoPrompt extends WMH_YesNoPrompt {
   }
 }
 
+class WMH_LureItemSelectionListener extends WMH_ItemSelectionListener {
+  var lure: WMH_LureSpot;
+
+  public function OnCallSelectItem(item: SItemUniqueId): bool {
+    lure.onLureItemSelected(item);
+
+    return true; // close the popup
+  }
+}
+
 state StartEvent in WMH_LureSpot {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
@@ -141,6 +166,7 @@ state PlayScene in WMH_LureSpot {
   }
 
   entry function PlayScene_main() {
+    Sleep(0.2);
     var camera_node: CNode = this.getNearbyCameraNode();
 
     if (!camera_node) {
