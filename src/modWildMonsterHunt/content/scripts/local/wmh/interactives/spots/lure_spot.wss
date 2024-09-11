@@ -294,6 +294,7 @@ state PlayScene in WMH_LureSpot {
     );
     camera_0.start();
 
+    SleepOneFrame();
     camera_1.teleportAndLookAt(
       camera_node.GetWorldPosition()
       + camera_0.GetCameraDirection() * 5,
@@ -301,7 +302,6 @@ state PlayScene in WMH_LureSpot {
       meditation_position + Vector(0, 0, 1)
     );
 
-		// GetWitcherPlayer().SetBehaviorVariable('MeditateWithIgnite', 0);
     GetWitcherPlayer().PlayerStartAction(PEA_Meditation);
     Sleep(1.0);
     
@@ -319,7 +319,7 @@ state PlayScene in WMH_LureSpot {
     camera_0.teleportAndLookAt(
       spawn_position
       + VecFromHeading(spawn_node.GetHeading()) * 10
-      + Vector(0, 0, 1.0),
+      + Vector(0, 0, 2),
       spawn_position + Vector(0, 0, 1.25)
     );
 
@@ -328,7 +328,7 @@ state PlayScene in WMH_LureSpot {
 
     camera_1.teleportAndLookAt(
       camera_0.GetWorldPosition()
-      + camera_0.GetCameraDirection() * -5,
+      + camera_0.GetCameraDirection() * -5 + Vector(0, 0, 10),
       spawn_position + Vector(0, 0, 1.5)
     );
 
