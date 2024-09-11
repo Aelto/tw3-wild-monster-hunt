@@ -28,6 +28,7 @@ state Loading in WMH_LootManager {
     this.registerLootMaterial();
     this.registerLootOre();
 
+    this.registerWmhRecipes();
     this.registerRecipesMisc();
     this.registerRecipesTier1();
     this.registerRecipesTier2();
@@ -1606,12 +1607,15 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('NGP Witcher Wolf Boots Upgrade schematic 3');
   }
 
-  function registerMeldingShematics() {
-    if (parent.maximum_loot_level.value < 30) {
-      return;
+  function registerWmhRecipes() {
+    this.tryAddSchematic('modwmh_trap_repair_tools_recipe');
+    this.tryAddSchematic('modwmh_trap_device_recipe');
+    this.tryAddSchematic('modwmh_lure_container_recipe');
+
+    if (parent.maximum_loot_level.value > 30) {
+      this.tryAddSchematic('modwmh_trophy_medallion_recipe');
     }
 
-    this.tryAddSchematic('modwmh_trophy_medallion_recipe');
   }
 
   function registerRopPerks() {
