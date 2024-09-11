@@ -69,6 +69,35 @@ statemachine class WMH_Bestiary {
     this.requestSpawn(request);
   }
 
+  public function onSpawnLure(
+    origin: WMH_LureSpot,
+    creature_bypass_tag: name,
+    position: Vector,
+    heading: float,
+    hunt_seed: int
+  ) {
+    var bentry: WMH_BestiaryEntry = this.getEntryByBiomeTagByPass(creature_bypass_tag);
+
+    if (!bentry) {
+      return;
+    }
+
+    var request: WMH_SpawnRequestLure = new WMH_SpawnRequestLure in this;
+
+    // do it in multiple lines to avoid downcasting it
+    request.withBestiaryEntry(bentry);
+    request.withSpawnPosition(position);
+    request.withHeading(heading);
+    request.withSeed(hunt_seed + origin.getSeed());
+    request.withAggressionTarget(thePlayer, 5);
+
+    // todo: if lures can spawn contract targets
+    // .withEncounterTag(encounter_tag)
+    // .withAffixes(affix_manager)
+
+    this.requestSpawn(request);
+  }
+
   // The elite entries are the closest ones to the given WMH_Level
   public function getEliteEntries(level: WMH_Level): array<WMH_BestiaryEntry> {
     var output: array<WMH_BestiaryEntry>;
@@ -456,6 +485,10 @@ state Spawning in WMH_Bestiary {
         request.seed,
         /*out*/ entities
       );
+    }
+
+    if (request.aggression_target) {
+      SUH_makeEntitiesTargetPlayer();
     }
 
     request.onRequestFinished(entities);

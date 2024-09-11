@@ -1,6 +1,9 @@
 class WMH_SpawnRequest {
   public var entries: array<WMH_BestiaryEntry>;
   public var spawn_point: WMH_BiomeSpawnPoint;
+  public var aggression_target: CGameplayEntity;
+  public var aggression_delay: float; // currently unused
+  public var spawn_position: Vector;
   public var encounter_tag: name;
   public var heading: float;
   public var seed: int;
@@ -13,6 +16,12 @@ class WMH_SpawnRequest {
 
   public function withSpawnPoint(spawn_point: WMH_BiomeSpawnPoint): WMH_SpawnRequest {
     this.spawn_point = spawn_point;
+
+    return this;
+  }
+
+  public function withSpawnPosition(position: Vector): WMH_SpawnRequest {
+    this.spawn_position = position;
 
     return this;
   }
@@ -47,6 +56,18 @@ class WMH_SpawnRequest {
     return this;
   }
 
+  // make the spawned creatures target the supplied `target` after the
+  // given `delay`
+  public function withAggressionTarget(
+    target: CGameplayEntity,
+    optional delay: float,
+  ): WMH_SpawnRequest {
+    this.aggression_target = target;
+    this.aggression_delay = delay;
+
+    return this;
+  }
+
   public function onRequestFinished(entities: array<CEntity>) {
     // WMHINFO("WMH_SpawnRequest::onRequestFinished, entities.Size() = " + entities.Size());
 
@@ -59,10 +80,12 @@ class WMH_SpawnRequest {
     );
   }
 
-  // made so if one day the spawn requests support setting a Vector position
-  // directly instead of a spawn point, it should be seamless.
   public function GetWorldPosition(): Vector {
-    return this.spawn_point.GetWorldPosition();
+    if (this.spawn_point) {
+      return this.spawn_point.GetWorldPosition();
+    }
+
+    return this.spawn_position;
   }
 }
 
@@ -73,6 +96,19 @@ class WMH_SpawnRequestClues extends WMH_SpawnRequest {
     thePlayer.wmh.submitOnCluesSpawned(
       this,
       this.spawn_point,
+      this.entries,
+      entities
+    );
+  }
+}
+
+class WMH_SpawnRequestLure extends WMH_SpawnRequest {
+  public function onRequestFinished(entities: array<CEntity>) {
+    WMHINFO("WMH_SpawnRequestLure::onRequestFinished, entities.Size() = " + entities.Size());
+
+    thePlayer.wmh.submitOnLureSpawned(
+      this,
+      this.GetWorldPosition(),
       this.entries,
       entities
     );

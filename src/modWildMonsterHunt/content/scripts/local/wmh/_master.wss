@@ -92,6 +92,21 @@ class WMH_Master {
     this.bestiary.onSpawnClues(bentry, location, clues_heading, seed);
   }
 
+  public function submitOnSpawnLure(
+    origin: WMH_LureSpot,
+    creature_bypass_tag: name,
+    position: Vector,
+    heading: float
+  ) {
+    this.bestiary.onSpawnLure(
+      origin,
+      creature_bypass_tag,
+      position,
+      heading,
+      this.hunt.getSeed()
+    );
+  }
+
   public function submitOnEncounterSpawned(
     origin: WMH_SpawnRequest,
     spawn_point: WMH_BiomeSpawnPoint,
@@ -111,10 +126,22 @@ class WMH_Master {
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>
   ) {
-    var encounter: WMH_EncounterClues = (new WMH_EncounterClues in thePlayer.wmh)
+    var encounter: WMH_EncounterClues = (new WMH_EncounterClues in this)
       .initClues(spawn_point, entries, entities);
 
     this.hunt.encounters.onCluesSpawned(encounter);
+  }
+
+  public function submitOnLureSpawned(
+    origin: WMH_SpawnRequestLure,
+    position: Vector,
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>
+  ) {
+    var encounter: WMH_EncounterLure = (new WMH_EncounterLure in this)
+      .initLure(position, entries, entities);
+
+    this.hunt.encounters.onLureSpawned(encounter);
   }
 
   public function submitOnCreatureKilled(
