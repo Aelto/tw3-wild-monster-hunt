@@ -1,5 +1,13 @@
 /// An abstract container that is always interactive
 abstract class WMH_InteractiveObject extends W3Container {
+  public editable var required_fact: name;
+  hint required_fact = "If set to a value, the fact must exist before the OnAllowedInteraction event is triggered otherwise onDisallowedInteraction will be used. NOTE: It is also recommend you add this fact to the tags list of this entity.";
+
+  public editable var object_name_loc_key: name;
+  hint object_name_loc_key = "loc key to get the name of the object";
+
+
+
   //#region private API
   event OnInteractionActivated(actionName : string, activator : CEntity) {
     // do not call super as it will probably disable the interaction.
@@ -55,12 +63,6 @@ abstract class WMH_InteractiveObject extends W3Container {
   //#endregion
 
   //#region public API, to override
-  public editable var required_fact: name;
-  hint required_fact = "If set to a value, the fact must exist before the OnAllowedInteraction event is triggered otherwise onDisallowedInteraction will be used. NOTE: It is also recommend you add this fact to the tags list of this entity.";
-
-  public editable var object_name_loc_key: name;
-  hint object_name_loc_key = "loc key to get the name of the object";
-
   event OnSpawned(spawnData: SEntitySpawnData)
   {
     super.OnSpawned(spawnData);

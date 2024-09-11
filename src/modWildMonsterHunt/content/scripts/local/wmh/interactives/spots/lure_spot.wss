@@ -1,0 +1,343 @@
+statemachine class WMH_LureSpot extends WMH_RestorableObject {
+  default repair_tools_tag = 'WMH_TrapRepairTools';
+  default select_repair_tools = false;
+  default object_name_loc_key = 'wmh_luring_spot';
+
+  protected editable var weak_creature_bypass_tag: name;
+  hint weak_creature_bypass_tag = "the tag of the weak type of creature to spawn for this lure spot";
+
+  protected editable var strong_creature_bypass_tag: name;
+  hint strong_creature_bypass_tag = "the tag of the strong type of c reature to spawn for this lure spot";
+
+  protected editable var strong_creature_threshold: int;
+  default strong_creature_threshold = 60;
+  hint strong_creature_threshold = "amount of points required to unlock the strong creature spawn";
+
+  protected var respawn_ticker: WMH_Ticker;
+  protected var spawn_strong_creature: bool;
+  
+  private var prompt: WMH_LureYesNoPrompt;
+
+  public function onAllowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {
+    if (!this.respawn_ticker) {
+      this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
+    }
+
+    if (!this.respawn_ticker.hasExpired()) {
+      return WMHHUD("There is nothing to lure at the moment");
+    }
+
+    if (thePlayer.inv.GetItemQuantityByTag('WMH_LureContainer') <= 0) {
+      var lure_container: string = GetLocStringByKey('wmh_lure_container');
+
+      return WMHHUD("You need a " + lure_container + " to set up a lure here");
+    }
+
+    this.prompt = new WMH_LureYesNoPrompt in this;
+    prompt.spot = this;
+    prompt.display();
+  }
+
+  public function trySetupLure() {
+    var lures: array<SItemUniqueId> = thePlayer.inv
+      .GetItemsByName('modwmh_lure_container');
+
+    if (lures.Size() <= 0) {
+      var lure_container: string = GetLocStringByKey('wmh_lure_container');
+
+      return WMHHUD("You need a " + lure_container + " to set up a lure here");
+    }
+
+    thePlayer.inv.GiveItemTo(
+      this.GetInventory(),
+      lures[0],
+      1
+    );
+
+    this.openItemSelectionMenu();
+  }
+
+  private function openItemSelectionMenu() {
+    var item_tags: array<name>;
+    item_tags.PushBack('CraftingIngredient');
+    item_tags.PushBack('AlchemyIngredient');
+
+    WMH_displayItemSelection(
+      this.required_fact,
+      this.GetInventory(),
+      item_tags,
+      true
+    );
+
+    AddTimer('finishLureSetup', 0.1 );
+  }
+
+  timer function finishLureSetup(delta: float , id: int) {
+
+    if (!this.respawn_ticker) {
+      this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
+    }
+
+    this.respawn_ticker.reset();
+    theSound.SoundEvent('gui_inventory_repair');
+    this.updateSpawnedCreatureTypeAndRemoveItems();
+    this.GotoState('StartEvent');
+  }
+
+  public function getSeed(): int {
+    var position: Vector = this.GetWorldPosition();
+
+    return (position.X + position.Y) as int;
+  }
+
+  private function updateSpawnedCreatureTypeAndRemoveItems() {
+    var items: array<SItemUniqueId>;
+    var total: int = 0;
+
+    var inventory: CInventoryComponent = this.GetInventory();
+    inventory.GetAllItems(items);
+
+    for item: SItemUniqueId in items {
+      total += inventory.GetItemPrice(item);
+    }
+
+    this.spawn_strong_creature = total >= this.strong_creature_threshold;
+    inventory.RemoveAllItems();
+  }
+}
+
+class WMH_LureYesNoPrompt extends WMH_YesNoPrompt {
+  var spot: WMH_LureSpot;
+
+  public function title(): string {
+    return "Luring spot";
+  }
+
+  public function description(): string {
+    var lure_container: string = GetLocStringByKey('wmh_lure_container');
+
+    return "Use a " + lure_container + " and materials to lure monsters?";
+  }
+
+  public function onResponse(accepted: bool) {
+    this.spot.trySetupLure();
+  }
+}
+
+state StartEvent in WMH_LureSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    parent.GotoState('PlayScene');
+  }
+}
+
+state PlayScene in WMH_LureSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.PlayScene_main();
+  }
+
+  entry function PlayScene_main() {
+    var camera_node: CNode = this.getNearbyCameraNode();
+
+    if (!camera_node) {
+      return;
+    }
+    WMHINFO("WMH_LureSpot_PlayScene, found camera node");
+
+    var meditation_node: CNode = this.getNearbyMeditationNode();
+
+    if (!meditation_node) {
+      return;
+    }
+    WMHINFO("WMH_LureSpot_PlayScene, found meditation node");
+
+    var spawn_node: CNode = this.getNearbySpawnNode(meditation_node);
+
+    if (!spawn_node) {
+      return;
+    }
+    WMHINFO("WMH_LureSpot_PlayScene, found spawn node");
+
+    this.playGeraltMeditation(camera_node, meditation_node, spawn_node);
+  }
+
+  private function getNearbyCameraNode(): CNode {
+    var camera_nodes: array<CNode>;
+    var camera_tags: array<name>;
+
+    camera_tags.PushBack(parent.required_fact);
+    camera_tags.PushBack('WMH_LureSpotCamera');
+    
+    theGame.GetNodesByTags(camera_tags, camera_nodes, true);
+
+    if (camera_nodes.Size() <= 0) {
+      var empty: CNode;
+      WMHERROR("WMH_LureSpot, no node was found with WMH_LureSpotCamera tag");
+      return empty;
+    }
+
+    var node: CNode = camera_nodes[0];
+    return node;
+  }
+
+  private function getNearbyMeditationNode(): CNode {
+    var meditation_nodes: array<CNode>;
+    var meditation_tags: array<name>;
+
+    meditation_tags.PushBack(parent.required_fact);
+    meditation_tags.PushBack('WMH_LureSpotMeditation');
+
+    theGame.GetNodesByTags(meditation_tags, meditation_nodes, true);
+
+    if (meditation_tags.Size() <= 0) {
+      var empty: CNode;
+      WMHERROR("WMH_LureSpot, no node was found with WMH_LureSpotMeditation tag");
+      return empty;
+    }
+
+    var node: CNode = meditation_nodes[0];
+    return node;
+  }
+
+  private function getNearbySpawnNode(camera_node: CNode): CNode {
+    var spawn_nodes: array<CNode>;
+    var spawn_tags: array<name>;
+
+    spawn_tags.PushBack(parent.required_fact);
+    spawn_tags.PushBack('WMH_LureSpotSpawn');
+
+    // IMPORTANT: we use all of the tags the camera node may have, this means
+    // that this node needed 2 tags to be considered a camera node but it can
+    // have more than these 2 tags. So if the camera has a 3rd tag then we use
+    // it to find the spawn nodes that are linked to this camera node.
+    //
+    // It can be useful to select nodes that are outside this camera's view
+    var camera_tags: array<name> = camera_node.GetTags();
+    if (camera_tags.Size() > 2) {
+      var i: int;
+      for (i = 2; i < camera_tags.Size(); i += 1) {
+        spawn_tags.PushBack(camera_tags[i]);
+      }
+    }
+
+    theGame.GetNodesByTags(spawn_tags, spawn_nodes, true);
+
+    if (spawn_nodes.Size() <= 0) {
+      var empty: CNode;
+      WMHERROR("WMH_LureSpot, no node was found with WMH_LureSpotSpawn tag");
+      return empty;
+    }
+
+    var node: CNode = spawn_nodes[0];
+    return node;
+  }
+
+  private latent function playGeraltMeditation(
+    camera_node: CNode,
+    meditation_node: CNode,
+    spawn_node: CNode
+  ) {
+    var camera_0: WMH_StaticCamera = WMH_getStaticCamera();
+    var camera_1: WMH_StaticCamera = WMH_getStaticCamera();
+    var meditation_position: Vector = meditation_node.GetWorldPosition();
+
+    // the first camera is used to instantly teleport the camera to a place
+    // the second camera is used to slow sliding effects
+    camera_0.activationDuration = 0;
+    camera_1.activationDuration = 20;
+    camera_1.deactivationDuration = 0;
+
+    // todo: slow movements to the cameras for dynamic effect
+
+    theGame.FadeOut(0.5);
+		GetWitcherPlayer().SetBehaviorVariable('MeditateAbort', 0);
+
+    // 1.0
+    // start meditation, 0 = not using fire
+    thePlayer.TeleportWithRotation(
+      meditation_position,
+      meditation_node.GetWorldRotation()
+    );
+    camera_0.teleportAndLookAt(
+      camera_node.GetWorldPosition(),
+      meditation_position + Vector(0, 0, 0.25)
+    );
+    camera_0.start();
+
+    camera_1.teleportAndLookAt(
+      camera_node.GetWorldPosition()
+      + camera_0.GetCameraDirection() * 5,
+
+      meditation_position + Vector(0, 0, 1)
+    );
+
+		// GetWitcherPlayer().SetBehaviorVariable('MeditateWithIgnite', 0);
+    GetWitcherPlayer().PlayerStartAction(PEA_Meditation);
+    Sleep(1.0);
+    
+    // 2.0
+    // show Geralt meditating for some time
+    camera_1.start();
+    theGame.FadeInAsync(0.8);
+    Sleep(3);
+
+    // 3.0
+    // spawn & show monsters
+    theGame.FadeOut(0.5);
+    var spawn_position: Vector = spawn_node.GetWorldPosition();
+    
+    camera_0.teleportAndLookAt(
+      spawn_position
+      + VecFromHeading(spawn_node.GetHeading()) * 10
+      + Vector(0, 0, 1.0),
+      spawn_position + Vector(0, 0, 1.25)
+    );
+
+    camera_0.start();
+    Sleep(0.5);
+
+    camera_1.teleportAndLookAt(
+      camera_0.GetWorldPosition()
+      + camera_0.GetCameraDirection() * -5,
+      spawn_position + Vector(0, 0, 1.5)
+    );
+
+    camera_1.start();
+
+    var direction_to_player: float = VecHeading(
+      thePlayer.GetWorldPosition() - spawn_position
+    );
+
+    var bypass_tag: name = parent.weak_creature_bypass_tag;
+    if (parent.spawn_strong_creature) {
+      bypass_tag = parent.strong_creature_bypass_tag;
+    }
+
+    thePlayer.wmh.submitOnSpawnLure(
+      parent,
+      bypass_tag,
+      spawn_position,
+      direction_to_player
+    );
+
+    theGame.FadeInAsync(0.8);
+    Sleep(3);
+
+    // 4.0
+    // camera goes back to the player
+    camera_1.deactivationDuration = 2.0;
+    camera_1.Stop();
+    Sleep(1);
+
+    // stop meditation
+		GetWitcherPlayer().SetBehaviorVariable('MeditateAbort', 0);
+    GetWitcherPlayer().PlayerStopAction(PEA_Meditation);
+    Sleep(2);
+
+    // monsters will automatically target player and attack
+  }
+}

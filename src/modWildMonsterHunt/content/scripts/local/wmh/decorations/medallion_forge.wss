@@ -8,7 +8,9 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
     action: string,
     activator: CEntity
   ) {
-    this.promptUserMelding();
+    this.prompt = new WMH_ForgeYesNoPrompt in this;
+    prompt.forge = this;
+    prompt.display();
   }
 
   // called after the YES/NO prompt is answered YES
@@ -43,28 +45,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
     this.openItemSelectionMenu();
   }
 
-  timer function finishMeldingProcess(delta: float , id: int) {
-    var runes: array<SItemUniqueId> = this.GetInventory().GetItemsByTag('WMH_RuneOfPower');
-
-    var inventory: CInventoryComponent = this.GetInventory();
-
-    for rune: SItemUniqueId in runes {
-      this.selected_medallion.appendPerk(WMH_runeGetPerk(inventory, rune));
-      thePlayer.inv.RemoveItemByName('modwmh_melding_reagent', 1);
-    }
-
-    // consume the runes
-    this.GetInventory().RemoveAllItems();
-    theSound.SoundEvent("gui_inventory_weapon_attach");
-    WMH_updateDecorationPerks();
-  }
-
-  private function promptUserMelding() {
-    this.prompt = new WMH_ForgeYesNoPrompt in this;
-    prompt.forge = this;
-    prompt.display();
-  }
-
+  
   private function openItemSelectionMenu() {
     var all_tags: array<name> = GetTags();
     var first_tag: name = all_tags[0];
@@ -81,6 +62,22 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
 
     AddTimer( 'finishMeldingProcess', 0.1 );
   }
+
+  timer function finishMeldingProcess(delta: float , id: int) {
+    var runes: array<SItemUniqueId> = this.GetInventory().GetItemsByTag('WMH_RuneOfPower');
+
+    var inventory: CInventoryComponent = this.GetInventory();
+
+    for rune: SItemUniqueId in runes {
+      this.selected_medallion.appendPerk(WMH_runeGetPerk(inventory, rune));
+      thePlayer.inv.RemoveItemByName('modwmh_melding_reagent', 1);
+    }
+
+    // consume the runes
+    inventory.RemoveAllItems();
+    theSound.SoundEvent("gui_inventory_weapon_attach");
+    WMH_updateDecorationPerks();
+  }
 }
 
 class WMH_ForgeYesNoPrompt extends WMH_YesNoPrompt {
@@ -91,7 +88,10 @@ class WMH_ForgeYesNoPrompt extends WMH_YesNoPrompt {
   }
 
   public function description(): string {
-    return "Use Melding Reagents to meld Runes Of Power onto your currently equipped medallion?";
+    var reagent: string = GetLocStringByKey('wmh_melding_reagent');
+    var rune: string = GetLocStringByKey('wmh_rune_of_power');
+
+    return "Use a "+reagent+" to meld a "+rune+" onto your currently equipped medallion?";
   }
 
   public function onResponse(accepted: bool) {

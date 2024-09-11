@@ -1,0 +1,9 @@
+statemachine class WMH_TrapSpot extends WMH_RestorableObject {
+  default repair_tools_tag = 'WMH_TrapRepairTools';
+  default select_repair_tools = false;
+  default object_name_loc_key = 'wmh_luring_spot';
+
+  // todo: onAreaLeave should stop the while(true) loop that checks for
+  // creatures, the trap gets automatically defused if player goes too far.
+  // must be interacted with to re-fuse
+}

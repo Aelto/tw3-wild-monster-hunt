@@ -94,6 +94,7 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
   //#region public API, to override
   public function onRestoration() {
     WMHHUD(this.getObjectName() + " restored");
+    theSound.SoundEvent('gui_inventory_repair');
   }
   //#endregion
 }
