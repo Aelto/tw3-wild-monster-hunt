@@ -33,7 +33,7 @@ abstract class WMH_InteractiveObject extends W3Container {
   ) {
     // do not call super.OnInteraction();
 
-    if (this.isInteractive()) {
+    if (this.isInteractionAllowed()) {
       this.onAllowedInteraction(action, activator);
     }
     else {
@@ -47,8 +47,9 @@ abstract class WMH_InteractiveObject extends W3Container {
 
   protected function isInteractionAllowed(): bool {
     return this.isInteractive()
-        && !IsNameValid(this.required_fact)
-        || FactsDoesExist(this.required_fact);
+        && (!IsNameValid(this.required_fact)
+          || FactsDoesExist(this.required_fact)
+        );
   }
 
   protected function addInteractionRequiredFact() {

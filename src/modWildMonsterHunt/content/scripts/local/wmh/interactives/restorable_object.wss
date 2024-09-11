@@ -5,6 +5,8 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
   public editable var select_repair_tools: bool;
   hint select_repair_tools = "If true, will display an item select panel so the player can pick the repair tools he wants to use";
 
+  private var repair_prompt: WMH_RestorableObject_RepairPrompt;
+
   protected function isRestored(): bool {
     return this.isInteractionAllowed();
   }
@@ -44,24 +46,21 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
 
       var first: SItemUniqueId = items[0];
 
-      thePlayer.inv.GiveItemTo(
-        this.GetInventory(),
-        first,
-        1
-      );
+      thePlayer.inv.RemoveItem(first, 1);
+      this.restoreObject();
     }
-    
-    var item_tags: array<name>;
-    item_tags.PushBack(this.repair_tools_tag);
+    else {
+      var item_tags: array<name>;
+      item_tags.PushBack(this.repair_tools_tag);
 
-    WMH_displayItemSelection(
-      this.required_fact, // use the required_fact as the unique tag
-      this.GetInventory(),
-      item_tags,
-      true
-    );
-
-    AddTimer( 'tryRestoreObjectPostItemSelection', 0.1 );
+      WMH_displayItemSelection(
+        this.required_fact, // use the required_fact as the unique tag
+        this.GetInventory(),
+        item_tags,
+        true
+      );
+      AddTimer( 'tryRestoreObjectPostItemSelection', 0.1 );
+    }
   }
 
   private timer function tryRestoreObjectPostItemSelection(delta: float , id: int) {
@@ -74,21 +73,20 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
     action: string,
     activator: CEntity
   ) {
-    var prompt: WMH_RestorableObject_RepairPrompt =
-      new WMH_RestorableObject_RepairPrompt in this;
+    this.repair_prompt = new WMH_RestorableObject_RepairPrompt in this;
 
-    prompt.object = this;
-    prompt.title = "Repair " + this.getObjectName();
+    this.repair_prompt.object = this;
+    this.repair_prompt.title = "Repair " + this.getObjectName();
 
     if (this.doesRequireRepairTools()) {
-      prompt.description = "Use repair tools on " + this.getObjectName() + "?";
+      this.repair_prompt.description = "Use repair tools on " + this.getObjectName() + "?";
     }
     else {
-      prompt.description = "Do you wish to repair this "
+      this.repair_prompt.description = "Do you wish to repair this "
         + this.getObjectName() + "?";
     }
     
-    prompt.display();
+    this.repair_prompt.display();
   }
 
   //#region public API, to override
@@ -116,5 +114,15 @@ class WMH_RestorableObject_RepairPrompt extends WMH_YesNoPrompt {
     if (accepted) {
       this.object.tryRestoreObject();
     }
+  }
+}
+
+class WMH_RestorableObject_ItemSelection extends WMH_ItemSelectionListener {
+  var object: WMH_RestorableObject;
+
+  public function OnCallSelectItem(item: SItemUniqueId): bool {
+    // this.object.onLureItemSelected(item);
+
+    return true; // close the popup
   }
 }

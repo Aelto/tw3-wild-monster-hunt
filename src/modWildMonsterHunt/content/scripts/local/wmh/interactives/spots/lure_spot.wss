@@ -146,7 +146,7 @@ class WMH_LureItemSelectionListener extends WMH_ItemSelectionListener {
   var lure: WMH_LureSpot;
 
   public function OnCallSelectItem(item: SItemUniqueId): bool {
-    lure.onLureItemSelected(item);
+    this.lure.onLureItemSelected(item);
 
     return true; // close the popup
   }
