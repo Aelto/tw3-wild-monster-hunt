@@ -19,6 +19,10 @@ class WMH_Encounter {
     return this;
   }
 
+  public function GetWorldPosition(): Vector {
+    return this.spawn_point.GetWorldPosition();
+  }
+
   // returns `true` if it needs to be destroyed by the manager
   public function onTick(): bool {
     SUH_removeDeadEntities(this.entities);
@@ -26,7 +30,7 @@ class WMH_Encounter {
     return this.entities.Size() <= 0
         || VecDistanceSquared2D(
             thePlayer.GetWorldPosition(),
-            this.spawn_point.GetWorldPosition()
+            this.GetWorldPosition()
           ) > 250 * 250;
   }
 
@@ -38,11 +42,14 @@ class WMH_Encounter {
     }
 
     this.entities.Clear();
-    this.spawn_point.liberate();
+
+    if (this.spawn_point) {
+      this.spawn_point.liberate();
+    }
 
     var notify: bool = VecDistanceSquared2D(
       thePlayer.GetWorldPosition(),
-      this.spawn_point.GetWorldPosition()
+      this.GetWorldPosition()
     ) > 40 * 40;
 
     if (notify) {

@@ -1,0 +1,22 @@
+// A type of encounter that abstracts away how to get its WorldPosition as it
+// doesn't have a designated WMH_BiomeSpawnPoint, instead it uses a raw Vector.
+class WMH_EncounterLure extends WMH_Encounter {
+  var position: Vector;
+
+  public function initLure(
+    position: Vector,
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>,
+    optional encounter_tag: name,
+  ): WMH_EncounterLure {
+    this.position = position;
+    this.entries = entries;
+    this.entities = entities;
+
+    return this;
+  }
+
+  public function GetWorldPosition(): Vector {
+    return this.position;
+  }
+}

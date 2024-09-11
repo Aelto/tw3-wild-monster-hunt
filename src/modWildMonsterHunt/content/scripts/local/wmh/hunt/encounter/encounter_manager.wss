@@ -19,6 +19,10 @@ statemachine class WMH_EncounterManager {
     this.encounter_clues.PushBack(encounter_clues);
   }
 
+  public function onLureSpawned(encounter_lure: WMH_EncounterLure) {
+    this.onEncounterSpawned(encounter_lure);
+  }
+
   public function onHuntFinished() {
     this.GotoState('Finish');
   }
