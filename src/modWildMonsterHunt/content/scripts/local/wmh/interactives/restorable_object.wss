@@ -7,6 +7,26 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
 
   private var repair_prompt: WMH_RestorableObject_RepairPrompt;
 
+  protected function onDisallowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {
+    this.repair_prompt = new WMH_RestorableObject_RepairPrompt in this;
+
+    this.repair_prompt.object = this;
+    this.repair_prompt.title = "Repair " + this.getObjectName();
+
+    if (this.doesRequireRepairTools()) {
+      this.repair_prompt.description = "Use repair tools on " + this.getObjectName() + "?";
+    }
+    else {
+      this.repair_prompt.description = "Do you wish to repair this "
+        + this.getObjectName() + "?";
+    }
+    
+    this.repair_prompt.display();
+  }
+
   protected function isRestored(): bool {
     return this.isInteractionAllowed();
   }
@@ -67,26 +87,6 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
     if (this.doesRequireRepairTools()) {
       this.GetInventory().RemoveItemByTag(this.repair_tools_tag, 1);
     }
-  }
-
-  protected function onDisallowedInteraction(
-    action: string,
-    activator: CEntity
-  ) {
-    this.repair_prompt = new WMH_RestorableObject_RepairPrompt in this;
-
-    this.repair_prompt.object = this;
-    this.repair_prompt.title = "Repair " + this.getObjectName();
-
-    if (this.doesRequireRepairTools()) {
-      this.repair_prompt.description = "Use repair tools on " + this.getObjectName() + "?";
-    }
-    else {
-      this.repair_prompt.description = "Do you wish to repair this "
-        + this.getObjectName() + "?";
-    }
-    
-    this.repair_prompt.display();
   }
 
   //#region public API, to override
