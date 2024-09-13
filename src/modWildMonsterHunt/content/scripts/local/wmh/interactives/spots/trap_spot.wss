@@ -49,7 +49,12 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
     var current_state: name = this.GetCurrentStateName();
 
     if (current_state == 'Consumed') {
-      WMHHUD("The trap was already used during this hunt");
+      WMHHUD("This trap was already used during this hunt");
+      return;
+    }
+
+    if (IsNameValid(this.oil_enhancement_name)) {
+      WMHHUD("This trap is already enhanced");
       return;
     }
 
