@@ -67,8 +67,15 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
 
     if (current_state == 'Armed') {
       var item_tags: array<name>;
-      item_tags.PushBack('SilverOil');
-      item_tags.PushBack('SteelOil');
+      if (WMH_playerUsesEnhancedEditionRedux()) {
+        item_tags.PushBack('ArgentiaOil');
+        item_tags.PushBack('EtherealOil');
+      }
+      else {
+        item_tags.PushBack('SilverOil');
+        item_tags.PushBack('SteelOil');
+      }
+
       item_tags.PushBack('WMH_SilverShrapnel');
 
       this.item_selection_listener = new WMH_TrapItemSelectionListener in this;
