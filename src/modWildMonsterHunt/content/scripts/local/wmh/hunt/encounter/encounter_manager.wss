@@ -1,6 +1,11 @@
+function WMH_getEncounterManager(): WMH_EncounterManager {
+  return thePlayer.wmh.hunt.encounters;
+}
+
 statemachine class WMH_EncounterManager {
   protected var encounters: array<WMH_Encounter>;
   protected var encounter_clues: array<WMH_EncounterClues>;
+  protected var repulsive_points: array<Vector>;
 
   public function init(): WMH_EncounterManager {
     this.GotoState('Waiting');
@@ -23,7 +28,25 @@ statemachine class WMH_EncounterManager {
     this.onEncounterSpawned(encounter_lure);
   }
 
+  public function onRepulsivePlaced(center: Vector) {
+    this.repulsive_points.PushBack(center);
+  }
+
   public function onHuntFinished() {
     this.GotoState('Finish');
+  }
+
+  public function onHuntStarted() {
+    this.GotoState('Finish');
+  }
+
+  public function isInRepulsive(point: Vector): bool {
+    for repulsive: Vector in this.repulsive_points {
+      if (VecDistanceSquared2D(point, repulsive) <= 150 * 150) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

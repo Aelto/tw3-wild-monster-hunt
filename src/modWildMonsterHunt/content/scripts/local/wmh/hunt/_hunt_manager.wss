@@ -60,6 +60,7 @@ statemachine class WMH_HuntManager {
 
     this.start_time = WMH_getGameTimeNow();
     this.killed_creatures.Clear();
+    this.encounters.onHuntStarted();
 
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Running');

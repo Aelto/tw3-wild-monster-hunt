@@ -29,10 +29,17 @@ statemachine class WMH_Bestiary {
 
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
-    // this.spawnRandomEntry(contract, hunt_seed);
-    // this.spawnRandomWildlife(hunt_seed + 1);
 
-    this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
+    // if the player is in a repulsive's area then skip spawning regular
+    // encounters. It isn't as precise as checking if the spawn point itself is
+    // in the repulsive but this approximation can save a lot of resources as
+    // we skip everything until the player gets outside the repulsive's radius
+    var can_spawn: bool = !WMH_getEncounterManager()
+      .isInRepulsive(thePlayer.GetWorldPosition());
+
+    if (can_spawn) {
+      this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
+    }
   }
 
   public function onSpawnContractTarget(
@@ -90,7 +97,7 @@ statemachine class WMH_Bestiary {
     request.withSpawnPosition(position);
     request.withHeading(heading);
     request.withSeed(hunt_seed + origin.getSeed());
-    request.withAggressionTarget(thePlayer, 5)
+    request.withAggressionTarget(thePlayer, 5);
     request.withRunesOfPowerChance(1, runes_of_power_chance);
 
     // todo: if lures can spawn contract targets
@@ -478,7 +485,19 @@ state Spawning in WMH_Bestiary {
     var bentry: WMH_BestiaryEntry;
     var entities: array<CEntity>;
 
+    var position: Vector = request.GetWorldPosition();
+    var contract_manager: WMH_ContractManager = WMH_getContractManager();
+    var encounter_manager: WMH_EncounterManager = WMH_getEncounterManager();
     for bentry: WMH_BestiaryEntry in request.entries {
+      // repulsives prevent regular monsters from spawning, contract targets
+      // however are unaffected by them.
+      if (
+        encounter_manager.isInRepulsive(position)
+        && !contract_manager.isTargetted(bentry.id)
+      ) {
+        continue;
+      }
+
       this.spawnTemplates(
         bentry,
         request.GetWorldPosition(),
@@ -506,8 +525,12 @@ state Spawning in WMH_Bestiary {
 
       var index: int = RandNoiseF(seed + 100, entities.Size()) as int;
       var entity: CEntity = entities[index];
+      var actor: CActor = entity as CActor;
+
+      if (actor) {
+        thePlayer.wmh.loot.giveRandomRuneOfPower(actor.GetInventory(), seed);
+      }
       
-      thePlayer.wmh.loot.giveRandomRuneOfPower(entity.GetInventory(), seed);
     }
 
     request.onRequestFinished(entities);

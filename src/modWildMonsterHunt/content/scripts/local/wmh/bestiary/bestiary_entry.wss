@@ -141,7 +141,7 @@ class WMH_BestiaryEntry {
   public function onEntitySpawned(entity: CEntity) {
     this.addCustomLoot((entity as CActor).GetInventory());
 
-    var npc: CNewNPC = entity;
+    var npc: CNewNPC = entity as CNewNPC;
     if (npc) {
       npc.SetLevel(thePlayer.GetLevel());
       npc.abilityManager.SetStatPointMax(

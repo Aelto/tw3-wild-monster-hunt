@@ -231,5 +231,12 @@ class WMH_Master {
   ) {
     this.loot.onMilestoneContractCompleted(seed);
   }
+
+  public function submitOnRepulsivePlaced(
+    origin: WMH_LureSpot,
+    center: Vector
+  ) {
+    this.hunt.encounters.onRepulsivePlaced(center);
+  }
 }
 

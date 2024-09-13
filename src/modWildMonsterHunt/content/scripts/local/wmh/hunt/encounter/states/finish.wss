@@ -15,7 +15,13 @@ state Finish in WMH_EncounterManager {
       encounter.onDestroy();
       SleepOneFrame();
     }
-
     parent.encounters.Clear();
+
+    for encounter: WMH_Encounter in parent.encounter_clues {
+      encounter.onDestroy();
+      SleepOneFrame();
+    }
+    parent.encounter_clues.Clear();
+    parent.repulsive_points.Clear();
   }
 }

@@ -29,6 +29,7 @@ exec function wmhaddruneofpower() {
 
 exec function wmhtrapper() {
   thePlayer.inv.AddAnItem('modwmh_lure_container', 1);
+  thePlayer.inv.AddAnItem('modwmh_lure_repulsive', 2);
   thePlayer.inv.AddAnItem('modwmh_trap_device', 1);
   thePlayer.inv.AddAnItem('modwmh_trap_repair_tools', 2);
   thePlayer.inv.AddAnItem('modwmh_silver_shrapnel', 1);
