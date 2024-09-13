@@ -242,7 +242,9 @@ state Activating in WMH_TrapSpot {
         theGame.damageMgr.ProcessAction(damage );        
         delete damage;
 
-        actor.WMH_removeEffect(''); // remove all affixes
+        if (damage_bonus > 1.0) {
+          actor.WMH_removeEffect(''); // remove all affixes
+        }
       }
     }
 
