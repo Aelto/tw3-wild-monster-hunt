@@ -24,6 +24,11 @@ function OnTakeDamage(action: W3DamageAction) {
 
   if (attacker) {
     var effects: array<WMH_Effect> = attacker.WMH_getEffectsByTag('WMH_LifestealEffect');
+
+    if (effecits.Size() <= 0) {
+      return result;
+    }
+
     var damage_amount: float = action.GetDamageDealt();
     var total: float = 1.0;
 
