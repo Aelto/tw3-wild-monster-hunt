@@ -7,6 +7,7 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
   private var item_selection_listener: WMH_TrapItemSelectionListener;
 
   protected var oil_enhancement_name: name;
+  protected var oil_enhancement_quality: int;
 
   event OnSpawned(spawnData: SEntitySpawnData) {
     super.OnSpawned(spawnData);
@@ -95,8 +96,7 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
 
   function onTrapItemSelected(item: SItemUniqueId) {
     this.oil_enhancement_name = thePlayer.inv.GetItemName(item);
-
-    if ()
+    this.oil_enhancement_quality = thePlayer.inv.GetItemQuality(item);
 
     if (thePlayer.inv.IsItemOil(item)) {
       // applies the oil on the silver sword,
@@ -258,7 +258,7 @@ state Activating in WMH_TrapSpot {
 
   private function getEnhancementDamageBonus(actor: CActor): float {
     if (parent.oil_enhancement_name == 'WMH_SilverShrapnel') {
-      return 1.0 + 0.5;
+      return 1.0 + 0.5 + parent.oil_enhancement_quality;
     }
     
     var monsterCategory: EMonsterCategory;
@@ -279,7 +279,7 @@ state Activating in WMH_TrapSpot {
     var oil_names: array<name> = WMH_monsterCategoryToOilNames(monsterCategory);
 
     if (oil_names.Contains(parent.oil_enhancement_name)) {
-      return 1.0 + 0.5;
+      return 1.0 + 0.5 + parent.oil_enhancement_quality * 0.25;
     }
 
     return 1.0;
