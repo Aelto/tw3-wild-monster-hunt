@@ -1,9 +1,400 @@
 statemachine class WMH_TrapSpot extends WMH_RestorableObject {
   default repair_tools_tag = 'WMH_TrapRepairTools';
   default select_repair_tools = false;
-  default object_name_loc_key = 'wmh_luring_spot';
+  default object_name_loc_key = 'wmh_trap_spot';
 
-  // todo: onAreaLeave should stop the while(true) loop that checks for
-  // creatures, the trap gets automatically defused if player goes too far.
-  // must be interacted with to re-fuse
+  private var prompt: WMH_TrapYesNoPrompt;
+  private var item_selection_listener: WMH_TrapItemSelectionListener;
+
+  protected var oil_enhancement_name: name;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    super.OnSpawned(spawnData);
+    this.GotoState('Disarmed');
+  }
+
+  event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    super.OnAreaEnter(area, activator);
+
+    // ignore vent unless in 'Armed' state
+    if (this.GetCurrentStateName() != 'Armed') {
+      return false;
+    }
+
+    // the player cannot trigger the trap
+    if (activator.GetEntity() == thePlayer) {
+      return false;
+    }
+
+    this.GotoState('Activating');
+  }
+
+  event OnBoltHit() {
+    if (this.GetCurrentStateName() == 'Armed') {
+      this.GotoState('Activating');
+    }
+  }
+
+  event OnIgniHit(sign: W3IgniProjectile) {
+    if (this.GetCurrentStateName() == 'Armed') {
+      this.GotoState('Activating');
+    }
+  }
+
+  public function onAllowedInteraction(
+    action: string,
+    activator: CEntity
+  ) {
+    var current_state: name = this.GetCurrentStateName();
+
+    if (current_state == 'Consumed') {
+      WMHHUD("The trap was already used during this hunt");
+      return;
+    }
+
+    if (current_state == 'Paused') {
+      this.GotoState('Armed');
+      return;
+    }
+
+    if (current_state == 'Disarmed') {
+      this.prompt = new WMH_TrapYesNoPrompt in this;
+      this.prompt.spot = this;
+      this.prompt.display();
+
+      return;
+    }
+
+    if (current_state == 'Armed') {
+      var item_tags: array<name>;
+      item_tags.PushBack('SilverOil');
+      item_tags.PushBack('SteelOil');
+      item_tags.PushBack('WMH_SilverShrapnel');
+
+      this.item_selection_listener = new WMH_TrapItemSelectionListener in this;
+      this.item_selection_listener.trap = this;
+
+      WMH_displayItemSelection(
+        this.required_fact,
+        this.GetInventory(),
+        item_tags,
+        true,
+        this.item_selection_listener
+      );
+
+      return;
+    }
+  }
+
+  function onTrapItemSelected(item: SItemUniqueId) {
+    this.oil_enhancement_name = thePlayer.inv.GetItemName(item);
+
+    if ()
+
+    if (thePlayer.inv.IsItemOil(item)) {
+      // applies the oil on the silver sword,
+      // - for vanilla players this won't do much except apply the oil which may
+      //   save them time for the coming fight
+      // - for EE players this should consume the oil
+      thePlayer.ApplyOil(
+        item,
+        thePlayer.GetEquippedSword(false)
+      );
+    }
+    else if (thePlayer.inv.ItemHasTag(item, 'WMH_SilverShrapnel')) {
+      oil_enhancement_name = 'WMH_SilverShrapnel';
+    }
+
+    WMHHUD("Trap enhanced");
+    theSound.SoundEvent('gui_inventory_bombs_attach');
+  }
+}
+
+state TryArming in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.TryArming_main();
+  }
+
+  entry function TryArming_main() {
+    var inventory: CInventoryComponent = thePlayer.GetInventory();
+    var devices: array<SItemUniqueId> = inventory
+      .GetItemsByName('modwmh_trap_device');
+
+    if (devices.Size() <= 0) {
+      var trap_device: string = GetLocStringByKey('wmh_trap_device');
+
+      return WMHHUD("You need a " + trap_device + " to do this");
+    }
+
+    inventory.RemoveItem(devices[0], 1);
+    parent.GotoState('Armed');
+  }
+}
+
+state Armed in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Armed_main();
+  }
+
+  private var armed_time: float;
+
+  entry function Armed_main() {
+    theSound.SoundEvent('gui_inventory_bombs_attach');
+    WMHHUD("Trap armed");
+
+    this.armed_time = SUH_now();
+
+    var minutes: int = 60;
+
+    while (!SUH_hasElapsed(this.armed_time, 5 * minutes)) {
+
+      Sleep(1);
+    }
+
+    parent.GotoState('Paused');
+  }
+}
+
+// The trap is paused but it can be re armed by interacting with it
+state Paused in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Paused_main();
+  }
+
+  entry function Paused_main() {}
+}
+
+state Disarmed in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Disarmed_main();
+  }
+
+  entry function Disarmed_main() {}
+}
+
+state Activating in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Activating_main();
+  }
+
+  entry function Activating_main() {
+    var entities: array<CGameplayEntity>;
+    var radius: float = 10;
+
+    FindGameplayEntitiesInSphere(
+      entities,
+      parent.GetWorldPosition(),
+      radius,
+      100, // max results
+      , // tags
+      FLAG_OnlyAliveActors + FLAG_ExcludePlayer
+    );
+
+    entities.Remove(parent);
+
+    for entity: CGameplayEntity in entities {
+      var actor: CActor = entity as CActor;
+
+      if (actor) {
+        var damage: W3DamageAction = new W3DamageAction in this;
+
+        damage.Initialize(
+          parent,
+          actor,
+          NULL,
+          parent,
+          EHRT_None,
+          CPS_Undefined,
+          false,
+          false,
+          false,
+          true
+        );
+        
+        var damage_amount: float = 50;
+        var damage_bonus: float = this.getEnhancementDamageBonus(actor);
+        damage.AddDamage(
+          theGame.params.DAMAGE_NAME_FIRE,
+          RoundF(
+            damage_amount
+            * CalculateAttributeValue(
+              actor.GetAttributeValue('level', , true)
+            ) as float
+            * damage_bonus
+          * 
+        );
+
+        damage.AddEffectInfo(EET_Burning);
+        damage.AddEffectInfo(EET_KnockdownTypeApplicator);
+        damage.SetProcessBuffsIfNoDamage(true);
+        theGame.damageMgr.ProcessAction(damage );        
+        delete damage;
+
+        actor.WMH_removeEffect(''); // remove all affixes
+      }
+    }
+
+    parent.oil_enhancement_name = '';
+    parent.PlayEffect('explosion');
+    parent.PlayEffect('fire_ground');
+    GCameraShake(1.5, true, parent.GetWorldPosition(), 20.0);
+
+    parent.GotoState('Consumed');
+  }
+
+  private function getEnhancementDamageBonus(actor: CActor): float {
+    if (parent.oil_enhancement_name == 'WMH_SilverShrapnel') {
+      return 1.0 + 0.5;
+    }
+    
+    var monsterCategory: EMonsterCategory;
+    var soundMonsterName : name;
+    var isTeleporting: bool;
+    var canBeTargeted: bool;
+    var canBeHitByFists: bool;
+
+    theGame.GetMonsterParamsForActor(
+      target,
+      monsterCategory,
+      soundMonsterName,
+      isTeleporting,
+      canBeTargeted,
+      canBeHitByFists
+    );
+
+    var oil_names: array<name> = WMH_monsterCategoryToOilNames(monsterCategory);
+
+    if (oil_names.Contains(parent.oil_enhancement_name)) {
+      return 1.0 + 0.5;
+    }
+
+    return 1.0;
+  }
+}
+
+state Consumed in WMH_TrapSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Consumed_main();
+  }
+
+  entry function Consumed_main() {}
+}
+
+class WMH_TrapYesNoPrompt extends WMH_YesNoPrompt {
+  var spot: WMH_TrapSpot;
+
+  public function title(): string {
+    return "Trap";
+  }
+
+  public function description(): string {
+    var trap_device: string = GetLocStringByKey('wmh_trap_device');
+
+    return "Use a " + trap_device + " here?";
+  }
+
+  public function onResponse(accepted: bool) {
+    this.spot.GotoState('TryArming');
+  }
+}
+
+class WMH_TrapItemSelectionListener extends WMH_ItemSelectionListener {
+  var trap: WMH_TrapSpot;
+
+  public function OnCallSelectItem(item: SItemUniqueId): bool {
+    this.trap.onTrapItemSelected(item);
+
+    return true; // close the popup
+  }
+}
+
+// a copy of the vanilla function that was introduced in Next Gen
+function WMH_monsterCategoryToOilNames(
+  monsterCategory: EMonsterCategory
+): array<name> {
+  var oils : array<name>;
+
+  // EE players don't have species specific oils, instead they have two types of
+  // of oils that are strong against monsters.
+  if (WMH_playerUsesEnhancedEditionRedux()) {
+    oils.PushBack('Silver Oil 1');
+    oils.PushBack('Silver Oil 2');
+    oils.PushBack('Silver Oil 3');
+    oils.PushBack('Ethereal Oil 1');
+    oils.PushBack('Ethereal Oil 2');
+    oils.PushBack('Ethereal Oil 3');
+
+    return oils;
+  }
+
+  switch(monsterCategory) {
+    case MC_Beast:
+      oils.PushBack('Beast Oil 3');
+      oils.PushBack('Beast Oil 2');
+      oils.PushBack('Beast Oil 1');
+      return oils;
+    case MC_Cursed:
+      oils.PushBack('Cursed Oil 3');
+      oils.PushBack('Cursed Oil 2');
+      oils.PushBack('Cursed Oil 1');
+      return oils;
+    case MC_Draconide:
+      oils.PushBack('Draconide Oil 3');
+      oils.PushBack('Draconide Oil 2');
+      oils.PushBack('Draconide Oil 1');
+      return oils;
+    case MC_Human:
+      oils.PushBack('Hanged Man Venom 3');
+      oils.PushBack('Hanged Man Venom 2');
+      oils.PushBack('Hanged Man Venom 1');
+      return oils;
+    case MC_Hybrid:
+      oils.PushBack('Hybrid Oil 3');
+      oils.PushBack('Hybrid Oil 2');
+      oils.PushBack('Hybrid Oil 1');
+      return oils;
+    case MC_Insectoid:
+      oils.PushBack('Insectoid Oil 3');
+      oils.PushBack('Insectoid Oil 2');
+      oils.PushBack('Insectoid Oil 1');
+      return oils;
+    case MC_Magicals:
+      oils.PushBack('Magicals Oil 3');
+      oils.PushBack('Magicals Oil 2');
+      oils.PushBack('Magicals Oil 1');
+      return oils;      
+    case MC_Necrophage:
+      oils.PushBack('Necrophage Oil 3');
+      oils.PushBack('Necrophage Oil 2');
+      oils.PushBack('Necrophage Oil 1');
+      return oils;  
+    case MC_Troll:
+      oils.PushBack('Ogre Oil 3');
+      oils.PushBack('Ogre Oil 2');
+      oils.PushBack('Ogre Oil 1');
+      return oils;  
+    case MC_Relic:
+      oils.PushBack('Relic Oil 3');
+      oils.PushBack('Relic Oil 2');
+      oils.PushBack('Relic Oil 1');
+      return oils;  
+    case MC_Specter:
+      oils.PushBack('Specter Oil 3');
+      oils.PushBack('Specter Oil 2');
+      oils.PushBack('Specter Oil 1');
+      return oils;  
+    case MC_Vampire:
+      oils.PushBack('Vampire Oil 3');
+      oils.PushBack('Vampire Oil 2');
+      oils.PushBack('Vampire Oil 1');
+      return oils;        
+    
+    default : return oils;
+  }
 }
