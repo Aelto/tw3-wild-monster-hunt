@@ -1611,6 +1611,8 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('modwmh_trap_repair_tools_recipe');
     this.tryAddSchematic('modwmh_trap_device_recipe');
     this.tryAddSchematic('modwmh_lure_container_recipe');
+    this.tryAddSchematic('modwmh_silver_shrapnel_recipe');
+
 
     if (parent.maximum_loot_level.value > 30) {
       this.tryAddSchematic('modwmh_trophy_medallion_recipe');
