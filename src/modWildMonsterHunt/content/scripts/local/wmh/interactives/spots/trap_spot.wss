@@ -110,6 +110,8 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
     }
     else if (thePlayer.inv.ItemHasTag(item, 'WMH_SilverShrapnel')) {
       oil_enhancement_name = 'WMH_SilverShrapnel';
+
+      thePlayer.inv.RemoveItem(item, 1);
     }
 
     WMHHUD("Trap enhanced");
