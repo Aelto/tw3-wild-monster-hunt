@@ -51,6 +51,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     var item_tags: array<name>;
     item_tags.PushBack('CraftingIngredient');
     item_tags.PushBack('AlchemyIngredient');
+    item_tags.PushBack('WMH_LureRepulsive');
 
     this.item_selection_listener = new WMH_LureItemSelectionListener in this;
     this.item_selection_listener.lure = this;
@@ -83,44 +84,31 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       return WMHHUD("You need a " + lure_container + " to set up a lure here");
     }
 
-    var price: int = inventory.GetItemPrice(this.selected_item);
-    this.spawn_strong_creature = price >= this.strong_creature_threshold;
-
-    inventory.RemoveItem(lures[0], 1);
-    inventory.RemoveItem(this.selected_item, 1);
-
     if (!this.respawn_ticker) {
       this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
     }
 
     this.respawn_ticker.reset();
-    theSound.SoundEvent('gui_inventory_repair');
-    this.GotoState('StartEvent');
+    inventory.RemoveItem(lures[0], 1);
+    inventory.RemoveItem(this.selected_item, 1);
+
+    if (inventory.ItemHasTag(this.selected_item, 'WMH_LureRepulsive')) {
+      thePlayer.wmh.submitOnRepulsivePlaced(this, this.GetWorldPosition());
+      theSound.SoundEvent('gui_inventory_repair');
+    }
+    else {
+      var price: int = inventory.GetItemPrice(this.selected_item);
+      this.spawn_strong_creature = price >= this.strong_creature_threshold;
+
+      theSound.SoundEvent('gui_inventory_repair');
+      this.GotoState('StartLuring');
+    }
   }
 
   public function getSeed(): int {
     var position: Vector = this.GetWorldPosition();
 
     return (position.X + position.Y) as int;
-  }
-
-  private function updateSpawnedCreatureTypeAndRemoveItems(): bool {
-    var items: array<SItemUniqueId>;
-    var total: int = 0;
-
-    var inventory: CInventoryComponent = this.GetInventory();
-    inventory.GetAllItems(items);
-
-    for item: SItemUniqueId in items {
-      if (!inventory.ItemHasTag(item, 'WMH_LureContainer')) {
-        total += inventory.GetItemPrice(item);
-      }
-    }
-
-    this.spawn_strong_creature = total >= this.strong_creature_threshold;
-    inventory.RemoveAllItems();
-
-    return total > 0;
   }
 }
 
@@ -152,41 +140,41 @@ class WMH_LureItemSelectionListener extends WMH_ItemSelectionListener {
   }
 }
 
-state StartEvent in WMH_LureSpot {
+state StartLuring in WMH_LureSpot {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
-    parent.GotoState('PlayScene');
+    parent.GotoState('PlayLuring');
   }
 }
 
-state PlayScene in WMH_LureSpot {
+state PlayLuring in WMH_LureSpot {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
-    this.PlayScene_main();
+    this.PlayLuring_main();
   }
 
-  entry function PlayScene_main() {
+  entry function PlayLuring_main() {
     Sleep(0.2);
     var camera_node: CNode = this.getNearbyCameraNode();
 
     if (!camera_node) {
       return;
     }
-    WMHINFO("WMH_LureSpot_PlayScene, found camera node");
+    WMHINFO("WMH_LureSpot_PlayLuring, found camera node");
 
     var meditation_node: CNode = this.getNearbyMeditationNode();
 
     if (!meditation_node) {
       return;
     }
-    WMHINFO("WMH_LureSpot_PlayScene, found meditation node");
+    WMHINFO("WMH_LureSpot_PlayLuring, found meditation node");
 
     var spawn_node: CNode = this.getNearbySpawnNode(meditation_node);
 
     if (!spawn_node) {
       return;
     }
-    WMHINFO("WMH_LureSpot_PlayScene, found spawn node");
+    WMHINFO("WMH_LureSpot_PlayLuring, found spawn node");
 
     this.playGeraltMeditation(camera_node, meditation_node, spawn_node);
   }
@@ -288,9 +276,14 @@ state PlayScene in WMH_LureSpot {
       meditation_position,
       meditation_node.GetWorldRotation()
     );
-    camera_0.teleportAndLookAt(
+    // camera_0.teleportAndLookAt(
+    //   camera_node.GetWorldPosition(),
+    //   meditation_position + Vector(0, 0, 0.25)
+    // );
+
+    camera_0.TeleportWithRotation(
       camera_node.GetWorldPosition(),
-      meditation_position + Vector(0, 0, 0.25)
+      camera_node.GetWorldRotation()
     );
     camera_0.start();
 
