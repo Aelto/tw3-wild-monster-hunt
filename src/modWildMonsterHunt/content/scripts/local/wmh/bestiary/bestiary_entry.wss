@@ -140,7 +140,15 @@ class WMH_BestiaryEntry {
   // Entries can override this function to tweak the newly spawned entities
   public function onEntitySpawned(entity: CEntity) {
     this.addCustomLoot((entity as CActor).GetInventory());
-    (entity as CNewNPC).SetLevel(thePlayer.GetLevel());
+
+    var npc: CNewNPC = entity;
+    if (npc) {
+      npc.SetLevel(thePlayer.GetLevel());
+      npc.abilityManager.SetStatPointMax(
+        BCS_Vitality,
+        npc.GetMaxHealth() * MaxF(this.strength * 0.5, 1.0)
+      );
+    }
   }
 
   public function onContractCompleted(
