@@ -1,0 +1,7 @@
+function WMH_playerUsesEnhancedEditionRedux(): bool {
+  return StrLen(GetLocStringByKey("Redux_ToxMult")) > 0;
+}
+
+function WMH_playerUsesVladimirUI(): bool {
+  return StrLen(GetLocStringById(2112698555)) > 0;
+}
