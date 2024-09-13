@@ -74,6 +74,7 @@ statemachine class WMH_Bestiary {
     creature_bypass_tag: name,
     position: Vector,
     heading: float,
+    runes_of_power_chance: float,
     hunt_seed: int
   ) {
     var bentry: WMH_BestiaryEntry = this.getEntryByBiomeTagByPass(creature_bypass_tag);
@@ -89,7 +90,8 @@ statemachine class WMH_Bestiary {
     request.withSpawnPosition(position);
     request.withHeading(heading);
     request.withSeed(hunt_seed + origin.getSeed());
-    request.withAggressionTarget(thePlayer, 5);
+    request.withAggressionTarget(thePlayer, 5)
+    request.withRunesOfPowerChance(1, runes_of_power_chance);
 
     // todo: if lures can spawn contract targets
     // .withEncounterTag(encounter_tag)
@@ -489,6 +491,23 @@ state Spawning in WMH_Bestiary {
 
     if (request.aggression_target) {
       SUH_makeEntitiesTargetPlayer(entities);
+    }
+
+    // add runes of power to entities
+    var i: int = 0;
+    for (i = 0; i < request.runes_of_power_count; i += 1) {
+      var seed: int = request.seed + i;
+      var can_add: bool = RandNoiseF(seed + 10, 1.0)
+                        < request.runes_of_power_chance;
+
+      if (!can_add) {
+        continue;
+      }
+
+      var index: int = RandNoiseF(seed + 100, entities.Size()) as int;
+      var entity: CEntity = entities[index];
+      
+      thePlayer.wmh.loot.giveRandomRuneOfPower(entity.GetInventory(), seed);
     }
 
     request.onRequestFinished(entities);

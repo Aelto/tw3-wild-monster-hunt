@@ -50,10 +50,9 @@ state Running in WMH_LootManager {
       }
     }
 
-    if (request.allow_runes_of_power) {
+    if (request.runes_of_power_chance > 0.0) {
       var can_add: bool = RandNoiseF(request.seed + 10, 1.0)
-                        // 5% chance
-                        <= 0.05;
+                        <= request.runes_of_power_chance;
 
       if (can_add) {
         parent.giveRandomRuneOfPower(

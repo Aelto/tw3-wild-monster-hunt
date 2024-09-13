@@ -2,6 +2,8 @@ class WMH_SpawnRequest {
   public var entries: array<WMH_BestiaryEntry>;
   public var spawn_point: WMH_BiomeSpawnPoint;
   public var aggression_target: CGameplayEntity;
+  public var runes_of_power_chance: float;
+  public var runes_of_power_count: int;
   public var aggression_delay: float; // currently unused
   public var spawn_position: Vector;
   public var encounter_tag: name;
@@ -64,6 +66,16 @@ class WMH_SpawnRequest {
   ): WMH_SpawnRequest {
     this.aggression_target = target;
     this.aggression_delay = delay;
+
+    return this;
+  }
+
+  public function withRunesOfPowerChance(
+    quantity: int,
+    chance_per_roll: float
+  ): WMH_SpawnRequest {
+    this.runes_of_power_chance = chance_per_roll;
+    this.runes_of_power_count = quantity;
 
     return this;
   }

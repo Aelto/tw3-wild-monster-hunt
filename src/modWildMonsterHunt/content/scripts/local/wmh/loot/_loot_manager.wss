@@ -26,14 +26,14 @@ statemachine class WMH_LootManager {
     out tags: array<WMH_LootTag>,
     seed: int
   ) {
-    var allow_runes_of_power: bool = true;
+    var runes_of_power_chance: float = 0.05;
 
     this.addLootRequest(
       WMH_LootRequest(
         inventory,
         tags,
         seed,
-        allow_runes_of_power
+        runes_of_power_chance
       )
     );
   }
@@ -174,5 +174,5 @@ struct WMH_LootRequest {
   var inventory: CInventoryComponent;
   var tags: array<WMH_LootTag>;
   var seed: int;
-  var allow_runes_of_power: bool;
+  var runes_of_power_chance: float;
 }

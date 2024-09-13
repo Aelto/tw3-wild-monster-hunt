@@ -343,11 +343,17 @@ state PlayScene in WMH_LureSpot {
       bypass_tag = parent.strong_creature_bypass_tag;
     }
 
+    var runes_of_power_chance: float = 0.8;
+    if (!parent.spawn_strong_creature) {
+      runes_of_power_chance *= 0.25;
+    }
+
     thePlayer.wmh.submitOnSpawnLure(
       parent,
       bypass_tag,
       spawn_position,
-      direction_to_player
+      direction_to_player,
+      runes_of_power_chance
     );
 
     theGame.FadeInAsync(0.8);

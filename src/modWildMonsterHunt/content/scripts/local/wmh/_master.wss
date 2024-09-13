@@ -96,13 +96,15 @@ class WMH_Master {
     origin: WMH_LureSpot,
     creature_bypass_tag: name,
     position: Vector,
-    heading: float
+    heading: float,
+    runes_of_power_chance: float
   ) {
     this.bestiary.onSpawnLure(
       origin,
       creature_bypass_tag,
       position,
       heading,
+      runes_of_power_chance,
       this.hunt.getSeed()
     );
   }
