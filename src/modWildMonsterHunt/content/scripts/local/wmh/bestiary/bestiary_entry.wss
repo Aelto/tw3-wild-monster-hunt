@@ -20,13 +20,17 @@ class WMH_BestiaryEntry {
     return "Unknown";
   }
 
+  public function isStrongTarget(): bool {
+    return this.strength > NoonWraithStrength!;
+  }
+
   public function canBeTarget(level: WMH_Level): bool {
     if (this.strength <= 0) {
       return false;
     }
      
     // in the early levels we only target the small monsters
-    if (level.value < NoonWraithStrength! && this.strength < NoonWraithStrength!) {
+    if (level.value < NoonWraithStrength! && !this.isStrongTarget()) {
       return true;
     }
 

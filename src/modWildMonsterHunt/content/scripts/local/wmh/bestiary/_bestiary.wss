@@ -223,12 +223,16 @@ statemachine class WMH_Bestiary {
                                   && RandNoiseF(point_seed + 1, 1.0) <= 0.2;
 
       if (can_spawn_monsters) {
+        var options: WMH_getRandomEntryOptions;
+        options.exclude_strong_target = !spawn_point.allow_strong_targets;
+
         var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
           contract,
           this.biomes,
           spawn_point.biome_tags,
           spawn_point.biome_tags_bypass,
-          point_seed
+          point_seed,
+          options
         );
 
         if (bentry) {

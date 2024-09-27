@@ -6,6 +6,10 @@ class WMH_Storage {
   public var decorations: WMH_StorageDecorations;
 }
 
+function WMH_getStorage(): WMH_Storage {
+  return thePlayer.wmh.storage;
+}
+
 function WMH_initializeStorage(master: WMH_Master) {
   if (!master.storage) {
     master.storage = new WMH_Storage in master;

@@ -66,7 +66,8 @@ class WMH_BestiaryActiveView {
     biome_manager: WMH_BiomeManager,
     biome_tags: WMH_BiomeTags,
     biome_tags_bypass: array<name>,
-    seed: int
+    seed: int,
+    optional options: WMH_getRandomEntryOptions
   ): WMH_BestiaryEntry {
     var weather: WMH_WeatherType = biome_manager.getWeatherType();
     var day_hour: int = biome_manager.getDayHour();
@@ -99,6 +100,12 @@ class WMH_BestiaryActiveView {
       } else {
         // the stronger a creature is the lower its chances of appearing
         ratio = ratio / MaxF(1.0, current.strength * 0.1);
+
+        // if the creature is not bypassed and the strong targets are excluded,
+        // ensure it cannot spawn if it's a strong target
+        if (options.exclude_strong_target && current.isStrongTarget()) {
+          ratio = 0;
+        }
       }
 
       roller.addRatio(ratio);
@@ -155,4 +162,11 @@ class WMH_BestiaryActiveView {
 
     return this.entries_wildlife[index];
   }
+}
+
+// if fields are added to the struct make sure their default value wouldn't
+// change the filtering as the getRandomEntry functions have the options as
+// optional arguments
+struct WMH_getRandomEntryOptions {
+  var exclude_strong_target: bool;
 }

@@ -43,6 +43,10 @@ class WMH_RewardProvider {
   ): WMH_RewardProvider {
     var i: int;
 
+    if (quantity <= 0) {
+      return this;
+    }
+
     for (i = 0; i < this.groups.Size(); i += 1) {
       if (this.groups[i].reason == reason) {
         var k: int;
