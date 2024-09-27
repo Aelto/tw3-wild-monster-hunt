@@ -349,8 +349,9 @@ state PlayLuring in WMH_LureSpot {
       runes_of_power_chance
     );
 
+    Sleep(0.25);
     theGame.FadeInAsync(0.8);
-    Sleep(3);
+    Sleep(2.75);
 
     // 4.0
     // camera goes back to the player
