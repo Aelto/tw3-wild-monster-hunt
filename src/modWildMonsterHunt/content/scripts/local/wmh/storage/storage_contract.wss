@@ -1,5 +1,7 @@
 class WMH_StorageContract {
   public var milestone_level: WMH_Level;
 
+  public var completed_contracts_count: int;
+
   public var pending_contracts: array<WMH_Contract>;
 }

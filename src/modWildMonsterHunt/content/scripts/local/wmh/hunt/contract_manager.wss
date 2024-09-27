@@ -130,6 +130,8 @@ class WMH_ContractManager {
       smith.onContractCompleted();
     }
 
+    storage.contract.completed_contracts_count += 1;
+
     // experience gain is locked until the milestone contract is completed.
     if (!this.hasPendingMilestoneContract()) {
       WMHINFO("onContractCompleted, old level = " +  storage.general.level.value);
