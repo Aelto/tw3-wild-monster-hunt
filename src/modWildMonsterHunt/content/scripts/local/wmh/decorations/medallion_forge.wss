@@ -2,7 +2,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
   private var selected_medallion: WMH_Medallion;
   private var prompt: WMH_ForgeYesNoPrompt;
 
-  default object_name_loc_key = 'wmh_tropy_medallion_forge';
+  default object_name_loc_key = 'wmh_trophy_medallion_forge';
 
   public function onAllowedInteraction(
     action: string,
