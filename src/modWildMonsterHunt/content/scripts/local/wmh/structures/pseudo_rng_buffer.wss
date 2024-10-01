@@ -1,0 +1,43 @@
+/// A type that can be used to alter the chances of an RNG roll over time, as
+/// the rolls are happening. Primarily made to be used in combination of a
+/// [WMH_RatiosRoller] but may also be used independently.
+class WMH_PseudoRngBuffer {
+  /// Stores the variances of the ratios (by their indices), how much the ratio
+  /// should be modified on either un/successful rolls
+  private var ratios_variances: array<float>;
+
+  /// Stores the modifier of the ratios (by their indices), a value that should
+  /// multiply the ratios to obtain the final altered value.
+  private var ratios_modifiers: array<float>;
+
+  public function registerEntry(ratio: float) {
+    // Currently the higher the base ratio the smaller the variance.
+    // This means that on successive missed rolls the high base ratios should
+    // see small changes to their modifiers, on the other hand the high base
+    // ratios vary a lot more that allows them to get back to high values faster
+    // after a successfull roll.
+    this.ratios_variances.PushBack(1.0 / ratio);
+    this.ratios_modifiers.PushBack(1.0);
+  }
+
+  public function getAlteredRatio(index: int, ratio: float): float {
+    return this.ratios_modifiers[index] * ratio;
+  }
+
+  public function notifyRolledEntry(index: int) {
+    var i: int;
+
+    for (i = 0; i < this.ratios_variances.Size(); i += 1) {
+      if (index == i) {
+        this.ratios_modifiers[i] = 0;
+      }
+      else {
+        var variance: float = this.ratios_variances[i];
+
+        this.ratios_modifiers[i] += variance;
+      }
+    }
+  }
+
+  private function 
+}

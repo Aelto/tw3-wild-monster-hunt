@@ -1,5 +1,13 @@
 #define const HuntSeedOffset_difficulty = 10;
 
+function WMH_getHuntManager(): WMH_HuntManager {
+  return thePlayer.wmh.hunt;
+}
+
+function WMH_getHuntManagerSpawnratesPseudoRng(): WMH_PseudoRngBuffer {
+  return thePlayer.wmh.hunt.spawnrates_pseudo_rng;
+}
+
 struct WMH_HuntKill {
   var bestiary_id: WMH_BestiaryId;
   var encounter_tag: name;
@@ -12,6 +20,10 @@ statemachine class WMH_HuntManager {
   public var encounters: WMH_EncounterManager;
   public var contract: WMH_ContractManager;
   public var wildlife: WMH_WildlifeManager;
+  
+  /// Tweaks the spawn rates dynamically during the hunt to ensure a greater
+  /// variety of spawns.
+  public var spawnrates_pseudo_rng: WMH_PseudoRngBuffer;
 
   protected var factory: WMH_HuntSeedFactory;
   protected var seed: int;
@@ -55,6 +67,8 @@ statemachine class WMH_HuntManager {
       * (this.factory.index + 1)
       + this.factory.timeoffset
     ) as int;
+
+    this.spawnrates_pseudo_rng = WMH_Bestiary().toPseudoRngBuffer();
 
     WMH_setHuntSeedFact(this.seed);
 
@@ -105,6 +119,12 @@ statemachine class WMH_HuntManager {
 
   public function onPlayerDeath() {
     this.killed_creatures.Clear();
+  }
+
+  public function onEncounterSpawned(entries: array<WMH_BestiaryEntry>) {
+    for bentry: WMH_BestiaryEntry in entries {
+      this.spawnrates_pseudo_rng.notifyRolledEntry(bentry.id.value);
+    }
   }
 
   protected function getSecondsSinceStart(): int {

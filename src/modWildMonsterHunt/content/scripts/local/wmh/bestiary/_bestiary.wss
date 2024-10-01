@@ -1,4 +1,6 @@
-
+function WMH_getBestiary(): WMH_Bestiary() {
+  return thePlayer.wmh.bestiary;
+}
 
 statemachine class WMH_Bestiary {
   private var master: WMH_Master;
@@ -186,6 +188,16 @@ statemachine class WMH_Bestiary {
     }
 
     return null;
+  }
+
+  public function toPseudoRngBuffer(): WMH_PseudoRngBuffer {
+    var buffer: WMH_PseudoRngBuffer = new WMH_PseudoRngBuffer in this;
+
+    for bentry: float in this.entries {
+      buffer.registerEntry(bentry.strength);
+    }
+
+    return buffer;
   }
 
   private function spawnNearbyAvailableSpawnPoints(

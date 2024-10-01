@@ -45,10 +45,10 @@ statemachine class WMH_TrapperTools extends WMH_InteractiveObject {
   }
 
   private function getAvailableTrapDevices(): int {
-    return this.getCompletedContractsSinceLastInteraction() * 0.2;
+    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.2);
   }
 
   private function getAvailableLureContainers(): int {
-    return this.getCompletedContractsSinceLastInteraction() * 0.5;
+    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.5);
   }
 }

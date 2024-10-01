@@ -77,6 +77,8 @@ class WMH_BestiaryActiveView {
     );
 
     var roller: WMH_RatiosRoller = new WMH_RatiosRoller in this;
+    var pseudo_rng_buffer: WMH_PseudoRngBuffer = 
+      WMH_getHuntManagerSpawnratesPseudoRng()
 
     // 1.
     // start by building a list of the entries that could spawn from the
@@ -108,7 +110,11 @@ class WMH_BestiaryActiveView {
         }
       }
 
-      roller.addRatio(ratio);
+      // note: the roll is not given to the pseudo_rng_buffer here but once the
+      // spawn request is fulfilled, this allows to keep this function somewhat
+      // pure with no side effects.
+      roller
+        .addRatio(pseudo_rng_buffer.getAlteredRatio(current.id.value, ratio));
     }
 
     var index: int = roller.roll(seed);
