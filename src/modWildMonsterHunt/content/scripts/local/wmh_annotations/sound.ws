@@ -10,7 +10,7 @@ function InitializeAreaMusic(worldArea: EAreaName ) {
     // uncomment the music of your choice, or add your own
     // SoundEvent( "play_music_toussaint" );
     // SoundEvent( "play_music_nomansgrad" );
-    // SoundEvent( "play_music_skellige" );
+    SoundEvent( "play_music_skellige" );
     // SoundEvent( "play_music_kaer_morhen" );
     // SoundEvent( "play_music_prologue" );
     // SoundEvent( "play_music_wyzima_castle" );
