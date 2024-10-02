@@ -38,6 +38,4 @@ class WMH_PseudoRngBuffer {
       }
     }
   }
-
-  private function 
 }

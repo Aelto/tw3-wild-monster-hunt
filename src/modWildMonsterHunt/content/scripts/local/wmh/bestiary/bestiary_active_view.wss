@@ -78,7 +78,7 @@ class WMH_BestiaryActiveView {
 
     var roller: WMH_RatiosRoller = new WMH_RatiosRoller in this;
     var pseudo_rng_buffer: WMH_PseudoRngBuffer = 
-      WMH_getHuntManagerSpawnratesPseudoRng()
+      WMH_getHuntManagerSpawnratesPseudoRng();
 
     // 1.
     // start by building a list of the entries that could spawn from the

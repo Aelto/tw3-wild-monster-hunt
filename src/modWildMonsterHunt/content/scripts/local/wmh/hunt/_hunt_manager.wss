@@ -68,7 +68,7 @@ statemachine class WMH_HuntManager {
       + this.factory.timeoffset
     ) as int;
 
-    this.spawnrates_pseudo_rng = WMH_Bestiary().toPseudoRngBuffer();
+    this.spawnrates_pseudo_rng = WMH_getBestiary().toPseudoRngBuffer();
 
     WMH_setHuntSeedFact(this.seed);
 
