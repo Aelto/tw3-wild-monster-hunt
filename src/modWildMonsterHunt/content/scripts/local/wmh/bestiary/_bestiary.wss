@@ -237,6 +237,7 @@ statemachine class WMH_Bestiary {
       if (can_spawn_monsters) {
         var options: WMH_getRandomEntryOptions;
         options.exclude_strong_target = !spawn_point.allow_strong_targets;
+        options.exclude_weak_target = !spawn_point.allow_weak_targets;
 
         var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
           contract,

@@ -105,8 +105,15 @@ class WMH_BestiaryActiveView {
 
         // if the creature is not bypassed and the strong targets are excluded,
         // ensure it cannot spawn if it's a strong target
-        if (options.exclude_strong_target && current.isStrongTarget()) {
-          ratio = 0;
+        if (current.isStrongTarget()) {
+          if (options.exclude_strong_target) {
+            ratio = 0;
+          }
+        }
+        else {
+          if (options.exclude_weak_target) {
+            ratio = 0;
+          }
         }
       }
 
@@ -175,4 +182,5 @@ class WMH_BestiaryActiveView {
 // optional arguments
 struct WMH_getRandomEntryOptions {
   var exclude_strong_target: bool;
+  var exclude_weak_target: bool;
 }
