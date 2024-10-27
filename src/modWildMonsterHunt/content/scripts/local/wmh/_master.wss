@@ -170,16 +170,9 @@ class WMH_Master {
 
   public function submitOnDeath(origin: CR4PlayerStateUnconscious) {
     // 1. teleport player to feint respawn location
-    var destination: CEntity = theGame.GetEntityByTag('WMH_FeintRespawn');
-
     this.hunt.onPlayerDeath();
 
-    if (destination) {
-      thePlayer.TeleportWithRotation(
-        destination.GetWorldPosition(),
-        destination.GetWorldRotation()
-      );
-    }
+    WMH_teleportToFeintRespawn();
 
     // 2. break some consumables
     var inventory: CInventoryComponent = thePlayer.GetInventory();

@@ -1,0 +1,70 @@
+statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
+  private var prompt: WMH_ReturnToCampYesNoPrompt;
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    this.GotoState('Waiting');
+    if (!thePlayer.IsActionAllowed( EIAB_OpenMap )) {
+      thePlayer.DisplayActionDisallowedHudMessage(EIAB_OpenMap);
+    }
+    else {
+      this.prompt = new WMH_ReturnToCampYesNoPrompt in this;
+      prompt.entity = this;
+      prompt.display();
+    }
+  }
+}
+
+state Waiting in WMH_ReturnToCampEntity {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {}
+}
+
+state FastTravel in WMH_ReturnToCampEntity {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.FastTravel_main();
+  }
+
+  entry function FastTravel_main() {
+    WMH_fastTravelToCamp();
+  }
+}
+
+class WMH_ReturnToCampYesNoPrompt extends WMH_YesNoPrompt {
+  var entity: WMH_ReturnToCampEntity;
+
+  public function title(): string {
+    return "Return to camp";
+  }
+
+  public function description(): string {
+    return "Fast travel back to camp?";
+  }
+
+  public function onResponse(accepted: bool) {
+    if (accepted) {
+      this.entity.GotoState('FastTravel');
+    }
+  }
+}
+
+function WMH_teleportToFeintRespawn() {
+  var destination: CEntity = theGame.GetEntityByTag('WMH_FeintRespawn');
+
+  if (destination) {
+    thePlayer.TeleportWithRotation(
+      destination.GetWorldPosition(),
+      destination.GetWorldRotation()
+    );
+  }
+}
+
+latent function WMH_fastTravelToCamp() {
+  theGame.FadeOut(0.5);
+  WMH_teleportToFeintRespawn();
+  theGame.FadeInAsync(1.0);
+}
