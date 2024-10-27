@@ -38,6 +38,15 @@ class WMH_MilestoneContract extends WMH_PendingContract {
   public function onContractCompleted(provider: WMH_RewardProvider) {
     super.onContractCompleted(provider);
 
+    // additional experience on top of the XP of a regular contract, but this
+    // one is a % of the needed experience for the next level.
+    //
+    // This should help combat mods that tweak the XP curve using an exponential
+    // curve.
+    provider.appendExperience(
+      RoundF((GetWitcherPlayer().GetMissingExpForNextLevel() as float) * 0.30)
+    );
+
     WMHINFO(
       "WMH_MilestoneContract::onContractCompleted(), level = "
       + this.milestone_level.value

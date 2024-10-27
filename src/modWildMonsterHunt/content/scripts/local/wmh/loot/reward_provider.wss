@@ -7,6 +7,7 @@ struct WMH_ItemQuantity {
 struct WMH_RewardGroup {
   var reason: string;
   var items: array<WMH_ItemQuantity>;
+  var experience: int;
 }
 
 
@@ -30,6 +31,10 @@ class WMH_RewardProvider {
 
   public function appendItem(item: name, quantity: int): WMH_RewardProvider {
     return this.addItem(this.active_group, item, quantity);
+  }
+
+  public function appendExperience(quantity: int): WMH_RewardProvider {
+    return this.addExperience(this.active_group, quantity);
   }
 
   public function addMoney(reason: string, quantity: int): WMH_RewardProvider {
@@ -76,12 +81,43 @@ class WMH_RewardProvider {
     return this;
   }
 
+  public function addExperience(
+    reason: string,
+    quantity: int
+  ): WMH_RewardProvider {
+    var i: int;
+
+    if (quantity <= 0) {
+      return this;
+    }
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      if (this.groups[i].reason == reason) {
+        this.groups[i].experience += quantity;
+        return this;
+      }
+    }
+
+    // no group with the given name was found, add it
+    this.groups.PushBack(WMH_RewardGroup(reason));
+    this.groups[this.groups.Size() - 1].experience += quantity;
+
+
+    return this;
+  }
+
   public function toHtml(inventory: CInventoryComponent): string {
     var message: string;
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
       message += "<u>" + this.groups[i].reason + "</u>";
+
+      if (this.groups[i].experience > 0) {
+        message += "<br /> XP <font size='18'>"
+                 + this.groups[i].experience
+                 + "</font>";
+      }
 
       var k: int;
       for (k = 0; k < this.groups[i].items.Size(); k += 1) {
@@ -103,6 +139,7 @@ class WMH_RewardProvider {
   }
 
   public function transferItems(inventory: CInventoryComponent) {
+    var total_experience: int = 0;
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
@@ -116,6 +153,11 @@ class WMH_RewardProvider {
           true // show as reward
         );
       }
+
+      total_experience += this.groups[i].experience;
     }
+
+    // experience is hardcoded for the player:
+    GetWitcherPlayer().AddPoints(EExperiencePoint, total_experience, true);
   }
 }

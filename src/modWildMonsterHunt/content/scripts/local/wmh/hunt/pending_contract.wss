@@ -146,6 +146,18 @@ class WMH_PendingContract {
 
       provider.appendMoney(money);
 
+      var experience: int = WMH_difficultyScaleUpF(
+        (200 + this.target.strength * 10)
+        // at level 100 the rewards are doubled, the XP should scale with
+        // contract level, but it shouldn't be too high either:
+        * (1 + this.contract.level.value / 100),
+
+        // increases it by 10% for every difficulty level
+        0.1
+      ) as int;
+
+      provider.appendExperience(experience);
+
       var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
         < MinF((this.target.strength as float) * 0.1, 0.5);
 
