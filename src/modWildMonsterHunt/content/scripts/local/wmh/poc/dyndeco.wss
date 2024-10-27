@@ -1,0 +1,302 @@
+struct WMH_DynDecorationSlotOptions {
+  var template: string;
+  var max_rotation_randomness: float;
+  var slot_chance: float;
+}
+
+class WMH_DynDecoration extends CEntity {
+  private var decorations: array<CEntity>;
+
+  protected editable var decorations_templates: array<string>;
+  hint decorations_templates = "path to the entity templates this DynDecoration entity may spawn in its CBoxComponents. If more than one is listed then a random one is selected for each slot.";
+
+  protected editable var max_rotation_randomness: float;
+  hint max_rotation_randomness = "if enabled, the entity may be randomly rotated around it spawned position.";
+
+  protected editable var slot_chance: float;
+  default slot_chance = 1.0;
+  hint slot_chance = "Chance for a slot to spawn an object, where 1.0 means 100% and 0.0 means 0%.";
+
+  event OnSpawned( spawnData : SEntitySpawnData )
+	{
+    super.OnSpawned(spawnData);
+    this.AddTimer('delayedGeneratedRequest', 5.0);
+	}
+
+  timer function delayedGeneratedRequest(delta: float , id: int) {
+    this.requestAsynchronousGeneration();
+  }
+
+  // event OnStreamIn() {
+  //   WMHINFO("WMH_DynDecoration, onStreamIn");
+  //   this.generateDynamicDecoration();
+  // }
+
+  public function requestAsynchronousGeneration() {
+    thePlayer.wmh_dyndeco_orchestrator.requestGeneration(this);
+  }
+
+  public latent function generateDynamicDecoration() {
+    this.clearDynamicDecorations();
+
+    var components: array<CComponent> = this
+      .GetComponentsByClassName('CBoxComponent');
+
+    for component: CComponent in components {
+      var options: WMH_DynDecorationSlotOptions = this.getSlotOptions(component);
+
+      if (options.slot_chance < 1.0 && RandRangeF(1) > options.slot_chance) {
+        continue;
+      }
+
+      var rotation: EulerAngles = component.GetWorldRotation();      
+      if (options.max_rotation_randomness > 0) {
+        rotation.Yaw += RandRangeF(options.max_rotation_randomness, options.max_rotation_randomness * -1);
+      }
+
+      var template: CEntityTemplate = LoadResourceAsync(
+        options.template,
+        true
+      ) as CEntityTemplate;
+
+      this.decorations.PushBack(
+        theGame.CreateEntity(
+          template,
+          component.GetWorldPosition(),
+          rotation
+        ) as CEntity
+      );
+    }
+
+    // for entity: CEntity in this.decorations {
+    //   var decoration: WMH_DynDecoration = entity as WMH_DynDecoration;
+
+    //   if (decoration) {
+    //     decoration.generateDynamicDecoration();
+    //   }
+    // }
+  }
+
+  // protected function addDecorationToSlots(
+  //   out slots: array<CComponent>,
+  //   out decorations: array<String>,
+  //   optional required_tag: name,
+  //   optional max_rotation_randomness: bool,
+  //   optional slot_chance: float
+  // ) {
+  //   for slot: CComponent in slots {
+  //     if (slot_chance > 0 && slot_chance < 1 && RandRangeF(1) < slot_chance) {
+  //       continue;
+  //     }
+
+  //     if (required_tag != '' && !slot.HasTag(required_tag)) {
+  //       continue;
+  //     }
+
+  //     var rotation: EulerAngles = slot.GetWorldRotation();      
+  //     if (this.max_rotation_randomness) {
+  //       rotation.Yaw += RandRangeF(360);
+  //     }
+
+  //     var decoration_path = 
+
+  //     this.decorations.PushBack(
+  //       theGame.CreateEntity(
+  //         LoadResource(
+  //           this.getSlotOptions(),
+  //           true
+  //         ) as CEntityTemplate,
+  //         component.GetWorldPosition(),
+  //         rotation
+  //       ) as CEntity
+  //     );
+  //   }
+  // }
+
+  public function clearDynamicDecorations() {
+    for entity: CEntity in this.decorations {
+      if (!entity) {
+        continue;
+      }
+
+      var decoration: WMH_DynDecoration = entity as WMH_DynDecoration;
+      if (decoration) {
+        decoration.beforeDestroy();
+      }
+
+      entity.Destroy();
+    }
+
+    this.decorations.Clear();
+  }
+
+  public function beforeDestroy() {}
+
+  protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
+    var index: int = RandRange(this.decorations_templates.Size());
+
+    return WMH_DynDecorationSlotOptions(
+      this.decorations_templates[index],
+      this.max_rotation_randomness,
+      this.slot_chance
+    );
+  }
+}
+
+class WMH_DynDeco_Table extends WMH_DynDecoration {
+  protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
+    if (slot.HasTag('food')) {
+      var template: string;
+      var roll: float = RandRangeF(1);
+
+      if (roll < 0.1) {
+        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent";
+      }
+      else if (roll < 0.2) {
+        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent";
+      }
+      else if (roll < 0.3) {
+        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent";
+      }
+      else if (roll < 0.4) {
+        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent";
+      }
+      else {
+        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent";
+      }
+
+      return WMH_DynDecorationSlotOptions(
+        template,
+        180,
+        0.5
+      );
+    }
+    else if (slot.HasTag('chair')) {
+      var template: string;
+      var roll: float = RandRangeF(1);
+
+      if (roll < 0.1) {
+        template = "environment\decorations\furniture\barons_manor\baron_chair_1_px.w2ent";
+      }
+      else if (roll < 0.2) {
+        template = "environment\decorations\furniture\barons_manor\baron_chair_2_px.w2ent";
+      }
+      else if (roll < 0.3) {
+        template = "environment\decorations\furniture\barons_manor\baron_chair_3_px.w2ent";
+      }
+      else if (roll < 0.4) {
+        template = "dlc\bob\data\environment\decorations\gameplay\poor_district\decoration_set\chairs\deco_poor_stool_a.w2ent";
+      }
+      else {
+        template = "dlc\bob\data\environment\decorations\gameplay\poor_district\furniture\stools\poor_stool_a_dynamic.w2ent";
+      }
+
+      return WMH_DynDecorationSlotOptions(
+        template,
+        20,
+        0.8
+      );
+    }
+
+    return super.getSlotOptions(slot);
+  }
+}
+
+@addField(CR4Player)
+var wmh_dyndeco_orchestrator: WMH_DynDecoOrchestrator;
+
+@wrapMethod(CR4Player)
+function OnSpawned(spawnData : SEntitySpawnData) {
+  wrappedMethod(spawnData);
+
+  if (!this.wmh_dyndeco_orchestrator) {
+    this.wmh_dyndeco_orchestrator = new WMH_DynDecoOrchestrator in this;
+  }
+
+  this.wmh_dyndeco_orchestrator.onLoad();
+}
+
+statemachine class WMH_DynDecoOrchestrator {
+  protected var requests_buffers: array<array<WMH_DynDecoration>>;
+
+  protected var buffer_index_opened: int;
+  protected var buffer_index_closed: int;
+
+  public function onLoad() {
+    this.buffer_index_closed = 1;
+    this.buffer_index_opened = 0;
+    this.requests_buffers.Grow(2);
+    this.GotoState('Waiting');
+  }
+
+  public function requestGeneration(object: WMH_DynDecoration) {
+    this.requests_buffers[this.buffer_index_opened].PushBack(object);
+    
+    if (this.GetCurrentStateName() != 'Processing') {
+      this.GotoState('Processing');
+    }
+  }
+}
+
+state Waiting in WMH_DynDecoOrchestrator {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {
+    if (parent.requests_buffers[parent.buffer_index_opened].Size() > 0) {
+      parent.GotoState('Processing');
+    }
+  }
+}
+
+state Processing in WMH_DynDecoOrchestrator {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Processing_main();
+  }
+
+  entry function Processing_main() {
+    Sleep(5.0);
+
+    if (parent.buffer_index_closed == 0) {
+      parent.buffer_index_closed = 1;
+      parent.buffer_index_opened = 0;
+    }
+    else {
+      parent.buffer_index_closed = 0;
+      parent.buffer_index_opened = 1;
+    }
+
+    var requests_count: int = parent.requests_buffers[parent.buffer_index_closed].Size();
+    var index: int = 0;
+
+    while (requests_count > 0 && index < requests_count) {
+      var decoration: WMH_DynDecoration = parent
+        .requests_buffers[parent.buffer_index_closed][index];
+
+      decoration.generateDynamicDecoration();
+      index += 1;
+      
+      SleepOneFrame();
+    }
+
+    parent.requests_buffers[parent.buffer_index_closed].Clear();
+    parent.GotoState('Waiting');
+  }
+}
+
+exec function dyndeco() {
+  var entities: array<CEntity>;
+  
+  theGame.GetEntitiesByTag('DynDeco', entities);
+
+  for entity: CEntity in entities {
+    var dyndeco: WMH_DynDecoration = entity as WMH_DynDecoration;
+
+    if (dyndeco) {
+      dyndeco.requestAsynchronousGeneration();
+    }
+  }
+}
