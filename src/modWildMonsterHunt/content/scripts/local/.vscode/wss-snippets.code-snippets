@@ -27,5 +27,11 @@
       "  entry function $1_main() {$3}",
       "}"
     ]
+  },
+  "onInteraction": {
+    "prefix": "event onInteraction",
+    "body": [
+      "event OnInteraction(actionName: string, activator: CEntity) {}"
+    ]
   }
 }
