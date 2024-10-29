@@ -1,0 +1,7 @@
+function WMH_either<T>(left: T, right: T, value: bool): T {
+  if (value) {
+    return left;
+  }
+
+  return right;
+}

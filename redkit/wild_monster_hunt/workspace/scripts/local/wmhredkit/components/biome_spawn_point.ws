@@ -15,6 +15,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	default allow_weak_targets = true;
 	hint allow_weak_targets = "supposedly weak monsters can only spawn to this spawn point if the option is set to `true`";
 
+	public editable var prefer_wildlife: bool;
+	default prefer_wildlife = false;
+	hint prefer_wildlife = "if set to true, then the chances of a monster spawning there are reduced while wildlife is increased.";
+
 	protected var respawn_ticker: WMH_Ticker;
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
