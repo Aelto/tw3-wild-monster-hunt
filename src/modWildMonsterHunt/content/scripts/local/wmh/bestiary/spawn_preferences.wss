@@ -165,3 +165,25 @@ enum WMH_WeatherType {
   WMH_WeatherType_Rain = 2,
   WMH_WeatherType_Snow = 3,
 }
+
+function WMH_getWeatherType(): WMH_WeatherType {
+  var weather: EWeatherEffect = GetCurWeather();
+  var output: WMH_WeatherType = WMH_WeatherType_None;
+
+  switch (weather) {
+    case EWE_Clear:
+      output = WMH_WeatherType_Clear;
+      break;
+
+    case EWE_Rain:
+    case EWE_Storm:
+      output = WMH_WeatherType_Rain;
+      break;
+
+    case EWE_Snow:
+      output = WMH_WeatherType_Snow;
+      break;
+  }
+
+  return output;
+}

@@ -1,0 +1,95 @@
+/// There is a vanilla WeatherShrine class, however it doesn't 100% cover our
+/// needs: A shrine can only change the weather type to 1 specific value.
+class WMH_WeatherShrine extends CGameplayEntity {
+  private editable var target_weather: WMH_WeatherType;
+  hint target_weather = "The desired weather after the shrine is interacted with.";
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    this.changeWeather();
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    var current: name = GetWeatherConditionName();
+
+    this.displayTutorial();
+
+    // Each totem has two sides:
+    // - one to clear the weather if the current weather matches the desired one
+    //   for the shrine
+    // - one to set the weather to the desired one by the shrine but only if the
+    //   weather is clear/none
+    if (this.target_weather == WMH_WeatherType_Snow) {
+      if (current == 'WT_Snow') {
+        return interactionComponentName == "PrayInteractionClear";
+      }
+
+      return current == 'WT_Clear'
+          && interactionComponentName == "PrayInteractionDesired";
+    }
+    else if (this.target_weather == WMH_WeatherType_Rain) {
+      if (current == 'WT_Rain_Storm') {
+        return interactionComponentName == "PrayInteractionClear";
+      }
+
+      return current == 'WT_Clear'
+          && interactionComponentName == "PrayInteractionDesired";
+    }
+
+    // if the shrine is set to Clear or None, then only its Clear component is
+    // displayed, and no matter the current weather.
+    return interactionComponentName == "PrayInteractionClear";
+  }
+
+  protected function changeWeather() {
+    var weather_name: string;
+    var success: bool;
+
+    var current: WMH_WeatherType = WMH_getWeatherType();
+    var target_weather_name: name;
+
+    if (current == this.target_weather) {
+      target_weather_name = 'WT_Clear';
+    }
+    else {
+      switch (this.target_weather) {
+        case WMH_WeatherType_Clear:
+        case WMH_WeatherType_None:
+          target_weather_name = 'WT_Clear';
+          break;
+
+        case WMH_WeatherType_Snow:
+          target_weather_name = 'WT_Snow';
+          break;
+
+        case WMH_WeatherType_Rain:
+          target_weather_name = 'WT_Rain_Storm';
+          break;
+      }
+    }
+
+    success = RequestWeatherChangeTo(target_weather_name, 60, false);
+    if (success) {
+      thePlayer.DisplayHudMessage(
+        GetLocStringByKeyExt("panel_hud_message_prayer_heard")
+      );
+    }
+    else {
+      thePlayer.DisplayHudMessage(
+        GetLocStringByKeyExt("panel_hud_message_prayer_not_heard")
+      );
+    }
+  }
+
+  private function displayTutorial() {
+    WMHTUTOFACT(
+      'WMH_WeatherShrine',
+      "Weather Shrine",
+      "You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather."
+      + "<br/><br/>"
+      + "These Druidic artefacts possess two faces and the <font color='#CD7D03'>results may vary depending on which side you interact with</font>, experiment with them to turn the weather into a powerful hunting tool."
+    );
+  }
+}
