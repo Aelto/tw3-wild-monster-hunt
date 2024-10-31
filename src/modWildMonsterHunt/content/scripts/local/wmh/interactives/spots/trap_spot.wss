@@ -46,6 +46,12 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
     action: string,
     activator: CEntity
   ) {
+    WMHTUTOFACT(
+      'WMH_TrapSpot',
+      "Trap Spot",
+      "<font color='#CD7D03'>Trap Spots</font> are deadly devices that you can arm using dedicated tools.Lure your creatures near them and trigger them with Igni.<br/><br/>Traps may also be enhanced with oils or special components to block the monsters' magic abilities.<br/><br/>Once a Trap Spot is repaired, it remains available for all of your future hunts."
+    );
+
     var current_state: name = this.GetCurrentStateName();
 
     if (current_state == 'Consumed') {

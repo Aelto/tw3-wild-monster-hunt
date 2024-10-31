@@ -8,6 +8,12 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
     action: string,
     activator: CEntity
   ) {
+    WMHTUTOFACT(
+      'WMH_MedallionForge',
+      "Medallion Forge",
+      "The <font color='#CD7D03'>Medallion Forge</font> can be used to engrave <font color='#CD7D03'>Runes of Power</font> into a <font color='#CD7D03'>Witcher Medallion</font>.<br/><br/>Wearing a forged medallion allows you to inherit the power of the runes that were engraved into it.<br/><br/><u>A medallion may only hold a limited amount of runes, and engraving runes is a permanent process.</u>"
+    );
+
     this.prompt = new WMH_ForgeYesNoPrompt in this;
     prompt.forge = this;
     prompt.display();
@@ -33,7 +39,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
       .GetItemQuantityByName('modwmh_melding_reagent');
 
     if (reagents_count < 1) {
-      WMHHUD("You lack the necessary Melding Reageants for the process");
+      WMHHUD("You lack the necessary Melding Reagreants for the process");
 
       return;
     }

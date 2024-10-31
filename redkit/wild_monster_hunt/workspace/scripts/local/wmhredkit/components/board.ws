@@ -13,6 +13,20 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   event OnInteractionActivated(interactionComponentName : string, activator : CEntity) {
     super.OnInteractionActivated(interactionComponentName, activator);
 
+    WMHTUTOFACT(
+      'WMH_NoticeBoard',
+      "Monster Hunts",
+      "The noticeboard displays up to 5 targets for your monster hunts. "
+      + "Slaying the designated targets during your hunts will allow you to "
+      + "complete the contracts, netting you crowns and experience while also "
+      + "immediately receiving a new target in return the next time you get back "
+      + "to camp."
+      + "<br/><br/>"
+      + "Every now and then an usual creature may be listed, when it appears, "
+      + "hunting it should be your first priority as experience gain from "
+      + "regular contracts is halted until the target is no more."
+    );
+
     if (activator == thePlayer) {
       this.setupContractOneliners(thePlayer.wmh.hunt.contract);
     }

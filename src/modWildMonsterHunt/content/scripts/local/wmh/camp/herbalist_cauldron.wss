@@ -30,6 +30,13 @@ class WMH_HerbalistCauldron extends W3Container {
   event OnInteractionActivated(actionName : string, activator : CEntity) {
     // do not call super as it will probably disable the interaction.
     // super.OnInteractionActivated(actionName, activator);
+
+    WMHTUTOFACT(
+      'WMH_HerbalistCauldron',
+      "Melding Cauldrong",
+      "Shupe the troll invites you to throw any monster material you do not want into the <font color='#CD7D03'>Melding Cauldron</font>! On top of having a taste of his magnificient concoction, you may also get a hold of the precious <font color='#CD7D03'>recipes & schematics</font> the troll was able to dig up during his young and adventurous days...<br/><br/>Do note, however, that you cannot trick Shupe by only throwing in mere Drowner hair or unpleasant shells into the boiling cauldron. It is the rarest materials that contribute the most to the taste, dropping such delicacies will get you a larger compensation. But do not fret about the extra bones you collected as a soup is nothing without its floating bits, the texture they add is worth a reward... as long as you bring enough of them."
+    );
+
     this.Enable(true, false, true);
   }
 

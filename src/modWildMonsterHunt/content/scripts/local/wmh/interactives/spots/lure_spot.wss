@@ -24,6 +24,12 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     action: string,
     activator: CEntity
   ) {
+    WMHTUTOFACT(
+      'WMH_LureSpot',
+      "Luring Spot",
+      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>The prey you will get depends entirely on the quality of the lure that you use, adjust the ingredients based on needs.<br/><br/><i>Once a Luring Spot is repaired, it remains available for all of your future hunts.<i>"
+    );
+
     if (!this.respawn_ticker) {
       this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
     }
@@ -265,8 +271,6 @@ state PlayLuring in WMH_LureSpot {
     camera_1.activationDuration = 20;
     camera_1.deactivationDuration = 0;
 
-    // todo: slow movements to the cameras for dynamic effect
-
     theGame.FadeOut(0.5);
 		GetWitcherPlayer().SetBehaviorVariable('MeditateAbort', 0);
 
@@ -276,10 +280,6 @@ state PlayLuring in WMH_LureSpot {
       meditation_position,
       meditation_node.GetWorldRotation()
     );
-    // camera_0.teleportAndLookAt(
-    //   camera_node.GetWorldPosition(),
-    //   meditation_position + Vector(0, 0, 0.25)
-    // );
 
     camera_0.TeleportWithRotation(
       camera_node.GetWorldPosition(),

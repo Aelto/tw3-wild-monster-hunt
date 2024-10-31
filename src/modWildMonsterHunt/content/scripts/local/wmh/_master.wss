@@ -48,6 +48,12 @@ class WMH_Master {
     if (this.exit_debounce.validate()) {
       WMHINFO("submitOnSettlementExit, debounce validated");
 
+      WMHTUTOFACT(
+        'WMH_HuntingModeStarted',
+        "Hunting mode",
+        "You left the <font color='#CD7D03'>Witcher Camp</font>, you are now entering in <font color='#CD7D03'>Hunting Mode</font>.<br/><br/>Each hunt is unique, the world is refilled with chests for you to loot, and depending on the time of day & weather the creatures you killed are back as well. You are free to stay in hunting mode for as long as you wish, you are also free to leave the camp as often as needed.<br/><br/>Keep in mind however that hunting your contract targets remains your primary objective, so make every hunt count in order to maximize your rewards and improve your gear."
+      );
+
       this.hunt.onHuntStarted(this.storage);
       this.hunt.contract.onHuntStarted(this.bestiary);
       this.bestiary.spawn_points.onHuntStarted();
@@ -217,6 +223,12 @@ class WMH_Master {
 
       inventory.SingletonItemRemoveAmmo(item, 1);
     }
+
+    WMHTUTOFACT(
+      'WMH_OnFeint',
+      "Feinting",
+      "You <font color='#CD7D03'>feinted</font>. You cannot die while in Hunting Mode, but that doesn't make the situation any less punishing.<br/><br/>Feinting caused you to <font color='CD7D03'>lose some of your potions, but also any progress you may have made in your contracts</font>.<br/><br/>Bring in your hunt only what's necessary, and make sure that you're prepared for what's coming if you decide to pursue multiple targets in your hunt. "
+    );
   }
 
   public function submitOnMilestoneContractCompleted(
