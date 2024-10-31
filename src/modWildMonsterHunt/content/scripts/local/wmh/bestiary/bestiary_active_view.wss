@@ -155,14 +155,15 @@ class WMH_BestiaryActiveView {
     for (i = 0; i < this.entries_wildlife.Size(); i += 1) {
       var current: WMH_BestiaryEntry = this.entries_wildlife[i];
 
-      // todo: the biome_tags_bypass is not verified during this step.
-      //  ~> what ratio should a bypassed entry get?
-
       var ratio: float = current.getSpawnRatio(
         biome,
         weather,
         day_hour
       ) as float;
+
+      if (current.isBiomeBypassed(biome_tags_bypass)) {
+        ratio *= 20;
+      }
 
       roller.addRatio(ratio);
     }
