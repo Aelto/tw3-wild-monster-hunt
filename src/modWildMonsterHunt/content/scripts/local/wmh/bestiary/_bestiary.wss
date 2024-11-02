@@ -99,7 +99,7 @@ statemachine class WMH_Bestiary {
     request.withSpawnPosition(position);
     request.withHeading(heading);
     request.withSeed(hunt_seed + origin.getSeed());
-    request.withAggressionTarget(thePlayer, 5);
+    // request.withAggressionTarget(thePlayer, 5);
     request.withRunesOfPowerChance(1, runes_of_power_chance);
 
     // todo: if lures can spawn contract targets
