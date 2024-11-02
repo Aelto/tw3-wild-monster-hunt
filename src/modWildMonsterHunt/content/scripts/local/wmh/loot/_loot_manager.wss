@@ -23,10 +23,29 @@ statemachine class WMH_LootManager {
 
   public function onContainerRefill(
     inventory: CInventoryComponent,
-    out tags: array<WMH_LootTag>,
+    tags: array<WMH_LootTag>, // not `out`, copies the array
     seed: int
   ) {
     var runes_of_power_chance: float = 0.05;
+
+    // the container has no tags: use random tags
+    var tags_size: int = tags.Size();
+    if (tags_size <= 0) {
+      while (tags_size < 3) {  
+        if (RandNoiseF(seed + tags_size * 2, tags_size * 1.0) > 0.5) {
+          break;
+        }
+
+        tags.PushBack(
+          RandNoiseF(
+            seed + tags_size * 2 + 1,
+            (WMH_LootTag_Ore as float) + 1
+          ) as int
+        );
+
+        tags_size += 1;
+      }
+    }
 
     this.addLootRequest(
       WMH_LootRequest(
