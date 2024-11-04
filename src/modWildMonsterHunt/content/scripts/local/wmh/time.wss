@@ -9,3 +9,11 @@ function WMH_getGameTimeMinutes(): int {
 function WMH_getGameTimeSecondsSince(time: GameTime): int {
   return GameTimeToSeconds(WMH_getGameTimeNow()) - GameTimeToSeconds(time);
 }
+
+function WMH_getEngineTimeAsSeconds(): float {
+  return theGame.GetEngineTimeAsSeconds();
+}
+
+function WMH_getEngineTimeSecondsSince(time: float): float {
+  return WMH_getEngineTimeAsSeconds() - time;
+}

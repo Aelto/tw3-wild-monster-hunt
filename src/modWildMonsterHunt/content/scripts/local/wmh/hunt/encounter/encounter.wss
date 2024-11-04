@@ -35,6 +35,8 @@ class WMH_Encounter {
   }
 
   public function onDestroy() {
+    var had_any_creature: bool = this.entities.Size() > 0;
+
     for entity: CEntity in this.entities {
       if (entity) {
         entity.Destroy();
@@ -44,7 +46,7 @@ class WMH_Encounter {
     this.entities.Clear();
 
     if (this.spawn_point) {
-      this.spawn_point.liberate();
+      this.spawn_point.liberate(!had_any_creature);
     }
 
     var notify: bool = VecDistanceSquared2D(

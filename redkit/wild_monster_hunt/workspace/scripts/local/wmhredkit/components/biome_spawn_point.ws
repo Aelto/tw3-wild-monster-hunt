@@ -20,6 +20,12 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	hint prefer_wildlife = "if set to true, then the chances of a monster spawning there are reduced while wildlife is increased.";
 
 	protected var respawn_ticker: WMH_Ticker;
+
+	// stores the timestamp of the last time this spawn point spawned something
+	protected var last_spawn_time: GameTime;
+	// stores the timestamp of the last time this spawn point was liberated after
+	// it spawned something
+	protected var last_clear_time: GameTime;
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
 		this.respawn_ticker = (new WMH_Ticker in this).init(180.0);
@@ -32,9 +38,22 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	// to be used when the location is used as a spawn point,
 	public function consume() {
 		this.respawn_ticker.lock();
+		this.last_spawn_time = WMH_getEngineTimeAsSeconds();
 	}
 
-	public function liberate() {
+	public function liberate(optional encounter_was_killed: bool) {
 		this.respawn_ticker.reset();
+
+		if (encounter_was_killed) {
+			this.last_clear_time = WMH_getEngineTimeAsSeconds();
+		}
+	}
+
+	public function wasKilledSince(engine_time: float): bool {
+		return engine_time < this.last_clear_time;
+	}
+
+	public function wasKilledSinceStartOfHunt(): bool {
+		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clear_time);
 	}
 }
