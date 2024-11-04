@@ -5,3 +5,29 @@ function WMH_either<T>(left: T, right: T, value: bool): T {
 
   return right;
 }
+
+function WMH_vectorToCardinalDescription(input: Vector): string {
+  var output: string = (VecLength2D(input) as int) + "meters";
+  var normalized: Vector = VecNormalize2D(input);
+  var space: bool = false;
+
+  if (normalized.Y > 0.25) {
+    output += "North";
+    space = true;
+  }
+  else if (normalized.Y < -0.25) {
+    space = true;
+    output += "South";
+  }
+
+  if (normalized.X > 0.25) {
+    if (space) message += " ";
+    output += "East";
+  }
+  else if (normalized.X < -0.25) {
+    if (space) message += " ";
+    output += "West";
+  }
+
+  return output;
+}
