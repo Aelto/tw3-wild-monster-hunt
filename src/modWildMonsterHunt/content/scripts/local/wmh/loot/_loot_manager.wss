@@ -4,6 +4,11 @@ function submitOnMeldItem() {
   this.storage.herbalist.melding_level.value += 1;
 }
 
+function WMH_getLootManager(): WMH_LootManager {
+  return thePlayer.wmh.loot;
+}
+
+
 statemachine class WMH_LootManager {
   protected var loot_requests: array<WMH_LootRequest>;
 
