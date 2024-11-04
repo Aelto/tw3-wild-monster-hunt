@@ -1,0 +1,69 @@
+/// An event that asks the player to trade items X to get items Y, money, & xp
+// in exchange.
+class WMH_EventNpc_EventFetchItem {
+  public function description(): string {
+    var inventory: CInventoryComponent = thePlayer.GetInventory();
+    var definitions: CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();
+
+    return "Give "
+         + this.itemQuantity() + "x "
+         + inventory.GetItemIconPathByName(this.requiredItem());
+  }
+
+  public function tryComplete(provider: WMH_RewardProvider): bool {
+    var inventory: CInventoryComponent = thePlayer.GetInventory();
+    var item: name = this.requiredItem();
+    var quantity: int = this.itemQuantity();
+
+    if (inventory.GetItemQuantityByName(item) < quantity) {
+      return false;
+    }
+
+    provider
+      .startGroup("Fetch item event")
+      .appendItem(item, quantity * -1)
+      .appendItem(this.rewardedItem(), this.itemQuantity(1))
+      .appendExperience(WMH_difficultyScaleUpF(50, 0.25) as int)
+      .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);
+
+    return true;
+  }
+
+  private function requiredItem(): name {
+    var loot_manager: WMH_LootManager = WMH_getLootManager();
+
+    return loot_manager.getRandomItem(
+      this.itemCategory(),
+      this.seed
+    );
+  }
+
+  private function rewardedItem(): name {
+    var loot_manager: WMH_LootManager = WMH_getLootManager();
+
+    return loot_manager.getRandomItem(
+      this.itemCategory(1),
+      this.seed
+    );
+  }
+
+  private function itemQuantity(optional offset: int): int {
+    return 1 + RandNoiseF(this.seed + offset, 3.0) as int;
+  }
+
+  private function itemCategory(optional offset: int): WMH_LootTag {
+    var roll: float = RandNoiseF(this.seed + offset, 1.0);
+
+    if (roll < 0.25) {
+      return WMH_LootTag_Herb;
+    }
+    else if (roll < 0.50) {
+      return WMH_LootTag_Alchemy;
+    }
+    else if (roll < 0.75) {
+      return WMH_LootTag_Material;
+    }
+    
+    return WMH_LootTag_Food;
+  }
+}

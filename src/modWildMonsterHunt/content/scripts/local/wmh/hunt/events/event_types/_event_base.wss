@@ -1,0 +1,21 @@
+abstract class WMH_EventNpc_BaseEvent {
+  protected var origin: WMH_EventNpcSpawnPoint;
+  protected var seed: int;
+
+  public function init(origin: WMH_EventNpcSpawnPoint, seed: int) {
+    this.origin = origin;
+    this.seed = seed;
+  }
+  public function description(): string {}
+
+  // override for actions when the event is starting, when it's being tracked.
+  // For example adding a 3D Marker, or a quest entry
+  public function tryStart() {}
+  // override to add custom rewards to the provider, if the returned value is
+  // `true` then the provider shall be used.
+  public function tryComplete(provider: WMH_RewardProvider): bool {
+
+    // TODO: unify rewards calculation
+
+  }
+}
