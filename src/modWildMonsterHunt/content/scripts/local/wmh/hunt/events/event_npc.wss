@@ -1,0 +1,66 @@
+statemachine class WMH_EventNpc extends CNewNPC {
+  var conversation: WMH_ConversationManager;
+  var events: array<WMH_EventNpc_BaseEvent>;
+  var seed: int;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    this.GotoState('Waiting');
+  }
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    if (actionName != "Talk") {
+      return super.OnInteraction(actionName, activator);
+    }
+
+    // 1. load/generate events
+    this.seed = this.getSeed();
+    this.generateEvents(this.seed);
+
+    // 2.
+    this.GotoState('DialogChoice');
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    return interactionComponentName == "talk"
+        && activator == thePlayer
+        && thePlayer.CanStartTalk();
+  }
+
+  protected function getSeed(): int {
+    var position: Vector = this.GetWorldPosition();
+
+    return WMH_getHuntManager().getSeed() + position.X - position.Y + 100;
+  }
+
+  protected function generateEvents(seed: int) {
+    this.events.Clear();
+
+    var max: int = 1;
+    var i: int;
+    for (i = 0; i < max; i += 1) {
+      var npc_event: WMH_EventNpc_BaseEvent = this.generateRandomEvent(seed + i);
+      this.events.PushBack(npc_event);
+    }
+  }
+
+  protected function generateRandomEvent(seed: int): WMH_EventNpc_BaseEvent {
+    var roll: int = RandNoiseF(seed + 1, 2) as int;
+
+    if (roll < 1) {
+      var event_fetchitem: WMH_EventNpc_EventFetchItem;
+      event_fetchitem = new WMH_EventNpc_EventFetchItem in this;
+      event_fetchitem.init(this, seed);
+      
+      return event_fetchitem;
+    }
+
+    var event_clearpoi: WMH_EventNpc_EventClearPoi;
+    event_clearpoi = new WMH_EventNpc_EventClearPoi in this;
+    event_clearpoi.init(this, seed);
+
+    return event_clearpoi;
+  }
+}

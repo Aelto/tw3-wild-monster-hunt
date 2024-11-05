@@ -1,0 +1,133 @@
+state DialogChoice in WMH_CampManager {
+  var camera: WMH_StaticCamera;
+
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.DialogChoice_main();
+  }
+
+  entry function DialogChoice_main() {
+    parent.conversation = (new WMH_ConversationManager in this)
+      .init()
+      .registerActor(parent as CActor)
+      .registerActor(thePlayer as CActor);
+
+    this.displayChoicesMain();
+    parent.conversation
+      .playLine(
+        thePlayer,
+        452638, // Geralt choice: Farewell
+        WMH_AnimationCategory_Goodbye,
+        WMH_AnimationCategory_Goodbye
+      );
+
+    parent.GotoState('Waiting');
+  }
+
+  latent function displayChoicesMain() {
+    var choices: array<SSceneChoice>;
+
+    var i: int;
+    for (i = 0; i < parent.events.Size(); i += 1) {
+      var npc_event: WMH_EventNpc_BaseEvent = parent.events[i];
+
+      choices.PushBack(SSceneChoice(
+        npc_event.description(),
+        npc_event.canBeCompleted(), // emphasis
+        npc_event.is_active, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        this.getEventIndexName(i)
+      ));
+    }
+
+    choices.PushBack(SSceneChoice(
+      "Farewell.",
+      false,
+      true,
+      false,
+      DialogAction_EXIT,
+      'Cancel'
+    ));
+
+    var say_greetings: bool = true;
+
+    parent.conversation.startSimulatingConversation();
+    while (true) {
+      if (say_greetings) {
+        say_greetings = false;
+
+        parent.conversation.playLine(
+          thePlayer,
+          1127230, // 0x0011333e  Geralt: Greetings
+          WMH_AnimationCategory_Greetings,
+          // listeners play agreeing animation
+          WMH_AnimationCategory_Greetings
+        );
+      }
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'Cancel') {
+        Sleep(0.25);
+        break;
+      }
+      else {
+        var index: int = this.getEventIndexFromName(response.playGoChunk);
+        var npc_event: WMH_EventNpc_BaseEvent = parent.events[index];
+        var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+
+        npc_event.tryStart();
+        if (npc_event.tryComplete(provider)) {
+          provider.transferItems(thePlayer.GetInventory());
+          WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+        }
+      }
+    }
+    parent.conversation.stopSimulatingConversation();
+
+  }
+
+  private function getEventIndexName(index: int): name {
+    var output: name = 'NpcEvent_0';
+
+    switch (index) {
+      case 4:
+        output = 'NpcEvent_4';
+        break;
+      case 3:
+        output = 'NpcEvent_3';
+        break;
+      case 2:
+        output = 'NpcEvent_2';
+        break;
+      case 1:
+        output = 'NpcEvent_1';
+        break;
+    }
+
+    return output;
+  }
+
+  private function getEventIndexFromName(index: name): int {
+    var output: int = 0;
+
+    switch (index) {
+      case 'NpcEvent_4':
+        output = 4;
+        break;
+      case 'NpcEvent_3':
+        output = 3;
+        break;
+      case 'NpcEvent_2':
+        output = 2;
+        break;
+      case 'NpcEvent_1':
+        output = 1;
+        break;
+    }
+
+    return output;
+  }
+}
