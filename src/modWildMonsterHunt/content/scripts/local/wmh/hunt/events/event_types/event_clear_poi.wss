@@ -1,0 +1,64 @@
+/// An event that asks the player to trade items X to get items Y, money, & xp
+// in exchange.
+class WMH_EventNpc_EventClearPoi {
+  private var poi: WMH_BiomeSpawnPoint;
+
+  public function init(origin: WMH_EventNpcSpawnPoint, seed: int) {
+    super.init(origin, seed);
+
+    var entities: array<CGameplayEntity>;
+
+    // directly fetch the points in range instead of relying on the spawn point 
+    // manager as its cache could yield undesired results:
+    FindGameplayEntitiesInRange(
+      entities,
+      origin,
+      200,
+      'WMH_BiomeSpawnPoint'
+    );
+
+    var index: int = RandNoiseF(this.seed, entities.Size()) as int;
+    var entity: CGameplayEntity = entities[index];
+
+    this.poi = entity as WMH_BiomeSpawnPoint;
+    if (!this.poi) {
+      WMHERROR(
+        "EventClearPoi: selected point is not an instance of WMH_BiomeSpawnPoint"
+      );
+    }
+  }
+
+  public function description(): string {
+    var travel: Vector = this.poi.GetWorldPosition()
+                         - this.origin.GetWorldPosition();
+
+    return "Clear area "
+         + WMH_vectorToCardinalDescription(travel)
+         + " from there";
+  }
+
+  public function tryStart() {
+    if (!this.poi) {
+      return;
+    }
+
+    // 1. activate spawn, tell it to force spawn,
+    if (!this.poi.wasKilledSinceStartOfHunt()) {
+      this.poi.spawnPriorityForce();
+    }
+  }
+
+  public function tryComplete(provider: WMH_RewardProvider): bool {
+    if (!this.poi.wasKilledSinceStartOfHunt()) {
+      return false;
+    }
+
+    provider
+      .startGroup("Clear POI event")
+      .appendItem(this.itemName(0), this.itemQuantity(0))
+      .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
+      .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
+
+    return true;
+  }
+}
