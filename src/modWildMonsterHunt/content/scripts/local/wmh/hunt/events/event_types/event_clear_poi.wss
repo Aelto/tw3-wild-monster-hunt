@@ -38,18 +38,24 @@ class WMH_EventNpc_EventClearPoi {
   }
 
   public function tryStart() {
+    if (this.is_active) {
+      return;
+    }
+
     if (!this.poi) {
       return;
     }
 
     // 1. activate spawn, tell it to force spawn,
-    if (!this.poi.wasKilledSinceStartOfHunt()) {
+    if (!this.canBeCompleted()) {
       this.poi.spawnPriorityForce();
     }
+
+    super.tryStart();
   }
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
-    if (!this.poi.wasKilledSinceStartOfHunt()) {
+    if (!this.canBeCompleted()) {
       return false;
     }
 
@@ -59,6 +65,14 @@ class WMH_EventNpc_EventClearPoi {
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
 
-    return true;
+    return tryComplete(provider);
+  }
+
+  public function canBeCompleted(): bool {
+    if (this.poi) {
+      return this.poi.wasKilledSinceStartOfHunt() && super.canBeCompleted();
+    }
+
+    return super.canBeCompleted();
   }
 }

@@ -11,21 +11,25 @@ class WMH_EventNpc_EventFetchItem {
   }
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
-    var inventory: CInventoryComponent = thePlayer.GetInventory();
-    var item: name = this.itemName(0);
-    var quantity: int = this.itemQuantity(0);
-
-    if (inventory.GetItemQuantityByName(item) < quantity) {
+    if (!this.canBeCompleted()) {
       return false;
     }
 
     provider
       .startGroup("Fetch item event")
-      .appendItem(item, quantity * -1)
+      .appendItem(this.itemName(0), this.itemQuantity(0) * -1)
       .appendItem(this.itemName(1), this.itemQuantity(1))
       .appendExperience(WMH_difficultyScaleUpF(50, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);
 
-    return true;
+    return super.tryComplete(provider);
+  }
+
+  public function canBeCompleted(): bool {
+    var inventory: CInventoryComponent = thePlayer.GetInventory();
+
+    return inventory
+            .GetItemQuantityByName(this.itemName(0)) >= this.itemQuantity(0)
+        && super.canBeCompleted();
   }
 }

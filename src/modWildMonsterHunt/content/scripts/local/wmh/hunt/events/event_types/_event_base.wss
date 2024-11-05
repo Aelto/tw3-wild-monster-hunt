@@ -1,22 +1,33 @@
 abstract class WMH_EventNpc_BaseEvent {
-  protected var origin: WMH_EventNpcSpawnPoint;
+  protected var origin: WMH_EventNpc;
   protected var seed: int;
 
-  public function init(origin: WMH_EventNpcSpawnPoint, seed: int) {
+  public var is_active: bool;
+  public var is_completed: bool;
+
+  public function init(origin: WMH_EventNpc, seed: int) {
     this.origin = origin;
     this.seed = seed;
   }
-  public function description(): string {}
+  public function description(): string {
+    return "Offer help";
+  }
 
   // override for actions when the event is starting, when it's being tracked.
   // For example adding a 3D Marker, or a quest entry
-  public function tryStart() {}
+  public function tryStart() {
+    this.is_active = true;
+  }
+
   // override to add custom rewards to the provider, if the returned value is
   // `true` then the provider shall be used.
   public function tryComplete(provider: WMH_RewardProvider): bool {
+    this.is_completed = true;
+    return true;
+  }
 
-    // TODO: unify rewards calculation
-
+  public function canBeCompleted(): bool {
+    return this.is_active && !this.is_completed;
   }
 
   protected function itemQuantity(optional offset: int): int {
