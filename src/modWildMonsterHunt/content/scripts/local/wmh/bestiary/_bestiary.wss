@@ -222,15 +222,13 @@ statemachine class WMH_Bestiary {
       ((allowed_spawns_per_region as float) / (region_spawns_count as float));
 
     for spawn_point: WMH_BiomeSpawnPoint in spawn_points {
-      var position: Vector = spawn_point.GetWorldPosition();
-      var point_seed: int = hunt_seed + (position.X as int) - (position.Y as int);
+      var point_seed: int = spawn_point.getPointSeed(hunt_seed);
 
       WMHINFO("monster_spawn_chance = " + monster_spawn_chance + " roll = " + RandNoiseF(point_seed + 0, 1.0));
 
       // regular nearby spawn points have a chance to be disabled for the hunt,
-      var can_spawn_monsters: bool = RandNoiseF(point_seed + 0, 1.0)
-        <= monster_spawn_chance 
-         * WMH_either::<float>(0.5, 1.0, spawn_point.prefer_wildlife);
+      var can_spawn_monsters: bool = spawn_point
+        .canSpawnMonstersInHunt(point_seed);
 
       // if a point isn't allowed to spawn creatures, it may spawn wildlife
       var can_spawn_wildlife: bool = !can_spawn_monsters

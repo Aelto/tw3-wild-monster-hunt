@@ -34,7 +34,7 @@ class WMH_HerbalistCauldron extends W3Container {
     WMHTUTOFACT(
       'WMH_HerbalistCauldron',
       "Melding Cauldrong",
-      "Shupe the Troll beckons you to find rare and unique delicacies for his bubbling <font color='#CD7D03'>Melting Cauldron</font>. In return, he'll offer you a taste of his… delightful concoction. Impress Shupe with truly rare ingredients, and he might reward you with ancient recipes and schematics—snatched from forgotten tomes, abandoned packs, or even the still-twitching limbs of unlucky adventurers.<br/><br/>But don't try to fool him with common items like Drowner hair, shells, or stones — Shupe's refined palate demands the extraordinary. And remember, a hearty stock needs plenty of bones, so be generous with those if you want the best reward!"
+      "Shupe the Troll beckons you to find rare and unique delicacies for his bubbling <font color='#CD7D03'>Melting Cauldron</font>. In return, he'll offer you a taste of his… delightful concoction. Impress Shupe with truly rare ingredients, and he might reward you with ancient recipes and schematics—snatched from forgotten tomes, abandoned packs, or even the still-twitching limbs of unlucky adventurers.<br/><br/>But don't try to fool him with common items like Drowner hair, shells, or stones — Shupe's refined palate demands the extraordinary. And remember, a hearty stock needs plenty of bones, so be generous with those if you want the best reward !"
     );
 
     this.Enable(true, false, true);

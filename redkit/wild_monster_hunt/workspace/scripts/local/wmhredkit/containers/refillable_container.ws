@@ -22,20 +22,6 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 	event OnInteractionActivated( interactionComponentName : string, activator : CEntity ) {		
 		super.OnInteractionActivated(interactionComponentName, activator);
 	}
-	
-	// timer function wmhRefill(delta: float, id: int) {
-	// 	var inventory: CInventoryComponent;
-		
-	// 	if (!this.IsEmpty()) {
-	// 		return;
-	// 	}
-		
-	// 	inventory = this.GetInventory();
-	// 	inventory.AddAnItem('Raw meat', 1);
-	// 	SetFocusModeVisibility( FMV_Interactive );
-	// 	ApplyAppearance( "1_full" );
-	// 	Enable( true );
-	// }
 
 	timer function maybeRefillForHunt(delta: float, id: int) {
 		var inventory: CInventoryComponent;
