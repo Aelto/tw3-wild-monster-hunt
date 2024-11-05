@@ -18,4 +18,33 @@ abstract class WMH_EventNpc_BaseEvent {
     // TODO: unify rewards calculation
 
   }
+
+  protected function itemQuantity(optional offset: int): int {
+    return 1 + RandNoiseF(this.seed + offset, 3.0) as int;
+  }
+
+  protected function itemName(optional offset: int): name {
+    var loot_manager: WMH_LootManager = WMH_getLootManager();
+
+    return loot_manager.getRandomItem(
+      this.itemCategory(offset),
+      this.seed + offset
+    );
+  }
+
+  private function itemCategory(optional offset: int): WMH_LootTag {
+    var roll: float = RandNoiseF(this.seed + offset, 1.0);
+
+    if (roll < 0.25) {
+      return WMH_LootTag_Herb;
+    }
+    else if (roll < 0.50) {
+      return WMH_LootTag_Alchemy;
+    }
+    else if (roll < 0.75) {
+      return WMH_LootTag_Material;
+    }
+    
+    return WMH_LootTag_Food;
+  }
 }

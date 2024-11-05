@@ -7,13 +7,13 @@ class WMH_EventNpc_EventFetchItem {
 
     return "Give "
          + this.itemQuantity() + "x "
-         + inventory.GetItemIconPathByName(this.requiredItem());
+         + inventory.GetItemIconPathByName(this.itemName(0));
   }
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
     var inventory: CInventoryComponent = thePlayer.GetInventory();
-    var item: name = this.requiredItem();
-    var quantity: int = this.itemQuantity();
+    var item: name = this.itemName(0);
+    var quantity: int = this.itemQuantity(0);
 
     if (inventory.GetItemQuantityByName(item) < quantity) {
       return false;
@@ -22,48 +22,10 @@ class WMH_EventNpc_EventFetchItem {
     provider
       .startGroup("Fetch item event")
       .appendItem(item, quantity * -1)
-      .appendItem(this.rewardedItem(), this.itemQuantity(1))
+      .appendItem(this.itemName(1), this.itemQuantity(1))
       .appendExperience(WMH_difficultyScaleUpF(50, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);
 
     return true;
-  }
-
-  private function requiredItem(): name {
-    var loot_manager: WMH_LootManager = WMH_getLootManager();
-
-    return loot_manager.getRandomItem(
-      this.itemCategory(),
-      this.seed
-    );
-  }
-
-  private function rewardedItem(): name {
-    var loot_manager: WMH_LootManager = WMH_getLootManager();
-
-    return loot_manager.getRandomItem(
-      this.itemCategory(1),
-      this.seed
-    );
-  }
-
-  private function itemQuantity(optional offset: int): int {
-    return 1 + RandNoiseF(this.seed + offset, 3.0) as int;
-  }
-
-  private function itemCategory(optional offset: int): WMH_LootTag {
-    var roll: float = RandNoiseF(this.seed + offset, 1.0);
-
-    if (roll < 0.25) {
-      return WMH_LootTag_Herb;
-    }
-    else if (roll < 0.50) {
-      return WMH_LootTag_Alchemy;
-    }
-    else if (roll < 0.75) {
-      return WMH_LootTag_Material;
-    }
-    
-    return WMH_LootTag_Food;
   }
 }
