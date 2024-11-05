@@ -26,19 +26,35 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	// stores the timestamp of the last time this spawn point was liberated after
 	// it spawned something
 	protected var last_clear_time: GameTime;
+
+	protected var spawn_priority: WMH_BiomeSpawnPoint_SpawnPriority;
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
 		this.respawn_ticker = (new WMH_Ticker in this).init(180.0);
 	}
+
+	public function getPointSeed(hunt_seed: int): int {
+		var position: Vector = this.GetWorldPosition();
+
+		return hunt_seed + (position.X as int) - (position.Y as int);
+	}
 	
 	public function canRespawn(): bool {
 		return this.respawn_ticker.hasExpired();
+	}
+
+	public function canSpawnMonstersInHunt(point_seed: int): bool {
+		return this.spawn_priority == WMH_BSP_SP_Forced
+				|| RandNoiseF(point_seed + 0, 1.0)
+				<= monster_spawn_chance 
+         * WMH_either::<float>(0.5, 1.0, this.prefer_wildlife)
 	}
 	
 	// to be used when the location is used as a spawn point,
 	public function consume() {
 		this.respawn_ticker.lock();
 		this.last_spawn_time = WMH_getEngineTimeAsSeconds();
+		this.spawn_priority = WMH_BSP_SP_None;
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {
@@ -46,7 +62,14 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 
 		if (encounter_was_killed) {
 			this.last_clear_time = WMH_getEngineTimeAsSeconds();
+			this.spawn_priority = WMH_BSP_SP_None;
 		}
+	}
+
+	// tells the spawn point to spawn its creatures as soon as possible, even if
+	// other rules would have caused it to be ignored.
+	public function spawnPriorityForce() {
+		this.spawn_priority = WMH_BSP_SP_Forced;
 	}
 
 	public function wasKilledSince(engine_time: float): bool {
@@ -56,4 +79,9 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public function wasKilledSinceStartOfHunt(): bool {
 		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clear_time);
 	}
+}
+
+enum WMH_BiomeSpawnPoint_SpawnPriority {
+	WMH_BSP_SP_None = 0,
+	WMH_BSP_SP_Forced = 1
 }
