@@ -49,6 +49,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 				<= monster_spawn_chance 
          * WMH_either::<float>(0.5, 1.0, this.prefer_wildlife)
 	}
+
+	public function isOccupied(): bool {
+		return this.respawn_ticker.isLocked();
+	}
 	
 	// to be used when the location is used as a spawn point,
 	public function consume() {

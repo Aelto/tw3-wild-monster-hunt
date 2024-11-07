@@ -1,0 +1,123 @@
+statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
+  private editable var npc_path: string;
+  hint npc_path = "Path to a w2ent that will spawn a npc, ideally the spawned entity should use the WMH_EventNpc class.";
+
+  private editable var required_points_cleared_tag: name;
+  hint required_points_cleared_tag = "A tag used to fetching the spawn points that must be cleared for EventNpc to spawn. If left empty then it defaults to using the points in the cleared_radius instead.";
+
+  private editable var required_points_cleared_radius: float;
+  default required_points_cleared_radius = 50.0;
+  hint required_points_cleared_radius = "A radius where all spawn points must be clear of monsters for the EventNpc to spawn.";
+
+  private var npc: WMH_EventNpc;
+  
+  public function trySpawnNpc() {
+    if (!this.canSpawn()) {
+      return;
+    }
+
+    if (this.GetCurrentStateName() == 'Spawning') {
+      this.GotoState('Waiting');
+    }
+
+    this.GotoState('Spawning');
+  }
+
+  protected function canSpawn(): bool {
+    var points: array<WMH_BiomeSpawnPoint>;
+
+    if (IsNameValid(this.required_points_cleared_tag)) {
+      this.getRequiredPointsClearedByTag(
+        this.required_points_cleared_tag,
+        points
+      );
+    }
+    else {
+      this.getRequiredPointsClearedByRadius(
+        this.required_points_cleared_radius,
+        points
+      );
+    }
+
+    for point: WMH_BiomeSpawnPoint in points {
+      if (point.isOccupied()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private function getRequiredPointsClearedByTag(
+    tag: name,
+    out output: array<WMH_BiomeSpawnPoint>
+  ) {
+    var entities: array<CEntity>;
+
+    theGame.GetEntitiesByTag(tag, entities);
+    for entity: CEntity in entities {
+      var point: WMH_BiomeSpawnPoint = entity as WMH_BiomeSpawnPoint;
+
+      if (point) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
+  }
+
+  private function getRequiredPointsClearedByRadius(
+    radius: float,
+    out output: array<WMH_BiomeSpawnPoint>
+  ) {
+    var entities: array<CGameplayEntity>;
+
+    FindGameplayEntitiesInRange(
+      entities,
+      this.GetWorldPosition(),
+      radius,
+      'WMH_BiomeSpawnPoint'
+    );
+
+    for entity: CEntity in entities {
+      var point: WMH_BiomeSpawnPoint = entity as WMH_BiomeSpawnPoint;
+
+      if (point) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
+  }
+}
+
+state Waiting in WMH_EventNpcSpawnPoint {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {}
+}
+
+state Spawning in WMH_EventNpcSpawnPoint {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Spawning_main();
+  }
+
+  entry function Spawning_main() {
+    parent.GotoState('Waiting');
+
+    var template: CEntityTemplate = LoadResourceAsync(
+      parent.npc_path,
+      true
+    ) as CEntityTemplate;
+
+    parent.npc = theGame.CreateEntity(
+      template,
+      this.GetWorldPosition(),
+      this.GetWorldRotation()
+    ) as WMH_EventNpc;
+  }
+}
