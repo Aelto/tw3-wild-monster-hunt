@@ -170,7 +170,10 @@ statemachine class WMH_Bestiary {
       );
   }
 
-  public function getRandomUnfilteredEliteEntry(level: WMH_Level, seed: int): WMH_BestiaryEntry {
+  public function getRandomUnfilteredEliteEntry(
+    level: WMH_Level,
+    seed: int
+  ): WMH_BestiaryEntry {
     var elites: array<WMH_BestiaryEntry> = this.getEliteEntries(level);
     var index: int = RandNoiseF(seed, elites.Size() as int) as int;
     var bentry: WMH_BestiaryEntry = elites[index];
