@@ -84,6 +84,29 @@ class WMH_SpawnPointManager {
     return output;
   }
 
+  public function getNearbyEventNpcSpawnPoints(
+    out output: array<WMH_EventNpcSpawnPoint>
+  ) {
+    var entities: array<CGameplayEntity>;
+    var radius: float = 250;
+
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer.GetWorldPosition(),
+      radius,
+      20, // max results
+      'WMH_EventNpcSpawnPoint'
+    );
+
+    for entity: CGameplayEntity in entities {
+      var point: WMH_EventNpcSpawnPoint = entity as WMH_EventNpcSpawnPoint;
+
+      if (point) {
+        output.PushBack(point);
+      }
+    }
+  }
+
   private function findNearbySpawnPoints(
     radius: float,
     count: int

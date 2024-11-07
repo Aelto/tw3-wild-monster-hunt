@@ -42,6 +42,8 @@ statemachine class WMH_Bestiary {
     if (can_spawn) {
       this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
     }
+
+    this.spawnNearbyEventNpcSpawnPoints();
   }
 
   public function onSpawnContractTarget(
@@ -289,6 +291,16 @@ statemachine class WMH_Bestiary {
           WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
         }
       }
+    }
+  }
+
+  private function spawnNearbyEventNpcSpawnPoints() {
+    var points: array<WMH_EventNpcSpawnPoint>;
+
+    this.spawn_points.getNearbyEventNpcSpawnPoints(points);
+
+    for point: WMH_EventNpcSpawnPoint in points {
+      point.trySpawnNpc();
     }
   }
 
