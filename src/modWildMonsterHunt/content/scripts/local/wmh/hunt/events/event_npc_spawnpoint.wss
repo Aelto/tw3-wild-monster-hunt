@@ -26,6 +26,10 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
   protected function canSpawn(): bool {
     var points: array<WMH_BiomeSpawnPoint>;
 
+    if (this.npc) {
+      return false;
+    }
+
     if (IsNameValid(this.required_points_cleared_tag)) {
       this.getRequiredPointsClearedByTag(
         this.required_points_cleared_tag,
