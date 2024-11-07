@@ -76,6 +76,7 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
       entities,
       this.GetWorldPosition(),
       radius,
+      50, // max results
       'WMH_BiomeSpawnPoint'
     );
 
