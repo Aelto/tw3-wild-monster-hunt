@@ -30,7 +30,7 @@ statemachine class WMH_EventNpc extends CNewNPC {
     interactionComponentName: string,
     activator: CEntity
   ) {
-    return interactionComponentName == "talk"
+    return StrLower(interactionComponentName) == "talk"
         && activator == thePlayer
         && thePlayer.CanStartTalk();
   }

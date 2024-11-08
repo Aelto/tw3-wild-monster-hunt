@@ -1,6 +1,7 @@
 /// An event that asks the player to trade items X to get items Y, money, & xp
 // in exchange.
 class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
+  private var oneliner: SU_OnelinerEntity;
   private var poi: WMH_BiomeSpawnPoint;
 
   public function init(origin: WMH_EventNpc, seed: int) {
@@ -52,6 +53,13 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       this.poi.spawnPriorityForce();
     }
 
+    if (!this.oneliner) {
+      this.oneliner = SU_onelinerEntity(
+        " <img src='img://icons/quests/monsterhunt.png' vspace='-10' /> Clear area",
+        this.poi
+      );
+    }
+
     super.tryStart();
   }
 
@@ -65,6 +73,10 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       .appendItem(this.itemName(0), this.itemQuantity(0))
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
+
+    if (this.oneliner) {
+      this.oneliner.unregister();
+    }
 
     return tryComplete(provider);
   }
