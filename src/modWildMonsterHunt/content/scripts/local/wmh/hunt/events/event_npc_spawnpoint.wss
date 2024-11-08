@@ -1,18 +1,19 @@
 statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
-  private editable var npc_path: string;
+  protected editable var npc_path: string;
   hint npc_path = "Path to a w2ent that will spawn a npc, ideally the spawned entity should use the WMH_EventNpc class.";
 
-  private editable var required_points_cleared_tag: name;
+  protected editable var required_points_cleared_tag: name;
   hint required_points_cleared_tag = "A tag used to fetching the spawn points that must be cleared for EventNpc to spawn. If left empty then it defaults to using the points in the cleared_radius instead.";
 
-  private editable var required_points_cleared_radius: float;
+  protected editable var required_points_cleared_radius: float;
   default required_points_cleared_radius = 50.0;
   hint required_points_cleared_radius = "A radius where all spawn points must be clear of monsters for the EventNpc to spawn.";
 
-  private var npc: WMH_EventNpc;
+  protected var npc: WMH_EventNpc;
   
   public function trySpawnNpc() {
     if (!this.canSpawn()) {
+      WMHINFO("WMH_EventNpcSpawnPoint, trySpawnNpc(), cannot spawn");
       return;
     }
 
@@ -66,8 +67,6 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
         output.PushBack(point);
       }
     }
-
-    return output;
   }
 
   private function getRequiredPointsClearedByRadius(
@@ -78,7 +77,7 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
 
     FindGameplayEntitiesInRange(
       entities,
-      this.GetWorldPosition(),
+      this, // around this
       radius,
       50, // max results
       'WMH_BiomeSpawnPoint'
@@ -91,8 +90,6 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
         output.PushBack(point);
       }
     }
-
-    return output;
   }
 }
 
@@ -112,7 +109,7 @@ state Spawning in WMH_EventNpcSpawnPoint {
   }
 
   entry function Spawning_main() {
-    parent.GotoState('Waiting');
+    WMHINFO("WMH_EventNpcSpawnPoint, state Spawning");
 
     var template: CEntityTemplate = LoadResourceAsync(
       parent.npc_path,
@@ -121,8 +118,10 @@ state Spawning in WMH_EventNpcSpawnPoint {
 
     parent.npc = theGame.CreateEntity(
       template,
-      this.GetWorldPosition(),
-      this.GetWorldRotation()
+      parent.GetWorldPosition(),
+      parent.GetWorldRotation()
     ) as WMH_EventNpc;
+
+    parent.GotoState('Waiting');
   }
 }

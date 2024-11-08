@@ -38,7 +38,10 @@ statemachine class WMH_EventNpc extends CNewNPC {
   protected function getSeed(): int {
     var position: Vector = this.GetWorldPosition();
 
-    return WMH_getHuntManager().getSeed() + position.X - position.Y + 100;
+    return WMH_getHuntManager().getSeed()
+         + (position.X as int)
+         - (position.Y as int)
+         + 100;
   }
 
   protected function generateEvents(seed: int) {

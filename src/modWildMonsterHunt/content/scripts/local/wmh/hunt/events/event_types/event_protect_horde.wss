@@ -1,5 +1,5 @@
 /// An event that spawns a few waves of monster around the NPC
-statemachine class WMH_EventNpc_EventProtectHorde {
+statemachine class WMH_EventNpc_EventProtectHorde extends WMH_EventNpc_BaseEvent {
   public function init(origin: WMH_EventNpc, seed: int) {
     super.init(origin, seed);
     this.GotoState('Waiting');
@@ -52,7 +52,7 @@ statemachine class WMH_EventNpc_EventProtectHorde {
         && super.canBeCompleted();
   }
 
-  private function getWavesSpecies(
+  protected function getWavesSpecies(
     out output: array<WMH_BestiaryEntry>
   ) {
     var bestiary: WMH_Bestiary = WMH_getBestiary();
@@ -61,7 +61,7 @@ statemachine class WMH_EventNpc_EventProtectHorde {
     var i: int;
 
     for (i = 0; i < waves; i += 1) {
-      waves.PushBack(
+      output.PushBack(
         bestiary.getRandomUnfilteredEliteEntry(
           WMH_Level(0),
           this.seed + 1
@@ -77,7 +77,7 @@ state Waiting in WMH_EventNpc_EventProtectHorde {}
 state Exhausted in WMH_EventNpc_EventProtectHorde {}
 /// The event is spawning its creatures until exhaustion
 state Spawning in WMH_EventNpc_EventProtectHorde {
-  public var entities: array<CNewNPC>;
+  public var entities: array<CEntity>;
 
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
@@ -92,7 +92,7 @@ state Spawning in WMH_EventNpc_EventProtectHorde {
       * 10;
 
     var waves: array<WMH_BestiaryEntry>;
-    this.getWavesSpecies(waves);
+    parent.getWavesSpecies(waves);
     while (waves.Size() > 0) {
       var bentry: WMH_BestiaryEntry = waves.PopBack();
 

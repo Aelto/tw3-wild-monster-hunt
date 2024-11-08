@@ -92,7 +92,7 @@ class WMH_SpawnPointManager {
 
     FindGameplayEntitiesInRange(
       entities,
-      thePlayer.GetWorldPosition(),
+      thePlayer as CNode,
       radius,
       20, // max results
       'WMH_EventNpcSpawnPoint'

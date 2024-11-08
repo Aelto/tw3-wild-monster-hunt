@@ -254,7 +254,7 @@ statemachine class WMH_Bestiary {
 
       // regular nearby spawn points have a chance to be disabled for the hunt,
       var can_spawn_monsters: bool = spawn_point
-        .canSpawnMonstersInHunt(point_seed);
+        .canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
 
       // if a point isn't allowed to spawn creatures, it may spawn wildlife
       var can_spawn_wildlife: bool = !can_spawn_monsters

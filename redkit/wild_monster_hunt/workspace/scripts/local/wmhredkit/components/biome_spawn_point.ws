@@ -22,10 +22,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	protected var respawn_ticker: WMH_Ticker;
 
 	// stores the timestamp of the last time this spawn point spawned something
-	protected var last_spawn_time: GameTime;
+	protected var last_spawn_time: float;
 	// stores the timestamp of the last time this spawn point was liberated after
 	// it spawned something
-	protected var last_clear_time: GameTime;
+	protected var last_clear_time: float;
 
 	protected var spawn_priority: WMH_BiomeSpawnPoint_SpawnPriority;
 	
@@ -36,18 +36,21 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public function getPointSeed(hunt_seed: int): int {
 		var position: Vector = this.GetWorldPosition();
 
-		return hunt_seed + (position.X as int) - (position.Y as int);
+		return hunt_seed + (int)position.X - (int)position.Y;
 	}
 	
 	public function canRespawn(): bool {
 		return this.respawn_ticker.hasExpired();
 	}
 
-	public function canSpawnMonstersInHunt(point_seed: int): bool {
+	public function canSpawnMonstersInHunt(
+		point_seed: int,
+		monster_spawn_chance: float
+	): bool {
 		return this.spawn_priority == WMH_BSP_SP_Forced
 				|| RandNoiseF(point_seed + 0, 1.0)
 				<= monster_spawn_chance 
-         * WMH_either::<float>(0.5, 1.0, this.prefer_wildlife)
+         * (this.prefer_wildlife ? 0.5 : 1.0);
 	}
 
 	public function isOccupied(): bool {

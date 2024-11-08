@@ -1,6 +1,6 @@
 /// An event that asks the player to trade items X to get items Y, money, & xp
 // in exchange.
-class WMH_EventNpc_EventFetchItem {
+class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
   public function description(): string {
     var inventory: CInventoryComponent = thePlayer.GetInventory();
     var definitions: CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();

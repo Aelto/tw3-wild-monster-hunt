@@ -21,11 +21,11 @@ function WMH_vectorToCardinalDescription(input: Vector): string {
   }
 
   if (normalized.X > 0.25) {
-    if (space) {message += " ";}
+    if (space) {output += " ";}
     output += "East";
   }
   else if (normalized.X < -0.25) {
-    if (space) {message += " ";}
+    if (space) {output += " ";}
     output += "West";
   }
 
