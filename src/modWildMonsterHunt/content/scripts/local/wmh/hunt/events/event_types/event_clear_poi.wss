@@ -78,7 +78,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       this.oneliner.unregister();
     }
 
-    return tryComplete(provider);
+    return super.tryComplete(provider);
   }
 
   public function canBeCompleted(): bool {
