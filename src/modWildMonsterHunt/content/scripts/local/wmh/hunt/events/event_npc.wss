@@ -3,8 +3,14 @@ statemachine class WMH_EventNpc extends CNewNPC {
   var events: array<WMH_EventNpc_BaseEvent>;
   var seed: int;
 
+  /// stores the heading the player approached from
+  var player_approach_heading: float;
+
   event OnSpawned(spawnData: SEntitySpawnData) {
     this.GotoState('Waiting');
+    this.player_approach_heading = VecHeading(
+      thePlayer.GetWorldPosition() - this.GetWorldPosition()
+    );
   }
 
   event OnInteraction(actionName: string, activator: CEntity) {

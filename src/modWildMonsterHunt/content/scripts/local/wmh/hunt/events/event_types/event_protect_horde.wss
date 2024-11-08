@@ -1,0 +1,127 @@
+/// An event that spawns a few waves of monster around the NPC
+statemachine class WMH_EventNpc_EventProtectHorde {
+  public function init(origin: WMH_EventNpc, seed: int) {
+    super.init(origin, seed);
+    this.GotoState('Waiting');
+  }
+
+  public function description(): string {
+    var waves: array<WMH_BestiaryEntry>;
+    this.getWavesSpecies(waves);
+
+    var message_waves: string;
+    var i: int;
+
+    for (i = 0; i < waves.Size(); i += 1) {
+      if (i > 0) {
+        if (i >= waves.Size() - 1) { // last
+          message_waves += " & ";
+        }
+        else {
+          message_waves += ", ";
+        }
+      }
+      
+      message_waves += waves[i].getLocName();
+    }
+
+    return "Survive against " + message_waves;
+  }
+
+  public function tryStart() {
+    super.tryStart();
+    this.GotoState('Spawning');
+  }
+
+  public function tryComplete(provider: WMH_RewardProvider): bool {
+    if (!this.canBeCompleted()) {
+      return false;
+    }
+
+    provider
+      .startGroup("Protect horde event")
+      .appendItem(this.itemName(0), this.itemQuantity(0))
+      .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
+      .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
+
+    return super.tryComplete(provider);
+  }
+
+  public function canBeCompleted(): bool {
+    return this.GetCurrentStateName() == 'Exhausted'
+        && super.canBeCompleted();
+  }
+
+  private function getWavesSpecies(
+    out output: array<WMH_BestiaryEntry>
+  ) {
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+
+    var waves: int = (RandNoiseF(this.seed, 2) as int) + 1;
+    var i: int;
+
+    for (i = 0; i < waves; i += 1) {
+      waves.PushBack(
+        bestiary.getRandomUnfilteredEliteEntry(
+          WMH_Level(0),
+          this.seed + 1
+        )
+      );
+    }
+  }
+}
+
+/// The event is ready to enter the `Spawning` state
+state Waiting in WMH_EventNpc_EventProtectHorde {}
+/// The event has exhausted everything it could spawn
+state Exhausted in WMH_EventNpc_EventProtectHorde {}
+/// The event is spawning its creatures until exhaustion
+state Spawning in WMH_EventNpc_EventProtectHorde {
+  public var entities: array<CNewNPC>;
+
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Spawning_main();
+    parent.GotoState('Exhausted');
+  }
+
+  entry function Spawning_main() {
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+    var spawn_position: Vector = parent.origin.GetWorldPosition()
+      + VecFromHeading(parent.origin.player_approach_heading)
+      * 10;
+
+    var waves: array<WMH_BestiaryEntry>;
+    this.getWavesSpecies(waves);
+    while (waves.Size() > 0) {
+      var bentry: WMH_BestiaryEntry = waves.PopBack();
+
+      if (!bentry) {
+        break;
+      }
+
+      bestiary.onSpawnEventHorde(
+        this,
+        bentry,
+        spawn_position,
+        AngleNormalize(parent.origin.player_approach_heading + 180),
+        parent.seed
+      );
+
+      // sleep until array has new entities
+      while (this.entities.Size() <= 0) {
+        SleepOneFrame();
+      }
+
+      SUH_makeEntitiesTargetPlayer(this.entities);
+
+      // then sleep until all entities are killed
+      while (this.entities.Size() > 0) {
+        SUH_removeDeadEntities(this.entities);
+        Sleep(0.25);
+      }
+
+      Sleep(1.0);
+    }
+  }
+}

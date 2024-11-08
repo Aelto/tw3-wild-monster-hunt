@@ -126,3 +126,12 @@ class WMH_SpawnRequestLure extends WMH_SpawnRequest {
     );
   }
 }
+
+class WMH_SpawnRequestEventHorde extends WMH_SpawnRequest {
+  public var event_npc: WMH_EventNpc_EventProtectHordeStateSpawning;
+  public function onRequestFinished(entities: array<CEntity>) {
+    for entity: CEntity in entities {
+      this.event_npc.entities.PushBack(entity);
+    }
+  }
+}

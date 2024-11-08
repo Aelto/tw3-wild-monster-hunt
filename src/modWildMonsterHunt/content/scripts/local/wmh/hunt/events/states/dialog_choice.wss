@@ -1,4 +1,4 @@
-state DialogChoice in WMH_CampManager {
+state DialogChoice in WMH_EventNpc {
   var camera: WMH_StaticCamera;
 
   event OnEnterState(previous_state_name: name) {
