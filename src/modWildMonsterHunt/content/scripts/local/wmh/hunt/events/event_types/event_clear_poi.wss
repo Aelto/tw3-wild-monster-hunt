@@ -35,7 +35,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
 
     return "Clear area "
          + WMH_vectorToCardinalDescription(travel)
-         + " from there";
+         + " from here";
   }
 
   public function tryStart() {

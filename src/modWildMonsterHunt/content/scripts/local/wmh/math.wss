@@ -7,7 +7,7 @@ function WMH_either<T>(left: T, right: T, value: bool): T {
 }
 
 function WMH_vectorToCardinalDescription(input: Vector): string {
-  var output: string = (VecLength2D(input) as int) + "meters";
+  var output: string = (VecLength2D(input) as int) + "m ";
   var normalized: Vector = VecNormalize2D(input);
   var space: bool = false;
 
