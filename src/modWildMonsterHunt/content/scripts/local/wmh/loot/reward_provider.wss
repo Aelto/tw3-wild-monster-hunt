@@ -48,7 +48,7 @@ class WMH_RewardProvider {
   ): WMH_RewardProvider {
     var i: int;
 
-    if (quantity == 0) {
+    if (quantity == 0 || !IsNameValid(item)) {
       return this;
     }
 
@@ -154,7 +154,7 @@ class WMH_RewardProvider {
             true // show as reward
           );
         }
-        else {
+        else if (this.groups[i].items[k].quantity < 0) {
           inventory.RemoveItemByName(
             this.groups[i].items[k].item,
             Abs(this.groups[i].items[k].quantity)
@@ -166,6 +166,8 @@ class WMH_RewardProvider {
     }
 
     // experience is hardcoded for the player:
-    GetWitcherPlayer().AddPoints(EExperiencePoint, total_experience, true);
+    if (total_experience > 0) {
+      GetWitcherPlayer().AddPoints(EExperiencePoint, total_experience, true);
+    }
   }
 }
