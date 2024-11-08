@@ -79,10 +79,13 @@ state DialogChoice in WMH_EventNpc {
         var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
 
         npc_event.tryStart();
+        Sleep(0.1);
         if (npc_event.tryComplete(provider)) {
           provider.transferItems(thePlayer.GetInventory());
           WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
         }
+        Sleep(0.1);
+        break;
       }
     }
     parent.conversation.stopSimulatingConversation();
