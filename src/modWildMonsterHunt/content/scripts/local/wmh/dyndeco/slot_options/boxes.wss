@@ -1,0 +1,28 @@
+// utility function to find options that match a dyndeco slot that would accept:
+// boxes
+function WMH_dyndecoSlotFactory_boxes(seed: int): WMH_DynDecorationSlotOptions {
+  var roll: float = RandNoise(seed, 1.0);
+  var template: string;
+
+  if (roll < 0.1) {
+    template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent";
+  }
+  else if (roll < 0.2) {
+    template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent";
+  }
+  else if (roll < 0.3) {
+    template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent";
+  }
+  else if (roll < 0.4) {
+    template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent";
+  }
+  else {
+    template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent";
+  }
+
+  return WMH_DynDecorationSlotOptions(
+    template,
+    180,
+    0.5
+  );
+}
