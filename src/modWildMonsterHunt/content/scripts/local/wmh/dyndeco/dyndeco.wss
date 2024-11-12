@@ -31,48 +31,18 @@ class WMH_DynDecoration extends CGameplayEntity {
   }
 
   public latent function generateDynamicDecoration() {
-    this.clearDynamicDecorations();
-
     var components: array<CComponent> = this
-      .GetComponentsByClassName('CBoxComponent');
+      .GetComponentsByClassName('WMH_DyndecoSlot');
 
     for component: CComponent in components {
-      if (!component.HasTag('dyndeco_slot')) {
+      var slot: WMH_DyndecoSlot = component as WMH_DyndecoSlot;
+
+      if (!slot) {
         continue;
       }
 
-      var options: WMH_DynDecorationSlotOptions = this.getSlotOptions(component);
-
-      if (options.slot_chance < 1.0 && RandRangeF(1) > options.slot_chance) {
-        continue;
-      }
-
-      var rotation: EulerAngles = component.GetWorldRotation();      
-      if (options.max_rotation_randomness > 0) {
-        rotation.Yaw += RandRangeF(options.max_rotation_randomness, options.max_rotation_randomness * -1);
-      }
-
-      var template: CEntityTemplate = LoadResourceAsync(
-        options.template,
-        true
-      ) as CEntityTemplate;
-
-      this.decorations.PushBack(
-        theGame.CreateEntity(
-          template,
-          component.GetWorldPosition(),
-          rotation
-        ) as CEntity
-      );
+      slot.generateDynamicDecoration();
     }
-
-    // for entity: CEntity in this.decorations {
-    //   var decoration: WMH_DynDecoration = entity as WMH_DynDecoration;
-
-    //   if (decoration) {
-    //     decoration.generateDynamicDecoration();
-    //   }
-    // }
   }
 
   // protected function addDecorationToSlots(
@@ -112,20 +82,18 @@ class WMH_DynDecoration extends CGameplayEntity {
   // }
 
   public function clearDynamicDecorations() {
-    for entity: CEntity in this.decorations {
-      if (!entity) {
+    var components: array<CComponent> = this
+      .GetComponentsByClassName('WMH_DyndecoSlot');
+
+    for component: CComponent in components {
+      var slot: WMH_DyndecoSlot = component as WMH_DyndecoSlot;
+
+      if (!slot) {
         continue;
       }
 
-      var decoration: WMH_DynDecoration = entity as WMH_DynDecoration;
-      if (decoration) {
-        decoration.beforeDestroy();
-      }
-
-      entity.Destroy();
+      slot.clearDynamicDecoration();
     }
-
-    this.decorations.Clear();
   }
 
   public function beforeDestroy() {}
@@ -141,64 +109,64 @@ class WMH_DynDecoration extends CGameplayEntity {
   }
 }
 
-class WMH_DynDeco_Table extends WMH_DynDecoration {
-  protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
-    if (slot.HasTag('food')) {
-      var template: string;
-      var roll: float = RandRangeF(1);
+// class WMH_DynDeco_Table extends WMH_DynDecoration {
+//   protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
+//     if (slot.HasTag('food')) {
+//       var template: string;
+//       var roll: float = RandRangeF(1);
 
-      if (roll < 0.1) {
-        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent";
-      }
-      else if (roll < 0.2) {
-        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent";
-      }
-      else if (roll < 0.3) {
-        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent";
-      }
-      else if (roll < 0.4) {
-        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent";
-      }
-      else {
-        template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent";
-      }
+//       if (roll < 0.1) {
+//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent";
+//       }
+//       else if (roll < 0.2) {
+//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent";
+//       }
+//       else if (roll < 0.3) {
+//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent";
+//       }
+//       else if (roll < 0.4) {
+//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent";
+//       }
+//       else {
+//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent";
+//       }
 
-      return WMH_DynDecorationSlotOptions(
-        template,
-        180,
-        0.5
-      );
-    }
-    else if (slot.HasTag('chair')) {
-      var template: string;
-      var roll: float = RandRangeF(1);
+//       return WMH_DynDecorationSlotOptions(
+//         template,
+//         180,
+//         0.5
+//       );
+//     }
+//     else if (slot.HasTag('chair')) {
+//       var template: string;
+//       var roll: float = RandRangeF(1);
 
-      if (roll < 0.1) {
-        template = "environment\decorations\furniture\barons_manor\baron_chair_1_px.w2ent";
-      }
-      else if (roll < 0.2) {
-        template = "environment\decorations\furniture\barons_manor\baron_chair_2_px.w2ent";
-      }
-      else if (roll < 0.3) {
-        template = "environment\decorations\furniture\barons_manor\baron_chair_3_px.w2ent";
-      }
-      else if (roll < 0.4) {
-        template = "dlc\bob\data\environment\decorations\gameplay\poor_district\decoration_set\chairs\deco_poor_stool_a.w2ent";
-      }
-      else {
-        template = "dlc\bob\data\environment\decorations\gameplay\poor_district\furniture\stools\poor_stool_a_dynamic.w2ent";
-      }
+//       if (roll < 0.1) {
+//         template = "environment\decorations\furniture\barons_manor\baron_chair_1_px.w2ent";
+//       }
+//       else if (roll < 0.2) {
+//         template = "environment\decorations\furniture\barons_manor\baron_chair_2_px.w2ent";
+//       }
+//       else if (roll < 0.3) {
+//         template = "environment\decorations\furniture\barons_manor\baron_chair_3_px.w2ent";
+//       }
+//       else if (roll < 0.4) {
+//         template = "dlc\bob\data\environment\decorations\gameplay\poor_district\decoration_set\chairs\deco_poor_stool_a.w2ent";
+//       }
+//       else {
+//         template = "dlc\bob\data\environment\decorations\gameplay\poor_district\furniture\stools\poor_stool_a_dynamic.w2ent";
+//       }
 
-      return WMH_DynDecorationSlotOptions(
-        template,
-        20,
-        0.8
-      );
-    }
+//       return WMH_DynDecorationSlotOptions(
+//         template,
+//         20,
+//         0.8
+//       );
+//     }
 
-    return super.getSlotOptions(slot);
-  }
-}
+//     return super.getSlotOptions(slot);
+//   }
+// }
 
 @addField(CR4Player)
 var wmh_dyndeco_orchestrator: WMH_DynDecoOrchestrator;

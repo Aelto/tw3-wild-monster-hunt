@@ -1,0 +1,63 @@
+/// Used as a position for spawning dyndeco by instances of WMH_DynDecoration
+class WMH_DyndecoSlot extends CScriptedComponent {
+  // stores the entity that was spawned on the slot
+  private var decoration: CEntity;
+
+  protected editable var decorations_templates: array<string>;
+  hint decorations_templates = "path to the entity templates this DynDecoration entity may spawn in its CBoxComponents. If more than one is listed then a random one is selected for each slot.";
+
+  protected editable var max_rotation_randomness: float;
+  hint max_rotation_randomness = "if enabled, the entity may be randomly rotated around its spawned position.";
+  default max_rotation_randomness = 360;
+
+  protected editable var slot_chance: float;
+  default slot_chance = 1.0;
+  hint slot_chance = "Chance for the slot to spawn an object, where 1.0 means 100% and 0.0 means 0%.";
+
+  public latent function generateDynamicDecoration() {
+    this.clearDynamicDecoration();
+
+    var options: WMH_DynDecorationSlotOptions = this.getSlotOptions();
+
+    if (options.slot_chance < 1.0 && RandRangeF(1) > options.slot_chance) {
+      return;
+    }
+
+    var rotation: EulerAngles = this.GetWorldRotation();      
+    if (options.max_rotation_randomness > 0) {
+      rotation.Yaw += RandRangeF(options.max_rotation_randomness, options.max_rotation_randomness * -1);
+    }
+
+    var template: CEntityTemplate = LoadResourceAsync(
+      options.template,
+      true
+    ) as CEntityTemplate;
+
+    this.decoration = theGame.CreateEntity(
+      template,
+      this.GetWorldPosition(),
+      rotation
+    ) as CEntity;
+  }
+
+  public function clearDynamicDecoration() {
+    if (this.decoration) {
+      var decoration: WMH_DynDecoration = this.decoration as WMH_DynDecoration;
+      if (decoration) {
+        decoration.beforeDestroy();
+      }
+
+      this.decoration.Destroy();
+    }
+  }
+
+  protected function getSlotOptions(): WMH_DynDecorationSlotOptions {
+    var index: int = RandRange(this.decorations_templates.Size());
+
+    return WMH_DynDecorationSlotOptions(
+      this.decorations_templates[index],
+      this.max_rotation_randomness,
+      this.slot_chance
+    );
+  }
+}
