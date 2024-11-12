@@ -93,17 +93,26 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
         break;
       }
 
-      var slot_index: int = RandNoiseF(
-        this.seed + 10 + i,
-        this.spawn_slots.Size()
-      ) as int;
+      var spawn_position: Vector;
 
-      var slot: CComponent = this.spawn_slots[slot_index];
+      if (this.spawn_points.Size() > 0) {
+        var slot_index: int = RandNoiseF(
+          this.seed + 10 + i,
+          this.spawn_slots.Size()
+        ) as int;
+
+        var slot: CComponent = this.spawn_slots[slot_index];
+        spawn_position = slot.GetWorldPosition();
+      }
+      else {
+        spawn_position = this.origin.GetWorldPosition();
+      }
+      
 
       bestiary.onSpawnGuardedTreasure(
         this,
         bentry,
-        slot.GetWorldPosition()
+        spawn_position,
         this.seed + 20 + i
       );
 
