@@ -9,6 +9,7 @@ abstract class WMH_EventNpc_BaseEvent {
     this.origin = origin;
     this.seed = seed;
   }
+
   public function description(): string {
     return "Offer help";
   }
