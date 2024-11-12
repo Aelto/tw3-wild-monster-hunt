@@ -135,3 +135,12 @@ class WMH_SpawnRequestEventHorde extends WMH_SpawnRequest {
     }
   }
 }
+
+class WMH_SpawnRequestGuardedTreasure extends WMH_SpawnRequest {
+  public var guarded_treasure: WMH_GuardedTreasure;
+  public function onRequestFinished(entities: array<CEntity>) {
+    for entity: CEntity in entities {
+      this.guarded_treasure.hostile_entities.PushBack(entity);
+    }
+  }
+}

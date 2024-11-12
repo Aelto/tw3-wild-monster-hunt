@@ -1,0 +1,125 @@
+statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
+  protected var origin: WMH_BiomeSpawnPoint;
+  protected var seed: int;
+
+  public function hostile_entities: array<CEntity>;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    super.OnSpawned(spawnData);
+    this.seed = this.getSeed(WMH_getHuntManager().getSeed());
+	}
+
+  public function init(origin: WMH_BiomeSpawnPoint) {
+    this.origin = origin;
+    this.spawnEntities();
+  }
+
+  public function getSeed(optional offset: int): int {
+    var position: Vector = this.GetWorldPosition();
+
+    return position.X - position.Y;
+  }
+
+  //#region generation of props
+
+  // OVERRIDE to adjust the kind of props that may be spawned in the
+  // slots.
+  // Relies on `WMH_DynDecoration` ability to fill its BoxComponents with the
+  // `dyndeco_slot` tag with dynamic props
+  //
+  // 
+  protected function getSlotOptions(
+    slot: CComponent
+  ): WMH_DynDecorationSlotOptions {
+    if (slot.HasTag('boxes')) {
+      return WMH_dyndecoSlotFactory_boxes(this.seed);
+    }
+
+    return super.getSlotOptions(slot);
+  }
+  //#endregion
+
+  //#region spawning of entities
+  // OVERRIDE to return a custom bestiary entry if needed 
+  // 
+  // as long as the returned bool is true it will continue to increase the index
+  // in order to get new bestiary entries to spawn
+  protected function getBestiaryEntryToSpawn(
+    index: int,
+    contract: WMH_ContractManager,
+    bestiary: WMH_Bestiary,
+    out bentry: WMH_BestiaryEntry
+  ): bool {
+    if (index > 0) {
+      return false;
+    }
+
+    var options: WMH_getRandomEntryOptions;
+    options.exclude_strong_target = !this.origin.allow_strong_targets;
+    options.exclude_weak_target = !this.origin.allow_weak_targets;
+
+    bentry = bestiary.active_view.getRandomEntry(
+      contract,
+      bestiary.biomes,
+      this.origin.biome_tags,
+      this.origin.biome_tags_bypass,
+      this.seed + 1,
+      options
+    );
+
+    return true;
+  }
+
+  private function spawnEntities() {
+    var spawn_slots: array<CComponent>;
+    this.getSpawnSlots(spawn_slots);
+
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+    var contract: WMH_ContractManager = WMH_getContractManager();
+
+    var i: int = 0;
+
+    // 10, a soft limit in case something goes wrong and it never stops spawning
+    while (i < 10) {
+      var bentry: WMH_BestiaryEntry;
+      var should_spawn: bool = this.getBestiaryEntryToSpawn(
+        i,
+        bestiary,
+        contract,
+        bentry
+      );
+
+      if (!should_spawn) {
+        break;
+      }
+
+      var slot_index: int = RandNoiseF(
+        this.seed + 10 + i,
+        this.spawn_slots.Size()
+      ) as int;
+
+      var slot: CComponent = this.spawn_slots[slot_index];
+
+      bestiary.onSpawnGuardedTreasure(
+        this,
+        bentry,
+        slot.GetWorldPosition()
+        this.seed + 20 + i
+      );
+
+      i += 1;
+    }
+  }
+
+  private function getSpawnSlots(out slots: array<CComponent>) {
+    var components: array<CComponent> = this
+      .GetComponentsByClassName('CBoxComponent');
+
+    for component: CComponent in components {
+      if (component.HasTag('npc_slot')) {
+        slot.PushBack(component);
+      }
+    }
+  }
+  //#endregion
+}
