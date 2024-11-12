@@ -2,7 +2,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   protected var origin: WMH_BiomeSpawnPoint;
   protected var seed: int;
 
-  public function hostile_entities: array<CEntity>;
+  public var hostile_entities: array<CEntity>;
 
   event OnSpawned(spawnData: SEntitySpawnData) {
     super.OnSpawned(spawnData);

@@ -131,7 +131,7 @@ statemachine class WMH_Bestiary {
     this.requestSpawn(request);
   }
 
-  public functon onSpawnGuardedTreasure(
+  public function onSpawnGuardedTreasure(
     origin: WMH_GuardedTreasure,
     bentry: WMH_BestiaryEntry,
     position: Vector,
