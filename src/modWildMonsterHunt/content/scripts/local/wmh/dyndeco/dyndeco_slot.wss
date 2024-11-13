@@ -1,3 +1,9 @@
+struct WMH_DynDecorationSlotOptions {
+  var template: string;
+  var max_rotation_randomness: float;
+  var slot_chance: float;
+}
+
 /// Used as a position for spawning dyndeco by instances of WMH_DynDecoration
 class WMH_DyndecoSlot extends CScriptedComponent {
   // stores the entity that was spawned on the slot
