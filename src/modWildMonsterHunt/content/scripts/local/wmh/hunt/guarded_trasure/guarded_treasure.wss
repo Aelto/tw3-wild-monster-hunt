@@ -1,6 +1,5 @@
 statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   protected var origin: WMH_BiomeSpawnPoint;
-  protected var seed: int;
 
   public var hostile_entities: array<CEntity>;
 
@@ -13,18 +12,11 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
   event OnSpawned(spawnData: SEntitySpawnData) {
     super.OnSpawned(spawnData);
-    this.seed = this.getSeed(WMH_getHuntManager().getSeed());
 	}
 
   public function init(origin: WMH_BiomeSpawnPoint) {
     this.origin = origin;
     this.spawnEntities();
-  }
-
-  public function getSeed(optional offset: int): int {
-    var position: Vector = this.GetWorldPosition();
-
-    return (position.X as int) - (position.Y as int);
   }
 
   //#region spawning of entities
@@ -43,7 +35,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     if (index > 0) {
       var current_chances: float = 1.0 - this.spawn_rate_decrease * index;
 
-      if (RandNoiseF(this.seed + 30 + index, 1.0) > current_chances) {
+      if (RandNoiseF(this.getSeed(30 + index), 1.0) > current_chances) {
         return false;
       }
     }
@@ -51,7 +43,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     var tags_count: int = this.creature_bypass_tags.Size();
     // perform a search by tag
     if (tags_count > 0) {
-      var tag_index: int = RandNoiseF(this.seed + 40 + index, tags_count);
+      var tag_index: int = RandNoiseF(this.getSeed(40 + index), tags_count);
 
       bentry = bestiary
         .getEntryByBiomeTagByPass(this.creature_bypass_tags[tag_index]);
@@ -67,7 +59,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
         bestiary.biomes,
         this.origin.biome_tags,
         this.origin.biome_tags_bypass,
-        this.seed + 1,
+        this.getSeed(1),
         options
       );
     }
@@ -102,7 +94,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
       var slots_count: int = spawn_slots.Size();
       if (slots_count > 0) {
         var slot_index: int = RandNoiseF(
-          this.seed + 10 + i,
+          this.getSeed(10 + i),
           slots_count
         ) as int;
 
@@ -117,7 +109,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
         this,
         bentry,
         spawn_position,
-        this.seed + 20 + i
+        this.getSeed(20 + i)
       );
 
       i += 1;

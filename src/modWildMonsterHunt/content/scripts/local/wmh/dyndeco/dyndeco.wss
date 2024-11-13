@@ -1,10 +1,39 @@
 class WMH_DynDecoration extends CGameplayEntity {
   private var decorations: array<CEntity>;
 
+  protected var seed: int;
+
+  protected editable var offset_seed_with_position: bool;
+  default offset_seed_with_position = true;
+  hint offset_seed_with_position = "if enabled, activates the use of a seed for PRNG and use the entity's position as part of the seed.";
+
+  protected editable var offset_seed_with_hunt: bool;
+  default offset_seed_with_hunt = true;
+  hint offset_seed_with_hunt = "if enabled, activates the use of a seed for PRNG and use the current WMH hunt seed as part of the seed.";
+
   event OnSpawned(spawnData: SEntitySpawnData ) {
     super.OnSpawned(spawnData);
+
+    if (this.offset_seed_with_position) {
+      var position: Vector = this.GetWorldPosition();
+
+      this.seed += (position.X as int) - (position.Y as int);
+    }
+
+    if (this.offset_seed_with_hunt) {
+      this.seed += WMH_getHuntManager().getSeed();
+    }
+
+    if (!this.offset_seed_with_hunt && this.offset_seed_with_position) {
+      this.seed = theGame.GetEngineTimeAsSeconds() + RandRange(10000);
+    }
+
     this.AddTimer('delayedGeneratedRequest', 5.0);
 	}
+
+  public function getSeed(optional offset: int): int {
+    return this.seed + offset;
+  }
 
   timer function delayedGeneratedRequest(delta: float , id: int) {
     this.requestAsynchronousGeneration();
