@@ -45,42 +45,6 @@ class WMH_DynDecoration extends CGameplayEntity {
     }
   }
 
-  // protected function addDecorationToSlots(
-  //   out slots: array<CComponent>,
-  //   out decorations: array<String>,
-  //   optional required_tag: name,
-  //   optional max_rotation_randomness: bool,
-  //   optional slot_chance: float
-  // ) {
-  //   for slot: CComponent in slots {
-  //     if (slot_chance > 0 && slot_chance < 1 && RandRangeF(1) < slot_chance) {
-  //       continue;
-  //     }
-
-  //     if (required_tag != '' && !slot.HasTag(required_tag)) {
-  //       continue;
-  //     }
-
-  //     var rotation: EulerAngles = slot.GetWorldRotation();      
-  //     if (this.max_rotation_randomness) {
-  //       rotation.Yaw += RandRangeF(360);
-  //     }
-
-  //     var decoration_path = 
-
-  //     this.decorations.PushBack(
-  //       theGame.CreateEntity(
-  //         LoadResource(
-  //           this.getSlotOptions(),
-  //           true
-  //         ) as CEntityTemplate,
-  //         component.GetWorldPosition(),
-  //         rotation
-  //       ) as CEntity
-  //     );
-  //   }
-  // }
-
   public function clearDynamicDecorations() {
     var components: array<CComponent> = this
       .GetComponentsByClassName('WMH_DyndecoSlot');
@@ -97,76 +61,7 @@ class WMH_DynDecoration extends CGameplayEntity {
   }
 
   public function beforeDestroy() {}
-
-  protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
-    var index: int = RandRange(this.decorations_templates.Size());
-
-    return WMH_DynDecorationSlotOptions(
-      this.decorations_templates[index],
-      this.max_rotation_randomness,
-      this.slot_chance
-    );
-  }
 }
-
-// class WMH_DynDeco_Table extends WMH_DynDecoration {
-//   protected function getSlotOptions(slot: CComponent): WMH_DynDecorationSlotOptions {
-//     if (slot.HasTag('food')) {
-//       var template: string;
-//       var roll: float = RandRangeF(1);
-
-//       if (roll < 0.1) {
-//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent";
-//       }
-//       else if (roll < 0.2) {
-//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent";
-//       }
-//       else if (roll < 0.3) {
-//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent";
-//       }
-//       else if (roll < 0.4) {
-//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent";
-//       }
-//       else {
-//         template = "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent";
-//       }
-
-//       return WMH_DynDecorationSlotOptions(
-//         template,
-//         180,
-//         0.5
-//       );
-//     }
-//     else if (slot.HasTag('chair')) {
-//       var template: string;
-//       var roll: float = RandRangeF(1);
-
-//       if (roll < 0.1) {
-//         template = "environment\decorations\furniture\barons_manor\baron_chair_1_px.w2ent";
-//       }
-//       else if (roll < 0.2) {
-//         template = "environment\decorations\furniture\barons_manor\baron_chair_2_px.w2ent";
-//       }
-//       else if (roll < 0.3) {
-//         template = "environment\decorations\furniture\barons_manor\baron_chair_3_px.w2ent";
-//       }
-//       else if (roll < 0.4) {
-//         template = "dlc\bob\data\environment\decorations\gameplay\poor_district\decoration_set\chairs\deco_poor_stool_a.w2ent";
-//       }
-//       else {
-//         template = "dlc\bob\data\environment\decorations\gameplay\poor_district\furniture\stools\poor_stool_a_dynamic.w2ent";
-//       }
-
-//       return WMH_DynDecorationSlotOptions(
-//         template,
-//         20,
-//         0.8
-//       );
-//     }
-
-//     return super.getSlotOptions(slot);
-//   }
-// }
 
 @addField(CR4Player)
 var wmh_dyndeco_orchestrator: WMH_DynDecoOrchestrator;
