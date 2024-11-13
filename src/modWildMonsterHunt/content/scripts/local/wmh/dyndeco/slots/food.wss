@@ -1,0 +1,9 @@
+class WMH_DyndecoSlot_food extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_board_meat_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plate_fruit_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\jugs\deco_rich_jug_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\rich_district\decoration_set\plates\deco_rich_plates_pile_a.w2ent"
+  }};
+}

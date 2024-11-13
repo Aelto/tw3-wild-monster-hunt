@@ -1,0 +1,11 @@
+class WMH_DyndecoSlot_box extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_b.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_c.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_d.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_e.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_f.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_g.w2ent"
+  }};
+}

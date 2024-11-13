@@ -1,0 +1,9 @@
+class WMH_DyndecoSlot_chair extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "environment\decorations\furniture\barons_manor\baron_chair_1_px.w2ent",
+    "environment\decorations\furniture\barons_manor\baron_chair_2_px.w2ent",
+    "environment\decorations\furniture\barons_manor\baron_chair_3_px.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\poor_district\decoration_set\chairs\deco_poor_stool_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\poor_district\furniture\stools\poor_stool_a_dynamic.w2ent"
+  }};
+}
