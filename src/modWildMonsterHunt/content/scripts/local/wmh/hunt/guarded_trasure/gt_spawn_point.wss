@@ -1,0 +1,2 @@
+/// Used as spawn positions in WMH_GuardedTreasure instances
+class WMH_GuardedTreasure_SpawnComponent extends CScriptedComponent {}
