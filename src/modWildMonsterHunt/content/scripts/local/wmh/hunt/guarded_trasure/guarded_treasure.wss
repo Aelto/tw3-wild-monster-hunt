@@ -8,6 +8,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   hint creature_bypass_tags = "If let empty, will default to using the biome data. If filled then the treasure shall only host creatures with the supplied tags.";
 
   protected editable var spawn_rate_decrease: float;
+  default spawn_rate_decrease = 1.0;
   hint spawn_rate_decrease = "How much the chances of spawning a new creature is decreased after every spawn. It should be a value in the ]0;1] range, for example if 0.3 then after spawning 1 creature the chances of spawning a second creature will be lowered to 0.7.";
 
   event OnSpawned(spawnData: SEntitySpawnData) {
