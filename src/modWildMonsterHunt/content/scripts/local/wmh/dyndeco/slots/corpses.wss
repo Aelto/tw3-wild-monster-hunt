@@ -1,0 +1,14 @@
+class WMH_DyndecoSlot_corpse extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_01.w2ent",
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_02.w2ent",
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_03.w2ent",
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_04.w2ent",
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_05.w2ent",
+    // removed as the corpses as not flat on the ground
+    // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_06.w2ent",
+    // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_07.w2ent",
+    // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_08.w2ent",
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_09.w2ent"
+  }};
+}

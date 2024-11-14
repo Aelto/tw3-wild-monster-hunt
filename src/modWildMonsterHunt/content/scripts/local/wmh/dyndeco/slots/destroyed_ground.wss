@@ -1,0 +1,12 @@
+class WMH_DyndecoSlot_destroyedGround extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_pots_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_pots_b.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_pots_c.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_pots_d.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_pots_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_pots_b.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_wine_a.w2ent"
+  }};
+}

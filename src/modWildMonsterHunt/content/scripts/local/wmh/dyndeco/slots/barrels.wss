@@ -1,0 +1,12 @@
+class WMH_DyndecoSlot_barrel extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_d.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_barrels_stairs_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_barrel_covered_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_barrel_set_table_a.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_barrel_set_f.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_barrel_set_d.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_barrel_set_e.w2ent",
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\barrels\deco_gen_crate_pile_i.w2ent"
+  }};
+}
