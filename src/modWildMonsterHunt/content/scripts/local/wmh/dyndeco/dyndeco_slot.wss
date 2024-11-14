@@ -17,8 +17,12 @@ class WMH_DyndecoSlot extends CScriptedComponent {
   default max_rotation_randomness = 360;
 
   protected editable var slot_chance: float;
-  default slot_chance = 1.0;
+  default slot_chance = 0.75;
   hint slot_chance = "Chance for the slot to spawn an object, where 1.0 means 100% and 0.0 means 0%.";
+
+  protected editable var calculate_ground_normal: bool;
+  default calculate_ground_normal = true;
+  hint calculate_ground_normal = "If enabled, ground normal will be calculated to adjust the decoration's position & rotation.";
 
   public latent function generateDynamicDecoration(seed: int) {
     this.clearDynamicDecoration();
@@ -30,6 +34,38 @@ class WMH_DyndecoSlot extends CScriptedComponent {
       && RandNoiseF(seed + 1, 1.0) > options.slot_chance
     ) {
       return;
+    }
+
+    var position: Vector = this.GetWorldPosition();
+    if (this.calculate_ground_normal) {
+      var normal: Vector;
+      var success: bool;
+      var new_position: Vector = position;
+
+      success = theGame.GetWorld().StaticTrace(
+        position,
+        position + Vector(0, 0, 2.0 * -1),
+        new_position,
+        normal
+      );
+
+      if (success) {
+        position = new_position;
+        rotation = VecToRotation(normal);
+      }
+      else {
+        success = theGame.GetWorld().StaticTrace(
+          position,
+          position + Vector(0, 0, 2.0 * 1),
+          new_position,
+          normal
+        );
+
+        if (success) {
+          position = new_position;
+          rotation = VecToRotation(normal);
+        }
+      }
     }
 
     var rotation: EulerAngles = this.GetWorldRotation();      
@@ -47,7 +83,7 @@ class WMH_DyndecoSlot extends CScriptedComponent {
 
     this.decoration = theGame.CreateEntity(
       template,
-      this.GetWorldPosition(),
+      position,
       rotation
     ) as CEntity;
   }

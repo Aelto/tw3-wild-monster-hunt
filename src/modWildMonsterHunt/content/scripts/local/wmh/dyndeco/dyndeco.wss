@@ -17,21 +17,21 @@ class WMH_DynDecoration extends CGameplayEntity {
     if (this.offset_seed_with_position) {
       var position: Vector = this.GetWorldPosition();
 
-      this.seed += ((position.X * 10) as int) - ((position.Y * 10) as int);
+      this.seed += RoundF(position.X * 10) - RoundF(position.Y * 10);
     }
 
     if (this.offset_seed_with_hunt) {
       this.seed += WMH_getHuntManager().getSeed();
     }
 
-    if (!this.offset_seed_with_hunt && this.offset_seed_with_position) {
-      this.seed = theGame.GetEngineTimeAsSeconds() + RandRange(10000);
-    }
-
     this.AddTimer('delayedGeneratedRequest', 5.0);
 	}
 
   public function getSeed(optional offset: int): int {
+    if (this.seed <= 0) {
+      return RoundF(theGame.GetEngineTimeAsSeconds()) + RandRange(10000);
+    }
+
     return this.seed + offset;
   }
 

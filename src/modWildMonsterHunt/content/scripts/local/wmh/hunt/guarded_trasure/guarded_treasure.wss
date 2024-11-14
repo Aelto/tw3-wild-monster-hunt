@@ -1,3 +1,32 @@
+exec function wmhgennearbytreasures() {
+  WMH_generateNearbyTreasures(50);
+}
+
+function WMH_generateNearbyTreasures(radius: float) {
+  var entities: array<CGameplayEntity>;
+
+  FindGameplayEntitiesInRange(
+    entities,
+    thePlayer,
+    radius,
+    100,
+    , //tags
+    , // queryflags
+    , // target
+    'WMH_GuardedTreasure'
+  );
+
+  for entity: CGameplayEntity in entities {
+    var treasure: WMH_GuardedTreasure = entity as WMH_GuardedTreasure;
+
+    if (!treasure) {
+      continue;
+    }
+
+    treasure.requestAsynchronousGeneration();
+  }
+}
+
 statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   protected var origin: WMH_BiomeSpawnPoint;
 
@@ -43,7 +72,10 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     var tags_count: int = this.creature_bypass_tags.Size();
     // perform a search by tag
     if (tags_count > 0) {
-      var tag_index: int = RandNoiseF(this.getSeed(40 + index), tags_count);
+      var tag_index: int = RandNoiseF(
+        this.getSeed(40 + index),
+        tags_count
+      ) as int;
 
       bentry = bestiary
         .getEntryByBiomeTagByPass(this.creature_bypass_tags[tag_index]);
