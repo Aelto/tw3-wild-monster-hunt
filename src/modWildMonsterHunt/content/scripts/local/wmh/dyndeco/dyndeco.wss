@@ -17,7 +17,7 @@ class WMH_DynDecoration extends CGameplayEntity {
     if (this.offset_seed_with_position) {
       var position: Vector = this.GetWorldPosition();
 
-      this.seed += (position.X as int) - (position.Y as int);
+      this.seed += ((position.X * 10) as int) - ((position.Y * 10) as int);
     }
 
     if (this.offset_seed_with_hunt) {
@@ -43,9 +43,11 @@ class WMH_DynDecoration extends CGameplayEntity {
     thePlayer.wmh_dyndeco_orchestrator.requestGeneration(this);
   }
 
-  public latent function generateDynamicDecoration() {
+  public latent function generateDynamicDecorations() {
     var components: array<CComponent> = this
       .GetComponentsByClassName('WMH_DyndecoSlot');
+
+    var seed: int = this.getSeed();
 
     for component: CComponent in components {
       var slot: WMH_DyndecoSlot = component as WMH_DyndecoSlot;
@@ -54,7 +56,8 @@ class WMH_DynDecoration extends CGameplayEntity {
         continue;
       }
 
-      slot.generateDynamicDecoration();
+      slot.generateDynamicDecoration(seed);
+      seed += 5;
     }
   }
 
@@ -150,7 +153,7 @@ state Processing in WMH_DynDecoOrchestrator {
       var decoration: WMH_DynDecoration = parent
         .requests_buffers[parent.buffer_index_closed][index];
 
-      decoration.generateDynamicDecoration();
+      decoration.generateDynamicDecorations();
       index += 1;
       
       SleepOneFrame();
