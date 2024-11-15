@@ -34,8 +34,14 @@ class WMH_Encounter {
           ) > 400 * 400;
   }
 
+  public function isCompleted(): bool {
+    return this.entities.Size() <= 0;
+  }
+
   public function onDestroy() {
-    var had_any_creature: bool = this.entities.Size() > 0;
+    // do it before clearing the entities as it relies on the list to confirm
+    // whether it was completed.
+    var is_completed = this.isCompleted();
 
     for entity: CEntity in this.entities {
       if (entity) {
@@ -46,7 +52,7 @@ class WMH_Encounter {
     this.entities.Clear();
 
     if (this.spawn_point) {
-      this.spawn_point.liberate(!had_any_creature);
+      this.spawn_point.liberate(is_completed);
     }
 
     var notify: bool = VecDistanceSquared2D(
