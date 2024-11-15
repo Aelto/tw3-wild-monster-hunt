@@ -39,5 +39,11 @@
     "body": [
       "event OnSpawned(spawnData: SEntitySpawnData) {}"
     ]
+  },
+  "pushback": {
+    "prefix": "push",
+    "body": [
+      "PushBack(${1:item});"
+    ]
   }
 }
