@@ -33,6 +33,9 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
   public var hostile_entities: array<CEntity>;
   protected var encounters: array<WMH_EncounterGuardedTreasure>;
+  // stores whether the encounter at the given index was already spawned and
+  // killed.
+  protected var encounters_killed: array<bool>;
 
   protected editable var creature_bypass_tags: array<name>;
   hint creature_bypass_tags = "If let empty, will default to using the biome data. If filled then the treasure shall only host creatures with the supplied tags.";
@@ -112,6 +115,16 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
     // 10, a soft limit in case something goes wrong and it never stops spawning
     while (i < 10) {
+      if (this.encounters_killed.Size() > index) {
+        // the encounter was already spawned and killed in the past,
+        // the check is done outside of the getBestiaryEntryToSpawn's index
+        // check as this can prevent this encounter from spawning but doesn't
+        // break the loop entirely.
+        if (this.encounters_killed[index]) {
+          continue;
+        }
+      }
+
       var bentry: WMH_BestiaryEntry;
       var should_spawn: bool = this.getBestiaryEntryToSpawn(
         i,
@@ -164,6 +177,17 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     encounter.treasure_index = this.encounters.Size() - 1;
 
     WMH_getEncounterManager().onGuardedTreasureSpawned(encounter);
+  }
+
+  public function onEncounterDestroyed(
+    encounter: WMH_EncounterGuardedTreasure
+  ) {
+    if (this.encounters_killed.Size() > encounter.treasure_index) {
+      this
+        .encounters_killed[encounter.treasure_index] = encounter.isCompleted();
+    }
+
+    this.encounters.Remove(encounter);
   }
   //#endregion
 }
