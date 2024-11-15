@@ -3,7 +3,7 @@ class WMH_GuardedTreasure_SpawnComponent extends CScriptedComponent {}
 
 
 /// Used as a spawn location for new WMH_GuardedTreasure instances
-class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
+statemachine class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
   protected var treasure: WMH_GuardedTreasure;
 
   public function trySpawnGuardedTreasure(hunt_seed: int) {
@@ -26,28 +26,9 @@ class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
       return;
     }
 
-    var variants: array<string>;
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_nest.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent");
-
-    var index: int = RandNoiseF(point_seed, variants.Size()) as int;
-
-    var template: CEntityTemplate = LoadResource(
-      variants[index],
-      true
-    ) as CEntityTemplate;
-
-    var entity: CEntity = theGame.CreateEntity(
-      template,
-      this.GetWorldPosition(),
-      this.GetWorldRotation()
-    ) as CEntity;
-
-    this.treasure =  entity as WMH_GuardedTreasure;
-    this.treasure.init(this);
+    if (this.GetCurrentStateName() != 'Spawning') {
+      this.GotoState('Spawning');
+    }
   }
 
   public function canRespawn(): bool {
@@ -65,4 +46,40 @@ class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
 
     return false;
 	}
+}
+
+state Waiting in WMH_GuardTreasureSpawnPoint {}
+state Spawning in WMH_GuardTreasureSpawnPoint {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Spawning_main();
+  }
+
+  entry function Spawning_main() {
+    var variants: array<string>;
+    
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_nest.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent");
+
+    var point_seed: int = parent.getPointSeed(WMH_getHuntManager().getSeed());
+    var index: int = RandNoiseF(point_seed, variants.Size()) as int;
+
+    var template: CEntityTemplate = LoadResourceAsync(
+      variants[index],
+      true
+    ) as CEntityTemplate;
+
+    var entity: CEntity = theGame.CreateEntity(
+      template,
+      parent.GetWorldPosition(),
+      parent.GetWorldRotation()
+    ) as CEntity;
+
+    parent.treasure =  entity as WMH_GuardedTreasure;
+    parent.treasure.init(parent);
+    parent.GotoState('Waiting');
+  }
 }
