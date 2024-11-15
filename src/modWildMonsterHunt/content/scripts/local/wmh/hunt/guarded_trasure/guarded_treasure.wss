@@ -28,10 +28,8 @@ function WMH_generateNearbyTreasures(radius: float) {
 }
 
 statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
-  protected var origin: WMH_BiomeSpawnPoint;
   public var origin: WMH_BiomeSpawnPoint;
 
-  public var hostile_entities: array<CEntity>;
   protected var encounters: array<WMH_EncounterGuardedTreasure>;
   // stores whether the encounter at the given index was already spawned and
   // killed.
