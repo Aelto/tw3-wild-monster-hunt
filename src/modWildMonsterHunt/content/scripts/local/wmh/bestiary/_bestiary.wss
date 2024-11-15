@@ -44,7 +44,7 @@ statemachine class WMH_Bestiary {
     }
 
     this.spawnNearbyEventNpcSpawnPoints();
-    this.spawnNearbyGuardedTreasureSpawnPoints();
+    this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
   }
 
   public function onSpawnContractTarget(

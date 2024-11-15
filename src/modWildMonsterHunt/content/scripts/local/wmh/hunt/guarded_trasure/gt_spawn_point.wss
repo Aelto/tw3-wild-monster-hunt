@@ -9,7 +9,11 @@ class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
   public function trySpawnGuardedTreasure(hunt_seed: int) {
     var point_seed: int = this.getPointSeed(hunt_seed);
 
-    if (!this.canSpawnMonstersInHunt(point_seed, 0.5)) {
+    WMHINFO("trySpawnGuardedTreasure");
+
+    if (!this.canSpawnMonstersInHunt(point_seed, 1.0)) {
+      WMHINFO("trySpawnGuardedTreasure, cannot spawn in hunt");
+
       return;
     }
 
@@ -18,8 +22,11 @@ class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
     }
 
     var variants: array<string>;
-
-    variants.PushBack("");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_nest.w2ent");
+    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent");
 
     var index: int = RandNoiseF(point_seed, variants.Size()) as int;
 

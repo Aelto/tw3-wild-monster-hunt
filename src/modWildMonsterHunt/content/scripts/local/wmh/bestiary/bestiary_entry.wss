@@ -107,7 +107,7 @@ class WMH_BestiaryEntry {
       ) as int;
 
       var selected_template: WMH_EnemyTemplate = active_templates[index];
-      WMHINFO("buildSpawnList() - adding " + selected_template.template);
+      // WMHINFO("buildSpawnList() - adding " + selected_template.template);
 
       var found: bool = false;
       var should_erase: bool = false;
