@@ -34,6 +34,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   // stores whether the encounter at the given index was already spawned and
   // killed.
   protected var encounters_killed: array<bool>;
+  protected var encounters_spawned: array<bool>;
 
   protected editable var creature_bypass_tags: array<name>;
   hint creature_bypass_tags = "If let empty, will default to using the biome data. If filled then the treasure shall only host creatures with the supplied tags.";
@@ -48,7 +49,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
   public function init(origin: WMH_BiomeSpawnPoint) {
     this.origin = origin;
-    this.spawnEntities();
+    this.trySpawnEntities();
   }
 
   //#region spawning of entities
@@ -102,7 +103,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     return true;
   }
 
-  private function spawnEntities() {
+  public function trySpawnEntities() {
     var spawn_slots: array<CComponent>;
     this.getSpawnSlots(spawn_slots);
 
@@ -121,6 +122,10 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
         if (this.encounters_killed[i]) {
           continue;
         }
+      }
+
+      if (this.encounters_spawned[i]) {
+        continue;
       }
 
       var bentry: WMH_BestiaryEntry;
@@ -171,6 +176,7 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   ) {
     this.encounters.PushBack(encounter);
     this.encounters_killed.PushBack(false);
+    this.encounters_spawned.PushBack(true);
 
     encounter.treasure_index = this.encounters.Size() - 1;
 
@@ -183,6 +189,10 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     if (this.encounters_killed.Size() > encounter.treasure_index) {
       this
         .encounters_killed[encounter.treasure_index] = encounter.isCompleted();
+    }
+
+    if (this.encounters_spawned.Size() > encounter.treasure_index) {
+      this.encounters_spawned[encounter.treasure_index] = false;
     }
 
     this.encounters.Remove(encounter);

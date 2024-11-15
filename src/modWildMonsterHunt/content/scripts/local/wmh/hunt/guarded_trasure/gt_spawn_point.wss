@@ -11,7 +11,12 @@ class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
 
     WMHINFO("trySpawnGuardedTreasure");
 
-    if (!this.canSpawnMonstersInHunt(point_seed, 1.0)) {
+    if (this.treasure) {
+      this.treasure.trySpawnEntities();
+      return;
+    }
+
+    if (!this.canSpawnMonstersInHunt(point_seed, 0.3)) {
       WMHINFO("trySpawnGuardedTreasure, cannot spawn in hunt");
 
       return;
