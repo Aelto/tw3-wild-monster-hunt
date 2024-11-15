@@ -12,6 +12,7 @@ class WMH_EncounterLure extends WMH_Encounter {
     this.position = position;
     this.entries = entries;
     this.entities = entities;
+    this.encounter_tag = encounter_tag;
 
     return this;
   }
