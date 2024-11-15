@@ -1,0 +1,31 @@
+class WMH_EncounterGuardedTreasure extends WMH_Encounter {
+  protected var treasure: WMH_GuardedTreasure;
+
+  // is assigned an index by the WMH_GuardedTreasure to track it across its
+  // workflow
+  public var treasure_index: int;
+
+  public function initGuardedTreasure(
+    origin: WMH_BiomeSpawnPoint,
+    entries: array<WMH_BestiaryEntry>,
+    entities: array<CEntity>,
+    treasure: WMH_GuardedTreasure,
+    optional encounter_tag: name,
+  ): WMH_EncounterLure {
+    super.init(
+      origin,
+      entries,
+      entities,
+      encounter_tag
+    );
+
+    this.treasure = treasure;
+
+    return this;
+  }
+
+  public function onDestroy() {
+    treasure.onEncounterDestroyed(this);
+    super.onDestroy();
+  }
+}
