@@ -113,12 +113,12 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
     // 10, a soft limit in case something goes wrong and it never stops spawning
     while (i < 10) {
-      if (this.encounters_killed.Size() > index) {
+      if (this.encounters_killed.Size() > i) {
         // the encounter was already spawned and killed in the past,
         // the check is done outside of the getBestiaryEntryToSpawn's index
         // check as this can prevent this encounter from spawning but doesn't
         // break the loop entirely.
-        if (this.encounters_killed[index]) {
+        if (this.encounters_killed[i]) {
           continue;
         }
       }
@@ -186,6 +186,16 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     }
 
     this.encounters.Remove(encounter);
+  }
+
+  public function isCompleted(): bool {
+    for was_killed: bool in this.encounters_killed {
+      if (!was_killed) {
+        return false;
+      }
+    }
+
+    return this.encounters_killed.Size() > 0;
   }
   //#endregion
 }

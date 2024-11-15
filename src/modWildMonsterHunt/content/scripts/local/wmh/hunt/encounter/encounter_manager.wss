@@ -29,7 +29,7 @@ statemachine class WMH_EncounterManager {
   }
 
   public function onGuardedTreasureSpawned(
-    encounter_guarded_treasure: WMH_GuardedTreasure
+    encounter_guarded_treasure: WMH_EncounterGuardedTreasure
   ) {
     this.onEncounterSpawned(encounter_guarded_treasure);
   }

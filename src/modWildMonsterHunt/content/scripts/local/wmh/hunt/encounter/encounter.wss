@@ -41,7 +41,7 @@ class WMH_Encounter {
   public function onDestroy() {
     // do it before clearing the entities as it relies on the list to confirm
     // whether it was completed.
-    var is_completed = this.isCompleted();
+    var is_completed: bool = this.isCompleted();
 
     for entity: CEntity in this.entities {
       if (entity) {

@@ -1,2 +1,56 @@
 /// Used as spawn positions in WMH_GuardedTreasure instances
 class WMH_GuardedTreasure_SpawnComponent extends CScriptedComponent {}
+
+
+/// Used as a spawn location for new WMH_GuardedTreasure instances
+class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
+  protected var treasure: WMH_GuardedTreasure;
+
+  public function trySpawnGuardedTreasure(hunt_seed: int) {
+    var point_seed: int = this.getPointSeed(hunt_seed);
+
+    if (!this.canSpawnMonstersInHunt(point_seed, 0.5)) {
+      return;
+    }
+
+    if (!this.canRespawn()) {
+      return;
+    }
+
+    var variants: array<string>;
+
+    variants.PushBack("");
+
+    var index: int = RandNoiseF(point_seed, variants.Size()) as int;
+
+    var template: CEntityTemplate = LoadResource(
+      variants[index],
+      true
+    ) as CEntityTemplate;
+
+    var entity: CEntity = theGame.CreateEntity(
+      template,
+      this.GetWorldPosition(),
+      this.GetWorldRotation()
+    ) as CEntity;
+
+    this.treasure =  entity as WMH_GuardedTreasure;
+    this.treasure.init(this);
+  }
+
+  public function canRespawn(): bool {
+    if (this.treasure) {
+      return false;
+    }
+
+    return true;
+	}
+
+  public function isOccupied(): bool {
+		if (this.treasure) {
+      return !this.treasure.isCompleted();
+    }
+
+    return false;
+	}
+}

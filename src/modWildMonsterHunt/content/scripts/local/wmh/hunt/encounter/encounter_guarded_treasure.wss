@@ -11,7 +11,7 @@ class WMH_EncounterGuardedTreasure extends WMH_Encounter {
     entities: array<CEntity>,
     treasure: WMH_GuardedTreasure,
     optional encounter_tag: name,
-  ): WMH_EncounterLure {
+  ): WMH_EncounterGuardedTreasure {
     super.init(
       origin,
       entries,

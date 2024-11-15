@@ -107,6 +107,29 @@ class WMH_SpawnPointManager {
     }
   }
 
+  public function getNearbyGuardedTreasureSpawnPoints(
+    out output: array<WMH_GuardTreasureSpawnPoint>
+  ) {
+    var entities: array<CGameplayEntity>;
+    var radius: float = 250;
+
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer as CNode,
+      radius,
+      20, // max results
+      'WMH_GuardTreasureSpawnPoint'
+    );
+
+    for entity: CGameplayEntity in entities {
+      var point: WMH_GuardTreasureSpawnPoint = entity as WMH_GuardTreasureSpawnPoint;
+
+      if (point) {
+        output.PushBack(point);
+      }
+    }
+  }
+
   private function findNearbySpawnPoints(
     radius: float,
     count: int
