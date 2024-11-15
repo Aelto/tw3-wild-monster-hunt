@@ -47,10 +47,17 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		point_seed: int,
 		monster_spawn_chance: float
 	): bool {
-		return this.spawn_priority == WMH_BSP_SP_Forced
-				|| RandNoiseF(point_seed + 0, 1.0)
-				<= monster_spawn_chance 
-         * (this.prefer_wildlife ? 0.5 : 1.0);
+		var chances: float = monster_spawn_chance;
+
+		if (this.spawn_priority == WMH_BSP_SP_Forced) {
+			return true;
+		}
+
+		if (this.prefer_wildlife) {
+			chances *= 0.5;
+		}
+
+		return RandNoiseF(point_seed + 0, 1.0) <= chances;
 	}
 
 	public function isOccupied(): bool {
