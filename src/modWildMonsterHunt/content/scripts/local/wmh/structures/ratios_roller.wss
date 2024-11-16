@@ -36,3 +36,20 @@ class WMH_RatiosRoller {
     return this.ratios.Size() - 1;
   }
 }
+
+class WMH_RatiosRollerGen<T> extends WMH_RatiosRoller {
+  private var items: array<T>;
+
+  public function addItem(ratio: float, item: T): WMH_RatiosRollerGen<T> {
+    this.items.PushBack(item);
+    this.addRatio(ratio);
+
+    return this;
+  }
+
+  public function rollItem(seed: int): T {
+    var index: int = this.roll(seed);
+
+    return this.items[index];
+  }
+}

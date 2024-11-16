@@ -65,19 +65,45 @@ state Spawning in WMH_GuardTreasureSpawnPoint {
   }
 
   entry function Spawning_main() {
-    var variants: array<string>;
-    
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_nest.w2ent");
-    variants.PushBack("dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent");
-
     var point_seed: int = parent.getPointSeed(WMH_getHuntManager().getSeed());
-    var index: int = RandNoiseF(point_seed, variants.Size()) as int;
+    var variant: WMH_RatiosRollerGen<string>;
+    
+    variant = (new WMH_RatiosRollerGen<string> in this)
+      .addItem(
+        0.2
+        + (this.biome_tags.structuresHigh as int)
+        + (this.biome_tags.roomWide as int)
+        - (this.biome_tags.altitudeHigh as int),
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent"
+      )
+      .addItem(
+        0.2
+        + (this.biome_tags.structuresHigh as int)
+        + (this.biome_tags.vegetationHigh as int),
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent"
+      )
+      .addItem(
+        0.5
+        + (this.biome_tags.structuresHigh as int)
+        - (this.biome_tags.altitudeHigh as int),
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent"
+      )
+      .addItem(
+        1.0,
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_nest.w2ent"
+      )
+      .addItem(
+        1.0
+        + (this.biome_tags.vegetationHigh as int) * 3
+        - (this.biome_tags.structuresHigh as int)
+        - (this.biome_tags.altitudeHigh as int)
+        - (this.biome_tags.underground as int),
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent"
+      )
+      .rollItem(point_seed);
 
     var template: CEntityTemplate = LoadResourceAsync(
-      variants[index],
+      variant,
       true
     ) as CEntityTemplate;
 
