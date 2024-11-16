@@ -30,6 +30,7 @@ statemachine class WMH_HuntManager {
 
   private var start_time: GameTime;
   private var start_time_engine: float;
+  private var save_lock: int;
 
   // stores the creatures that were killed during the current hunt, and that
   // should result in completed contracts the next time the player enters a
@@ -78,6 +79,9 @@ statemachine class WMH_HuntManager {
     this.killed_creatures.Clear();
     this.encounters.onHuntStarted();
 
+    theGame.SaveGame(SGT_QuickSave, -1);
+    theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
+
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Running');
     }
@@ -93,6 +97,9 @@ statemachine class WMH_HuntManager {
 
     this.contract.onHuntFinished(bestiary, storage, this.killed_creatures);
     this.encounters.onHuntFinished();
+
+    theGame.SaveGame(SGT_QuickSave, -1);
+    theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
   }
 
   public function onCreatureKilled(
