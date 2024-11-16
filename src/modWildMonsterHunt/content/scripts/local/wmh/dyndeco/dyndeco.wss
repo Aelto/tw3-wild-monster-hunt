@@ -76,7 +76,9 @@ class WMH_DynDecoration extends CGameplayEntity {
     }
   }
 
-  public function beforeDestroy() {}
+  public function beforeDestroy() {
+    this.clearDynamicDecorations();
+  }
 }
 
 @addField(CR4Player)
