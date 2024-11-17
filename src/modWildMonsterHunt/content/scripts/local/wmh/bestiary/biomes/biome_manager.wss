@@ -16,7 +16,7 @@ class WMH_BiomeManager {
   }
 
   public function getDayHour(): int {
-    return 12;
+    return GameTimeHours(theGame.GetGameTime());
   }
 
   public function getWeatherType(): WMH_WeatherType {
