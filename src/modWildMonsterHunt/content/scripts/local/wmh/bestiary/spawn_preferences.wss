@@ -167,20 +167,25 @@ enum WMH_WeatherType {
 }
 
 function WMH_getWeatherType(): WMH_WeatherType {
-  var weather: EWeatherEffect = GetCurWeather();
+  var weather: name = GetWeatherConditionName();
   var output: WMH_WeatherType = WMH_WeatherType_None;
 
   switch (weather) {
-    case EWE_Clear:
+    case 'WT_Clear':
+    case 'WT_Light_Clouds':
+    case 'WT_Mid_Clouds':
+    case 'WT_Mid_Clouds_Dark':
+    case 'WT_Heavy_Clouds':
+    case 'WT_Heavy_Clouds_Dark':
       output = WMH_WeatherType_Clear;
       break;
 
-    case EWE_Rain:
-    case EWE_Storm:
+    case 'WT_Rain_Storm':
+    case 'WT_Fog':
       output = WMH_WeatherType_Rain;
       break;
 
-    case EWE_Snow:
+    case 'WT_Snow':
       output = WMH_WeatherType_Snow;
       break;
   }

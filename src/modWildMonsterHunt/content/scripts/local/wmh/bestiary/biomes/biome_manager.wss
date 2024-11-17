@@ -20,6 +20,6 @@ class WMH_BiomeManager {
   }
 
   public function getWeatherType(): WMH_WeatherType {
-    return WMH_WeatherType_None;
+    return WMH_getWeatherType();
   }
 }
