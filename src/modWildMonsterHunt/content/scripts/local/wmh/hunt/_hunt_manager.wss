@@ -79,8 +79,10 @@ statemachine class WMH_HuntManager {
     this.killed_creatures.Clear();
     this.encounters.onHuntStarted();
 
-    theGame.SaveGame(SGT_QuickSave, -1);
-    theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
+    if (!thePlayer.wmh.hasJustBooted()) {
+      theGame.SaveGame(SGT_QuickSave, -1);
+      theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
+    }
 
     if (this.GetCurrentStateName() == 'Waiting') {
       this.GotoState('Running');
@@ -98,8 +100,10 @@ statemachine class WMH_HuntManager {
     this.contract.onHuntFinished(bestiary, storage, this.killed_creatures);
     this.encounters.onHuntFinished();
 
-    theGame.SaveGame(SGT_QuickSave, -1);
-    theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
+    if (!thePlayer.wmh.hasJustBooted()) {
+      theGame.SaveGame(SGT_QuickSave, -1);
+      theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
+    }
   }
 
   public function onCreatureKilled(
