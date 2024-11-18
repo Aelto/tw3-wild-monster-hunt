@@ -66,26 +66,25 @@ state Spawning in WMH_GuardTreasureSpawnPoint {
 
   entry function Spawning_main() {
     var point_seed: int = parent.getPointSeed(WMH_getHuntManager().getSeed());
-    var variant: WMH_RatiosRollerGen<string>;
-    
-    variant = (new WMH_RatiosRollerGen<string> in this)
+
+    var variant: string = (new WMH_RatiosRollerGen<string> in this)
       .addItem(
         0.2
-        + (this.biome_tags.structuresHigh as int)
-        + (this.biome_tags.roomWide as int)
-        - (this.biome_tags.altitudeHigh as int),
+        + (parent.biome_tags.structuresHigh as int)
+        + (parent.biome_tags.roomWide as int)
+        - (parent.biome_tags.altitudeHigh as int),
         "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_boxes.w2ent"
       )
       .addItem(
         0.2
-        + (this.biome_tags.structuresHigh as int)
-        + (this.biome_tags.vegetationHigh as int),
+        + (parent.biome_tags.structuresHigh as int)
+        + (parent.biome_tags.vegetationHigh as int),
         "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_broken_cart.w2ent"
       )
       .addItem(
         0.5
-        + (this.biome_tags.structuresHigh as int)
-        - (this.biome_tags.altitudeHigh as int),
+        + (parent.biome_tags.structuresHigh as int)
+        - (parent.biome_tags.altitudeHigh as int),
         "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_corpse.w2ent"
       )
       .addItem(
@@ -94,10 +93,10 @@ state Spawning in WMH_GuardTreasureSpawnPoint {
       )
       .addItem(
         1.0
-        + (this.biome_tags.vegetationHigh as int) * 3
-        - (this.biome_tags.structuresHigh as int)
-        - (this.biome_tags.altitudeHigh as int)
-        - (this.biome_tags.underground as int),
+        + (parent.biome_tags.vegetationHigh as int) * 3
+        - (parent.biome_tags.structuresHigh as int)
+        - (parent.biome_tags.altitudeHigh as int)
+        - (parent.biome_tags.underground as int),
         "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent"
       )
       .rollItem(point_seed);

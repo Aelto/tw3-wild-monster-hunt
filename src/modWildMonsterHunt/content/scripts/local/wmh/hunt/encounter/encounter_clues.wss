@@ -1,5 +1,5 @@
 class WMH_EncounterClues extends WMH_Encounter {
-  private oneliner: WMH_GameplayOnelinerEntity;
+  private var oneliner: WMH_GameplayOnelinerEntity;
 
   public function initClues(
     spawn_point: WMH_BiomeSpawnPoint,
