@@ -1,4 +1,6 @@
 class WMH_EncounterClues extends WMH_Encounter {
+  private oneliner: WMH_GameplayOnelinerEntity;
+
   public function initClues(
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
@@ -7,6 +9,12 @@ class WMH_EncounterClues extends WMH_Encounter {
     this.spawn_point = spawn_point;
     this.entries = entries;
     this.entities = entities;
+
+    this.oneliner = WMH_gameplayOnelinerEntity(
+      "<img src='img://icons/perks/s_perk_1.png' vspace='-10' />",
+      this.spawn_point
+    );
+    this.oneliner.render_distance = 50;
 
     return this;
   }
@@ -19,6 +27,10 @@ class WMH_EncounterClues extends WMH_Encounter {
   public function onDestroy() {
     for entity: CEntity in this.entities {
       entity.Destroy();
+    }
+
+    if (this.oneliner) {
+      this.oneliner.unregister();
     }
   }
 }

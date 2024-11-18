@@ -1,21 +1,52 @@
-class WMH_OnelinerEntity extends SU_OnelinerEntity {}
+/// Base class for oneliners that need a common set of settings for gameplay
+/// 3D markers.
+class WMH_GameplayOneliner extends SU_Oneliner {
+  function getVisible(player_position: Vector): bool {
+    return theGame.IsFocusModeActive() && super.getVisible(player_position);
+  }
+}
+
+class WMH_GameplayOnelinerEntity extends SU_OnelinerEntity {
+  function getVisible(player_position: Vector): bool {
+    return theGame.IsFocusModeActive() && super.getVisible(player_position);
+  }
+}
 
 /// A oneliner that sits to the side of an entity
-class WMH_OnelinerEntitySide extends WMH_OnelinerEntity {
-  public function WMH_OnelinerEntitySide(entity: CEntity): WMH_OnelinerEntitySide {
+class WMH_GameplayOnelinerEntitySide extends WMH_GameplayOnelinerEntity {
+  public function WMH_OnelinerEntitySide(
+    entity: CEntity
+  ): WMH_GameplayOnelinerEntitySide {
     this.offset = Vector(1.0);
-    this.render_distance = 5;
 
     return this;
   }
 }
 
-class WMH_OnelinerScreen extends SU_OnelinerScreen {}
+function WMH_gameplayOneliner(
+  text: string,
+  position: Vector
+): WMH_GameplayOneliner {
+  var oneliner: WMH_GameplayOneliner;
 
-class WMH_OnelinerScreenDebugLog extends WMH_OnelinerScreen {
-  public function init(): WMH_OnelinerScreenDebugLog {
-    this.position = Vector(0.0, 0.5);
+  oneliner = new WMH_GameplayOneliner in thePlayer;
+  oneliner.text = text;
+  oneliner.position = position;
+  oneliner.register();
 
-    return this;
-  }
+  return oneliner;
+}
+
+function WMH_gameplayOnelinerEntity(
+  text: string,
+  entity: CEntity
+): WMH_GameplayOnelinerEntity {
+  var oneliner: WMH_GameplayOnelinerEntity;
+
+  oneliner = new WMH_GameplayOnelinerEntity in thePlayer;
+  oneliner.text = text;
+  oneliner.entity = entity;
+  oneliner.register();
+
+  return oneliner;
 }
