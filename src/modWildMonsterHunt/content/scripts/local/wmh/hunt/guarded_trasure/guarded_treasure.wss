@@ -120,11 +120,13 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
         // check as this can prevent this encounter from spawning but doesn't
         // break the loop entirely.
         if (this.encounters_killed[i]) {
+          i += 1;
           continue;
         }
       }
 
-      if (this.encounters_spawned[i]) {
+      if (this.encounters_spawned.Size() > i && this.encounters_spawned[i]) {
+        i += 1;
         continue;
       }
 
