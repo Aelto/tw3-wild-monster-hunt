@@ -15,6 +15,7 @@ class WMH_EncounterClues extends WMH_Encounter {
       this.spawn_point
     );
     this.oneliner.render_distance = 50;
+    this.oneliner.offset = Vector(0, 0, 1.5);
 
     return this;
   }
