@@ -259,7 +259,7 @@ statemachine class WMH_Bestiary {
       return;
     }
 
-    var allowed_spawns_per_region: int = Min(34, region_spawns_count) + 1;
+    var allowed_spawns_per_region: int = Min(60, region_spawns_count) + 1;
 
     var monster_spawn_chance: float = 
       // we get the ratio of allowed spawns compared to the available
