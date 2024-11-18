@@ -17,6 +17,8 @@ class WMH_GameplayOnelinerEntitySide extends WMH_GameplayOnelinerEntity {
   public function WMH_OnelinerEntitySide(
     entity: CEntity
   ): WMH_GameplayOnelinerEntitySide {
+    // this won't work as well unless the offset is relative to the entity's
+    // rotation. Could use the same technique as the board's OLs with a matrix.
     this.offset = Vector(1.0);
 
     return this;
