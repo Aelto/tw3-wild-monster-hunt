@@ -1,0 +1,16 @@
+
+
+class WMH_EffectCriticalBonus extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  public function initCriticalBonusOnPlayer(
+    owner: CGameplayEntity,
+    optional duration: float
+  ) {
+    this.initOnPlayer(owner, 'WMHeffectCriticalBonus', duration);
+  }
+}

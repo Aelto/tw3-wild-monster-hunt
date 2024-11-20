@@ -1,0 +1,24 @@
+
+
+class WMH_EffectVitalityBonus extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  public function initVitalityBonusOnPlayer(
+    owner: CGameplayEntity,
+    optional duration: float
+  ) {
+    this.initOnPlayer(owner, 'WMHeffectVitalityBonus', duration);
+  }
+}
+
+exec function wmhtestvitalityeffect() {
+  WMHHUD("wmhtestvitalityeffect");
+  var effect: WMH_EffectVitalityBonus = new WMH_EffectVitalityBonus in thePlayer;
+
+  effect.initVitalityBonusOnPlayer(thePlayer);
+  thePlayer.WMH_getEffectManager().WMH_addEffect(effect);
+}

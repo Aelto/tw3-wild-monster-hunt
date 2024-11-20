@@ -1,0 +1,16 @@
+
+
+class WMH_EffectEncumbranceBonus extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  public function initEncumbranceBonusOnPlayer(
+    owner: CGameplayEntity,
+    optional duration: float
+  ) {
+    this.initOnPlayer(owner, 'WMHeffectEncumbranceBonus', duration);
+  }
+}

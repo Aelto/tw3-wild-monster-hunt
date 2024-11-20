@@ -1,0 +1,16 @@
+
+
+class WMH_EffectVitalityRegenBonus extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  public function initVitalityRegenBonusOnPlayer(
+    owner: CGameplayEntity,
+    optional duration: float
+  ) {
+    this.initOnPlayer(owner, 'WMHeffectVitalityRegenBonus', duration);
+  }
+}

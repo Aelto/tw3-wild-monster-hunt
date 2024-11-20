@@ -1,0 +1,24 @@
+
+
+class WMH_EffectArmorBonus extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  public function initArmorBonusOnPlayer(
+    owner: CGameplayEntity,
+    optional duration: float
+  ) {
+    this.initOnPlayer(owner, 'WMHeffectArmorBonus', duration);
+  }
+}
+
+exec function wmhtestarmoreffect() {
+  WMHHUD("wmhtestarmoreffect");
+  var effect: WMH_EffectArmorBonus = new WMH_EffectArmorBonus in thePlayer;
+
+  effect.initArmorBonusOnPlayer(thePlayer);
+  thePlayer.WMH_getEffectManager().WMH_addEffect(effect);
+}

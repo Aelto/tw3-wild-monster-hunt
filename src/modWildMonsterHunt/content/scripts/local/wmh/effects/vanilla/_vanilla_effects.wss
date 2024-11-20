@@ -1,0 +1,105 @@
+@addMethod(W3EffectManager)
+function WMH_addEffect(effect: CBaseGameplayEffect) {
+  var overridenEffectsIdxs: array<int>;
+  var params: W3BuffCustomParams;
+
+  this.ApplyEffect(
+    effect,
+    overridenEffectsIdxs,
+    -1,
+    params
+  );
+}
+
+@addMethod(CActor)
+function WMH_getEffectManager(): W3EffectManager {
+  return this.effectManager;
+}
+
+// instances of vanilla effects that extend `CBaseGameplayEffect`
+// and depend on the effects manager
+class WMH_VanillaEffect extends CBaseGameplayEffect {
+  default showOnHUD = true;
+
+  default isPositive = true;
+  default isNeutral = false;
+  default isNegative = false;
+
+  // ASSIGN a default value so they're assigned to the init info
+  default abilityName = '';
+  default duration = -1;
+
+  public function initVanillaEffect(
+    owner: CGameplayEntity,
+    target: CActor,
+    ability_name: name,
+    // if provided, will override any duration that may come from the xml 
+    optional duration: float
+    // default to being the ability_name converted to string
+    optional source_name: string,
+  ) {
+    var init: SEffectInitInfo;
+
+    init.owner = owner;
+    init.target = target;
+    init.targetEffectManager = target.WMH_getEffectManager();
+    init.abilityName = ability_name;
+
+    if (source_name != "") {
+      init.sourceName = source_name;
+    }
+    else {
+      init.sourceName = NameToString(ability_name);
+    }
+
+    if (duration > 0) {
+      init.duration = this.duration;
+    }
+
+    this.Init(init);
+
+    // struct SEffectInitInfo
+    // {
+    //   var owner : CGameplayEntity;
+    //   var target : CActor;
+    //   var duration : float;
+    //   var sourceName : string;
+    //   var targetEffectManager : W3EffectManager;
+
+    //   //optional
+    //   var powerStatValue : SAbilityAttributeValue;
+    //   var customEffectValue : SAbilityAttributeValue;
+    //   var customAbilityName : name;
+    //   var customFXName : name;
+    //   var isSignEffect : bool;
+    //   var vibratePadLowFreq 		: float;					//pad vibration
+    //   var vibratePadHighFreq 		: float;					//pad vibration
+    // }
+  }
+
+  public function initOnPlayer(
+    owner: CGameplayEntity,
+    ability: name,
+    optional duration: float
+  ) {
+    this.initVanillaEffect(
+      owner,
+      thePlayer,
+      ability,
+      duration
+    );
+  }
+
+  // do nothing since there is no XML to fetch
+  public function CacheSettings() {} 
+
+  // Calculates and sets final effect value
+	protected function SetEffectValue() {
+    super.SetEffectValue();
+  }
+
+  // OVERRIDE: if duration must be programitically edited
+  protected function CalculateDuration(optional setInitialDuration : bool) {
+    super.CalculateDuration(setInitialDuration);
+  }
+}
