@@ -18,6 +18,8 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
   private editable var upgrade_description: string;
   hint upgrade_description = "description of what the upgrade does when interacting with";
 
+  private editable var oneliner_offset: Vector;
+
   private var prompt: WMH_CampUpgradeYesNoPrompt;
   private var oneliner: WMH_GameplayOnelinerEntity;
 
@@ -150,7 +152,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
       this
     );
 
-    this.oneliner.offset = Vector(0, 0, 1.5);
+    this.oneliner.offset = this.oneliner_offset;
     this.oneliner.visible_outside_focus_mode = true;
   }
 
