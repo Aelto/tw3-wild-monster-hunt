@@ -11,11 +11,30 @@ function WMH_addEffect(effect: CBaseGameplayEffect) {
   );
 }
 
+@addMethod(W3EffectManager)
+function WMH_removeEffectsBySource(source_name: string) {
+  var to_remove: array<CBaseGameplayEffect>;
+
+  for effect: CBaseGameplayEffect in this.effects {
+    if (effect.GetSourceName() == source_name) {
+      to_remove.PushBack(effect);
+    }
+  }
+
+  for effect: CBaseGameplayEffect in to_remove {
+    this.RemoveEffect(effect);
+  }
+}
+
 @addMethod(CActor)
 function WMH_getEffectManager(): W3EffectManager {
   return this.effectManager;
 }
 
+// adds an WMH effect to the entity,
+// NOTE: it stacks the buffs if they share the same source. To remove duplicates
+// call `WMH_getEffectManager().WMH_removeEffectsBySource(source_name)` first.
+// 
 function WMH_addEffect(
   owner: CGameplayEntity,
   target: CActor,

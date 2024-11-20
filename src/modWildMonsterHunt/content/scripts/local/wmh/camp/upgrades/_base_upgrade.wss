@@ -1,3 +1,5 @@
+
+
 abstract class WMH_CampUpgradeBase extends CGameplayEntity {
   protected editable var level_fact: name;
   hint level_fact = "name of the fact that should be used to get the level of this upgrade";
@@ -10,19 +12,61 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
   hint upgrade_cost_per_level = "additional crowns needed to upgade for each levels already unlocked";
   default upgrade_cost_per_level = 250;
 
-  protected editable var upgrade_title: string;
+  private editable var upgrade_title: string;
   hint upgrade_title = "name of the upgrade, to describe it";
 
+  private editable var upgrade_description: string;
+  hint upgrade_description = "description of what the upgrade does when interacting with";
+
   private var prompt: WMH_CampUpgradeYesNoPrompt;
+  private var oneliner: WMH_GameplayOnelinerEntity;
 
   event OnInteraction(actionName: string, activator: CEntity) {
-    if (this.isUnlocked()) {
+    WMHINFO("on interact: " + actionName);
+    if (actionName != "Use") {
+      return false;
+    }
+
+    if (this.isUnlocked() && !theGame.IsFocusModeActive()) {
       this.tryApply();
     }
     else {
       this.prompt = new WMH_CampUpgradeYesNoPrompt in this;
       prompt.entity = this;
       prompt.display();
+    }
+  }
+
+  event OnInteractionActivated(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    if (activator != thePlayer) {
+      return false;
+    }
+
+    WMHINFO("OnInteractionActivated");
+
+    if (!this.oneliner) {
+      this.setupOneliner();
+    }
+    else {
+      this.oneliner.register();
+    }
+  }
+
+  event OnInteractionDeactivated(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    if (activator != thePlayer) {
+      return false;
+    }
+
+    WMHINFO("OnInteractionDeactivated");
+
+    if (this.oneliner) {
+      this.oneliner.unregister();
     }
   }
 
@@ -34,11 +78,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
       return false;
     }
 
-    WMHINFO("on interact: " + interactionComponentName);
-    var focus: bool = theGame.IsFocusModeActive();
-
-    return interactionComponentName == "interactionUse" && !focus
-        || interactionComponentName == "interactionUpgrade" && focus;
+    return interactionComponentName == "interactionUse";
   }
 
 
@@ -60,6 +100,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     var cost: int = this.getUpgradeCost();
 
     if (thePlayer.GetMoney() < cost) {
+      WMHHUD("Insufficient funds to do that");
       return false;
     }
 
@@ -67,18 +108,27 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     theSound.SoundEvent("gui_inventory_buy");
     this.addLevel();
     this.onUpgrade(cost);
+    this.setupOneliner();
 
     return true;
   }
 
   public function getUpgradeCost(): int {
-    return this.upgrade_cost_per_level + this.getLevel()
+    return this.upgrade_cost_per_level * this.getLevel()
       + this.upgrade_cost_base;
   }
 
 
   public function getLevel(): int {
     return FactsQueryLatestValue(this.level_fact);
+  }
+
+  public function title(): string {
+    return this.upgrade_title;
+  }
+
+  public function description(): string {
+    return this.upgrade_description;
   }
 
   protected function addLevel() {
@@ -88,25 +138,46 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     );
   }
 
+  protected function setupOneliner() {
+    if (this.oneliner) {
+      this.oneliner.unregister();
+    }
+
+    this.oneliner = WMH_gameplayOnelinerEntity(
+      "<u>" + this.title() + "</u> lv" + this.getLevel() + "<br/>"
+      + this.description()
+      + "<br/><u>interact with Witcher Senses to upgrade</u>",
+      this
+    );
+
+    this.oneliner.offset = Vector(0, 0, 1.5);
+    this.oneliner.visible_outside_focus_mode = true;
+  }
+
   // OVERRIDE to perform custom action when entity was successfully upgraded
-  protected function onUpgrade(money_spent: int) {}
+  protected function onUpgrade(money_spent: int) {
+    theSound.SoundEvent('gui_inventory_repair');
+    WMHHUD(this.title() + " is now level " + this.getLevel());
+  }
 
   // OVERRIDE to apply bonus when used
-  protected function onApply(level: int) {}
+  protected function onApply(level: int) {
+    theSound.SoundEvent("gui_character_synergy_effect");
+  }
 }
 
 class WMH_CampUpgradeYesNoPrompt extends WMH_YesNoPrompt {
   var entity: WMH_CampUpgradeBase;
 
   public function title(): string {
-    return "Upgrade " + this.entity.upgrade_title;;
+    return "Upgrade " + this.entity.title();
   }
 
   public function description(): string {
     var price: int = this.entity.getUpgradeCost();
 
     return "Spend " + price 
-      + "Crowns to upgrade to level "
+      + " Crowns to upgrade to level "
       + (this.entity.getLevel() + 1)
       + "?";
   }

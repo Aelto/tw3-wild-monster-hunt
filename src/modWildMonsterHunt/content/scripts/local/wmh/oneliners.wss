@@ -1,14 +1,20 @@
 /// Base class for oneliners that need a common set of settings for gameplay
 /// 3D markers.
 class WMH_GameplayOneliner extends SU_Oneliner {
+  public var visible_outside_focus_mode: bool;
+
   function getVisible(player_position: Vector): bool {
-    return theGame.IsFocusModeActive() && super.getVisible(player_position);
+    return (this.visible_outside_focus_mode || theGame.IsFocusModeActive())
+        && super.getVisible(player_position);
   }
 }
 
 class WMH_GameplayOnelinerEntity extends SU_OnelinerEntity {
+  public var visible_outside_focus_mode: bool;
+
   function getVisible(player_position: Vector): bool {
-    return theGame.IsFocusModeActive() && super.getVisible(player_position);
+    return (this.visible_outside_focus_mode || theGame.IsFocusModeActive())
+        && super.getVisible(player_position);
   }
 }
 

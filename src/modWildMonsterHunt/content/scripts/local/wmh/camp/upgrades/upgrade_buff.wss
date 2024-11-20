@@ -7,11 +7,19 @@ class WMH_CampUpgradeBuff extends WMH_CampUpgradeBase {
   hint seconds_per_level = "duration of the buff in seconds and multiplied by the level of the upgrade";
 
   protected function onApply(level: int) {
-    WMH_addEffect(
-      this,
-      thePlayer,
-      this.buff_on_use,
-      this.getLevel() * this.seconds_per_level
-    );
+    thePlayer.WMH_getEffectManager()
+      .WMH_removeEffectsBySource(NameToString(this.buff_on_use));
+
+    var i: int;
+    for (i = 0; i < level; i += 1) {
+      WMH_addEffect(
+        this,
+        thePlayer,
+        this.buff_on_use,
+        level * this.seconds_per_level
+      );
+    }
+
+    super.onApply(level);
   }
 }
