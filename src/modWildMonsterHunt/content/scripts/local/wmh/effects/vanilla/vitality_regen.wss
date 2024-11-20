@@ -1,6 +1,6 @@
 
 
-class WMH_EffectVitalityRegenBonus extends CBaseGameplayEffect {
+class WMH_EffectVitalityRegenBonus extends WMH_VanillaEffect {
   default showOnHUD = true;
 
   default isPositive = true;

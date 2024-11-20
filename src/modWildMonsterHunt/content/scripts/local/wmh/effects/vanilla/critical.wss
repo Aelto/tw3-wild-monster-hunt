@@ -1,6 +1,6 @@
 
 
-class WMH_EffectCriticalBonus extends CBaseGameplayEffect {
+class WMH_EffectCriticalBonus extends WMH_VanillaEffect {
   default showOnHUD = true;
 
   default isPositive = true;

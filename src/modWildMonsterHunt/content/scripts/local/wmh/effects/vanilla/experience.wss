@@ -1,6 +1,6 @@
 
 
-class WMH_EffectExperienceBonus extends CBaseGameplayEffect {
+class WMH_EffectExperienceBonus extends WMH_VanillaEffect {
   default showOnHUD = true;
 
   default isPositive = true;

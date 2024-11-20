@@ -1,6 +1,6 @@
 
 
-class WMH_EffectEncumbranceBonus extends CBaseGameplayEffect {
+class WMH_EffectEncumbranceBonus extends WMH_VanillaEffect {
   default showOnHUD = true;
 
   default isPositive = true;

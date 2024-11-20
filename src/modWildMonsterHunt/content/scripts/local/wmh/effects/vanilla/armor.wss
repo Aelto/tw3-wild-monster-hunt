@@ -1,6 +1,6 @@
 
 
-class WMH_EffectArmorBonus extends CBaseGameplayEffect {
+class WMH_EffectArmorBonus extends WMH_VanillaEffect {
   default showOnHUD = true;
 
   default isPositive = true;
