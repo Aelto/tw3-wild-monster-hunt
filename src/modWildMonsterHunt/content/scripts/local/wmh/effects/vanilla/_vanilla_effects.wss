@@ -16,6 +16,19 @@ function WMH_getEffectManager(): W3EffectManager {
   return this.effectManager;
 }
 
+function WMH_addEffect(
+  owner: CGameplayEntity,
+  target: CActor,
+  ability_name: name,
+  optional duration: float,
+  optional source_name: string,
+) {
+  var effect: WMH_VanillaEffect = new WMH_VanillaEffect in target;
+
+  effect.initVanillaEffect(owner, target, ability_name, duration, source_name);
+  target.WMH_getEffectManager().WMH_addEffect(effect);
+}
+
 // instances of vanilla effects that extend `CBaseGameplayEffect`
 // and depend on the effects manager
 class WMH_VanillaEffect extends CBaseGameplayEffect {
@@ -34,7 +47,7 @@ class WMH_VanillaEffect extends CBaseGameplayEffect {
     target: CActor,
     ability_name: name,
     // if provided, will override any duration that may come from the xml 
-    optional duration: float
+    optional duration: float,
     // default to being the ability_name converted to string
     optional source_name: string,
   ) {
@@ -43,7 +56,7 @@ class WMH_VanillaEffect extends CBaseGameplayEffect {
     init.owner = owner;
     init.target = target;
     init.targetEffectManager = target.WMH_getEffectManager();
-    init.abilityName = ability_name;
+    init.customAbilityName = ability_name;
 
     if (source_name != "") {
       init.sourceName = source_name;

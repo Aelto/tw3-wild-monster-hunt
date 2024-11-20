@@ -1,0 +1,119 @@
+abstract class WMH_CampUpgradeBase extends CGameplayEntity {
+  protected editable var level_fact: name;
+  hint level_fact = "name of the fact that should be used to get the level of this upgrade";
+
+  protected editable var upgrade_cost_base: int;
+  hint upgrade_cost_base = "crowns needed for the first level";
+  default upgrade_cost_base = 500;
+
+  protected editable var upgrade_cost_per_level: int;
+  hint upgrade_cost_per_level = "additional crowns needed to upgade for each levels already unlocked";
+  default upgrade_cost_per_level = 250;
+
+  protected editable var upgrade_title: string;
+  hint upgrade_title = "name of the upgrade, to describe it";
+
+  private var prompt: WMH_CampUpgradeYesNoPrompt;
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    if (this.isUnlocked()) {
+      this.tryApply();
+    }
+    else {
+      this.prompt = new WMH_CampUpgradeYesNoPrompt in this;
+      prompt.entity = this;
+      prompt.display();
+    }
+  }
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    if (activator != thePlayer) {
+      return false;
+    }
+
+    WMHINFO("on interact: " + interactionComponentName);
+    var focus: bool = theGame.IsFocusModeActive();
+
+    return interactionComponentName == "interactionUse" && !focus
+        || interactionComponentName == "interactionUpgrade" && focus;
+  }
+
+
+  public function isUnlocked(): bool {
+    return this.getLevel() > 0;
+  }
+
+  public function tryApply() {
+    var level: int = this.getLevel();
+
+    if (level <= 0) {
+      return;
+    }
+
+    this.onApply(level);
+  }
+
+  public function tryUpgrade(): bool {
+    var cost: int = this.getUpgradeCost();
+
+    if (thePlayer.GetMoney() < cost) {
+      return false;
+    }
+
+    thePlayer.RemoveMoney(cost);
+    theSound.SoundEvent("gui_inventory_buy");
+    this.addLevel();
+    this.onUpgrade(cost);
+
+    return true;
+  }
+
+  public function getUpgradeCost(): int {
+    return this.upgrade_cost_per_level + this.getLevel()
+      + this.upgrade_cost_base;
+  }
+
+
+  public function getLevel(): int {
+    return FactsQueryLatestValue(this.level_fact);
+  }
+
+  protected function addLevel() {
+    FactsSet(
+      this.level_fact,
+      this.getLevel() + 1
+    );
+  }
+
+  // OVERRIDE to perform custom action when entity was successfully upgraded
+  protected function onUpgrade(money_spent: int) {}
+
+  // OVERRIDE to apply bonus when used
+  protected function onApply(level: int) {}
+}
+
+class WMH_CampUpgradeYesNoPrompt extends WMH_YesNoPrompt {
+  var entity: WMH_CampUpgradeBase;
+
+  public function title(): string {
+    return "Upgrade " + this.entity.upgrade_title;;
+  }
+
+  public function description(): string {
+    var price: int = this.entity.getUpgradeCost();
+
+    return "Spend " + price 
+      + "Crowns to upgrade to level "
+      + (this.entity.getLevel() + 1)
+      + "?";
+  }
+
+  public function onResponse(accepted: bool) {
+    if (accepted) {
+      this.entity.tryUpgrade();
+    }
+  }
+}
