@@ -27,7 +27,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     WMHTUTOFACT(
       'WMH_LureSpot',
       "Luring Spot",
-      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>The prey you will get depends entirely on the quality of the lure that you use, adjust the ingredients based on needs.<br/><br/><i>Once a Luring Spot is repaired, it remains available for all of your future hunts.<i>"
+      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>The prey you will get depends entirely on the quality of the lure that you use, adjust the ingredients based on your needs, whether you want a safe encounter or a tough opponent.<br/><br/><i>Once a Luring Spot is repaired, it remains available for all of your future hunts.<i>"
     );
 
     if (!this.respawn_ticker) {

@@ -18,6 +18,12 @@ statemachine class WMH_EventNpc extends CNewNPC {
       return super.OnInteraction(actionName, activator);
     }
 
+    WMHTUTOFACT(
+      'WMH_LureSpot_OnInteraction',
+      "Person in Distress",
+      "You may randomly encounter <font color='#CD7D03'>Persons in Distress</font> during your hunts. Usually found in safe areas where no monster will attack them, they offer <font color='#CD7D03'>mini events</font> that you can complete for additional rewards & experience.<br/><br/>"
+    );
+
     // 1. load/generate events
     this.seed = this.getSeed();
     this.generateEvents(this.seed);
