@@ -1,0 +1,46 @@
+@addMethod(CR4Player)
+function WMH_onInstantMountRoach(horse: CEntity) {
+  this.MountVehicle(horse, VMT_ImmediateUse);
+}
+
+function WMH_instantMountRoach(optional use_animation: bool) {
+  var vehicleEntity: CEntity;
+	var createEntityHelper: CR4CreateEntityHelper;
+	var vehicle: CVehicleComponent; 
+
+  vehicleEntity = thePlayer.GetHorseWithInventory();
+    
+  if (!vehicleEntity) {
+    createEntityHelper = new CR4CreateEntityHelper in thePlayer;
+    createEntityHelper.SetPostAttachedCallback(
+      thePlayer,
+      'WMH_onInstantMountRoach'
+    );
+    theGame.SummonPlayerHorse( false, createEntityHelper );
+    return;
+  }
+
+  if (use_animation) {
+    thePlayer.MountVehicle(vehicleEntity, VMT_ApproachAndMount);
+  }
+  else {
+    thePlayer.MountVehicle( vehicleEntity, VMT_ImmediateUse);
+  }
+}
+
+function WMH_instantDismountInternal(use_animation: bool) {
+	var createEntityHelper: CR4CreateEntityHelper;
+	var vehicle: CVehicleComponent; 
+
+  var vehicleEntity: CEntity = thePlayer.GetHorseCurrentlyMounted();
+  if (!vehicleEntity) {
+    return;
+  }
+
+  if (use_animation) {
+    thePlayer.GetUsedHorseComponent().OnSmartDismount();
+  }
+  else {
+    thePlayer.DismountVehicle(vehicleEntity, DT_instant);
+  }
+}
