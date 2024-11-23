@@ -30,6 +30,9 @@ statemachine class WMH_CampManager {
   protected var camp_manager_npc: WMH_CampManagerNPC;
   protected var conversation: WMH_ConversationManager;
 
+  // temporarily unlock upgrade to showcase them during the dialogue
+  private var temporary_unlocks: array<name>;
+
   public function init(master: WMH_Master): WMH_CampManager {
     this.herbalist = (new WMH_HerbalistManager in this).init(this);
     this.GotoState('Waiting');
@@ -42,12 +45,15 @@ statemachine class WMH_CampManager {
       return;
     }
 
+    this.removeTemporaryUnlocks();
+
     if (choice.playGoChunk == 'UnlockHerbalist') {
       this.swapAndMoveCamera(
         Vector(738.371, 635.173, 499.505, 0),
         EulerAngles(-362.055, 15400.5, 0),
         45.0
       );
+      this.unlockHerbalist(true);
     }
     if (choice.playGoChunk == 'UnlockMerchant') {
       this.swapAndMoveCamera(
@@ -55,6 +61,7 @@ statemachine class WMH_CampManager {
         EulerAngles(-355.014, 15355.1, 0),
         25.0
       );
+      this.unlockMerchant(true);
     }
     if (choice.playGoChunk == 'UnlockGarden0') {
       this.swapAndMoveCamera(
@@ -62,6 +69,7 @@ statemachine class WMH_CampManager {
         EulerAngles(-387.015, 15238.9, 0),
         45.0
       );
+      this.unlockGarden0(true);
     }
     if (choice.playGoChunk == 'UnlockGarden1') {
       this.swapAndMoveCamera(
@@ -72,6 +80,7 @@ statemachine class WMH_CampManager {
         // EulerAngles(-381.575, 15263.5, 0),
         // 40.0
       );
+      this.unlockGarden1(true);
     }
     if (choice.playGoChunk == 'UnlockArmors') {
       this.swapAndMoveCamera(
@@ -79,6 +88,7 @@ statemachine class WMH_CampManager {
         EulerAngles(-368.454, 15291.4, 0),
         25.0
       );
+      this.unlockArmors(true);
     }
     if (choice.playGoChunk == 'UnlockWeapons') {
       this.swapAndMoveCamera(
@@ -86,6 +96,7 @@ statemachine class WMH_CampManager {
         EulerAngles(-378.054, 15403.1, 0),
         25.0
       );
+      this.unlockWeapons(true);
     }
   }
 
@@ -115,7 +126,22 @@ statemachine class WMH_CampManager {
     camera.start();
   }
 
-  protected function unlockGarden0() {
+  protected function removeTemporaryUnlocks() {
+    for unlock: name in this.temporary_unlocks {
+      FactsRemove(unlock);
+    }
+
+    this.temporary_unlocks.Clear();
+  }
+
+  protected function unlockGarden0(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_Garden0Unlocked')) {
+      this.temporary_unlocks.PushBack('WMH_Garden0Unlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_Garden0Unlocked');
+    }
+
     FactsSet('WMH_Garden0Unlocked', 1);
   }
 
@@ -124,27 +150,43 @@ statemachine class WMH_CampManager {
   }
 
   protected function isGarden0Unlocked(): bool {
-    return FactsDoesExist('WMH_Garden0Unlocked');
+    return FactsDoesExist('WMH_Garden0Unlocked')
+        && !this.temporary_unlocks.Contains('WMH_Garden0Unlocked');
   }
 
   //--
 
   protected function isGarden1Unlocked(): bool {
-    return FactsDoesExist('WMH_Garden1Unlocked');
+    return FactsDoesExist('WMH_Garden1Unlocked')
+        && !this.temporary_unlocks.Contains('WMH_Garden1Unlocked');
   }
 
   protected function unlockGarden1Price(): int {
     return 1250;
   }
 
-  protected function unlockGarden1() {
+  protected function unlockGarden1(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_Garden1Unlocked')) {
+      this.temporary_unlocks.PushBack('WMH_Garden1Unlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_Garden1Unlocked');
+    }
+
     FactsSet('WMH_Garden1Unlocked', 1);
   }
 
   //--
 
   // armor repair bench
-  protected function unlockArmors() {
+  protected function unlockArmors(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_ArmorsUnlocked')) {
+      this.temporary_unlocks.PushBack('WMH_ArmorsUnlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_ArmorsUnlocked');
+    }
+
     FactsSet('WMH_ArmorsUnlocked', 1);
   }
 
@@ -153,12 +195,20 @@ statemachine class WMH_CampManager {
   }
 
   protected function isArmorsUnlocked(): bool {
-    return FactsDoesExist('WMH_ArmorsUnlocked');
+    return FactsDoesExist('WMH_ArmorsUnlocked')
+        && !this.temporary_unlocks.Contains('WMH_ArmorsUnlocked');
   }
 
   //--
 
-  protected function unlockWeapons() {
+  protected function unlockWeapons(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_WeaponsUnlocked')) {
+      this.temporary_unlocks.PushBack('WMH_WeaponsUnlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_WeaponsUnlocked');
+    }
+
     FactsSet('WMH_WeaponsUnlocked', 1);
   }
 
@@ -167,12 +217,20 @@ statemachine class WMH_CampManager {
   }
 
   protected function isWeaponsUnlocked(): bool {
-    return FactsDoesExist('WMH_WeaponsUnlocked');
+    return FactsDoesExist('WMH_WeaponsUnlocked')
+        && !this.temporary_unlocks.Contains('WMH_WeaponsUnlocked');
   }
   
   //--
 
-  protected function unlockMerchant() {
+  protected function unlockMerchant(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_MerchantUnlocked')) {
+      this.temporary_unlocks.PushBack('WMH_MerchantUnlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_MerchantUnlocked');
+    }
+
     FactsSet('WMH_MerchantUnlocked', 1);
   }
 
@@ -181,12 +239,20 @@ statemachine class WMH_CampManager {
   }
 
   protected function isMerchantUnlocked(): bool {
-    return FactsDoesExist('WMH_MerchantUnlocked');
+    return FactsDoesExist('WMH_MerchantUnlocked')
+        && !this.temporary_unlocks.Contains('WMH_MerchantUnlocked');
   }
 
   //--
 
-  protected function unlockHerbalist() {
+  protected function unlockHerbalist(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_HerbalistUnlocked')) {
+      this.temporary_unlocks.PushBack('WMH_HerbalistUnlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_HerbalistUnlocked');
+    }
+
     FactsSet('WMH_HerbalistUnlocked', 1);
   }
 
@@ -195,6 +261,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function isHerbalistUnlocked(): bool {
-    return FactsDoesExist('WMH_HerbalistUnlocked');
+    return FactsDoesExist('WMH_HerbalistUnlocked')
+        && !this.temporary_unlocks.Contains('WMH_HerbalistUnlocked');
   }
 }

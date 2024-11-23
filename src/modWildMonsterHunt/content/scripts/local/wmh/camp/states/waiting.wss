@@ -4,5 +4,7 @@ state Waiting in WMH_CampManager {
     this.Waiting_main();
   }
 
-  entry function Waiting_main() {}
+  entry function Waiting_main() {
+    parent.removeTemporaryUnlocks();
+  }
 }
