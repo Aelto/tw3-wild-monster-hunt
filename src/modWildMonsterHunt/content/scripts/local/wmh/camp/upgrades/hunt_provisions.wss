@@ -1,0 +1,67 @@
+/// When interacted with:
+/// - 
+statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
+  default level_fact = 'wmh_camp_upgrade_provisions';
+  default upgrade_title = "Provisions";
+  default upgrade_description = "Completing contracts motivates the neighbouring villages to give you provisions<br/>scales with level, both in quantity & frequency";
+
+  default upgrade_cost_base = 25;
+  default upgrade_cost_per_level = 100;
+
+  private var previous_completed_contracts_count: int;
+
+  protected function onApply(level: int) {
+    var devices: int = this.getAvailableTrapDevices(level as float);
+    var containers: int = this.getAvailableLureContainers(level as float);
+    var waters: int = this.getAvailableWater();
+    var apples: int = waters;
+
+    if (devices + containers + waters <= 0) {
+      return WMHHUD("There is nothing to retrieve at the moment");
+    }
+
+    this.previous_completed_contracts_count = this.getCompletedContracts();
+
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+
+    provider.startGroup(this.title())
+      .appendItem('modwmh_trap_device', devices)
+      .appendItem('modwmh_lure_container', containers)
+      .appendItem('Bottled water', waters)
+      .appendItem('Apple', apples);
+
+    provider.transferItems(thePlayer.GetInventory());
+    WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+  }
+
+  private function getCompletedContracts(): int {
+    var storage: WMH_Storage = WMH_getStorage();
+
+    if (!storage) {
+      return 0;
+    }
+
+    return storage.contract.completed_contracts_count;
+  }
+
+  private function getCompletedContractsSinceLastInteraction(): int {
+    var previous: int = this.previous_completed_contracts_count;
+
+    return Max(0, this.getCompletedContracts() - previous);
+  }
+
+  private function getAvailableTrapDevices(level: float): int {
+    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.2 * level);
+  }
+
+  private function getAvailableLureContainers(level: float): int {
+    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.5 * level);
+  }
+
+  private function getAvailableWater(level: float): int {
+    return RoundF(
+      this.getCompletedContractsSinceLastInteraction()
+      * (2 + level * 0.5)
+  );
+  }
+}
