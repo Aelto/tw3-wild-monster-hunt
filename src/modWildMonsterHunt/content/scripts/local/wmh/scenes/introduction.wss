@@ -126,69 +126,66 @@ statemachine class WMH_SceneIntroduction {
     this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
       .initFollowRotation(
         0,
-        ts_0_seconds + 1,
+        ts_0_seconds,
         thePlayer
       )
     );
 
     // looking at the horizon, above bridge
-    this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', p1, r1);
-    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      0,// start_after,
-      ts_0_seconds * 2,// blendin_seconds,
-      p1,// target_position,
-      r1// target_rotation
-    ));
-
-    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      ts_0_seconds,// start_after,
-      ts_1_seconds,// blendin_seconds,
-      p1,// target_position,
-      r1// target_rotation
-    ));
     WMHINFO("SCENE, 2");
 
     horse.wmh_horse_override.setSpeed(1.0);
     horse.wmh_horse_override.start();
     Sleep(0.5); // give time for roach to start
     WMHINFO("SCENE, 3");
-    this.tick(ts_0_seconds + ts_1_seconds, camera, position, rotation);
-    todo!("show WMH logo with fn similar to `ShowEP2Logo`")
-    Sleep(5.0);
-    WMHINFO("SCENE, 4");
+    this.tick(ts_0_seconds, camera, position, rotation);
+    theGame.FadeOut(0.5);
+    this.milestones.Clear();
+    this.processing.Clear();
 
-    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
-    mount.TeleportWithRotation(p, r);
+    //////////////////////////
+    this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
+      .initSmoother(0, 100)
+    );
+
+    this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', position, rotation);
+    camera.TeleportWithRotation(position, rotation);
     this.getPositionByTag('WMH_scene_welcome_camera_spawn_2', p, r);
+    this.milestones.PushBack((new WMH_CameraMilestone_Magnet in thePlayer)
+      .initMagnet(5, 10, p, r, 25.0, 5.0)
+    );
     this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      0,// start_after,
+      5,// start_after,
       5,// blendin_seconds,
       p,// target_position,
       r// target_rotation
     ));
 
-    // cause camera to look at point in 3secs
-    this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
-      .initFollowRotation(
-        0,
-        3,
-        theGame.GetEntityByTag('WMH_scene_welcome_camera_spawn_2')
-      )
-    );
-
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
+    mount.TeleportWithRotation(p, r);
     this.getPositionByTag('WMH_scene_welcome_camera_spawn_3', p1, r1);
     this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      3,// start_after,
+      5,// start_after,
       10,// blendin_seconds,
       p1,// target_position,
       r1// target_rotation
     ));
-    WMHINFO("SCENE, 5");
+    theGame.FadeInAsync(0.8);
+    todo!("show WMH logo with fn similar to `ShowEP2Logo`")
+    this.tick(15, camera, position, rotation);
 
+    WMHINFO("SCENE, 4");
+    // this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+    //   0,// start_after,
+    //   5,// blendin_seconds,
+    //   p,// target_position,
+    //   r// target_rotation
+    // ));
+
+
+    WMHINFO("SCENE, 5");
     this.tick(13, camera, position, rotation);
     WMHINFO("SCENE, 6");
-    WMHINFO("SCENE, 7");
-    Sleep(1.0);
     camera.Stop();
   }
 

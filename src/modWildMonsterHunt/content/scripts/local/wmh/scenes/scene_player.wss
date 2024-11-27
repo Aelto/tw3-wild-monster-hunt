@@ -1,4 +1,3 @@
-
 class WMH_CameraMilestone {
   // seconds after which this milestone will start having an effect on the
   // camera.
@@ -53,6 +52,7 @@ class WMH_CameraMilestone {
     var t: float = MinF(this.ran_for / this.blendin_seconds, 1.0);
     var sqr: float = t*t;
     return sqr / (2.0 * (sqr - t) + 1.0);
+
     // return PowF(t, 10);
     // return ((1.0 as float) / (this.blendin_seconds as float)) as float;
     // return this.ran_for / this.blendin_seconds;
@@ -158,6 +158,70 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
   }
 }
 
+class WMH_CameraMilestone_Magnet extends WMH_CameraMilestone {
+  private var radius: float;
+  private var strength: float;
+
+  public function initMagnet(
+    start_after: float,
+    blendin_seconds: float,
+    position: Vector,
+    rotation: EulerAngles,
+    radius: float,
+    strength: float
+  ): WMH_CameraMilestone_Magnet {
+    this.start_after = start_after;
+    this.blendin_seconds = blendin_seconds;
+    this.target_position = position;
+    this.target_rotation = rotation;
+    this.radius = radius;
+    this.strength = strength;
+
+    return this;
+  }
+
+  private function getPull(position: Vector): float {
+    return 1 - ClampF(
+      VecDistance(this.target_position, position), 0.0001, this.radius
+    ) / this.radius * this.strength;
+
+    // return LogF(MaxF(10 - VecDistance(this.target_position, position), 0) + 2);
+  }
+
+  public function applyPosition(
+    out position: Vector,
+    blendratio: float,
+    delta: float
+  ): bool {
+    super.applyPosition(position, blendratio, delta * this.getPull(position));
+
+    // var diff: Vector = this.target_position - position;
+
+    // position += this.getPull(position) * diff * delta * blendratio;
+
+    return true;
+  }
+
+  public function applyRotation(
+    out rotation: EulerAngles,
+    blendratio: float,
+    delta: float,
+    position: Vector,
+  ): bool {
+    super.applyRotation(rotation, blendratio, delta * this.getPull(position), position);
+
+    // var diff: EulerAngles = VecToRotation(this.target_position - position);
+    // diff.Pitch *= -1;
+    // var pull: float = this.getPull(position) * delta * blendratio * 0.5;
+
+    // rotation.Pitch = AngleNormalize180(rotation.Pitch + diff.Pitch * pull);
+    // rotation.Yaw = AngleNormalize180(rotation.Yaw + diff.Yaw * pull);
+    // rotation.Roll = AngleNormalize180(rotation.Roll + diff.Roll * pull);
+
+    return true;
+  }
+}
+
 class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
   public function initSmoother(
     start_after: float,
@@ -177,9 +241,10 @@ class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
     }
 
     var diff: Vector = position - this.previous_position;
+    var reducer: float = 1 - delta * 2;
 
     this.position_velocity = (diff + this.position_velocity) / 2;
-    this.position_velocity *= delta;
+    this.position_velocity *= reducer;
 
     this.previous_position = this.previous_position + this.position_velocity;
     position = this.previous_position;
@@ -205,13 +270,15 @@ class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
       rotation.Roll - this.previous_rotation.Roll,
     );
 
-    this.rotation_velocity.Pitch = AngleNormalize180(delta * this.rotation_velocity.Pitch);
-    this.rotation_velocity.Yaw = AngleNormalize180(delta * this.rotation_velocity.Yaw);
-    this.rotation_velocity.Roll = AngleNormalize180(delta * this.rotation_velocity.Roll);
+    var reducer: float = 1 - delta * 10;
 
-    this.rotation_velocity.Pitch = AngleNormalize180(delta + diff.Pitch + this.rotation_velocity.Pitch);
-    this.rotation_velocity.Yaw = AngleNormalize180(delta + diff.Yaw + this.rotation_velocity.Yaw);
-    this.rotation_velocity.Roll = AngleNormalize180(delta + diff.Roll + this.rotation_velocity.Roll);
+    this.rotation_velocity.Pitch = AngleNormalize180(reducer * this.rotation_velocity.Pitch);
+    this.rotation_velocity.Yaw = AngleNormalize180(reducer * this.rotation_velocity.Yaw);
+    this.rotation_velocity.Roll = AngleNormalize180(reducer * this.rotation_velocity.Roll);
+
+    this.rotation_velocity.Pitch = AngleNormalize180(diff.Pitch + this.rotation_velocity.Pitch);
+    this.rotation_velocity.Yaw = AngleNormalize180(diff.Yaw + this.rotation_velocity.Yaw);
+    this.rotation_velocity.Roll = AngleNormalize180(diff.Roll + this.rotation_velocity.Roll);
 
 
     this.previous_rotation = EulerAngles(
