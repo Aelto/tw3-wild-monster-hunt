@@ -13,7 +13,7 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
   protected function onApply(level: int) {
     var devices: int = this.getAvailableTrapDevices(level as float);
     var containers: int = this.getAvailableLureContainers(level as float);
-    var waters: int = this.getAvailableWater();
+    var waters: int = this.getAvailableWater(level as float);
     var apples: int = waters;
 
     if (devices + containers + waters <= 0) {
