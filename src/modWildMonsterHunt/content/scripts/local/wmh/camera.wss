@@ -1,7 +1,7 @@
 class WMH_StaticCamera extends CStaticCamera {
   public function start() {
     this.Run();
-    this.CameraShakeLooped(0.5, CSS_Normal);
+    // this.CameraShakeLooped(0.5, CSS_Normal);
   }
 
   public function teleportAndLookAt(position: Vector, target: Vector) {

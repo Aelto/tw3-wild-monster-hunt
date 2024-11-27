@@ -1,0 +1,10 @@
+// @addField(CR4Player) 
+// var wmh_scene: WMH_BaseScene;
+
+// statemachine class WMH_BaseScene {
+//   public function start() {
+//     this.GotoState('Starting');
+//   }
+//   public latent function onStart() {}
+// }
+

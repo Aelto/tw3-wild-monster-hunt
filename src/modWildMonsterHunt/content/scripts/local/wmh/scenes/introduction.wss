@@ -1,0 +1,380 @@
+exec function wmhsceneintroduction() {
+  var player: CR4Player = thePlayer;
+  player.wmh_scene = new WMH_SceneIntroduction in player;
+  player.wmh_scene.start();
+}
+
+@addField(CR4Player) 
+var wmh_scene: WMH_SceneIntroduction;
+
+statemachine class WMH_SceneIntroduction {
+  var milestones: array<WMH_CameraMilestone>;
+  var processing: array<WMH_CameraMilestone>;
+
+
+  public function start() {
+    if (FactsDoesExist("wmh_scene_introduction")) {
+      return;
+    }
+
+    this.GotoState('Starting');
+  }
+
+  latent function onStart() {
+    // theGame.FadeOut(0.5);
+    var can_play: bool = this.setupScene();
+    if (can_play) {
+      this.playScenePlayer();
+    }
+    else {
+      theGame.FadeInAsync(0.8);
+    }
+
+    this.endScene();
+  }
+
+  latent function setupScene(): bool {
+    WMH_instantMountRoach();
+    
+    while (true) {
+      var mount: CEntity = thePlayer.GetHorseCurrentlyMounted();
+
+      if (mount) {
+        break;
+      }
+
+      SleepOneFrame();
+    }
+
+    // 1.1 setup mount
+    var spawn_p: Vector;
+    var spawn_r: EulerAngles;
+    var success: bool = this.getPositionByTag(
+      'WMH_scene_introduction_geralt_spawn_0',
+      spawn_p,
+      spawn_r
+    );
+
+    if (!success) {
+      WMHERROR("WMH_SceneIntroduction::SetupScene, missing mount spawn entity");
+      return false;
+    }
+    
+    mount.TeleportWithRotation(spawn_p, spawn_r);
+    thePlayer.TeleportWithRotation(spawn_p, spawn_r);
+
+    // 1.2 setup camera
+    var camera_p: Vector;
+    var camera_r: EulerAngles;
+    success = this.getPositionByTag(
+      'WMH_scene_welcome_camera_spawn_0',
+      camera_p,
+      camera_r
+    );
+    if (!success) {
+      WMHERROR("WMH_SceneIntroduction::SetupScene, missing camera spawn entity");
+      return false;
+    }
+
+    return true;
+  }
+
+  latent function playScenePlayer() {
+    var r: EulerAngles;
+    var r1: EulerAngles;
+    var p: Vector;
+    var p1: Vector;
+
+    var ts_0_seconds: float = 5;
+    var ts_1_seconds: float = 5;
+
+    var horse: W3HorseComponent = thePlayer.GetUsedHorseComponent();
+    var mount: CNewNPC = horse.GetEntity() as CNewNPC;
+
+    
+
+    
+
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_0', p, r);
+    mount.TeleportWithRotation(p, r);
+
+    // in forest above bridge, looking at geralt
+    this.getPositionByTag('WMH_scene_welcome_camera_spawn_0', p, r);
+    var camera: WMH_StaticCamera = WMH_getStaticCamera();
+    var position: Vector = p;
+    var rotation: EulerAngles = r;
+    camera.TeleportWithRotation(p, r);
+    camera.activationDuration = 0;
+    camera.deactivationDuration = 0;
+    camera.start();
+
+    WMHINFO("SCENE, 0");
+  
+    this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
+      .initSmoother(0, 100)
+    );
+    
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      0,// start_after,
+      5,// blendin_seconds,
+      p,// target_position,
+      r// target_rotation
+    ));
+
+    WMHINFO("SCENE, 1");
+
+    this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
+      .initFollowRotation(
+        0,
+        ts_0_seconds + 1,
+        thePlayer
+      )
+    );
+
+    // looking at the horizon, above bridge
+    this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', p1, r1);
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      0,// start_after,
+      ts_0_seconds * 2,// blendin_seconds,
+      p1,// target_position,
+      r1// target_rotation
+    ));
+
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      ts_0_seconds,// start_after,
+      ts_1_seconds,// blendin_seconds,
+      p1,// target_position,
+      r1// target_rotation
+    ));
+    WMHINFO("SCENE, 2");
+
+    horse.wmh_horse_override.setSpeed(1.0);
+    horse.wmh_horse_override.start();
+    Sleep(0.5); // give time for roach to start
+    WMHINFO("SCENE, 3");
+    this.tick(ts_0_seconds + ts_1_seconds, camera, position, rotation);
+    todo!("show WMH logo with fn similar to `ShowEP2Logo`")
+    Sleep(5.0);
+    WMHINFO("SCENE, 4");
+
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
+    mount.TeleportWithRotation(p, r);
+    this.getPositionByTag('WMH_scene_welcome_camera_spawn_2', p, r);
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      0,// start_after,
+      5,// blendin_seconds,
+      p,// target_position,
+      r// target_rotation
+    ));
+
+    // cause camera to look at point in 3secs
+    this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
+      .initFollowRotation(
+        0,
+        3,
+        theGame.GetEntityByTag('WMH_scene_welcome_camera_spawn_2')
+      )
+    );
+
+    this.getPositionByTag('WMH_scene_welcome_camera_spawn_3', p1, r1);
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      3,// start_after,
+      10,// blendin_seconds,
+      p1,// target_position,
+      r1// target_rotation
+    ));
+    WMHINFO("SCENE, 5");
+
+    this.tick(13, camera, position, rotation);
+    WMHINFO("SCENE, 6");
+    WMHINFO("SCENE, 7");
+    Sleep(1.0);
+    camera.Stop();
+  }
+
+  latent function tick(duration: float,camera: WMH_StaticCamera, out position: Vector, out rotation: EulerAngles) {
+    var previous_time: float = theGame.GetEngineTimeAsSeconds();
+    
+
+    WMHINFO("Running_main");
+    camera.TeleportWithRotation(
+      position,
+      rotation
+    );
+
+    
+    SleepOneFrame();
+
+    while (duration >= 0) {
+      var now: float = theGame.GetEngineTimeAsSeconds();
+      var delta: float = now - previous_time;
+      previous_time = theGame.GetEngineTimeAsSeconds();
+      duration -= delta;
+
+      LogChannel('WMH', "delta ="+delta);
+
+      var has_updated: bool = false;
+
+      // loop through all milestones and apply the currently active ones
+      var i: int = 0;
+      var max: int = this.milestones.Size();
+      for (i = 0; i < max; i += 1) {
+        var blendratio: float = this.milestones[i].applyDelta(delta);
+          LogChannel('WMHINFO', "blendratio = " + blendratio);
+        
+        if (blendratio > 0) {
+          has_updated = true;
+
+          this.milestones[i].applyPosition(position, blendratio, delta);
+          this.milestones[i].applyRotation(rotation, blendratio, delta, position);
+        }
+      }
+
+      for (i = 0; i < max; i += 1) {
+        var blendratio: float = this.processing[i].applyDelta(delta);
+          LogChannel('WMHINFO', "blendratio = " + blendratio);
+        
+        if (blendratio > 0) {
+          has_updated = true;
+
+          this.processing[i].applyPosition(position, blendratio, delta);
+          this.processing[i].applyRotation(rotation, blendratio, delta, position);
+        }
+      }
+
+      camera.TeleportWithRotation(position, rotation);
+      SleepOneFrame();
+    }
+  }
+
+  // latent function playScene() {
+  //   this.camera_0.activationDuration = 0;
+  //   this.camera_0.deactivationDuration = 20;
+  //   this.camera_1.activationDuration = 0;
+  //   this.camera_1.deactivationDuration = 20;
+  //   this.camera_2.activationDuration = 0;
+  //   this.camera_2.deactivationDuration = 20;
+
+  //   var horse: W3HorseComponent = thePlayer.GetUsedHorseComponent();
+  //   var mount: CNewNPC = horse.GetEntity() as CNewNPC;
+  //   var destination: CEntity = theGame.GetEntityByTag('WMH_scene_introduction_roach_destination');
+
+  //   var r: EulerAngles;
+  //   var p: Vector;
+
+  //   this.getPositionByTag('WMH_scene_introduction_geralt_spawn_0', p, r);
+  //   mount.TeleportWithRotation(p, r);
+
+  //   this.camera_0.teleportAndLookAt(
+  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_0'),
+  //     p + Vector(0, 0, 2)
+  //   );
+
+  //   this.camera_1.teleportAndLookAt(
+  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_0')
+  //     + Vector(0, 0, 10),
+  //     p + Vector(0, 0, 2)
+  //   );
+
+  //   // 1.0
+  //   // looking at Roach&Geralt walking, camera slowly going up
+  //   this.camera_0.start();
+  //   horse.wmh_horse_override.setSpeed(1.0);
+  //   horse.wmh_horse_override.start();
+  //   this.camera_1.activationDuration = 60;
+  //   this.camera_1.deactivationDuration = 12;
+  //   this.camera_1.start();
+  //   this.camera_1.FollowWithRotation(thePlayer);
+
+  //   Sleep(1.0); // give time for roach to start
+  //   theGame.FadeInAsync(0.8);
+
+  //   // 2.0
+  //   // camera goes up, looking at horizon, display WMH logo
+  //   Sleep(5);
+  //   this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', p, r);
+  //   this.camera_2.TeleportWithRotation(p, r);
+  //   this.camera_2.activationDuration = 6;
+  //   this.camera_2.start();
+  //   Sleep(6);
+  //   todo!("show WMH logo with fn similar to `ShowEP2Logo`")
+
+  //   // 3.0
+  //   // fade, teleport below bridge, move towards camp, cross Geralt&Roach while
+  //   // moving
+  //   Sleep(2);
+  //   // theGame.FadeOut(1.0);
+  //   this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
+  //   mount.TeleportWithRotation(p, r);
+  //   thePlayer.TeleportWithRotation(p, r);
+
+  //   SleepOneFrame();
+  //   // this.camera_0.activationDuration = 0;
+  //   // this.camera_0.teleportAndLookAt(
+  //   //   this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_2'),
+  //   //   p + Vector(0, 0, 2)
+  //   // );
+  //   // this.camera_0.start();
+  //   SleepOneFrame();
+
+  //   this.camera_0.activationDuration = 10;
+  //   this.camera_0.teleportAndLookAt(
+  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_3'),
+  //     p + Vector(0, 0, 2)
+  //   );
+  //   this.camera_0.start();
+
+
+  //   Sleep(10);
+  //   // go to camp
+  // }
+
+  latent function endScene() {
+    // if (this.camera_0) {
+    //   this.camera_0.Stop();
+    // }
+
+    FactsSet('wmh_scene_introduction', 1);
+  }
+
+  
+  private function getPositionByTag(
+    tag: name,
+    out position: Vector,
+    out rotation: EulerAngles
+  ): bool {
+    var node: CEntity = theGame.GetEntityByTag(tag);
+
+    if (node) {
+      position = node.GetWorldPosition();
+      rotation = node.GetWorldRotation();
+
+      return true;
+    }
+
+    return false;
+  }
+
+  private function getPositionByTagUnsafe(tag: name): Vector {
+    return theGame.GetEntityByTag(tag).GetWorldPosition();
+  }
+}
+
+state Waiting in WMH_SceneIntroduction {}
+state Starting in WMH_SceneIntroduction {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    parent.GotoState('Running');
+  }
+}
+state Running in WMH_SceneIntroduction {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Running_main();
+  }
+
+  entry function Running_main() {
+    parent.onStart();
+    // parent.GotoState('Waiting');
+  }
+}
