@@ -44,19 +44,14 @@ class WMH_CameraMilestone {
       return 1.0;
     }
 
-    // bézier blend:
-    // https://stackoverflow.com/questions/13462001/ease-in-and-ease-out-animation-formula
-    // var t: float = MinF(this.ran_for / this.blendin_seconds, 1.0);
-    // return t * t * (3.0 - 2.0 * t);
-
     var t: float = MinF(this.ran_for / this.blendin_seconds, 1.0);
-    var sqr: float = t*t;
-    return sqr / (2.0 * (sqr - t) + 1.0);
+    // bring it in the [-1;1] range
+    t = t * 2 - 1;
 
-    // return PowF(t, 10);
-    // return ((1.0 as float) / (this.blendin_seconds as float)) as float;
-    // return this.ran_for / this.blendin_seconds;
-    // return LogF((this.ran_for / this.blendin_seconds) + 1);
+    // a curve whose highest point is at the middle of the range, it starts from
+    // the 0 when x=0, then peaks at 1 when x=0.5, and back to 0 when x=1.
+    // But it requires x to be in the [-1;1] range
+    return 1 - t*t;
   }
 
   public function applyPosition(out position: Vector, blendratio: float, delta: float): bool {
