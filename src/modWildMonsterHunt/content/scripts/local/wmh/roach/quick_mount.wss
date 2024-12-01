@@ -28,7 +28,7 @@ function WMH_instantMountRoach(optional use_animation: bool) {
   }
 }
 
-function WMH_instantDismountInternal(use_animation: bool) {
+function WMH_instantDismountInternal(optional use_animation: bool) {
 	var createEntityHelper: CR4CreateEntityHelper;
 	var vehicle: CVehicleComponent; 
 

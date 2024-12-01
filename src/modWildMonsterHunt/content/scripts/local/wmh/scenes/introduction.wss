@@ -92,9 +92,6 @@ statemachine class WMH_SceneIntroduction {
     var mount: CNewNPC = horse.GetEntity() as CNewNPC;
 
     
-
-    
-
     this.getPositionByTag('WMH_scene_introduction_geralt_spawn_0', p, r);
     mount.TeleportWithRotation(p, r);
 
@@ -108,8 +105,6 @@ statemachine class WMH_SceneIntroduction {
     camera.deactivationDuration = 0;
     camera.start();
 
-    WMHINFO("SCENE, 0");
-  
     this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
       .initSmoother(0, 100)
     );
@@ -121,8 +116,6 @@ statemachine class WMH_SceneIntroduction {
       r// target_rotation
     ));
 
-    WMHINFO("SCENE, 1");
-
     this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
       .initFollowRotation(
         0,
@@ -132,12 +125,9 @@ statemachine class WMH_SceneIntroduction {
     );
 
     // looking at the horizon, above bridge
-    WMHINFO("SCENE, 2");
-
     horse.wmh_horse_override.setSpeed(1.0);
     horse.wmh_horse_override.start();
     Sleep(0.5); // give time for roach to start
-    WMHINFO("SCENE, 3");
     this.tick(ts_0_seconds, camera, position, rotation);
     theGame.FadeOut(0.5);
     this.milestones.Clear();
@@ -150,43 +140,137 @@ statemachine class WMH_SceneIntroduction {
 
     this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', position, rotation);
     camera.TeleportWithRotation(position, rotation);
-    this.getPositionByTag('WMH_scene_welcome_camera_spawn_2', p, r);
-    this.milestones.PushBack((new WMH_CameraMilestone_Magnet in thePlayer)
-      .initMagnet(5, 10, p, r, 25.0, 5.0)
-    );
-    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      5,// start_after,
-      5,// blendin_seconds,
-      p,// target_position,
-      r// target_rotation
-    ));
 
     this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
     mount.TeleportWithRotation(p, r);
-    this.getPositionByTag('WMH_scene_welcome_camera_spawn_3', p1, r1);
-    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      5,// start_after,
-      10,// blendin_seconds,
-      p1,// target_position,
-      r1// target_rotation
-    ));
+
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 5, 5);
+    // this.addMagnetAtTag('WMH_scene_welcome_camera_spawn_2', 5, 10, 25.0, 5.0);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 5, 17);
     theGame.FadeInAsync(0.8);
     todo!("show WMH logo with fn similar to `ShowEP2Logo`")
-    this.tick(15, camera, position, rotation);
+    this.tick(18, camera, position, rotation);
+    WMHTUTOFACT(
+      'WMH_IntroductionWelcomeCamp',
+      "Witcher Camp",
+      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+    );
 
-    WMHINFO("SCENE, 4");
-    // this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-    //   0,// start_after,
-    //   5,// blendin_seconds,
-    //   p,// target_position,
-    //   r// target_rotation
-    // ));
+    // 1) look at camp manager, explain unlocking upgrades
+    horse.wmh_horse_override.setSpeed(0);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_4', 0.5, 10);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 10);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
+    this.tick(10, camera, position, rotation);
+    WMHTUTOFACT(
+      'WMH_IntroductionWelcomeCampManager',
+      "Camp Manager",
+      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+    );
 
+    // 2) look at entrance, explain going out when ready
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_5', 1.0, 5);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_exit', 1.5, 7);
+    this.tick(6, camera, position, rotation);
+    WMHTUTOFACT(
+      'WMH_IntroductionWelcomeLeavingCamp',
+      "On the Path",
+      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+    );
 
-    WMHINFO("SCENE, 5");
-    this.tick(13, camera, position, rotation);
-    WMHINFO("SCENE, 6");
+    // 3) look at noticeboard, explain prepare for targets
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_2', p, r);
+    thePlayer.TeleportWithRotation(p, r);
+    mount.TeleportWithRotation(p, r);
+    horse.wmh_horse_override.setSpeed(0.5);
+
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_6', 1.0, 5);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_noticeboard', 1.5, 5);
+    this.tick(6, camera, position, rotation);
+    WMHTUTOFACT(
+      'WMH_IntroductionWelcomeNoticeboard',
+      "Contract targets",
+      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+    );
+
+    // 4) look at home, explain getting ready
+    horse.wmh_horse_override.setSpeed(0.25);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_7', 0.5, 5);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_camp', 0.5, 5);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 5.0 + 1.0, 10);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 5.0 + 1.5, 15);
+    this.tick(5, camera, position, rotation);
+
+    // 4.1) look inside home, Geralt comes walking, tutorial ends
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_3', p, r);
+    thePlayer.TeleportWithRotation(p, r);
+    mount.TeleportWithRotation(p, r);
+    horse.wmh_horse_override.setSpeed(0.0);
+    this.tick(10, camera, position, rotation);
+    WMHTUTOFACT(
+      'WMH_IntroductionWelcomeGettingReady',
+      "Getting ready",
+      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+    );
+
+    // this.addMagnetAtTag('WMH_scene_welcome_camera_magnet_1', 20, 5, 25.0, 5.0);
+    // this.addMilestoneAtTag('WMH_scene_welcome_camera_magnet_1', 20, 5);
+
+    horse.wmh_horse_override.end();
+    camera.deactivationDuration = 2.0;
     camera.Stop();
+    Sleep(2.5);
+    WMH_instantDismountInternal(true);
+  }
+
+  function addMilestoneAtTag(
+    tag: name,
+    start_after: float,
+    blendin_seconds: float
+  ) {
+    var p: Vector;
+    var r: EulerAngles;
+
+    this.getPositionByTag(tag, p, r);
+    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
+      start_after,// start_after,
+      blendin_seconds,// blendin_seconds,
+      p,// target_position,
+      r// target_rotation
+    ));
+  }
+
+  function addMagnetAtTag(
+    tag: name,
+    start_after: float,
+    blendin_seconds: float,
+    radius: float,
+    pull: float
+  ) {
+    var p: Vector;
+    var r: EulerAngles;
+
+    this.getPositionByTag(tag, p, r);
+    this.processing.PushBack(
+      (new WMH_CameraMilestone_Magnet in thePlayer)
+      .initMagnet(start_after, blendin_seconds, p, r, radius, pull)
+    );
+  }
+
+  function addLookAtTag(
+    tag: name,
+    start_after: float,
+    blendin_seconds: float,
+    optional offset: Vector
+  ) {
+    var p: Vector;
+    var r: EulerAngles;
+
+    this.getPositionByTag(tag, p, r);
+    this.milestones.PushBack(
+      (new WMH_CameraMilestone_LookAt in thePlayer)
+        .initLookAt(start_after, blendin_seconds, p, offset)
+    );
   }
 
   latent function tick(duration: float,camera: WMH_StaticCamera, out position: Vector, out rotation: EulerAngles) {
@@ -208,8 +292,6 @@ statemachine class WMH_SceneIntroduction {
       previous_time = theGame.GetEngineTimeAsSeconds();
       duration -= delta;
 
-      LogChannel('WMH', "delta ="+delta);
-
       var has_updated: bool = false;
 
       // loop through all milestones and apply the currently active ones
@@ -217,7 +299,6 @@ statemachine class WMH_SceneIntroduction {
       var max: int = this.milestones.Size();
       for (i = 0; i < max; i += 1) {
         var blendratio: float = this.milestones[i].applyDelta(delta);
-          LogChannel('WMHINFO', "blendratio = " + blendratio);
         
         if (blendratio > 0) {
           has_updated = true;
@@ -229,7 +310,6 @@ statemachine class WMH_SceneIntroduction {
 
       for (i = 0; i < max; i += 1) {
         var blendratio: float = this.processing[i].applyDelta(delta);
-          LogChannel('WMHINFO', "blendratio = " + blendratio);
         
         if (blendratio > 0) {
           has_updated = true;

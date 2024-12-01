@@ -107,14 +107,20 @@ class WMH_CameraMilestone {
     //   rotation.Pitch = this.target_rotation.Pitch;
     // }
     // else {
-      rotation.Roll += blendratio * delta
-        * AngleNormalize180(this.target_rotation.Roll - rotation.Roll);
+      rotation.Roll = LerpAngleF(
+        blendratio * delta,
+        rotation.Roll, this.target_rotation.Roll
+      );
 
-      rotation.Yaw += blendratio * delta
-        * AngleNormalize180(this.target_rotation.Yaw - rotation.Yaw);
+      rotation.Pitch = LerpAngleF(
+        blendratio * delta,
+        rotation.Pitch, this.target_rotation.Pitch
+      );
 
-      rotation.Pitch += blendratio * delta
-        * AngleNormalize180(this.target_rotation.Pitch - rotation.Pitch);
+      rotation.Yaw = LerpAngleF(
+        blendratio * delta,
+        rotation.Yaw, this.target_rotation.Yaw
+      );
     // }
 
     return true;
@@ -123,11 +129,13 @@ class WMH_CameraMilestone {
 
 class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
   var followed_entity: CNode;
+  var offset: Vector;
 
   public function initFollowRotation(
     start_after: float,
     blendin_seconds: float,
-    entity: CNode
+    entity: CNode,
+    optional offset: Vector
   ): WMH_CameraMilestone_FollowRotation {
     this.start_after = start_after;
     this.blendin_seconds = blendin_seconds;
@@ -143,13 +151,48 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
     position: Vector,
   ): bool {
     this.target_rotation = VecToRotation(
-      this.followed_entity.GetWorldPosition() - position
+      this.followed_entity.GetWorldPosition() + this.offset - position
     );
 
     // because the Pitch (Y axis) is inverted by default
     this.target_rotation.Pitch *= -1;
 
     return super.applyRotation(rotation, blendratio, delta, position);
+  }
+}
+
+class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
+  var look_at_target: Vector;
+  var offset: Vector;
+
+  public function initLookAt(
+    start_after: float,
+    blendin_seconds: float,
+    look_at_target: Vector,
+    optional offset: Vector
+  ): WMH_CameraMilestone_LookAt {
+    this.start_after = start_after;
+    this.blendin_seconds = blendin_seconds;
+    this.look_at_target = look_at_target;
+    this.offset = offset;
+
+    return this;
+  }
+
+  public function applyRotation(
+    out rotation: EulerAngles,
+    blendratio: float,
+    delta: float,
+    position: Vector,
+  ): bool {
+    this.target_rotation = VecToRotation(
+      this.look_at_target + this.offset - position
+    );
+
+    // because the Pitch (Y axis) is inverted by default
+    this.target_rotation.Pitch *= -1;
+
+    return super.applyRotation(rotation, blendratio * 0.5, delta, position);
   }
 }
 
@@ -176,7 +219,7 @@ class WMH_CameraMilestone_Magnet extends WMH_CameraMilestone {
   }
 
   private function getPull(position: Vector): float {
-    return 1 - ClampF(
+    return this.strength - ClampF(
       VecDistance(this.target_position, position), 0.0001, this.radius
     ) / this.radius * this.strength;
 
@@ -193,25 +236,6 @@ class WMH_CameraMilestone_Magnet extends WMH_CameraMilestone {
     // var diff: Vector = this.target_position - position;
 
     // position += this.getPull(position) * diff * delta * blendratio;
-
-    return true;
-  }
-
-  public function applyRotation(
-    out rotation: EulerAngles,
-    blendratio: float,
-    delta: float,
-    position: Vector,
-  ): bool {
-    super.applyRotation(rotation, blendratio, delta * this.getPull(position), position);
-
-    // var diff: EulerAngles = VecToRotation(this.target_position - position);
-    // diff.Pitch *= -1;
-    // var pull: float = this.getPull(position) * delta * blendratio * 0.5;
-
-    // rotation.Pitch = AngleNormalize180(rotation.Pitch + diff.Pitch * pull);
-    // rotation.Yaw = AngleNormalize180(rotation.Yaw + diff.Yaw * pull);
-    // rotation.Roll = AngleNormalize180(rotation.Roll + diff.Roll * pull);
 
     return true;
   }
@@ -249,6 +273,7 @@ class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
 
   private var previous_rotation: EulerAngles;
   private var rotation_velocity: EulerAngles;
+  private var allowed_changes: float;
   public function applyRotation(
     out rotation: EulerAngles,
     blendratio: float,
@@ -259,27 +284,40 @@ class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
       this.previous_rotation = rotation;
     }
 
-    var diff: EulerAngles = EulerAngles(
-      rotation.Pitch - this.previous_rotation.Pitch,
-      rotation.Yaw - this.previous_rotation.Yaw,
-      rotation.Roll - this.previous_rotation.Roll,
-    );
+    var changes: float = (
+      AbsF(AngleDistance(rotation.Pitch, this.previous_rotation.Pitch))
+      + AbsF(AngleDistance(rotation.Yaw, this.previous_rotation.Yaw))
+      + AbsF(AngleDistance(rotation.Roll, this.previous_rotation.Roll))
+    ) / 3.0;
 
-    var reducer: float = 1 - delta * 10;
+    // this.allowed_changes = (this.allowed_changes + changes) / 2;
+    this.allowed_changes += changes * 1;
+    this.allowed_changes *= 1 - delta;
 
-    this.rotation_velocity.Pitch = AngleNormalize180(reducer * this.rotation_velocity.Pitch);
-    this.rotation_velocity.Yaw = AngleNormalize180(reducer * this.rotation_velocity.Yaw);
-    this.rotation_velocity.Roll = AngleNormalize180(reducer * this.rotation_velocity.Roll);
+    // var diff: EulerAngles = EulerAngles(
+    //   AngleDistance(rotation.Pitch, this.previous_rotation.Pitch),
+    //   AngleDistance(rotation.Yaw, this.previous_rotation.Yaw),
+    //   AngleDistance(rotation.Roll, this.previous_rotation.Roll),
+    // );
 
-    this.rotation_velocity.Pitch = AngleNormalize180(diff.Pitch + this.rotation_velocity.Pitch);
-    this.rotation_velocity.Yaw = AngleNormalize180(diff.Yaw + this.rotation_velocity.Yaw);
-    this.rotation_velocity.Roll = AngleNormalize180(diff.Roll + this.rotation_velocity.Roll);
-
+    WMHINFO("this.allowed_changes = " + this.allowed_changes);
 
     this.previous_rotation = EulerAngles(
-      AngleNormalize180(this.previous_rotation.Pitch + this.rotation_velocity.Pitch),
-      AngleNormalize180(this.previous_rotation.Yaw + this.rotation_velocity.Yaw),
-      AngleNormalize180(this.previous_rotation.Roll + this.rotation_velocity.Roll)
+      LerpAngleF(
+        this.allowed_changes,
+        this.previous_rotation.Pitch,
+        rotation.Pitch
+      ),
+      LerpAngleF(
+        this.allowed_changes,
+        this.previous_rotation.Yaw,
+        rotation.Yaw
+      ),
+      LerpAngleF(
+        this.allowed_changes,
+        this.previous_rotation.Roll,
+        rotation.Roll
+      )
     );
     rotation = this.previous_rotation;
 
@@ -335,7 +373,6 @@ state WMH_CameraPlayer_Running in WMH_CameraPlayer {
       var max: int = parent.milestones.Size();
       for (i = 0; i < max; i += 1) {
         var blendratio: float = parent.milestones[i].applyDelta(delta);
-          LogChannel('WMHINFO', "blendratio = " + blendratio);
         
         if (blendratio > 0) {
           has_updated = true;
