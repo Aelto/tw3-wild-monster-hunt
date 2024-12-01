@@ -131,7 +131,7 @@ statemachine class WMH_SceneIntroduction {
     follow_rotation = (new WMH_CameraMilestone_FollowRotation in thePlayer)
       .initFollowRotation(
         0,
-        400, // high blendin duration to make it slower
+        500, // high blendin duration to make it slower
         thePlayer
       );
     this.milestones.PushBack(follow_rotation);
@@ -141,26 +141,21 @@ statemachine class WMH_SceneIntroduction {
     Sleep(0.5); // give time for roach to start
     theGame.FadeInAsync(3);
     this.tick(7, camera, position, rotation);
-    WMH_showLogo(true, 2, 150, 150);
-    this.tick(8, camera, position, rotation);
-    WMH_showLogo(false, 2, 150, 150);
+    WMH_showLogo(true, 1.5, 125, 125);
+    this.tick(6, camera, position, rotation);
+    WMH_showLogo(false, 2, 125, 125);
     this.tick(2, camera, position, rotation);
 
     // 0.1) start to move the camera below the bridge
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0.25, 7.5);
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 18.5);
     // tick for a bit, then teleport roach in front of the camp
-    this.tick(0.75, camera, position, rotation);
+    follow_rotation.blendin_seconds = -1;
     horse.wmh_horse_override.setSpeed(1.0);
-    follow_rotation.blendin_seconds *= 0.1;
-    follow_rotation.ran_for *= 0.1;
-
-    // this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
-    // thePlayer.TeleportWithRotation(p, r);
-    // mount.TeleportWithRotation(p, r);
+    // this.tick(0.75, camera, position, rotation);
 
     // 0.2) go towards the camp
-    this.tick(15.75, camera, position, rotation);
+    this.tick(15.75 + 0.75, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeCamp',
       "Witcher Camp",

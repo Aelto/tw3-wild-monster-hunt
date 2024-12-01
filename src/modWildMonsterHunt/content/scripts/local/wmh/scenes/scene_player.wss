@@ -10,7 +10,7 @@ class WMH_CameraMilestone {
   var target_position: Vector;
   var target_rotation: EulerAngles;
 
-  private var ran_for: float;
+  var ran_for: float;
   default ran_for = 0.0;
 
   public function init(
