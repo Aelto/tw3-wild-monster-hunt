@@ -1,0 +1,25 @@
+@addMethod(CR4OverlayPopup)
+function WMH_showWmhLogo(show: bool, fadeInterval: float, x: int, y: int) {
+  var path: string;
+
+  if (show) {
+    path = "img://logos/wmh_en_logo.png";
+  }
+
+  this.m_fxShowEP2Logo.InvokeSelfFiveArgs(
+    FlashArgBool(show),
+    FlashArgNumber(fadeInterval),
+    FlashArgInt(x),
+    FlashArgInt(y),
+    FlashArgString(path)
+  );
+}
+
+function WMH_showLogo(show: bool, fadeInterval: float, x: int, y: int) {
+  var overlayPopupRef: CR4OverlayPopup = theGame.GetGuiManager()
+    .GetPopup('OverlayPopup') as CR4OverlayPopup;
+
+  if (overlayPopupRef) {
+    overlayPopupRef.WMH_showWmhLogo(show, fadeInterval, x, y);
+  }
+}

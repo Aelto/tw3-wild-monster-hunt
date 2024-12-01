@@ -21,10 +21,23 @@ statemachine class WMH_SceneIntroduction {
   }
 
   latent function onStart() {
-    // theGame.FadeOut(0.5);
+    theGame.FadeOut(0.5);
     var can_play: bool = this.setupScene();
     if (can_play) {
+      // theInput.SetContext( 'Scene' );
+      theGame.SetIsDialogOrCutscenePlaying(true);
+      hud.OnCutsceneStarted();
+
       this.playScenePlayer();
+
+      var hud : CR4ScriptedHud;
+      // theInput.SetContext(thePlayer.GetExplorationInputContext());
+      theGame.SetIsDialogOrCutscenePlaying(false);
+
+      hud = theGame.GetHud() as CR4ScriptedHud;
+      if(hud) {
+        hud.OnCutsceneEnded();
+      }
     }
     else {
       theGame.FadeInAsync(0.8);
@@ -92,7 +105,7 @@ statemachine class WMH_SceneIntroduction {
     var mount: CNewNPC = horse.GetEntity() as CNewNPC;
 
     
-    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_0', p, r);
+    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
     mount.TeleportWithRotation(p, r);
 
     // in forest above bridge, looking at geralt
@@ -105,51 +118,49 @@ statemachine class WMH_SceneIntroduction {
     camera.deactivationDuration = 0;
     camera.start();
 
+    RequestWeatherChangeTo('WT_Fog', 0, false);
+
     this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
       .initSmoother(0, 100)
     );
     
-    this.milestones.PushBack((new WMH_CameraMilestone in thePlayer).init(
-      0,// start_after,
-      5,// blendin_seconds,
-      p,// target_position,
-      r// target_rotation
-    ));
 
-    this.milestones.PushBack((new WMH_CameraMilestone_FollowRotation in thePlayer)
+    // this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_0', 0, 10);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_1', 0, 15);
+    var follow_rotation: WMH_CameraMilestone_FollowRotation;
+    follow_rotation = (new WMH_CameraMilestone_FollowRotation in thePlayer)
       .initFollowRotation(
         0,
-        ts_0_seconds,
+        400, // high blendin duration to make it slower
         thePlayer
-      )
-    );
+      );
+    this.milestones.PushBack(follow_rotation);
 
     // looking at the horizon, above bridge
-    horse.wmh_horse_override.setSpeed(1.0);
     horse.wmh_horse_override.start();
     Sleep(0.5); // give time for roach to start
-    this.tick(ts_0_seconds, camera, position, rotation);
-    theGame.FadeOut(0.5);
-    this.milestones.Clear();
-    this.processing.Clear();
+    theGame.FadeInAsync(3);
+    this.tick(7, camera, position, rotation);
+    WMH_showLogo(true, 2, 150, 150);
+    this.tick(8, camera, position, rotation);
+    WMH_showLogo(false, 2, 150, 150);
+    this.tick(2, camera, position, rotation);
 
-    //////////////////////////
-    this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
-      .initSmoother(0, 100)
-    );
+    // 0.1) start to move the camera below the bridge
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0.25, 7.5);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 18.5);
+    // tick for a bit, then teleport roach in front of the camp
+    this.tick(0.75, camera, position, rotation);
+    horse.wmh_horse_override.setSpeed(1.0);
+    follow_rotation.blendin_seconds *= 0.1;
+    follow_rotation.ran_for *= 0.1;
 
-    this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', position, rotation);
-    camera.TeleportWithRotation(position, rotation);
+    // this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
+    // thePlayer.TeleportWithRotation(p, r);
+    // mount.TeleportWithRotation(p, r);
 
-    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
-    mount.TeleportWithRotation(p, r);
-
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 5, 5);
-    // this.addMagnetAtTag('WMH_scene_welcome_camera_spawn_2', 5, 10, 25.0, 5.0);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 5, 17);
-    theGame.FadeInAsync(0.8);
-    todo!("show WMH logo with fn similar to `ShowEP2Logo`")
-    this.tick(18, camera, position, rotation);
+    // 0.2) go towards the camp
+    this.tick(15.75, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeCamp',
       "Witcher Camp",
@@ -161,7 +172,7 @@ statemachine class WMH_SceneIntroduction {
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_4', 0.5, 10);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 10);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
-    this.tick(10, camera, position, rotation);
+    this.tick(9.5, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeCampManager',
       "Camp Manager",
@@ -182,7 +193,7 @@ statemachine class WMH_SceneIntroduction {
     this.getPositionByTag('WMH_scene_introduction_geralt_spawn_2', p, r);
     thePlayer.TeleportWithRotation(p, r);
     mount.TeleportWithRotation(p, r);
-    horse.wmh_horse_override.setSpeed(0.5);
+    horse.wmh_horse_override.setSpeed(0.25);
 
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_6', 1.0, 5);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_noticeboard', 1.5, 5);
@@ -197,8 +208,8 @@ statemachine class WMH_SceneIntroduction {
     horse.wmh_horse_override.setSpeed(0.25);
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_7', 0.5, 5);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_camp', 0.5, 5);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 5.0 + 1.0, 10);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 5.0 + 1.5, 15);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 2.5, 10);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 2.0, 15);
     this.tick(5, camera, position, rotation);
 
     // 4.1) look inside home, Geralt comes walking, tutorial ends
@@ -206,21 +217,24 @@ statemachine class WMH_SceneIntroduction {
     thePlayer.TeleportWithRotation(p, r);
     mount.TeleportWithRotation(p, r);
     horse.wmh_horse_override.setSpeed(0.0);
-    this.tick(10, camera, position, rotation);
+    this.tick(6, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
       "Getting ready",
       "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
     );
 
-    // this.addMagnetAtTag('WMH_scene_welcome_camera_magnet_1', 20, 5, 25.0, 5.0);
-    // this.addMilestoneAtTag('WMH_scene_welcome_camera_magnet_1', 20, 5);
-
+    this.tick(2, camera, position, rotation);
+    theGame.FadeOut();
     horse.wmh_horse_override.end();
+    WMH_instantDismountInternal(false);
+    Sleep(0.25);
+    this.getPositionByTag('WMH_scene_welcome_camera_lookat_home_camp', p, r);
+    thePlayer.TeleportWithRotation(p, r);
     camera.deactivationDuration = 2.0;
     camera.Stop();
-    Sleep(2.5);
-    WMH_instantDismountInternal(true);
+    Sleep(1.5);
+    theGame.FadeIn(1.0);
   }
 
   function addMilestoneAtTag(
@@ -323,88 +337,6 @@ statemachine class WMH_SceneIntroduction {
       SleepOneFrame();
     }
   }
-
-  // latent function playScene() {
-  //   this.camera_0.activationDuration = 0;
-  //   this.camera_0.deactivationDuration = 20;
-  //   this.camera_1.activationDuration = 0;
-  //   this.camera_1.deactivationDuration = 20;
-  //   this.camera_2.activationDuration = 0;
-  //   this.camera_2.deactivationDuration = 20;
-
-  //   var horse: W3HorseComponent = thePlayer.GetUsedHorseComponent();
-  //   var mount: CNewNPC = horse.GetEntity() as CNewNPC;
-  //   var destination: CEntity = theGame.GetEntityByTag('WMH_scene_introduction_roach_destination');
-
-  //   var r: EulerAngles;
-  //   var p: Vector;
-
-  //   this.getPositionByTag('WMH_scene_introduction_geralt_spawn_0', p, r);
-  //   mount.TeleportWithRotation(p, r);
-
-  //   this.camera_0.teleportAndLookAt(
-  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_0'),
-  //     p + Vector(0, 0, 2)
-  //   );
-
-  //   this.camera_1.teleportAndLookAt(
-  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_0')
-  //     + Vector(0, 0, 10),
-  //     p + Vector(0, 0, 2)
-  //   );
-
-  //   // 1.0
-  //   // looking at Roach&Geralt walking, camera slowly going up
-  //   this.camera_0.start();
-  //   horse.wmh_horse_override.setSpeed(1.0);
-  //   horse.wmh_horse_override.start();
-  //   this.camera_1.activationDuration = 60;
-  //   this.camera_1.deactivationDuration = 12;
-  //   this.camera_1.start();
-  //   this.camera_1.FollowWithRotation(thePlayer);
-
-  //   Sleep(1.0); // give time for roach to start
-  //   theGame.FadeInAsync(0.8);
-
-  //   // 2.0
-  //   // camera goes up, looking at horizon, display WMH logo
-  //   Sleep(5);
-  //   this.getPositionByTag('WMH_scene_welcome_camera_spawn_1', p, r);
-  //   this.camera_2.TeleportWithRotation(p, r);
-  //   this.camera_2.activationDuration = 6;
-  //   this.camera_2.start();
-  //   Sleep(6);
-  //   todo!("show WMH logo with fn similar to `ShowEP2Logo`")
-
-  //   // 3.0
-  //   // fade, teleport below bridge, move towards camp, cross Geralt&Roach while
-  //   // moving
-  //   Sleep(2);
-  //   // theGame.FadeOut(1.0);
-  //   this.getPositionByTag('WMH_scene_introduction_geralt_spawn_1', p, r);
-  //   mount.TeleportWithRotation(p, r);
-  //   thePlayer.TeleportWithRotation(p, r);
-
-  //   SleepOneFrame();
-  //   // this.camera_0.activationDuration = 0;
-  //   // this.camera_0.teleportAndLookAt(
-  //   //   this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_2'),
-  //   //   p + Vector(0, 0, 2)
-  //   // );
-  //   // this.camera_0.start();
-  //   SleepOneFrame();
-
-  //   this.camera_0.activationDuration = 10;
-  //   this.camera_0.teleportAndLookAt(
-  //     this.getPositionByTagUnsafe('WMH_scene_welcome_camera_spawn_3'),
-  //     p + Vector(0, 0, 2)
-  //   );
-  //   this.camera_0.start();
-
-
-  //   Sleep(10);
-  //   // go to camp
-  // }
 
   latent function endScene() {
     // if (this.camera_0) {
