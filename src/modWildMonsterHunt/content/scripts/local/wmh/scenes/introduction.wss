@@ -131,8 +131,10 @@ statemachine class WMH_SceneIntroduction {
     follow_rotation = (new WMH_CameraMilestone_FollowRotation in thePlayer)
       .initFollowRotation(
         0,
-        500, // high blendin duration to make it slower
-        thePlayer
+        500,
+        thePlayer,
+        , // offset
+        1 // speed
       );
     this.milestones.PushBack(follow_rotation);
 
@@ -144,18 +146,18 @@ statemachine class WMH_SceneIntroduction {
     WMH_showLogo(true, 1.5, 125, 125);
     this.tick(6, camera, position, rotation);
     WMH_showLogo(false, 2, 125, 125);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0, 12.5);
     this.tick(2, camera, position, rotation);
 
     // 0.1) start to move the camera below the bridge
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0.25, 7.5);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 18.5);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0.25, 6.5);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
     // tick for a bit, then teleport roach in front of the camp
-    follow_rotation.blendin_seconds = -1;
+    follow_rotation.follow_speed *= 0.1;
     horse.wmh_horse_override.setSpeed(1.0);
-    // this.tick(0.75, camera, position, rotation);
 
     // 0.2) go towards the camp
-    this.tick(15.75 + 0.75, camera, position, rotation);
+    this.tick(15.75, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeCamp',
       "Witcher Camp",
@@ -202,7 +204,10 @@ statemachine class WMH_SceneIntroduction {
     // 4) look at home, explain getting ready
     horse.wmh_horse_override.setSpeed(0.25);
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_7', 0.5, 5);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_camp', 0.5, 5);
+    this.addLookAtTag(
+      'WMH_scene_welcome_camera_lookat_home_camp',
+      0.5, 5, Vector(0, 0, 3.0)
+    );
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 2.5, 10);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 2.0, 15);
     this.tick(5, camera, position, rotation);

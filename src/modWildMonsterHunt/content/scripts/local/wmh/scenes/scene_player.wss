@@ -131,15 +131,25 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
   var followed_entity: CNode;
   var offset: Vector;
 
+  var follow_speed: float;
+
   public function initFollowRotation(
     start_after: float,
     blendin_seconds: float,
     entity: CNode,
-    optional offset: Vector
+    optional offset: Vector,
+    optional speed: float
   ): WMH_CameraMilestone_FollowRotation {
     this.start_after = start_after;
     this.blendin_seconds = blendin_seconds;
     this.followed_entity = entity;
+
+    if (speed > 0) {
+      this.follow_speed = speed;
+    }
+    else {
+      this.follow_speed = 1.0;
+    }
 
     return this;
   }
@@ -157,7 +167,12 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
     // because the Pitch (Y axis) is inverted by default
     this.target_rotation.Pitch *= -1;
 
-    return super.applyRotation(rotation, blendratio, delta, position);
+    return super.applyRotation(
+      rotation,
+      blendratio * this.follow_speed,
+      delta,
+      position
+    );
   }
 }
 
@@ -165,16 +180,26 @@ class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
   var look_at_target: Vector;
   var offset: Vector;
 
+  var look_at_speed: float;
+
   public function initLookAt(
     start_after: float,
     blendin_seconds: float,
     look_at_target: Vector,
-    optional offset: Vector
+    optional offset: Vector,
+    optional speed: float
   ): WMH_CameraMilestone_LookAt {
     this.start_after = start_after;
     this.blendin_seconds = blendin_seconds;
     this.look_at_target = look_at_target;
     this.offset = offset;
+
+    if (speed > 0) {
+      this.look_at_speed = speed;
+    }
+    else {
+      this.look_at_speed = 1.0;
+    }
 
     return this;
   }
@@ -192,7 +217,12 @@ class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
     // because the Pitch (Y axis) is inverted by default
     this.target_rotation.Pitch *= -1;
 
-    return super.applyRotation(rotation, blendratio * 0.5, delta, position);
+    return super.applyRotation(
+      rotation,
+      blendratio * 0.5 * this.look_at_speed,
+      delta,
+      position
+    );
   }
 }
 
