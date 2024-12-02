@@ -13,16 +13,28 @@ class WMH_CameraMilestone {
   var ran_for: float;
   default ran_for = 0.0;
 
+  var intensity: float;
+  default intensity = 1.0;
+
+  var intensity_target: float;
+  default intensity_target = 1.0;
+
   public function init(
     _start_after: float,
     _blendin_seconds: float,
     _target_position: Vector,
-    _target_rotation: EulerAngles
+    _target_rotation: EulerAngles,
+    optional _intensity: float
   ): WMH_CameraMilestone {
     this.start_after = _start_after;
     this.blendin_seconds = _blendin_seconds;
     this.target_position = _target_position;
     this.target_rotation = _target_rotation;
+
+    if (_intensity > 0) {
+      this.intensity = _intensity;
+      this.intensity_target = _intensity;
+    }
 
     return this;
   }
@@ -40,6 +52,13 @@ class WMH_CameraMilestone {
 
     this.ran_for += delta;
 
+    if (AbsF(this.intensity - this.intensity_target) < delta) {
+      this.intensity = this.intensity_target;
+    }
+    else {
+      this.intensity = LerpF(delta, this.intensity, this.intensity_target);
+    }
+
     if (this.blendin_seconds <= 0) {
       return 1.0;
     }
@@ -51,7 +70,7 @@ class WMH_CameraMilestone {
     // a curve whose highest point is at the middle of the range, it starts from
     // the 0 when x=0, then peaks at 1 when x=0.5, and back to 0 when x=1.
     // But it requires x to be in the [-1;1] range
-    return 1 - t*t;
+    return (1 - t*t) * this.intensity;
   }
 
   public function applyPosition(out position: Vector, blendratio: float, delta: float): bool {
@@ -131,8 +150,6 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
   var followed_entity: CNode;
   var offset: Vector;
 
-  var follow_speed: float;
-
   public function initFollowRotation(
     start_after: float,
     blendin_seconds: float,
@@ -145,10 +162,10 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
     this.followed_entity = entity;
 
     if (speed > 0) {
-      this.follow_speed = speed;
+      this.intensity = speed;
     }
     else {
-      this.follow_speed = 1.0;
+      this.intensity = 1.0;
     }
 
     return this;
@@ -169,7 +186,7 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
 
     return super.applyRotation(
       rotation,
-      blendratio * this.follow_speed,
+      blendratio,
       delta,
       position
     );
@@ -179,8 +196,6 @@ class WMH_CameraMilestone_FollowRotation extends WMH_CameraMilestone {
 class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
   var look_at_target: Vector;
   var offset: Vector;
-
-  var look_at_speed: float;
 
   public function initLookAt(
     start_after: float,
@@ -195,10 +210,10 @@ class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
     this.offset = offset;
 
     if (speed > 0) {
-      this.look_at_speed = speed;
+      this.intensity = speed;
     }
     else {
-      this.look_at_speed = 1.0;
+      this.intensity = 1.0;
     }
 
     return this;
@@ -219,7 +234,7 @@ class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
 
     return super.applyRotation(
       rotation,
-      blendratio * 0.5 * this.look_at_speed,
+      blendratio * 0.5,
       delta,
       position
     );
@@ -252,8 +267,6 @@ class WMH_CameraMilestone_Magnet extends WMH_CameraMilestone {
     return this.strength - ClampF(
       VecDistance(this.target_position, position), 0.0001, this.radius
     ) / this.radius * this.strength;
-
-    // return LogF(MaxF(10 - VecDistance(this.target_position, position), 0) + 2);
   }
 
   public function applyPosition(

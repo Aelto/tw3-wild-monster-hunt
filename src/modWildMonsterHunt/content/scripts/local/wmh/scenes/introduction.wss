@@ -153,7 +153,7 @@ statemachine class WMH_SceneIntroduction {
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0.25, 6.5);
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
     // tick for a bit, then teleport roach in front of the camp
-    follow_rotation.follow_speed *= 0.1;
+    follow_rotation.intensity_target = 0;
     horse.wmh_horse_override.setSpeed(1.0);
 
     // 0.2) go towards the camp
