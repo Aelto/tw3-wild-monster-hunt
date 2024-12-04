@@ -56,7 +56,12 @@ class WMH_CameraMilestone {
       this.intensity = this.intensity_target;
     }
     else {
-      this.intensity = LerpF(delta, this.intensity, this.intensity_target);
+      if (this.intensity_target > this.intensity) {
+        this.intensity += delta;
+      }
+      else {
+        this.intensity -= delta;
+      }
     }
 
     if (this.blendin_seconds <= 0) {
