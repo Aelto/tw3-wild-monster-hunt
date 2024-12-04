@@ -138,6 +138,7 @@ statemachine class WMH_SceneIntroduction {
       );
     this.milestones.PushBack(follow_rotation);
 
+    RequestWeatherChangeTo('WT_Fog', 0, true);
     var hpm: float = theGame.GetHoursPerMinute();
     theGame.SetGameTime(GameTimeCreate(1, 0), false);
     theGame.SetHoursPerMinute(hpm * 150);
@@ -171,6 +172,7 @@ statemachine class WMH_SceneIntroduction {
     // 1) look at camp manager, explain unlocking upgrades
     horse.wmh_horse_override.setSpeed(0);
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_4', 0.5, 10);
+    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_4_curve', 0.5, 8.0, 7.5);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0, 8.0);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 10);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
@@ -198,6 +200,7 @@ statemachine class WMH_SceneIntroduction {
     horse.wmh_horse_override.setSpeed(0.25);
 
     this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_6', 1.0, 5);
+    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_6_curve', 1.0, 3.25, 4.0);
     this.addLookAtTag('WMH_scene_welcome_camera_lookat_noticeboard', 1.5, 5);
     this.tick(6, camera, position, rotation);
     WMHTUTOFACT(
@@ -289,6 +292,22 @@ statemachine class WMH_SceneIntroduction {
     this.milestones.PushBack(
       (new WMH_CameraMilestone_LookAt in thePlayer)
         .initLookAt(start_after, blendin_seconds, p, offset)
+    );
+  }
+
+  function addCurveAtTag(
+    tag: name,
+    start_after: float,
+    blendin_seconds: float,
+    optional strength: float
+  ) {
+    var p: Vector;
+    var r: EulerAngles;
+
+    this.getPositionByTag(tag, p, r);
+    this.milestones.PushBack(
+      (new WMH_CameraMilestone_Curve in thePlayer)
+        .initCurve(start_after, blendin_seconds, p, r, strength)
     );
   }
 
