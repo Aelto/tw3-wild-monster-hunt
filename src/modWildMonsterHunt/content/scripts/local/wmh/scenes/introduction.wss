@@ -4,6 +4,12 @@ exec function wmhsceneintroduction() {
   player.wmh_scene.start();
 }
 
+quest function wmhsceneintroduction_start() {
+  var player: CR4Player = thePlayer;
+  player.wmh_scene = new WMH_SceneIntroduction in player;
+  player.wmh_scene.start();
+}
+
 @addField(CR4Player) 
 var wmh_scene: WMH_SceneIntroduction;
 
@@ -24,14 +30,14 @@ statemachine class WMH_SceneIntroduction {
     theGame.FadeOut(0.5);
     var can_play: bool = this.setupScene();
     if (can_play) {
-      // theInput.SetContext( 'Scene' );
+      theInput.SetContext( 'Scene' );
       theGame.SetIsDialogOrCutscenePlaying(true);
       hud.OnCutsceneStarted();
 
       this.playScenePlayer();
 
       var hud : CR4ScriptedHud;
-      // theInput.SetContext(thePlayer.GetExplorationInputContext());
+      theInput.SetContext(thePlayer.GetExplorationInputContext());
       theGame.SetIsDialogOrCutscenePlaying(false);
 
       hud = theGame.GetHud() as CR4ScriptedHud;
@@ -44,6 +50,11 @@ statemachine class WMH_SceneIntroduction {
     }
 
     this.endScene();
+  }
+
+  latent function endScene() {
+
+    FactsSet('wmh_scene_introduction', 1);
   }
 
   latent function setupScene(): bool {
@@ -124,7 +135,7 @@ statemachine class WMH_SceneIntroduction {
     );
     
 
-    if (false) {
+    if (true) {
       // this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_0', 0, 10);
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_1', 0, 15);
       var follow_rotation: WMH_CameraMilestone_FollowRotation;
@@ -165,7 +176,7 @@ statemachine class WMH_SceneIntroduction {
       theGame.FadeInAsync(0.5);
     }
 
-    if (false) {
+    if (true) {
       // 0.2) go towards the camp
       this.tick(15.75, camera, position, rotation);
       WMHTUTOFACT(
@@ -189,7 +200,7 @@ statemachine class WMH_SceneIntroduction {
       );
     }
 
-    if (false) {
+    if (true) {
       // 2) look at entrance, explain going out when ready
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_5', 1.0, 5);
       this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_exit', 1.5, 7);
@@ -201,7 +212,7 @@ statemachine class WMH_SceneIntroduction {
       );
     }
 
-    if (false) {
+    if (true) {
       // 3) look at noticeboard, explain prepare for targets
       this.getPositionByTag('WMH_scene_introduction_geralt_spawn_2', p, r);
       thePlayer.TeleportWithRotation(p, r);
@@ -232,21 +243,21 @@ statemachine class WMH_SceneIntroduction {
     // 4) look at home, explain getting ready
     horse.wmh_horse_override.setSpeed(0.25);
     // this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_7', 0.5, 5);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 1.0, 18,, true);
+    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_8', 1.0, 17,, true);
     this.addLookAtTag(
       'WMH_scene_welcome_camera_lookat_home_camp',
-      0.25, 6, Vector(0, 0, 3.0), 0.005
+      0.25, 5.5, Vector(0, 0, 3.0), 0.005
     );
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 1.5, 24, , 0.05);
-    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_7_curve', 1.0, 9, 14);
-    this.tick(18, camera, position, rotation);
+    this.addLookAtTag('WMH_scene_welcome_camera_lookat_home_bed', 1.5, 22, , 0.05);
+    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_7_curve', 1.0, 8.5, 14);
+    this.tick(14, camera, position, rotation);
 
     // 4.1) look inside home, Geralt comes walking, tutorial ends
     this.getPositionByTag('WMH_scene_introduction_geralt_spawn_3', p, r);
     thePlayer.TeleportWithRotation(p, r);
     mount.TeleportWithRotation(p, r);
     horse.wmh_horse_override.setSpeed(0.0);
-    this.tick(6, camera, position, rotation);
+    this.tick(1, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
       "Getting ready",
@@ -387,15 +398,6 @@ statemachine class WMH_SceneIntroduction {
       SleepOneFrame();
     }
   }
-
-  latent function endScene() {
-    // if (this.camera_0) {
-    //   this.camera_0.Stop();
-    // }
-
-    FactsSet('wmh_scene_introduction', 1);
-  }
-
   
   private function getPositionByTag(
     tag: name,
