@@ -88,20 +88,9 @@ class WMH_CameraMilestone {
       return false;
     }
 
-    // if (blendratio >= 1) {
-    //   delta = 1.0;
-    // }
-
-    // if (blendratio >= 1) {
-    //   position.X = this.target_position.X;
-    //   position.Y = this.target_position.Y;
-    //   position.Z = this.target_position.Z;
-    // }
-    // else {
-      position.X += blendratio * delta * (this.target_position.X - position.X);
-      position.Y += blendratio * delta * (this.target_position.Y - position.Y);
-      position.Z += blendratio * delta * (this.target_position.Z - position.Z);
-    // }
+    position.X += blendratio * delta * (this.target_position.X - position.X);
+    position.Y += blendratio * delta * (this.target_position.Y - position.Y);
+    position.Z += blendratio * delta * (this.target_position.Z - position.Z);
 
     return true;
   }
@@ -121,31 +110,20 @@ class WMH_CameraMilestone {
       return false;
     }
       
+    rotation.Roll = LerpAngleF(
+      blendratio * delta,
+      rotation.Roll, this.target_rotation.Roll
+    );
 
-    // if (blendratio >= 1) {
-    //   delta = 1.0;
-    // }
-    // if (blendratio >= 1) {
-    //   rotation.Roll = this.target_rotation.Roll;
-    //   rotation.Yaw = this.target_rotation.Yaw;
-    //   rotation.Pitch = this.target_rotation.Pitch;
-    // }
-    // else {
-      rotation.Roll = LerpAngleF(
-        blendratio * delta,
-        rotation.Roll, this.target_rotation.Roll
-      );
+    rotation.Pitch = LerpAngleF(
+      blendratio * delta,
+      rotation.Pitch, this.target_rotation.Pitch
+    );
 
-      rotation.Pitch = LerpAngleF(
-        blendratio * delta,
-        rotation.Pitch, this.target_rotation.Pitch
-      );
-
-      rotation.Yaw = LerpAngleF(
-        blendratio * delta,
-        rotation.Yaw, this.target_rotation.Yaw
-      );
-    // }
+    rotation.Yaw = LerpAngleF(
+      blendratio * delta,
+      rotation.Yaw, this.target_rotation.Yaw
+    );
 
     return true;
   }
@@ -243,6 +221,52 @@ class WMH_CameraMilestone_LookAt extends WMH_CameraMilestone {
       delta,
       position
     );
+  }
+}
+
+class WMH_CameraMilestone_Curve extends WMH_CameraMilestone {
+  private var curve_vector: Vector;
+
+  public function initCurve(
+    start_after: float,
+    blendin_seconds: float,
+    _target_position: Vector,
+    _target_rotation: EulerAngles,
+    optional strength: float
+  ): WMH_CameraMilestone_Curve {
+    this.start_after = start_after;
+    this.blendin_seconds = blendin_seconds;
+    this.target_position = _target_position;
+    this.target_rotation = _target_rotation;
+    this.curve_vector = RotForward(_target_rotation);
+
+    if (strength > 0) {
+      this.intensity = strength;
+    }
+    else {
+      this.intensity = 1.0;
+    }
+
+    return this;
+  }
+
+  public function applyPosition(
+    out position: Vector,
+    blendratio: float,
+    delta: float
+  ): bool {
+    position += this.curve_vector * blendratio * delta;
+
+    return true;
+  }
+
+  public function applyRotation(
+    out rotation: EulerAngles,
+    blendratio: float,
+    delta: float,
+    position: Vector
+  ): bool {
+    return false;
   }
 }
 
