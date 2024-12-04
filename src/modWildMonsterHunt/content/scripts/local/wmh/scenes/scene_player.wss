@@ -19,12 +19,16 @@ class WMH_CameraMilestone {
   var intensity_target: float;
   default intensity_target = 1.0;
 
+  var rotation_enabled: bool;
+  default rotation_enabled = true;
+
   public function init(
     _start_after: float,
     _blendin_seconds: float,
     _target_position: Vector,
     _target_rotation: EulerAngles,
-    optional _intensity: float
+    optional _intensity: float,
+    optional disable_rotation: bool
   ): WMH_CameraMilestone {
     this.start_after = _start_after;
     this.blendin_seconds = _blendin_seconds;
@@ -34,6 +38,10 @@ class WMH_CameraMilestone {
     if (_intensity > 0) {
       this.intensity = _intensity;
       this.intensity_target = _intensity;
+    }
+
+    if (disable_rotation) {
+      this.rotation_enabled = false;
     }
 
     return this;
@@ -106,7 +114,7 @@ class WMH_CameraMilestone {
        + this.target_rotation.Yaw
        + this.target_rotation.Pitch;
 
-    if (!update_rotation) {
+    if (!update_rotation || !this.rotation_enabled) {
       return false;
     }
       
