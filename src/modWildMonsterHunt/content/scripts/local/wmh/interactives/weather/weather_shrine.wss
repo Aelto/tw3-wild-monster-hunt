@@ -89,7 +89,7 @@ class WMH_WeatherShrine extends CGameplayEntity {
       "Weather Shrine",
       "You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather."
       + "<br/><br/>"
-      + "These Druidic artefacts possess two faces and the <font color='#CD7D03'>results may vary depending on which side you interact with</font>, experiment with them to turn the weather into a powerful hunting tool."
+      + "These Druidic artefacts possess two faces and the <font color='#CD7D03'>results may vary depending on which side you interact with</font>, experiment with them to turn the weather into one of your powerful hunting tools."
     );
   }
 }
