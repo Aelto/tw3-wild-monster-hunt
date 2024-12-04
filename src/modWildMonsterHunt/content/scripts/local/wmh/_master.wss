@@ -51,6 +51,11 @@ class WMH_Master {
   public function submitOnSettlementExit(
     origin: WMH_SettlementAreaTrigger
   ) {
+    if (FactsDoesExist('wmh_hunt_disabled')) {
+      WMHINFO("submitOnSettlementExit, cancelled, disabled fact exists");
+      return;
+    }
+
     WMHINFO("submitOnSettlementExit");
     if (this.exit_debounce.validate()) {
       WMHINFO("submitOnSettlementExit, debounce validated");

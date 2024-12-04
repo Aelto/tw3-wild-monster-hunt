@@ -28,11 +28,16 @@ statemachine class WMH_SceneIntroduction {
 
   latent function onStart() {
     theGame.FadeOut(0.5);
+    FactsSet('wmh_hunt_disabled', 1);
     var can_play: bool = this.setupScene();
     if (can_play) {
       theInput.SetContext( 'Scene' );
       theGame.SetIsDialogOrCutscenePlaying(true);
       hud.OnCutsceneStarted();
+
+      todo!("no music, REDkit sound events are broken atm")
+      // theSound.SoundEvent("play_music_kaer_morhen");
+
 
       this.playScenePlayer();
 
@@ -53,8 +58,8 @@ statemachine class WMH_SceneIntroduction {
   }
 
   latent function endScene() {
-
     FactsSet('wmh_scene_introduction', 1);
+    FactsRemove('wmh_hunt_disabled');
   }
 
   latent function setupScene(): bool {
