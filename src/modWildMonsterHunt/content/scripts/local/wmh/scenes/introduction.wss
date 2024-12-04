@@ -118,96 +118,116 @@ statemachine class WMH_SceneIntroduction {
     camera.deactivationDuration = 0;
     camera.start();
 
-    RequestWeatherChangeTo('WT_Fog', 0, false);
 
     this.processing.PushBack((new WMH_CameraMilestone_Smoother in thePlayer)
       .initSmoother(0, 100)
     );
     
 
-    // this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_0', 0, 10);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_1', 0, 15);
-    var follow_rotation: WMH_CameraMilestone_FollowRotation;
-    follow_rotation = (new WMH_CameraMilestone_FollowRotation in thePlayer)
-      .initFollowRotation(
-        0,
-        500,
-        thePlayer,
-        , // offset
-        1 // speed
+    if (false) {
+      // this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_0', 0, 10);
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_1', 0, 15);
+      var follow_rotation: WMH_CameraMilestone_FollowRotation;
+      follow_rotation = (new WMH_CameraMilestone_FollowRotation in thePlayer)
+        .initFollowRotation(
+          0,
+          500,
+          thePlayer,
+          , // offset
+          1 // speed
+        );
+      this.milestones.PushBack(follow_rotation);
+
+      RequestWeatherChangeTo('WT_Fog', 0, true);
+      var hpm: float = theGame.GetHoursPerMinute();
+      theGame.SetGameTime(GameTimeCreate(1, 0), false);
+      theGame.SetHoursPerMinute(hpm * 150);
+
+      // looking at the horizon, above bridge
+      horse.wmh_horse_override.start();
+      Sleep(0.5); // give time for roach to start
+      theGame.FadeInAsync(3);
+      this.tick(6, camera, position, rotation);
+      WMH_showLogo(true, 1.5, 125, 125);
+      this.tick(6, camera, position, rotation);
+      WMH_showLogo(false, 2, 125, 125);
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0, 12.5);
+      theGame.SetHoursPerMinute(hpm * 1);
+      this.tick(2, camera, position, rotation);
+
+      // 0.1) start to move the camera below the bridge
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
+      // tick for a bit, then teleport roach in front of the camp
+      follow_rotation.intensity_target = 0;
+      horse.wmh_horse_override.setSpeed(1.0);
+    }
+    else {
+      theGame.FadeInAsync(0.5);
+    }
+
+    if (false) {
+      // 0.2) go towards the camp
+      this.tick(15.75, camera, position, rotation);
+      WMHTUTOFACT(
+        'WMH_IntroductionWelcomeCamp',
+        "Witcher Camp",
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
       );
-    this.milestones.PushBack(follow_rotation);
 
-    RequestWeatherChangeTo('WT_Fog', 0, true);
-    var hpm: float = theGame.GetHoursPerMinute();
-    theGame.SetGameTime(GameTimeCreate(1, 0), false);
-    theGame.SetHoursPerMinute(hpm * 150);
+      // 1) look at camp manager, explain unlocking upgrades
+      horse.wmh_horse_override.setSpeed(0);
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_4', 0.5, 10);
+      this.addCurveAtTag('WMH_scene_welcome_camera_spawn_4_curve', 0.5, 8.0, 7.5);
+      this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0, 8.0);
+      this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 10);
+      this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
+      this.tick(9.5, camera, position, rotation);
+      WMHTUTOFACT(
+        'WMH_IntroductionWelcomeCampManager',
+        "Camp Manager",
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+      );
+    }
 
-    // looking at the horizon, above bridge
-    horse.wmh_horse_override.start();
-    Sleep(0.5); // give time for roach to start
-    theGame.FadeInAsync(3);
-    this.tick(6, camera, position, rotation);
-    WMH_showLogo(true, 1.5, 125, 125);
-    this.tick(6, camera, position, rotation);
-    WMH_showLogo(false, 2, 125, 125);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0, 12.5);
-    theGame.SetHoursPerMinute(hpm * 1);
-    this.tick(2, camera, position, rotation);
+    if (false) {
+      // 2) look at entrance, explain going out when ready
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_5', 1.0, 5);
+      this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_exit', 1.5, 7);
+      this.tick(6, camera, position, rotation);
+      WMHTUTOFACT(
+        'WMH_IntroductionWelcomeLeavingCamp',
+        "On the Path",
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+      );
+    }
 
-    // 0.1) start to move the camera below the bridge
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
-    // tick for a bit, then teleport roach in front of the camp
-    follow_rotation.intensity_target = 0;
-    horse.wmh_horse_override.setSpeed(1.0);
+    if (false) {
+      // 3) look at noticeboard, explain prepare for targets
+      this.getPositionByTag('WMH_scene_introduction_geralt_spawn_2', p, r);
+      thePlayer.TeleportWithRotation(p, r);
+      mount.TeleportWithRotation(p, r);
+      horse.wmh_horse_override.setSpeed(0.25);
 
-    // 0.2) go towards the camp
-    this.tick(15.75, camera, position, rotation);
-    WMHTUTOFACT(
-      'WMH_IntroductionWelcomeCamp',
-      "Witcher Camp",
-      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
-    );
+      this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_6', 1.0, 5);
+      this.addCurveAtTag('WMH_scene_welcome_camera_spawn_6_curve', 1.0, 3.25, 4.0);
+      this.addLookAtTag('WMH_scene_welcome_camera_lookat_noticeboard', 1.5, 5);
+      this.tick(6, camera, position, rotation);
+      WMHTUTOFACT(
+        'WMH_IntroductionWelcomeNoticeboard',
+        "Contract targets",
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+      );
+    }
+    else {
+      this.getPositionByTag(
+        'WMH_scene_welcome_camera_spawn_6',
+        position,
+        rotation
+      );
 
-    // 1) look at camp manager, explain unlocking upgrades
-    horse.wmh_horse_override.setSpeed(0);
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_4', 0.5, 10);
-    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_4_curve', 0.5, 8.0, 7.5);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0, 8.0);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 10);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
-    this.tick(9.5, camera, position, rotation);
-    WMHTUTOFACT(
-      'WMH_IntroductionWelcomeCampManager',
-      "Camp Manager",
-      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
-    );
-
-    // 2) look at entrance, explain going out when ready
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_5', 1.0, 5);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_exit', 1.5, 7);
-    this.tick(6, camera, position, rotation);
-    WMHTUTOFACT(
-      'WMH_IntroductionWelcomeLeavingCamp',
-      "On the Path",
-      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
-    );
-
-    // 3) look at noticeboard, explain prepare for targets
-    this.getPositionByTag('WMH_scene_introduction_geralt_spawn_2', p, r);
-    thePlayer.TeleportWithRotation(p, r);
-    mount.TeleportWithRotation(p, r);
-    horse.wmh_horse_override.setSpeed(0.25);
-
-    this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_6', 1.0, 5);
-    this.addCurveAtTag('WMH_scene_welcome_camera_spawn_6_curve', 1.0, 3.25, 4.0);
-    this.addLookAtTag('WMH_scene_welcome_camera_lookat_noticeboard', 1.5, 5);
-    this.tick(6, camera, position, rotation);
-    WMHTUTOFACT(
-      'WMH_IntroductionWelcomeNoticeboard',
-      "Contract targets",
-      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
-    );
+      camera.TeleportWithRotation(position, rotation);
+      Sleep(2.0);
+    }
 
     // 4) look at home, explain getting ready
     horse.wmh_horse_override.setSpeed(0.25);
