@@ -9,7 +9,7 @@ state Running in WMH_HuntManager {
 
     while (true) {
       // split the sleep in two so spawns are created as soon as the hunt begins
-      Sleep(2.0);
+      Sleep(10.0);
       thePlayer.wmh.submitOnSpawn(
         parent,
         parent.contract,
@@ -17,7 +17,7 @@ state Running in WMH_HuntManager {
         parent.seed + parent.getSecondsSinceStart()
       );
 
-      Sleep(13.0);
+      Sleep(5.0);
     }
     
   }
