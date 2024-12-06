@@ -99,6 +99,7 @@ statemachine class WMH_HuntManager {
 
     this.contract.onHuntFinished(bestiary, storage, this.killed_creatures);
     this.encounters.onHuntFinished();
+    this.killed_creatures.Clear();
 
     if (!thePlayer.wmh.hasJustBooted()) {
       // theGame.SaveGame(SGT_QuickSave, -1);
