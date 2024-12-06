@@ -58,7 +58,7 @@ class WMH_Encounter {
     var notify: bool = VecDistanceSquared2D(
       thePlayer.GetWorldPosition(),
       this.GetWorldPosition()
-    ) > 40 * 40;
+    ) < 40 * 40;
 
     if (notify) {
       for bentry: WMH_BestiaryEntry in this.entries {
