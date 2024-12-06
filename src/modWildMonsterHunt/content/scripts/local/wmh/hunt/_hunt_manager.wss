@@ -80,8 +80,8 @@ statemachine class WMH_HuntManager {
     this.encounters.onHuntStarted();
 
     if (!thePlayer.wmh.hasJustBooted()) {
-      theGame.SaveGame(SGT_QuickSave, -1);
-      theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
+      // theGame.SaveGame(SGT_QuickSave, -1);
+      // theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
     }
 
     if (this.GetCurrentStateName() == 'Waiting') {
@@ -101,8 +101,8 @@ statemachine class WMH_HuntManager {
     this.encounters.onHuntFinished();
 
     if (!thePlayer.wmh.hasJustBooted()) {
-      theGame.SaveGame(SGT_QuickSave, -1);
-      theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
+      // theGame.SaveGame(SGT_QuickSave, -1);
+      // theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
     }
   }
 
