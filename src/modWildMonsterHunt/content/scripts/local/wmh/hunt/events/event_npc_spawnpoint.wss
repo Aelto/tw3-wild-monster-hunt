@@ -10,8 +10,16 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
   hint required_points_cleared_radius = "A radius where all spawn points must be clear of monsters for the EventNpc to spawn.";
 
   protected var npc: WMH_EventNpc;
+  protected var npc_spawn_hunt_seed: int;
   
-  public function trySpawnNpc() {
+  public function trySpawnNpc(hunt_seed: int) {
+    if (this.npc_spawn_hunt_seed != hunt_seed) {
+      if (this.npc) {
+        this.npc.onDestroy();
+        this.npc.Destroy();
+      }
+    }
+
     if (!this.canSpawn()) {
       WMHINFO("WMH_EventNpcSpawnPoint, trySpawnNpc(), cannot spawn");
       return;

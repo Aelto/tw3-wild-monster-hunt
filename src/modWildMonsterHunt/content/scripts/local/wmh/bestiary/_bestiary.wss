@@ -43,7 +43,7 @@ statemachine class WMH_Bestiary {
       this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
     }
 
-    this.spawnNearbyEventNpcSpawnPoints();
+    this.spawnNearbyEventNpcSpawnPoints(hunt_seed);
     this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
   }
 
@@ -334,13 +334,13 @@ statemachine class WMH_Bestiary {
     }
   }
 
-  private function spawnNearbyEventNpcSpawnPoints() {
+  private function spawnNearbyEventNpcSpawnPoints(hunt_seed: int) {
     var points: array<WMH_EventNpcSpawnPoint>;
 
     this.spawn_points.getNearbyEventNpcSpawnPoints(points);
 
     for point: WMH_EventNpcSpawnPoint in points {
-      point.trySpawnNpc();
+      point.trySpawnNpc(hunt_seed);
     }
   }
 
@@ -623,7 +623,7 @@ state Spawning in WMH_Bestiary {
     var group_positions: array<Vector> = WMH_getGroupPositions(
       position,
       templates.Size(),
-      /*density*/ 2
+      /*density*/ 0.01
     );
 
     var tags_array: array<name>;

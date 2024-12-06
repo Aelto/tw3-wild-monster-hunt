@@ -51,7 +51,7 @@ class WMH_BestiaryEntryDrowner extends WMH_BestiaryEntry {
       if (underground && !humidity) nospawn
 
       if (humidity) += 1.0,
-      if (rain) += 0.5,
+      if (rain) *= 1.5,
 
       morning {
         if (structures) *= 1.5,

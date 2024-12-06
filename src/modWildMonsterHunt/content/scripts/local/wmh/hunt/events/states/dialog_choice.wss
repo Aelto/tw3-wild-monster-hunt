@@ -30,10 +30,16 @@ state DialogChoice in WMH_EventNpc {
     var i: int;
     for (i = 0; i < parent.events.Size(); i += 1) {
       var npc_event: WMH_EventNpc_BaseEvent = parent.events[i];
+      var can_be_completed: bool = npc_event.canBeCompleted();
+
+      var suffix: string = "";
+      if (can_be_completed) {
+        suffix = " (reward available)";
+      }
 
       choices.PushBack(SSceneChoice(
-        npc_event.description(),
-        npc_event.canBeCompleted(), // emphasis
+        npc_event.description() + suffix,
+        can_be_completed, // emphasis
         npc_event.is_active, // previouslyChoosen
         false, // disabled
         DialogAction_MONSTERCONTRACT,
@@ -75,15 +81,9 @@ state DialogChoice in WMH_EventNpc {
       }
       else {
         var index: int = this.getEventIndexFromName(response.playGoChunk);
-        var npc_event: WMH_EventNpc_BaseEvent = parent.events[index];
-        var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
-
-        npc_event.tryStart();
+        parent.tryStartEvent(index);
         Sleep(0.1);
-        if (npc_event.tryComplete(provider)) {
-          provider.transferItems(thePlayer.GetInventory());
-          WMHPOPUP(provider.toHtml(thePlayer.GetInventory()), 10.0);
-        }
+        parent.tryCompleteEvent(index);
         Sleep(0.1);
         break;
       }

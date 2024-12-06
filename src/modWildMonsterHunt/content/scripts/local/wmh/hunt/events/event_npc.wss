@@ -11,6 +11,9 @@ statemachine class WMH_EventNpc extends CNewNPC {
     this.player_approach_heading = VecHeading(
       thePlayer.GetWorldPosition() - this.GetWorldPosition()
     );
+
+    var encounter: WMH_EncounterManager = WMH_getEncounterManager();
+    encounter.onEventNpcSpawned(this);
   }
 
   event OnInteraction(actionName: string, activator: CEntity) {
@@ -41,6 +44,38 @@ statemachine class WMH_EventNpc extends CNewNPC {
         && thePlayer.CanStartTalk();
   }
 
+  public function tryStartEvent(index: int) {
+    var an_event: WMH_EventNpc_BaseEvent = this.events[index];
+
+    if (an_event) {
+      an_event.tryStart();
+    }
+  }
+
+  public function tryCompleteEvent(index: int) {
+    var an_event: WMH_EventNpc_BaseEvent = this.events[index];
+
+    if (!an_event) {
+      return;
+    }
+  
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+
+    if (an_event.tryComplete(provider)) {
+      provider.transferItems(thePlayer.GetInventory());
+      theSound.SoundEvent("gui_inventory_buy");
+      WMHPOPUP(provider.toHtml(thePlayer.GetInventory()), 10.0);
+    }
+  }
+
+  public function onDestroy() {
+    for an_event: WMH_EventNpc_BaseEvent in this.events {
+      an_event.tryCancel();
+    }
+
+    this.events.Clear();
+  }
+
   protected function getSeed(): int {
     var position: Vector = this.GetWorldPosition();
 
@@ -62,7 +97,7 @@ statemachine class WMH_EventNpc extends CNewNPC {
   }
 
   protected function generateRandomEvent(seed: int): WMH_EventNpc_BaseEvent {
-    var roll: int = RandNoiseF(seed + 1, 2) as int;
+    var roll: int = RandNoiseF(seed + 1, 3) as int;
 
     if (roll < 1) {
       var event_fetchitem: WMH_EventNpc_EventFetchItem;
@@ -70,6 +105,13 @@ statemachine class WMH_EventNpc extends CNewNPC {
       event_fetchitem.init(this, seed);
       
       return event_fetchitem;
+    }
+    else if (roll < 2) {
+      var event_protecthorse: WMH_EventNpc_EventProtectHorde;
+      event_protecthorse = new WMH_EventNpc_EventProtectHorde in this;
+      event_protecthorse.init(this, seed);
+      
+      return event_protecthorse;
     }
 
     var event_clearpoi: WMH_EventNpc_EventClearPoi;

@@ -6,6 +6,7 @@ statemachine class WMH_EncounterManager {
   protected var encounters: array<WMH_Encounter>;
   protected var encounter_clues: array<WMH_EncounterClues>;
   protected var repulsive_points: array<Vector>;
+  protected var event_npcs: array<WMH_EventNpc>;
 
   public function init(): WMH_EncounterManager {
     this.GotoState('Waiting');
@@ -32,6 +33,12 @@ statemachine class WMH_EncounterManager {
     encounter_guarded_treasure: WMH_EncounterGuardedTreasure
   ) {
     this.onEncounterSpawned(encounter_guarded_treasure);
+  }
+
+  public function onEventNpcSpawned(
+    event_npc: WMH_EventNpc
+  ) {
+    this.event_npcs.PushBack(event_npc);
   }
 
   public function onRepulsivePlaced(center: Vector) {
