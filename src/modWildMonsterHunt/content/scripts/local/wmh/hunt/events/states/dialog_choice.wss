@@ -82,7 +82,7 @@ state DialogChoice in WMH_EventNpc {
         Sleep(0.1);
         if (npc_event.tryComplete(provider)) {
           provider.transferItems(thePlayer.GetInventory());
-          WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+          WMHPOPUP(provider.toHtml(thePlayer.GetInventory()), 10.0);
         }
         Sleep(0.1);
         break;
