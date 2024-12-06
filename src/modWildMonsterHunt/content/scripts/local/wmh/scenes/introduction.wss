@@ -187,7 +187,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
         "Witcher Camp",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/<br/>The neighbouring region is overrun by monsters, and this modest bastion is the last line of defence. Use it to organize hunting expeditions to help clear out the area."
       );
 
       // 1) look at camp manager, explain unlocking upgrades
@@ -199,9 +199,9 @@ statemachine class WMH_SceneIntroduction {
       this.addLookAtTag('WMH_scene_welcome_camera_lookat_camp_manager', 0.5, 12.5);
       this.tick(9.5, camera, position, rotation);
       WMHTUTOFACT(
-        'WMH_IntroductionWelcomeCampManager',
-        "Camp Manager",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+        'WMH_IntroductionWelcomeCampMaster',
+        "Camp Master",
+        "Need to upgrade the camp or recruit new craftsmen? The <font color='#CD7D03'>Camp Master</font> can help you arrange the Witcher Camp by adding new upgrades and by hiring new people who can help you get better gear.<br/><br/>Additionally, if you look around the camp, you will find different furnitures that he set up for you. Such furnitures provide various advantages for your hunts, and can be improved for greater & longer effects."
       );
     }
 
@@ -213,7 +213,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeLeavingCamp',
         "On the Path",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+        "The world beyond the camp is your <font color='#CD7D03'>hunting ground</font>. Explore the surrounding lands, gather, loot, and track down monstrous threats."
       );
     }
 
@@ -230,8 +230,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(6, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeNoticeboard',
-        "Contract targets",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+        "A Witcher's Duty",
+        "Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades."
       );
     }
     else {
@@ -265,8 +265,8 @@ statemachine class WMH_SceneIntroduction {
     this.tick(1, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
-      "Getting ready",
-      "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, "
+      "Prepare for the Hunt",
+      "Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your skills and <font color='#CD7D03'>ready yourself for the trials that await</font>."
     );
 
     this.tick(2, camera, position, rotation);
