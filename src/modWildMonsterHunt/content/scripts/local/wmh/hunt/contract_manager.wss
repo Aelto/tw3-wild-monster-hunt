@@ -142,8 +142,8 @@ class WMH_ContractManager {
         // level as experience. Then as the general.level increases it will require
         // stronger and stronger contracts to level up.
         storage.general.level.value + MinF(
-          (pending.contract.level.value + 1)
-          / (storage.general.level.value + 1),
+          ((pending.contract.level.value + 1.0) as float)
+          / ((storage.general.level.value + 1.0) as float),
 
           // the maximum of levels that we can get from a single contract:
           2

@@ -92,7 +92,7 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Food, 0, 'Apple juice');
     parent.registerLoot(WMH_LootTag_Food, 0, 'Bottled water');
 
-    if (parent.maximum_loot_level.value <= 10) {
+    if (parent.maximum_loot_level.value >= 10) {
       parent.registerLoot(WMH_LootTag_Food, 10, 'Bun');
       parent.registerLoot(WMH_LootTag_Food, 10, 'Bread');
       parent.registerLoot(WMH_LootTag_Food, 10, 'Banana');
@@ -117,7 +117,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Food, 10, 'Dumpling');
     }
 
-    if (parent.maximum_loot_level.value <= 20) {
+    if (parent.maximum_loot_level.value >= 20) {
       parent.registerLoot(WMH_LootTag_Food, 20, 'Cherry Cordial');
       parent.registerLoot(WMH_LootTag_Food, 20, 'Mahakam Spirit');
       parent.registerLoot(WMH_LootTag_Food, 20, 'Dwarven spirit');
@@ -159,7 +159,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Food, 20, 'Ginger Bread');
     }
 
-    if (parent.maximum_loot_level.value <= 30) {
+    if (parent.maximum_loot_level.value >= 30) {
       parent.registerLoot(WMH_LootTag_Food, 30, 'Erveluce');
       parent.registerLoot(WMH_LootTag_Food, 30, 'Est Est');
       parent.registerLoot(WMH_LootTag_Food, 30, 'Mettina Rose');
@@ -209,7 +209,7 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Heavy boots 01');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Boots 012');
 
-    if (parent.maximum_loot_level.value <= 10) {
+    if (parent.maximum_loot_level.value >= 10) {
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Rune stribog lesser');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Rune dazhbog lesser');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Rune devana lesser');
@@ -297,7 +297,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Skellige casual shoes');
     }
 
-    if (parent.maximum_loot_level.value <= 20) {
+    if (parent.maximum_loot_level.value >= 20) {
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Rune stribog');
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Rune dazhbog');
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Rune devana');
@@ -403,7 +403,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Boots 05');
     }
 
-    if (parent.maximum_loot_level.value <= 30) {
+    if (parent.maximum_loot_level.value >= 30) {
       parent.registerLoot(WMH_LootTag_Gear, 30, 'Rune stribog greater');
       parent.registerLoot(WMH_LootTag_Gear, 30, 'Rune dazhbog greater');
       parent.registerLoot(WMH_LootTag_Gear, 30, 'Rune devana greater');
@@ -589,7 +589,7 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Alchemy, 0, 'Empty bottle');
     parent.registerLoot(WMH_LootTag_Alchemy, 0, 'Alcohest');
 
-    if (parent.maximum_loot_level.value <= 30) {
+    if (parent.maximum_loot_level.value >= 30) {
       parent.registerLoot(WMH_LootTag_Alchemy, 30, 'Mandrake cordial');
     }
   }
@@ -771,7 +771,7 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Material, 0, 'Blunt pickaxe');
     parent.registerLoot(WMH_LootTag_Material, 0, 'Chain');
 
-    if (parent.maximum_loot_level.value <= 10) {
+    if (parent.maximum_loot_level.value >= 10) {
       parent.registerLoot(WMH_LootTag_Material, 10, 'Runestone lesser');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Runestone greater');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Smithing tools');
@@ -822,7 +822,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 10, 'Whetstone gnomish');
     }
 
-    if (parent.maximum_loot_level.value <= 20) {
+    if (parent.maximum_loot_level.value >= 20) {
       parent.registerLoot(WMH_LootTag_Material, 20, 'Monstrous brain');
       parent.registerLoot(WMH_LootTag_Material, 20, 'Drowner brain');
       parent.registerLoot(WMH_LootTag_Material, 20, 'Monstrous blood');
@@ -903,7 +903,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 20, 'Siren vocal cords');
     }
 
-    if (parent.maximum_loot_level.value <= 30) {
+    if (parent.maximum_loot_level.value >= 30) {
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen red');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen green');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen blue');
@@ -947,7 +947,7 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Ore, 0, 'Pearl');
     parent.registerLoot(WMH_LootTag_Ore, 0, 'Black pearl');
 
-    if (parent.maximum_loot_level.value <= 10) {
+    if (parent.maximum_loot_level.value >= 10) {
       parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver mug');
       parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver platter');
       parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver casket');
@@ -967,7 +967,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver ruby necklace');
     }
 
-    if (parent.maximum_loot_level.value <= 20) {
+    if (parent.maximum_loot_level.value >= 20) {
       parent.registerLoot(WMH_LootTag_Ore, 20, 'Emerald');
       parent.registerLoot(WMH_LootTag_Ore, 20, 'Amethyst');
       parent.registerLoot(WMH_LootTag_Ore, 20, 'Diamond');
@@ -979,7 +979,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Ore, 20, 'Sapphire');
     }
 
-    if (parent.maximum_loot_level.value <= 30) {
+    if (parent.maximum_loot_level.value >= 30) {
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold diamond ring');
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold diamond necklace');
       parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold sapphire necklace');
