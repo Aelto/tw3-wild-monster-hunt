@@ -1,7 +1,7 @@
 
 
 class WMH_MilestoneContract extends WMH_PendingContract {
-  default encounter_tag = "WMH_MilestoneContract";
+  default encounter_tag = WMH_EncounterTag_ContractMilestone;
 
   private var milestone_level: WMH_Level;
 

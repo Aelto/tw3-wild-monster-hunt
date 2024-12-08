@@ -37,8 +37,8 @@ class WMH_PendingContract {
 
   var target: WMH_BestiaryEntry;
 
-  var encounter_tag: name;
-  default encounter_tag = "WMH_PendingContract";
+  var encounter_tag: WMH_EncounterTag;
+  default encounter_tag = WMH_EncounterTag_ContractRegular;
 
 
   // Dynamic, you may leave it empty as it will be defined during gameplay.

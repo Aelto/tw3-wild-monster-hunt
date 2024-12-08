@@ -7,7 +7,7 @@ class WMH_EncounterLure extends WMH_Encounter {
     position: Vector,
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>,
-    optional encounter_tag: name,
+    optional encounter_tag: WMH_EncounterTag,
   ): WMH_EncounterLure {
     this.position = position;
     this.entries = entries;

@@ -51,7 +51,7 @@ statemachine class WMH_Bestiary {
     bentry: WMH_BestiaryEntry,
     location: WMH_BiomeSpawnPoint,
     affix_manager: WMH_AffixManager,
-    encounter_tag: name,
+    encounter_tag: WMH_EncounterTag,
     seed: int
   ) {
     this.requestSpawn(

@@ -6,7 +6,7 @@ class WMH_SpawnRequest {
   public var runes_of_power_count: int;
   public var aggression_delay: float; // currently unused
   public var spawn_position: Vector;
-  public var encounter_tag: name;
+  public var encounter_tag: WMH_EncounterTag;
   public var heading: float;
   public var seed: int;
 
@@ -52,7 +52,9 @@ class WMH_SpawnRequest {
     return this;
   }
 
-  public function withEncounterTag(encounter_tag: name): WMH_SpawnRequest {
+  public function withEncounterTag(
+    encounter_tag: WMH_EncounterTag
+  ): WMH_SpawnRequest {
     this.encounter_tag = encounter_tag;
 
     return this;

@@ -10,7 +10,7 @@ function WMH_getHuntManagerSpawnratesPseudoRng(): WMH_PseudoRngBuffer {
 
 struct WMH_HuntKill {
   var bestiary_id: WMH_BestiaryId;
-  var encounter_tag: name;
+  var encounter_tag: WMH_EncounterTag;
 }
 
 // Stores the data about the currently active hunt
@@ -109,7 +109,7 @@ statemachine class WMH_HuntManager {
 
   public function onCreatureKilled(
     bentry: WMH_BestiaryEntry,
-    encounter_tag: name
+    encounter_tag: WMH_EncounterTag
   ) {
     this.killed_creatures.PushBack(WMH_HuntKill(bentry.id, encounter_tag));
   }

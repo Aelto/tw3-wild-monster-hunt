@@ -10,7 +10,7 @@ class WMH_EncounterGuardedTreasure extends WMH_Encounter {
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>,
     treasure: WMH_GuardedTreasure,
-    optional encounter_tag: name,
+    optional encounter_tag: WMH_EncounterTag,
   ): WMH_EncounterGuardedTreasure {
     super.init(
       origin,

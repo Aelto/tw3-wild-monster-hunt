@@ -1,15 +1,21 @@
-// 
+
+enum WMH_EncounterTag {
+  WMH_EncounterTag_None = 0,
+  WMH_EncounterTag_ContractRegular = 1,
+  WMH_EncounterTag_ContractMilestone = 2,
+}
+
 class WMH_Encounter {
   protected var entries: array<WMH_BestiaryEntry>;
   protected var spawn_point: WMH_BiomeSpawnPoint;
   protected var entities: array<CEntity>;
-  protected var encounter_tag: name;
+  protected var encounter_tag: WMH_EncounterTag;
 
   public function init(
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
     entities: array<CEntity>,
-    optional encounter_tag: name,
+    optional encounter_tag: WMH_EncounterTag,
   ): WMH_Encounter {
     this.encounter_tag = encounter_tag;
     this.spawn_point = spawn_point;

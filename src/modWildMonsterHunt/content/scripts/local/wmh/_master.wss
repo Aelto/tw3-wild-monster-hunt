@@ -93,7 +93,7 @@ class WMH_Master {
     origin: WMH_PendingContract,
     bentry: WMH_BestiaryEntry,
     location: WMH_BiomeSpawnPoint,
-    encounter_tag: name,
+    encounter_tag: WMH_EncounterTag,
     seed: int
   ) {
     this.bestiary.onSpawnContractTarget(
@@ -136,7 +136,7 @@ class WMH_Master {
     origin: WMH_SpawnRequest,
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
-    encounter_tag: name,
+    encounter_tag: WMH_EncounterTag,
     entities: array<CEntity>
   ) {
     var encounter: WMH_Encounter = (new WMH_Encounter in thePlayer.wmh)
@@ -173,7 +173,7 @@ class WMH_Master {
   public function submitOnCreatureKilled(
     origin: WMH_Encounter,
     bentry: WMH_BestiaryEntry,
-    encounter_tag: name
+    encounter_tag: WMH_EncounterTag
   ) {
     WMHINFO(
       "submitOnCreatureKilled: id= " + bentry.id.value

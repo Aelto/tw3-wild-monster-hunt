@@ -110,7 +110,10 @@ class WMH_ContractManager {
     var output: array<WMH_HuntKill>;
 
     for pending: WMH_PendingContract in this.pending_contracts {
-      output.PushBack(WMH_HuntKill(pending.target.id, 'WMH_MilestoneContract'));
+      output.PushBack(WMH_HuntKill(
+        pending.target.id,
+        WMH_EncounterTag_ContractRegular
+      ));
     }
 
     return output;
@@ -172,7 +175,7 @@ class WMH_ContractManager {
           if (
             // milestone contract require you kill the creature spawned by it
             // directly as the creature has special affixes and all that.
-            kill.encounter_tag == 'WMH_MilestoneContract'
+            kill.encounter_tag == WMH_EncounterTag_ContractMilestone
             && milestone.isTargetted(kill.bestiary_id)
           ) {
             completed_contracts.PushBack(milestone);
