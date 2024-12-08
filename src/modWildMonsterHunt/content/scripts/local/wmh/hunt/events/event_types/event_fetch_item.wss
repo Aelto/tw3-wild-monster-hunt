@@ -5,9 +5,13 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
     var inventory: CInventoryComponent = thePlayer.GetInventory();
     var definitions: CDefinitionsManagerAccessor = theGame.GetDefinitionsManager();
 
+    var item_icon: string = "<img src='img://"
+                      + inventory.GetItemIconPathByName(this.itemName(0))
+                      + "' height='18' width='18' />";
+
     return "Give "
          + this.itemQuantity() + "x "
-         + inventory.GetItemIconPathByName(this.itemName(0));
+         + item_icon;
   }
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
