@@ -278,7 +278,7 @@ statemachine class WMH_Bestiary {
       // if a point isn't allowed to spawn creatures, it may spawn wildlife
       var can_spawn_wildlife: bool = !can_spawn_monsters
         && RandNoiseF(point_seed + 1, 1.0)
-        <= 0.2 * WMH_either::<float>(2.0, 1.0, spawn_point.prefer_wildlife);
+        <= 0.4 * WMH_either::<float>(2.0, 1.0, spawn_point.prefer_wildlife);
 
       if (can_spawn_monsters) {
         var options: WMH_getRandomEntryOptions;
