@@ -181,11 +181,11 @@ function WMH_getWeatherType(): WMH_WeatherType {
       break;
 
     case 'WT_Rain_Storm':
-    case 'WT_Fog':
       output = WMH_WeatherType_Rain;
       break;
 
     case 'WT_Snow':
+    case 'WT_Fog':
       output = WMH_WeatherType_Snow;
       break;
   }
