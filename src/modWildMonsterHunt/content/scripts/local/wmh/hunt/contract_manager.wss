@@ -32,6 +32,8 @@ class WMH_ContractManager {
       * this.milestoneContractsInterval()
     );
 
+    this.loadContractsFromStorage(bestiary, storage.contract);
+
     // side-effect: the storage is mutated from this
     this.finishCompletedContracts(
       killed_creatures,
@@ -185,10 +187,11 @@ class WMH_ContractManager {
     }
 
     for contract: WMH_PendingContract in completed_contracts {
-      this.pending_contracts.Remove(contract);
+      this.removePendingContract(storage.contract, contract);
       this.onContractCompleted(provider, contract, storage, maximum_level);
       completed_any = true;
     }
+    completed_contracts.Clear();
 
     // 2.0
     // then complete the regular pending contracts
@@ -278,6 +281,9 @@ class WMH_ContractManager {
     this.pending_contracts.Clear();
 
     for contract: WMH_Contract in storage_contract.pending_contracts {
+      WMHINFO("loadContractsFromStorage, loading contract, type = " + contract.type);
+
+
       if (contract.type == WMH_PendingContractType_MILESTONE) {
         this.pending_contracts.PushBack(
           (new WMH_MilestoneContract in this)
