@@ -29,6 +29,7 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
       this.GotoState('Waiting');
     }
 
+    this.npc_spawn_hunt_seed = hunt_seed;
     this.GotoState('Spawning');
   }
 
