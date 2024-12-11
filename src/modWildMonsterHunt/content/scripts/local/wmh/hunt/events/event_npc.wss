@@ -64,7 +64,7 @@ statemachine class WMH_EventNpc extends CNewNPC {
     if (an_event.tryComplete(provider)) {
       provider.transferItems(thePlayer.GetInventory());
       theSound.SoundEvent("gui_inventory_buy");
-      WMHPOPUP(provider.toHtml(thePlayer.GetInventory()), 10.0);
+      WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
     }
   }
 

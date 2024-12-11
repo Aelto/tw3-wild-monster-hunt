@@ -31,7 +31,7 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
       .appendItem('Apple', apples);
 
     provider.transferItems(thePlayer.GetInventory());
-    WMHPOPUP(provider.toHtml(thePlayer.GetInventory()), 5.0);
+    WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
   }
 
   private function getCompletedContracts(): int {
