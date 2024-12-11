@@ -20,7 +20,7 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
       return WMHHUD("There is nothing to retrieve at the moment");
     }
 
-    this.previous_completed_contracts_count = this.getCompletedContracts();
+    this.setPreviousCompletedContractsCount(this.getCompletedContracts());
 
     var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
 
@@ -44,8 +44,19 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
     return storage.contract.completed_contracts_count;
   }
 
+  private function getPreviousCompletedContractsCount(): int {
+    return Max(
+      0,
+      FactsQueryLatestValue('wmh_camp_upgrade_provisions_completed_contracts_count')
+    );
+  }
+
+  private function setPreviousCompletedContractsCount(value: int) {
+    FactsSet('wmh_camp_upgrade_provisions_completed_contracts_count', value);
+  }
+
   private function getCompletedContractsSinceLastInteraction(): int {
-    var previous: int = this.previous_completed_contracts_count;
+    var previous: int = this.getPreviousCompletedContractsCount();
 
     return Max(0, this.getCompletedContracts() - previous);
   }
