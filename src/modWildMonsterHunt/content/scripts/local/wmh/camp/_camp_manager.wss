@@ -146,7 +146,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockGarden0Price(): int {
-    return 750;
+    return 350;
   }
 
   protected function isGarden0Unlocked(): bool {
@@ -162,7 +162,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockGarden1Price(): int {
-    return 1250;
+    return 600;
   }
 
   protected function unlockGarden1(optional temporarily: bool) {
@@ -191,7 +191,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockArmorsPrice(): int {
-    return 650;
+    return 325;
   }
 
   protected function isArmorsUnlocked(): bool {
@@ -213,7 +213,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockWeaponsPrice(): int {
-    return 650;
+    return 325;
   }
 
   protected function isWeaponsUnlocked(): bool {
@@ -235,7 +235,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockMerchantPrice(): int {
-    return 500;
+    return 50;
   }
 
   protected function isMerchantUnlocked(): bool {
@@ -257,7 +257,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockHerbalistPrice(): int {
-    return 500;
+    return 50;
   }
 
   protected function isHerbalistUnlocked(): bool {
