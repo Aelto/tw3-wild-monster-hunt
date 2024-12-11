@@ -380,7 +380,7 @@ class WMH_CameraMilestone_Smoother extends WMH_CameraMilestone {
     //   AngleDistance(rotation.Roll, this.previous_rotation.Roll),
     // );
 
-    WMHINFO("this.allowed_changes = " + this.allowed_changes);
+    // WMHINFO("this.allowed_changes = " + this.allowed_changes);
 
     this.previous_rotation = EulerAngles(
       LerpAngleF(

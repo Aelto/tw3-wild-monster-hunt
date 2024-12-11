@@ -19,6 +19,16 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	default prefer_wildlife = false;
 	hint prefer_wildlife = "if set to true, then the chances of a monster spawning there are reduced while wildlife is increased.";
 
+	public editable var hunt_fact_on_spawn: string;
+	hint hunt_fact_on_spawn = "A hunt_fact to add to the HuntFactsDb when this spawn point is consumed.";
+
+	public editable var hunt_fact_on_clear: string;
+	hint hunt_fact_on_clear = "A hunt_fact to add to the HuntFactsDb when this spawn point is liberated.";
+
+	public editable var hunt_fact_remove_on_state_change: bool;
+	default hunt_fact_remove_on_state_change = false;
+	hint hunt_fact_remove_on_state_change = "If set to true, the hunt_facts are removed whenever the state clear/consumed changes. Leaving only the most recent hunt_fact.";
+
 	protected var respawn_ticker: WMH_Ticker;
 
 	// stores the timestamp of the last time this spawn point spawned something
@@ -69,6 +79,17 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		this.respawn_ticker.lock();
 		this.last_spawn_time = WMH_getEngineTimeAsSeconds();
 		this.spawn_priority = WMH_BSP_SP_None;
+
+		if (this.hunt_fact_on_spawn != "") {
+			WMH_getHuntFactsDb().insert(this.hunt_fact_on_spawn);
+		}
+
+		if (
+			this.hunt_fact_remove_on_state_change
+			&& this.hunt_fact_on_clear != ""
+		) {
+			WMH_getHuntFactsDb().remove(this.hunt_fact_on_clear);
+		}
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {
@@ -77,6 +98,17 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		if (encounter_was_killed) {
 			this.last_clear_time = WMH_getEngineTimeAsSeconds();
 			this.spawn_priority = WMH_BSP_SP_None;
+
+			if (this.hunt_fact_on_clear != "") {
+				WMH_getHuntFactsDb().insert(this.hunt_fact_on_clear);
+			}
+
+			if (
+				this.hunt_fact_remove_on_state_change
+				&& this.hunt_fact_on_spawn != ""
+			) {
+				WMH_getHuntFactsDb().remove(this.hunt_fact_on_spawn);
+			}
 		}
 	}
 
@@ -98,4 +130,27 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 enum WMH_BiomeSpawnPoint_SpawnPriority {
 	WMH_BSP_SP_None = 0,
 	WMH_BSP_SP_Forced = 1
+}
+
+/// Sub-type of BiomeSpawnPoints to be a fallback encounter to spawn
+class WMH_BiomeSpawnPointFallback extends WMH_BiomeSpawnPoint {
+	public editable var forbidden_hunt_fact: string;
+	hint forbidden_hunt_fact = "Supplied hunt_fact must NOT exist in the HuntFactsDb for the point to be considered available.";
+
+	public editable var required_hunt_fact: string;
+	hint required_hunt_fact = "supplied hunt_fact MUST exist in the HuntFactsDb for the point to the considered available.";
+
+	public function canSpawnMonstersInHunt(
+		point_seed: int,
+		monster_spawn_chance: float
+	): bool {
+		var chances: float = monster_spawn_chance;
+
+		var db: WMH_HuntFactsDb = WMH_getHuntFactsDb();
+
+		return (
+			this.forbidden_hunt_fact == "" || !db.contains(this.forbidden_hunt_fact)
+			&& this.required_hunt_fact == "" || db.contains(this.required_hunt_fact)
+		) && super.canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
+	}
 }

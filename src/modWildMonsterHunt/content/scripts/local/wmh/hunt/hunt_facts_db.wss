@@ -1,0 +1,31 @@
+function WMH_getHuntFactsDb(): WMH_HuntFactsDb {
+  return thePlayer.wmh.hunt.hunt_facts;
+}
+
+/// A database of "facts" (simple strings in this case) that last no longer than
+/// a single hunt. Once a new hunt is started the database is back to a fresh
+/// state.
+class WMH_HuntFactsDb {
+  private var facts: array<string>;
+
+  public function onHuntStarted() {
+    this.facts.Clear();
+  }
+
+  public function contains(hunt_fact: string): bool {
+    return this.facts.Contains(hunt_fact);
+  }
+
+  public function insert(hunt_fact: string): bool {
+    if (this.contains(hunt_fact)) {
+      return false;
+    }
+
+    this.facts.PushBack(hunt_fact);
+    return true;
+  }
+
+  public function remove(hunt_fact: string) {
+    this.facts.Remove(hunt_fact);
+  }
+}

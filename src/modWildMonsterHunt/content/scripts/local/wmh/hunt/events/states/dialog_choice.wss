@@ -75,17 +75,17 @@ state DialogChoice in WMH_EventNpc {
       var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
       SU_closeDialogChoiceInterface();
 
-      if (response.playGoChunk == 'Cancel') {
-        Sleep(0.25);
-        break;
-      }
-      else {
+      if (StrStartsWith(NameToString(response.playGoChunk), "NpcEvent")) {
         var index: int = this.getEventIndexFromName(response.playGoChunk);
         parent.tryStartEvent(index);
         Sleep(0.1);
         parent.tryCompleteEvent(index);
         Sleep(0.1);
         break;
+      }
+      else {
+        Sleep(0.25);
+        return;
       }
     }
     parent.conversation.stopSimulatingConversation();

@@ -47,6 +47,25 @@ statemachine class WMH_Bestiary {
     this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
   }
 
+  /// Same logic as the regular onSpawn but delayed by a few seconds, to give
+  /// enough time for regular spawn requests to be completed.
+  public function onSpawnDelayed(
+    contract: WMH_ContractManager,
+    hunt_seed: int
+  ) {
+    // if the player is in a repulsive's area then skip spawning regular
+    // encounters. It isn't as precise as checking if the spawn point itself is
+    // in the repulsive but this approximation can save a lot of resources as
+    // we skip everything until the player gets outside the repulsive's radius
+    var can_spawn: bool = !WMH_getEncounterManager()
+      .isInRepulsive(thePlayer.GetWorldPosition());
+
+    if (can_spawn) {
+      this.spawnNearbyAvailableSpawnPointFallbacks(contract, hunt_seed);
+    }
+    
+  }
+
   public function onSpawnContractTarget(
     bentry: WMH_BestiaryEntry,
     location: WMH_BiomeSpawnPoint,
@@ -270,6 +289,81 @@ statemachine class WMH_Bestiary {
       var point_seed: int = spawn_point.getPointSeed(hunt_seed);
 
       WMHINFO("monster_spawn_chance = " + monster_spawn_chance + " roll = " + RandNoiseF(point_seed + 0, 1.0));
+
+      // regular nearby spawn points have a chance to be disabled for the hunt,
+      var can_spawn_monsters: bool = spawn_point
+        .canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
+
+      // if a point isn't allowed to spawn creatures, it may spawn wildlife
+      var can_spawn_wildlife: bool = !can_spawn_monsters
+        && RandNoiseF(point_seed + 1, 1.0)
+        <= 0.4 * WMH_either::<float>(2.0, 1.0, spawn_point.prefer_wildlife);
+
+      if (can_spawn_monsters) {
+        var options: WMH_getRandomEntryOptions;
+        options.exclude_strong_target = !spawn_point.allow_strong_targets;
+        options.exclude_weak_target = !spawn_point.allow_weak_targets;
+
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
+          contract,
+          this.biomes,
+          spawn_point.biome_tags,
+          spawn_point.biome_tags_bypass,
+          point_seed,
+          options
+        );
+
+        if (bentry) {
+          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+            .init()
+            .withSpawnPoint(spawn_point)
+            .withBestiaryEntry(bentry)
+            .withSeed(point_seed);
+
+          this.requestSpawn(request);
+          spawn_point.consume();
+        }
+        else {
+          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        }
+      }
+
+      if (can_spawn_wildlife) {
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
+          this.biomes,
+          spawn_point.biome_tags,
+          spawn_point.biome_tags_bypass,
+          point_seed
+        );
+
+        if (bentry) {
+          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+            .init()
+            .withSpawnPoint(spawn_point)
+            .withBestiaryEntry(bentry)
+            .withSeed(point_seed);
+
+          this.requestSpawn(request);
+          spawn_point.consume();
+        }
+        else {
+          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        }
+      }
+    }
+  }
+
+  private function spawnNearbyAvailableSpawnPointFallbacks(
+    contract: WMH_ContractManager,
+    hunt_seed: int
+  ) {
+    var spawn_points: array<WMH_BiomeSpawnPointFallback>;
+    this.spawn_points.getNearbyEventNpcSpawnPointFallbacks(spawn_points);
+
+    var monster_spawn_chance: float = 1.0;
+
+    for spawn_point: WMH_BiomeSpawnPointFallback in spawn_points {
+      var point_seed: int = spawn_point.getPointSeed(hunt_seed);
 
       // regular nearby spawn points have a chance to be disabled for the hunt,
       var can_spawn_monsters: bool = spawn_point
