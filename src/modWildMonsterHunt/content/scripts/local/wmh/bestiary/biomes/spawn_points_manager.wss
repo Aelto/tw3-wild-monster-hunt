@@ -130,7 +130,7 @@ class WMH_SpawnPointManager {
     }
   }
 
-  public function getNearbyEventNpcSpawnPointFallbacks(
+  public function getNearbyValidSpawnPointFallbacks(
     out output: array<WMH_BiomeSpawnPointFallback>
   ) {
     var entities: array<CGameplayEntity>;
@@ -148,7 +148,9 @@ class WMH_SpawnPointManager {
       var point: WMH_BiomeSpawnPointFallback = entity as WMH_BiomeSpawnPointFallback;
 
       if (point) {
-        output.PushBack(point);
+        if (point.canRespawn()) {
+          output.PushBack(point);
+        }
       }
     }
   }
