@@ -25,6 +25,7 @@ abstract class WMH_EventNpc_BaseEvent {
   public function tryComplete(provider: WMH_RewardProvider): bool {
     this.onDestroy();
     this.is_completed = true;
+    theSound.SoundEvent("gui_inventory_buy");
     return true;
   }
 
