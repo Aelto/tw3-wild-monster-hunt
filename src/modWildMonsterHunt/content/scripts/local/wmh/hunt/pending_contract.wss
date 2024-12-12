@@ -136,7 +136,7 @@ class WMH_PendingContract {
       var difficulty: int = theGame.GetDifficultyLevel();
 
       var money: int = WMH_difficultyScaleDownF(
-        this.target.strength
+        this.target.strength * 1.5
         // at level 25 the rewards are doubled
         * (1 + this.contract.level.value / 25),
 
