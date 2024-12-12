@@ -74,6 +74,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
 
+    this.onDestroy();
     return super.tryComplete(provider);
   }
 
