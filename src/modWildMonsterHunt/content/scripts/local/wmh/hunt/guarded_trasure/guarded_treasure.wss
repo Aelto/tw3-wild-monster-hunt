@@ -30,18 +30,11 @@ function WMH_generateNearbyTreasures(radius: float) {
 statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   public var origin: WMH_BiomeSpawnPoint;
 
-  protected var encounters: array<WMH_EncounterGuardedTreasure>;
-  // stores whether the encounter at the given index was already spawned and
-  // killed.
-  protected var encounters_killed: array<bool>;
-  protected var encounters_spawned: array<bool>;
+  protected var encounter: WMH_EncounterGuardedTreasure;
+  protected var encounter_killed: bool;
 
   protected editable var creature_bypass_tags: array<name>;
   hint creature_bypass_tags = "If let empty, will default to using the biome data. If filled then the treasure shall only host creatures with the supplied tags.";
-
-  protected editable var spawn_rate_decrease: float;
-  default spawn_rate_decrease = 1.0;
-  hint spawn_rate_decrease = "How much the chances of spawning a new creature is decreased after every spawn. It should be a value in the ]0;1] range, for example if 0.3 then after spawning 1 creature the chances of spawning a second creature will be lowered to 0.7.";
 
   event OnSpawned(spawnData: SEntitySpawnData) {
     super.OnSpawned(spawnData);
@@ -63,16 +56,6 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
     contract: WMH_ContractManager,
     out bentry: WMH_BestiaryEntry
   ): bool {
-    // as creatures are spawned, the chances of spawning new groups is
-    // progressively lowered.
-    if (index > 0) {
-      var current_chances: float = 1.0 - this.spawn_rate_decrease * index;
-
-      if (RandNoiseF(this.getSeed(30 + index), 1.0) > current_chances) {
-        return false;
-      }
-    }
-
     var tags_count: int = this.creature_bypass_tags.Size();
     // perform a search by tag
     if (tags_count > 0) {
@@ -104,6 +87,10 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   }
 
   public function trySpawnEntities() {
+    if (this.encounter_killed || this.encounter) {
+      return; 
+    }
+
     var spawn_slots: array<CComponent>;
     this.getSpawnSlots(spawn_slots);
 
@@ -112,60 +99,41 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
 
     var i: int = 0;
 
-    // 10, a soft limit in case something goes wrong and it never stops spawning
-    while (i < 10) {
-      if (this.encounters_killed.Size() > i) {
-        // the encounter was already spawned and killed in the past,
-        // the check is done outside of the getBestiaryEntryToSpawn's index
-        // check as this can prevent this encounter from spawning but doesn't
-        // break the loop entirely.
-        if (this.encounters_killed[i]) {
-          i += 1;
-          continue;
-        }
-      }
+    var bentry: WMH_BestiaryEntry;
+    var should_spawn: bool = this.getBestiaryEntryToSpawn(
+      i,
+      bestiary,
+      contract,
+      bentry
+    );
 
-      if (this.encounters_spawned.Size() > i && this.encounters_spawned[i]) {
-        i += 1;
-        continue;
-      }
-
-      var bentry: WMH_BestiaryEntry;
-      var should_spawn: bool = this.getBestiaryEntryToSpawn(
-        i,
-        bestiary,
-        contract,
-        bentry
-      );
-
-      if (!should_spawn) {
-        break;
-      }
-
-      var spawn_position: Vector;
-      var slots_count: int = spawn_slots.Size();
-      if (slots_count > 0) {
-        var slot_index: int = RandNoiseF(
-          this.getSeed(10 + i),
-          slots_count
-        ) as int;
-
-        var slot: CComponent = spawn_slots[slot_index];
-        spawn_position = slot.GetWorldPosition();
-      }
-      else {
-        spawn_position = this.origin.GetWorldPosition();
-      }
-
-      bestiary.onSpawnGuardedTreasure(
-        this,
-        bentry,
-        spawn_position,
-        this.getSeed(20 + i)
-      );
-
-      i += 1;
+    if (!should_spawn) {
+      return;
     }
+
+    var spawn_position: Vector;
+    var slots_count: int = spawn_slots.Size();
+    if (slots_count > 0) {
+      var slot_index: int = RandNoiseF(
+        this.getSeed(10 + i),
+        slots_count
+      ) as int;
+
+      var slot: CComponent = spawn_slots[slot_index];
+      spawn_position = slot.GetWorldPosition();
+    }
+    else {
+      spawn_position = this.origin.GetWorldPosition();
+    }
+
+    WMHINFO("trySpawnEntities(), onSpawnGuardedTreasureEncounter");
+
+    bestiary.onSpawnGuardedTreasure(
+      this,
+      bentry,
+      spawn_position,
+      this.getSeed(20 + i)
+    );
   }
 
   private function getSpawnSlots(out slots: array<CComponent>) {
@@ -176,11 +144,8 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   public function onEncounterSpawned(
     encounter: WMH_EncounterGuardedTreasure
   ) {
-    this.encounters.PushBack(encounter);
-    this.encounters_killed.PushBack(false);
-    this.encounters_spawned.PushBack(true);
-
-    encounter.treasure_index = this.encounters.Size() - 1;
+    this.encounter = encounter;
+    this.encounter_killed = false;
 
     WMH_getEncounterManager().onGuardedTreasureSpawned(encounter);
   }
@@ -188,26 +153,12 @@ statemachine class WMH_GuardedTreasure extends WMH_DynDecoration {
   public function onEncounterDestroyed(
     encounter: WMH_EncounterGuardedTreasure
   ) {
-    if (this.encounters_killed.Size() > encounter.treasure_index) {
-      this
-        .encounters_killed[encounter.treasure_index] = encounter.isCompleted();
-    }
-
-    if (this.encounters_spawned.Size() > encounter.treasure_index) {
-      this.encounters_spawned[encounter.treasure_index] = false;
-    }
-
-    this.encounters.Remove(encounter);
+    this.encounter = NULL;
+    this.encounter_killed = encounter.isCompleted();
   }
 
   public function isCompleted(): bool {
-    for was_killed: bool in this.encounters_killed {
-      if (!was_killed) {
-        return false;
-      }
-    }
-
-    return this.encounters_killed.Size() > 0;
+    return this.encounter_killed;
   }
   //#endregion
 }

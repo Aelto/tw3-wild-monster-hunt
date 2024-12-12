@@ -358,7 +358,7 @@ statemachine class WMH_Bestiary {
     hunt_seed: int
   ) {
     var spawn_points: array<WMH_BiomeSpawnPointFallback>;
-    this.spawn_points.getNearbyEventNpcSpawnPointFallbacks(spawn_points);
+    this.spawn_points.getNearbyValidSpawnPointFallbacks(spawn_points);
 
     var monster_spawn_chance: float = 1.0;
 
