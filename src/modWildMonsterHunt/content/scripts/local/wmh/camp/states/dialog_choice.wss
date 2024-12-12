@@ -107,94 +107,95 @@ state DialogChoice in WMH_CampManager {
   private latent function displayChoicesImproveWitcherCamp() {
     var choices: array<SSceneChoice>;
 
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Hire herbalist ({{price}})",
-        "{{price}}",
-        parent.unlockHerbalistPrice()
-      ),
-      true, // emphasis
-      parent.isHerbalistUnlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockHerbalist'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Hire Merchant ({{price}})",
-        "{{price}}",
-        parent.unlockMerchantPrice()
-      ),
-      true, // emphasis
-      parent.isMerchantUnlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockMerchant'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Small garden plot ({{price}})",
-        "{{price}}",
-        parent.unlockGarden0Price()
-      ),
-      true, // emphasis
-      parent.isGarden0Unlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockGarden0'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Large garden plot ({{price}})",
-        "{{price}}",
-        parent.unlockGarden1Price()
-      ),
-      true, // emphasis
-      parent.isGarden1Unlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockGarden1'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Armor tools ({{price}})",
-        "{{price}}",
-        parent.unlockArmorsPrice()
-      ),
-      true, // emphasis
-      parent.isArmorsUnlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockArmors'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      StrReplace(
-        "Weapon tools ({{price}})",
-        "{{price}}",
-        parent.unlockWeaponsPrice()
-      ),
-      true, // emphasis
-      parent.isWeaponsUnlocked(), // previouslyChoosen
-      false, // disabled
-      DialogAction_SHOPPING,
-      'UnlockWeapons'
-    ));
-
-    choices.PushBack(SSceneChoice(
-      "Cancel",
-      false,
-      true,
-      false,
-      DialogAction_GETBACK,
-      'Cancel'
-    ));
-
     while (true) {
+      choices.Clear();
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Hire herbalist ({{price}})",
+          "{{price}}",
+          parent.unlockHerbalistPrice()
+        ),
+        true, // emphasis
+        parent.isHerbalistUnlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockHerbalist'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Hire Merchant ({{price}})",
+          "{{price}}",
+          parent.unlockMerchantPrice()
+        ),
+        true, // emphasis
+        parent.isMerchantUnlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockMerchant'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Small garden plot ({{price}})",
+          "{{price}}",
+          parent.unlockGarden0Price()
+        ),
+        true, // emphasis
+        parent.isGarden0Unlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockGarden0'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Large garden plot ({{price}})",
+          "{{price}}",
+          parent.unlockGarden1Price()
+        ),
+        true, // emphasis
+        parent.isGarden1Unlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockGarden1'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Armor tools ({{price}})",
+          "{{price}}",
+          parent.unlockArmorsPrice()
+        ),
+        true, // emphasis
+        parent.isArmorsUnlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockArmors'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
+          "Weapon tools ({{price}})",
+          "{{price}}",
+          parent.unlockWeaponsPrice()
+        ),
+        true, // emphasis
+        parent.isWeaponsUnlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockWeapons'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
       // simulate right away a hover on the first choice:
       parent.onDialogHover(choices[0]);
 
@@ -217,6 +218,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockHerbalist();
         WMHPOPUP("Herbalist hired");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockMerchant') {
         if (parent.isMerchantUnlocked()) {
@@ -234,6 +236,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockMerchant();
         WMHPOPUP("Merchant hired");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockArmors') {
         if (parent.isArmorsUnlocked()) {
@@ -251,6 +254,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockArmors();
         WMHPOPUP("Armor tools unlocked");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockWeapons') {
         if (parent.isWeaponsUnlocked()) {
@@ -268,6 +272,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockWeapons();
         WMHPOPUP("Weapon tools unlocked");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockGarden0') {
         if (parent.isGarden0Unlocked()) {
@@ -285,6 +290,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockGarden0();
         WMHPOPUP("Small garden plot unlocked");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockGarden1') {
         if (parent.isGarden1Unlocked()) {
@@ -302,6 +308,7 @@ state DialogChoice in WMH_CampManager {
         thePlayer.RemoveMoney(cost);
         parent.unlockGarden1();
         WMHPOPUP("Large garden plot unlocked");
+        theSound.SoundEvent("gui_inventory_buy");
       }
       else {
         parent.dialog_hover_camera_0.Stop();
