@@ -27,39 +27,41 @@ state DialogChoice in WMH_EventNpc {
   latent function displayChoicesMain() {
     var choices: array<SSceneChoice>;
 
-    var i: int;
-    for (i = 0; i < parent.events.Size(); i += 1) {
-      var npc_event: WMH_EventNpc_BaseEvent = parent.events[i];
-      var can_be_completed: bool = npc_event.canBeCompleted();
-
-      var suffix: string = "";
-      if (can_be_completed) {
-        suffix = " (reward available)";
-      }
-
-      choices.PushBack(SSceneChoice(
-        npc_event.description() + suffix,
-        can_be_completed, // emphasis
-        npc_event.is_active, // previouslyChoosen
-        false, // disabled
-        DialogAction_MONSTERCONTRACT,
-        this.getEventIndexName(i)
-      ));
-    }
-
-    choices.PushBack(SSceneChoice(
-      "Farewell.",
-      false,
-      true,
-      false,
-      DialogAction_EXIT,
-      'Cancel'
-    ));
-
     var say_greetings: bool = true;
 
     parent.conversation.startSimulatingConversation();
     while (true) {
+      choices.Clear();
+
+      var i: int;
+      for (i = 0; i < parent.events.Size(); i += 1) {
+        var npc_event: WMH_EventNpc_BaseEvent = parent.events[i];
+        var can_be_completed: bool = npc_event.canBeCompleted();
+
+        var suffix: string = "";
+        if (can_be_completed) {
+          suffix = " (reward available)";
+        }
+
+        choices.PushBack(SSceneChoice(
+          npc_event.description() + suffix,
+          can_be_completed, // emphasis
+          npc_event.is_active, // previouslyChoosen
+          npc_event.is_completed, // disabled
+          DialogAction_MONSTERCONTRACT,
+          this.getEventIndexName(i)
+        ));
+      }
+
+      choices.PushBack(SSceneChoice(
+        "Farewell.",
+        false,
+        true,
+        false,
+        DialogAction_EXIT,
+        'Cancel'
+      ));
+
       if (say_greetings) {
         say_greetings = false;
 
