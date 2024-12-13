@@ -150,7 +150,7 @@ class WMH_BestiaryEntry {
       npc.SetLevel(thePlayer.GetLevel());
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
-        npc.GetMaxHealth() * MaxF(this.strength * 0.5, 1.0)
+        npc.GetMaxHealth() * MaxF(this.strength * 0.25, 1.0)
       );
     }
   }
