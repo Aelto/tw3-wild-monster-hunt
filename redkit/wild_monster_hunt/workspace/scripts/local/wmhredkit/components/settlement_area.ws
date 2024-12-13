@@ -3,12 +3,21 @@ class WMH_SettlementAreaTrigger extends CEntity {
 	hint unlock_fact = "If provided, points to a fact that must be defined for the area to trigger";
 
 	event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+		if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
 		if (this.canTrigger()) {
+			
 			thePlayer.wmh.submitOnSettlementEnter(this);
 		}
 	}
 
 	event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
+		if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
 		if (this.canTrigger()) {
 			thePlayer.wmh.submitOnSettlementExit(this);
 		}
