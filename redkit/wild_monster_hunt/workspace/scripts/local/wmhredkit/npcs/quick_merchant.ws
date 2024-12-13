@@ -1,63 +1,8 @@
 // A type of merchant that doesn't use a scene to open its selling menu, interacting
 // with it goes straight to the menu.
 class WMH_QuickMerchant extends W3MerchantNPC {
-	protected editable var wmh_is_merchant: bool;
-	protected editable var wmh_is_blacksmith: bool;
-	protected editable var wmh_is_armorer: bool;
-	protected editable var wmh_is_herbalist: bool;
-	protected editable var wmh_is_alchemist: bool;
-	protected editable var wmh_is_enchanter: bool;
-
 	private var quickMerchantScenePlayer: WMH_QuickMerchantScenePlayer;
-
 	event OnInteraction(actionName: string, activator: CEntity) {
-		var inventory: CInventoryComponent;
-		
-		inventory = this.GetInventory();
-		
-		LogChannel('WMH', "NPC QuickMerchant, tags = " + GetTagsString());
-		
-		// notice the switch between `inventory` and `this` sometimes.
-		if (this.wmh_is_merchant) {
-			if (!inventory.HasTag('Merchant')) {
-				inventory.AddTag('Merchant');
-			}
-			
-			if (this.HasTag('Merchant')) {
-				this.AddTag('Merchant');
-			}
-		}
-
-		if (this.wmh_is_blacksmith) {
-			if (!this.HasTag('Blacksmith')) {
-				this.AddTag('Blacksmith');
-			}
-		}
-		
-		if (this.wmh_is_armorer) {
-			if (!this.HasTag('Armorer')) {
-				this.AddTag('Armorer');
-			}
-		}
-		
-		if (this.wmh_is_herbalist) {
-			if (!inventory.HasTag('type_herbalist')) {
-				inventory.AddTag('type_herbalist');
-			}
-		}
-		
-		if (this.wmh_is_alchemist) {
-			if (!inventory.HasTag('type_alchemist')) {
-				inventory.AddTag('type_alchemist');
-			}
-		}
-		
-		if (this.wmh_is_enchanter) {
-			if (!inventory.HasTag('type_enchanter')) {
-				inventory.AddTag('type_enchanter');
-			}
-		}
-		
 		this.quickMerchantScenePlayer = new WMH_QuickMerchantScenePlayer in this;
 		this.quickMerchantScenePlayer.entity = (CGameplayEntity)this;
 		this.quickMerchantScenePlayer.start();
