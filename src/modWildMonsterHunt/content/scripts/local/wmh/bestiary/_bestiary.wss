@@ -303,20 +303,6 @@ statemachine class WMH_Bestiary {
           spawn_point.biome_tags_bypass,
           point_seed
         );
-
-        if (bentry) {
-          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-            .init()
-            .withSpawnPoint(spawn_point)
-            .withBestiaryEntry(bentry)
-            .withSeed(point_seed);
-
-          this.requestSpawn(request);
-          spawn_point.consume();
-        }
-        else {
-          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
-        }
       }
       else {
         var options: WMH_getRandomEntryOptions;
@@ -331,21 +317,21 @@ statemachine class WMH_Bestiary {
           point_seed,
           options
         );
-
-        if (bentry) {
-          var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-            .init()
-            .withSpawnPoint(spawn_point)
-            .withBestiaryEntry(bentry)
-            .withSeed(point_seed);
-
-          this.requestSpawn(request);
-          spawn_point.consume();
-        }
-        else {
-          WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
-        }
       }
+    }
+
+    if (bentry) {
+      var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+        .init()
+        .withSpawnPoint(spawn_point)
+        .withBestiaryEntry(bentry)
+        .withSeed(point_seed);
+
+      this.requestSpawn(request);
+      spawn_point.consume();
+    }
+    else {
+      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
     }
   }
 
