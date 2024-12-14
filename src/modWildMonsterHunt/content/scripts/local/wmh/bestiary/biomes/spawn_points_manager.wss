@@ -1,3 +1,7 @@
+function WMH_getSpawnPointManager(): WMH_SpawnPointManager {
+  return thePlayer.wmh.bestiary.spawn_points;
+}
+
 // Keeps track of the spawn points around the player, and which of them are
 // available for respawn.
 class WMH_SpawnPointManager {
@@ -17,6 +21,15 @@ class WMH_SpawnPointManager {
 
   public function onHuntStarted() {
     this.maybeRefresh(true);
+    this.occupied_spawn_points.Clear();
+  }
+
+  public function onBiomeSpawnPointConsumed(point: WMH_BiomeSpawnPoint) {
+    this.occupied_spawn_points.PushBack(point);
+  }
+
+  public function onBiomeSpawnPointLiberated(point: WMH_BiomeSpawnPoint) {
+    this.occupied_spawn_points.Remove(point);
   }
 
   public function maybeRefresh(optional ignore_tickers: bool) {
@@ -35,13 +48,6 @@ class WMH_SpawnPointManager {
       var radius: float = 500;
       this.nearby_spawn_points = this.buildNearbySpawnPointsFromRegion(radius);
       WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
-    }
-
-    this.occupied_spawn_points.Clear();
-    for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
-      if (point.isOccupied()) {
-        this.occupied_spawn_points.PushBack(point);
-      }
     }
   }
 

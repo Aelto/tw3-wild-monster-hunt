@@ -90,6 +90,8 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		) {
 			WMH_getHuntFactsDb().remove(this.hunt_fact_on_clear);
 		}
+
+		WMH_getSpawnPointManager().onBiomeSpawnPointConsumed(this);
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {
@@ -110,6 +112,8 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 				WMH_getHuntFactsDb().remove(this.hunt_fact_on_spawn);
 			}
 		}
+
+		WMH_getSpawnPointManager().onBiomeSpawnPointLiberated(this);
 	}
 
 	// tells the spawn point to spawn its creatures as soon as possible, even if
