@@ -115,6 +115,14 @@ statemachine class WMH_HuntManager {
     encounter_tag: WMH_EncounterTag
   ) {
     this.killed_creatures.PushBack(WMH_HuntKill(bentry.id, encounter_tag));
+
+    var is_contract: bool = encounter_tag == WMH_EncounterTag_ContractRegular
+      || encounter_tag == WMH_EncounterTag_ContractMilestone;
+
+    if (is_contract) {
+      theSound.SoundEvent("gui_ingame_new_journal");
+      WMHHUD("A contract was completed");
+    }
   }
 
   public function difficulty(): int {

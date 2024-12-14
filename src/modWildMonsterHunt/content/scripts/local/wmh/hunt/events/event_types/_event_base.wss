@@ -18,6 +18,7 @@ abstract class WMH_EventNpc_BaseEvent {
   // For example adding a 3D Marker, or a quest entry
   public function tryStart() {
     this.is_active = true;
+    theSound.SoundEvent("gui_journal_track_quest");
   }
 
   // override to add custom rewards to the provider, if the returned value is
