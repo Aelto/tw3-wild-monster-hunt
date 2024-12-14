@@ -11,6 +11,8 @@ class WMH_Encounter {
   protected var entities: array<CEntity>;
   protected var encounter_tag: WMH_EncounterTag;
 
+  private var target_oneliner: WMH_GameplayOnelinerEntity;
+
   public function init(
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
@@ -21,6 +23,18 @@ class WMH_Encounter {
     this.spawn_point = spawn_point;
     this.entries = entries;
     this.entities = entities;
+
+    var display_oneliner: bool = encounter_tag == WMH_EncounterTag_ContractRegular
+      || encounter_tag == WMH_EncounterTag_ContractMilestone;
+
+    if (display_oneliner) {
+      this.target_oneliner = WMH_gameplayOnelinerEntity(
+        "<img src='img://icons/perks/s_perk_20.png' vspace='-10' />",
+        this.spawn_point
+      );
+      this.target_oneliner.render_distance = 50;
+      this.target_oneliner.offset = Vector(0, 0, 1.5);
+    }
 
     return this;
   }
