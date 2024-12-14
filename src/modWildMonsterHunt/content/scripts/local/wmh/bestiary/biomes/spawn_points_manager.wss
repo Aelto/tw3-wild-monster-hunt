@@ -3,6 +3,7 @@
 class WMH_SpawnPointManager {
   private var region_spawn_points: array<WMH_BiomeSpawnPoint>;
   private var nearby_spawn_points: array<WMH_BiomeSpawnPoint>;
+  private var occupied_spawn_points: array<WMH_BiomeSpawnPoint>;
 
   private var nearby_refresh_ticker: WMH_Ticker;
   private var region_refresh_ticker: WMH_Ticker;
@@ -34,6 +35,13 @@ class WMH_SpawnPointManager {
       var radius: float = 500;
       this.nearby_spawn_points = this.buildNearbySpawnPointsFromRegion(radius);
       WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
+    }
+
+    this.occupied_spawn_points.Clear();
+    for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
+      if (point.isOccupied()) {
+        this.occupied_spawn_points.PushBack(point);
+      }
     }
   }
 
