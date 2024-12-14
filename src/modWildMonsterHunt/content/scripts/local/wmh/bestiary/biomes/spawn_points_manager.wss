@@ -189,6 +189,30 @@ class WMH_SpawnPointManager {
     return count;
   }
 
+  public function countNearbyWaitingForRespawnSpawnPoints(
+    position: Vector,
+    radius: float
+  ): int {
+    var count: int = 0;
+
+    for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
+      if (!point.isWaitingForRespawn()) {
+        continue;
+      }
+
+      var distance: float = VecDistanceSquared2D(
+        position,
+        point.GetWorldPosition()
+      );
+
+      if (distance <= radius) {
+        count += 1;
+      }
+    }
+
+    return count;
+  }
+
   private function findNearbySpawnPoints(
     radius: float,
     count: int
