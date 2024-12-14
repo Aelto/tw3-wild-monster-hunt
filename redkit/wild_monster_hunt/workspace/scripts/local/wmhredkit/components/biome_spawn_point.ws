@@ -73,6 +73,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public function isOccupied(): bool {
 		return this.respawn_ticker.isLocked();
 	}
+
+	public function isWaitingForRespawn(): bool {
+		return this.respawn_ticker.isWaitingToExpire();
+	}
 	
 	// to be used when the location is used as a spawn point,
 	public function consume() {

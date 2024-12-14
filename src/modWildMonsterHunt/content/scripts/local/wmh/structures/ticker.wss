@@ -44,6 +44,12 @@ class WMH_Ticker {
         && SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds);
   }
 
+  public function isWaitingToExpire(): bool {
+    // a locked Ticker cannot be considered expired nor waiting for expiration
+    return !this.isLocked()
+        && !SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds);
+  }
+
   /// WARNING: mutates the counter if it is expired
   public function validate(): bool {
     if (this.hasExpired()) {
