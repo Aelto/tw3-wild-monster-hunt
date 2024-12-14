@@ -271,46 +271,37 @@ statemachine class WMH_Bestiary {
     var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
       .getValidSpawnPoints();
 
-    var region_spawns_count: int = this.spawn_points
-      .getRegionSpawnPointsCount();
+    // a seed that changes only every 30seconds, that way no matter how often
+    // this function runs a point may not get more than one real attempt for
+    // every seed.
+    var instant_seed: int = hunt_seed + (WMH_getEngineTimeAsSeconds() / 30);
 
-    if (region_spawns_count <= 0) {
-      return;
-    }
+    var monster_spawn_chance: float = 1.0;
 
-    var allowed_spawns_per_region: int = Min(60, region_spawns_count) + 1;
+    for point: WMH_BiomeSpawnPoint in spawn_points {
+      var nearby_occupied_count: int = this.spawn_points
+        .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 30);
 
-    var monster_spawn_chance: float = 
-      // we get the ratio of allowed spawns compared to the available
-      // spawns in the region
-      ((allowed_spawns_per_region as float) / (region_spawns_count as float));
+      var altered_chance: float = monster_spawn_chance / nearby_occupied_count;
+      var point_seed: int = spawn_point.getPointSeed(instant_seed);
 
-    for spawn_point: WMH_BiomeSpawnPoint in spawn_points {
-      var point_seed: int = spawn_point.getPointSeed(hunt_seed);
-
-      WMHINFO("monster_spawn_chance = " + monster_spawn_chance + " roll = " + RandNoiseF(point_seed + 0, 1.0));
-
-      // regular nearby spawn points have a chance to be disabled for the hunt,
+      // for every occupied point nearby, the chances of this point being used
       var can_spawn_monsters: bool = spawn_point
-        .canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
+        .canSpawnMonstersInHunt(point_seed, altered_chance);
 
-      // if a point isn't allowed to spawn creatures, it may spawn wildlife
-      var can_spawn_wildlife: bool = !can_spawn_monsters
-        && RandNoiseF(point_seed + 1, 1.0)
-        <= 0.4 * WMH_either::<float>(2.0, 1.0, spawn_point.prefer_wildlife);
+      if (!can_spawn_monsters) {
+        continue;
+      }
 
-      if (can_spawn_monsters) {
-        var options: WMH_getRandomEntryOptions;
-        options.exclude_strong_target = !spawn_point.allow_strong_targets;
-        options.exclude_weak_target = !spawn_point.allow_weak_targets;
+      var can_spawn_wildlife: bool = RandNoiseF(point_seed + 1, 1.0)
+        <= 0.05 + (spawn_point.prefer_wildlife as bool) * 0.1;
 
-        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
-          contract,
+      if (can_spawn_wildlife) {
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
           this.biomes,
           spawn_point.biome_tags,
           spawn_point.biome_tags_bypass,
-          point_seed,
-          options
+          point_seed
         );
 
         if (bentry) {
@@ -327,13 +318,18 @@ statemachine class WMH_Bestiary {
           WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
         }
       }
+      else {
+        var options: WMH_getRandomEntryOptions;
+        options.exclude_strong_target = !spawn_point.allow_strong_targets;
+        options.exclude_weak_target = !spawn_point.allow_weak_targets;
 
-      if (can_spawn_wildlife) {
-        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
+        var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntry(
+          contract,
           this.biomes,
           spawn_point.biome_tags,
           spawn_point.biome_tags_bypass,
-          point_seed
+          point_seed,
+          options
         );
 
         if (bentry) {
