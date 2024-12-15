@@ -352,6 +352,7 @@ statemachine class WMH_Bestiary {
     // this function runs a point may not get more than one real attempt for
     // every seed.
     var instant_seed: int = RoundF(hunt_seed + (WMH_getEngineTimeAsSeconds() / 30));
+    var spawned_count: int = 0;
 
     for point: WMH_BiomeSpawnPoint in spawn_points {
       var nearby_respawning_points: int = this.spawn_points
@@ -403,11 +404,14 @@ statemachine class WMH_Bestiary {
 
         this.requestSpawn(request);
         point.consume();
+        spawned_count += 1;
       }
       else {
         WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
       }
     }
+
+    WMHINFO("spawnNearbyAvailableSpawnPoints(), spawned_count = " + spawned_count);
   }
 
   private function spawnNearbyEventNpcSpawnPoints(hunt_seed: int) {

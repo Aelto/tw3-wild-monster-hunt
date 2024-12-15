@@ -9,8 +9,6 @@ statemachine class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
 
   public function trySpawnGuardedTreasure(hunt_seed: int) {
     var point_seed: int = this.getPointSeed(hunt_seed);
-
-    WMHINFO("trySpawnGuardedTreasure");
     
     // treasure was part of a previous hunt
     if (this.previous_hunt_seed != hunt_seed) {
@@ -35,6 +33,7 @@ statemachine class WMH_GuardTreasureSpawnPoint extends WMH_BiomeSpawnPoint {
     }
 
     if (this.GetCurrentStateName() != 'Spawning') {
+      WMHINFO("trySpawnGuardedTreasure, spawning");
       this.previous_hunt_seed = hunt_seed;
       this.GotoState('Spawning');
     }
