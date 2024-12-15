@@ -1,0 +1,51 @@
+/// Represents a seed that changes at every X seconds interval. Can be used to
+/// ensure repeated calls to a RandNoise(seed) yields the same results while in
+/// that interval, while getting a different seed as soon as the delay has
+/// passed
+class WMH_DynInstantSeed {
+  private var base_interval: float;
+
+  private var ts_seed: float;
+  private var interval_seed: int;
+
+  public function init(base_interval: float): WMH_DynInstantSeed {
+    this.base_interval = base_interval;
+
+    return this;
+  }
+
+  public function dynSeed(
+    seed: int,
+    /// each point removes a second to wait before getting a potential new seed
+    optional change_factor: float
+  ): int {
+    this.maybeRefresh(change_factor);
+    return seed + this.interval_seed;
+  }
+
+  /// Utility function to get a dynSeed that's affected by the player's movement
+  public function dynSeedPlayerMovements(seed: int): int {
+    var horse_factor: float;
+
+    if (thePlayer.IsUsingHorse()) {
+      horse_factor += (thePlayer.GetUsedVehicle() as CActor)
+        .GetMovingAgentComponent()
+        .GetRelativeMoveSpeed();
+    }
+
+    return this.dynSeed(
+      seed,
+      (thePlayer.GetMovingAgentComponent().GetSpeed() + horse_factor) * 3
+    );
+  }
+
+  private function maybeRefresh(change_factor: float) {
+    var now: float = WMH_getEngineTimeAsSeconds();
+    var interval: float = this.base_interval - AbsF(change_factor);
+
+    if (now - ts_seed >= interval) {
+      this.ts_seed = now;
+      this.interval_seed = RoundF(now / interval);
+    }
+  }
+}
