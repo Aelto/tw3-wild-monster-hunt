@@ -282,12 +282,14 @@ statemachine class WMH_Bestiary {
       var nearby_occupied_count: int = this.spawn_points
         .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 30);
 
-      var altered_chance: float = monster_spawn_chance / nearby_occupied_count;
+      var altered_chance: float = monster_spawn_chance / (nearby_occupied_count + 1);
       var point_seed: int = point.getPointSeed(instant_seed);
 
       // for every occupied point nearby, the chances of this point being used
       var can_spawn_monsters: bool = point
         .canSpawnMonstersInHunt(point_seed, altered_chance);
+
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters);
 
       if (!can_spawn_monsters) {
         continue;
@@ -318,20 +320,20 @@ statemachine class WMH_Bestiary {
           options
         );
       }
-    }
 
-    if (bentry) {
-      var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-        .init()
-        .withSpawnPoint(point)
-        .withBestiaryEntry(bentry)
-        .withSeed(point_seed);
+      if (bentry) {
+        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+          .init()
+          .withSpawnPoint(point)
+          .withBestiaryEntry(bentry)
+          .withSeed(point_seed);
 
-      this.requestSpawn(request);
-      point.consume();
-    }
-    else {
-      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        this.requestSpawn(request);
+        point.consume();
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+      }
     }
   }
 
@@ -387,20 +389,20 @@ statemachine class WMH_Bestiary {
           options
         );
       }
-    }
 
-    if (bentry) {
-      var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
-        .init()
-        .withSpawnPoint(point)
-        .withBestiaryEntry(bentry)
-        .withSeed(point_seed);
+      if (bentry) {
+        var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
+          .init()
+          .withSpawnPoint(point)
+          .withBestiaryEntry(bentry)
+          .withSeed(point_seed);
 
-      this.requestSpawn(request);
-      point.consume();
-    }
-    else {
-      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+        this.requestSpawn(request);
+        point.consume();
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
+      }
     }
   }
 
