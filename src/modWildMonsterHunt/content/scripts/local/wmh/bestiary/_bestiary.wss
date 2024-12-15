@@ -15,6 +15,7 @@ statemachine class WMH_Bestiary {
   public var entries_wildlife: array<WMH_BestiaryEntry>;
 
   protected var spawn_requests: array<WMH_SpawnRequest>;
+  protected var spawn_instant_seed: WMH_DynInstantSeed;
 
   public function init(master: WMH_Master): WMH_Bestiary {
     this.master = master;
@@ -22,6 +23,8 @@ statemachine class WMH_Bestiary {
     this.spawn_points = (new WMH_SpawnPointManager in this).init();
     this.active_view = (new WMH_BestiaryActiveView in this).init();
     this.biomes = (new WMH_BiomeManager in this).init();
+
+    this.spawn_instant_seed = (new WMH_DynInstantSeed in this).init(30);
 
     this.initEntries();
     this.GotoState('Waiting');
@@ -271,10 +274,9 @@ statemachine class WMH_Bestiary {
     var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
       .getValidSpawnPoints();
 
-    // a seed that changes only every 30seconds, that way no matter how often
-    // this function runs a point may not get more than one real attempt for
-    // every seed.
-    var instant_seed: int = RoundF(hunt_seed + (WMH_getEngineTimeAsSeconds() / 30));
+    var instant_seed: int = this.spawn_instant_seed
+      .dynSeedPlayerMovements(hunt_seed);
+
     var monster_spawn_chance: float = 1.0;
     var spawned_count: int = 0;
 
@@ -289,7 +291,7 @@ statemachine class WMH_Bestiary {
       var can_spawn_monsters: bool = point
         .canSpawnMonstersInHunt(point_seed, altered_chance);
 
-      // WMHINFO("spawnNearbyAvailableSpawnPoints(), chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters);
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters);
 
       if (!can_spawn_monsters) {
         continue;
@@ -348,10 +350,9 @@ statemachine class WMH_Bestiary {
     var spawn_points: array<WMH_BiomeSpawnPointFallback>;
     this.spawn_points.getNearbyValidSpawnPointFallbacks(spawn_points);
 
-    // a seed that changes only every 30seconds, that way no matter how often
-    // this function runs a point may not get more than one real attempt for
-    // every seed.
-    var instant_seed: int = RoundF(hunt_seed + (WMH_getEngineTimeAsSeconds() / 30));
+    var instant_seed: int = this.spawn_instant_seed
+      .dynSeedPlayerMovements(hunt_seed);
+
     var spawned_count: int = 0;
 
     for point: WMH_BiomeSpawnPoint in spawn_points {
