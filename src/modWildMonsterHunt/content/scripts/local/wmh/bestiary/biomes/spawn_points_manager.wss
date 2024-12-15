@@ -48,6 +48,7 @@ class WMH_SpawnPointManager {
       var radius: float = 500;
       var max: int = 250;
 
+      this.nearby_spawn_points.Clear();
       this.findNearbySpawnPoints(
         this.nearby_spawn_points,
         radius,
@@ -181,6 +182,7 @@ class WMH_SpawnPointManager {
     radius: float
   ): int {
     var count: int = 0;
+    var radius_sq: float = radius * radius;
 
     for point: WMH_BiomeSpawnPoint in this.occupied_spawn_points {
       var distance: float = VecDistanceSquared2D(
@@ -188,7 +190,7 @@ class WMH_SpawnPointManager {
         point.GetWorldPosition()
       );
 
-      if (distance <= radius) {
+      if (distance <= radius_sq) {
         count += 1;
       }
     }
@@ -201,6 +203,7 @@ class WMH_SpawnPointManager {
     radius: float
   ): int {
     var count: int = 0;
+    var radius_sq: float = radius * radius;
 
     for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
       if (!point.isWaitingForRespawn()) {
@@ -212,7 +215,7 @@ class WMH_SpawnPointManager {
         point.GetWorldPosition()
       );
 
-      if (distance <= radius) {
+      if (distance <= radius_sq) {
         count += 1;
       }
     }
