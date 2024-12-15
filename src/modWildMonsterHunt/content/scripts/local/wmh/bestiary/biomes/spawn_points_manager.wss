@@ -38,15 +38,22 @@ class WMH_SpawnPointManager {
     if (this.region_spawn_points.Size() <= 0) {
       if (ignore_tickers || this.region_refresh_ticker.validate()) {
         var radius: float = 4000;
-        var max: int = 500;
-        this.region_spawn_points = this.findNearbySpawnPoints(radius, max);
+        var max: int = 1000;
+        this.region_spawn_points = this.findGlobalSpawnPoints(radius, max);
         // WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
       }
     }
 
     if (ignore_tickers || this.nearby_refresh_ticker.validate()) {
       var radius: float = 500;
-      this.nearby_spawn_points = this.buildNearbySpawnPointsFromRegion(radius);
+      var max: int = 250;
+
+      this.findNearbySpawnPoints(
+        this.nearby_spawn_points,
+        radius,
+        max
+      );
+
       WMHINFO("WMH_SpawnPointManager, nearby_spawn_points.Size() = " + this.nearby_spawn_points.Size());
     }
   }
@@ -214,6 +221,34 @@ class WMH_SpawnPointManager {
   }
 
   private function findNearbySpawnPoints(
+    out output: array<WMH_BiomeSpawnPoint>,
+    radius: float,
+    optional count: int
+  ) {
+
+    if (count < 0) {
+      count = 100;
+    }
+
+    var entities: array<CGameplayEntity>;
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer as CNode,
+      radius,
+      count, // max results
+      'WMH_BiomeSpawnPoint'
+    );
+
+    for entity: CGameplayEntity in entities {
+      var point: WMH_BiomeSpawnPoint = entity as WMH_BiomeSpawnPoint;
+
+      if (point) {
+        output.PushBack(point);
+      }
+    }
+  }
+
+  private function findGlobalSpawnPoints(
     radius: float,
     count: int
   ): array<WMH_BiomeSpawnPoint> {
@@ -239,25 +274,6 @@ class WMH_SpawnPointManager {
           output.PushBack(current);
         }
       }
-    }
-
-    return output;
-  }
-
-  private function buildNearbySpawnPointsFromRegion(
-    radius: float
-  ): array<WMH_BiomeSpawnPoint> {
-    var output: array<WMH_BiomeSpawnPoint>;
-
-    var position: Vector = thePlayer.GetWorldPosition();
-    radius *= radius;
-
-    for point: WMH_BiomeSpawnPoint in this.region_spawn_points {
-      if (VecDistanceSquared2D(position, point.GetWorldPosition()) >= radius) {
-        continue;
-      }
-
-      output.PushBack(point);
     }
 
     return output;
