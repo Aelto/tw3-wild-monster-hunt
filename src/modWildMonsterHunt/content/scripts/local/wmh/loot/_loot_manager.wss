@@ -165,10 +165,6 @@ statemachine class WMH_LootManager {
 
   private function addLootRequest(request: WMH_LootRequest) {
     this.loot_requests.PushBack(request);
-
-    if (this.GetCurrentStateName() == 'Waiting') {
-      this.GotoState('Running');
-    }
   }
 
   protected function registerLoot(category: WMH_LootTag, _level: int, item: name) {

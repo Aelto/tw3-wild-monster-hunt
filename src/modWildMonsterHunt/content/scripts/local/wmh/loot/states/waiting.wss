@@ -7,16 +7,17 @@ state Waiting in WMH_LootManager {
   entry function Waiting_main() {
     // WMHINFO("WMH_LootManagerStateWaiting:Waiting_main()");
 
-    if (parent.loot_requests.Size() > 0) {
-      parent.GotoState('Running');
-    }
-
     while (true) {
-      Sleep(10);
+      Sleep(5.0);
 
+      
       if (parent.loot_requests.Size() > 0) {
+        WMHINFO("WMH_LootManagerStateWaiting:Waiting_main(), loot_requests.Size() = " + parent.loot_requests.Size());
+
         parent.GotoState('Running');
       }
+
+      Sleep(5.0);
     }
   }
 }
