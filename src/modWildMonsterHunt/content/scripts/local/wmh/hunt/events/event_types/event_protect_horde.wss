@@ -88,7 +88,11 @@ state Spawning in WMH_EventNpc_EventProtectHorde {
     var bestiary: WMH_Bestiary = WMH_getBestiary();
     var spawn_position: Vector = parent.origin.GetWorldPosition()
       + VecFromHeading(parent.origin.player_approach_heading)
-      * 10;
+      * 15;
+
+    if (!WMH_getGroundPosition(spawn_position, 2.5)) {
+      WMHINFO("EventProtectHorde, couldn't find suitable ground position");
+    }
 
     var waves: array<WMH_BestiaryEntry>;
     parent.getWavesSpecies(waves);
