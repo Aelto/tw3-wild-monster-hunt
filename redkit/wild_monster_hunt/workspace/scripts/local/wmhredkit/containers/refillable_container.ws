@@ -50,5 +50,6 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 		Enable( true );
 
 		this.previous_refill_seed = hunt_seed;
+		this.RemoveTimer('maybeRefillForHunt');
 	}
 }
