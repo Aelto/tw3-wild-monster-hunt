@@ -81,6 +81,17 @@ class WMH_Encounter {
     ) < 40 * 40;
 
     if (notify) {
+      if (
+        this.encounter_tag == WMH_EncounterTag_ContractRegular
+        || this.encounter_tag == WMH_EncounterTag_ContractMilestone
+      ) {
+        WMHTUTOFACT(
+          'WMH_EncounterContractHunterExpertise',
+          "Hunter Expertise",
+          "<font color='#CD7D03'>You completed a contract</font>.<br/><br/>You are free to go back to the camp now to get the reward or you can continue your hunt at the risk of losing your progress in the event a feint.<br/><br/>Keep note of the location you found this target, but also the weather and the time of day, so the next time a similar creature emerges you will have an easier time finding it."
+        );
+      }
+
       for bentry: WMH_BestiaryEntry in this.entries {
         thePlayer.wmh.submitOnCreatureKilled(this, bentry, this.encounter_tag);
       }
