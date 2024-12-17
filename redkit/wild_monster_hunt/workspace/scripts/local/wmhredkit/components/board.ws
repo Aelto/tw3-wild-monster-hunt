@@ -1,5 +1,6 @@
 class WMH_NoticeBoard extends W3NoticeBoard {
   private var oneliners: array<SU_OnelinerEntity>;
+  private var general_oneliner: SU_OnelinerEntity;
   private var contract_manager: WMH_ContractManager;
 
   private var update_cooldown: WMH_Ticker;
@@ -45,6 +46,8 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   private timer function setupContractOnelinersTimer(delta: float, id: int) {
     var target_names: array<string> = this.contract_manager.getPendingTargetsNameHtml();
     var oneliner: SU_OnelinerEntity;
+    var contract_level: WMH_Level;
+    var general_text: string;
     var i: int = 0;
 
     var position: Vector;
@@ -103,6 +106,24 @@ class WMH_NoticeBoard extends W3NoticeBoard {
       oneliner.offset.Z += 1.0;
       oneliner.update();
     }
+
+    contract_level = WMH_getStorage().general.level;
+    general_text = "<u>Reputation level:</u> ";
+    general_text += FloorF(contract_level.value);
+
+    if (this.general_oneliner) {
+      this.general_oneliner.text = general_text;
+      this.general_oneliner.update();
+    }
+    else {
+      this.general_oneliner = SU_onelinerEntity(
+        general_text,
+        this
+      );
+    }
+
+     this.general_oneliner.offset = Vector(0, 0, 2.0);
+     this.general_oneliner.render_distance = 5;
   }
 
   private function unregisterOneliners() {
@@ -115,5 +136,10 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     }
 
     this.oneliners.Clear();
+
+    if (this.general_oneliner) {
+      this.general_oneliner.unregister();
+      delete this.general_oneliner;
+    }
   }
 }
