@@ -1,4 +1,6 @@
 class WMH_StorageContract {
+  /// this is currently unused, the milestone level is obtained by dividing the
+  /// general level by 5.
   public var milestone_level: WMH_Level;
 
   public var completed_contracts_count: int;
