@@ -64,6 +64,7 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
       else += 0.8,
 
       if (humidity) += 0.2,
+      if (wide) *= 0.5,
 
       morning {
         if (clear) *= 0.1,

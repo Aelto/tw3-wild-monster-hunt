@@ -40,9 +40,7 @@ class WMH_BestiaryEntrySiren extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (!humidity || !wide || vegetation) nospawn
-      else += 1.0,
-
+      if (humidity && wide) += 1.0,
       if (!clear) *= 2.0,
     }});
   }

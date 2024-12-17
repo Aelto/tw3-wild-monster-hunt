@@ -27,8 +27,10 @@ class WMH_BestiaryEntryBerserker extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (structures) += 0.3,
-      if (!structures) += 0.1,
+      if (structures) += 0.05,
+      if (vegetation) += 0.05,
+      if (altitude) *= 1.5,
+      if (wide) -= 0.05,
     }});
   }
 

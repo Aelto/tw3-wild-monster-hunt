@@ -63,8 +63,9 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
     pref_time!({{
       if (underground) += 0.5,
       if (vegetation) += 0.5,
-      if (!wide) += 0.2,
-      if (humidity) += 0.1,
+
+      if (wide) -= 0.2,
+      if (humidity) -= 0.1,
 
       night {
         if (!underground) *= 0.2,
