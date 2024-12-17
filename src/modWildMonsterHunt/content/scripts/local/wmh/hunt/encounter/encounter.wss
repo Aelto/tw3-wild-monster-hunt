@@ -75,6 +75,10 @@ class WMH_Encounter {
       this.spawn_point.liberate(is_completed);
     }
 
+    if (this.target_oneliner) {
+      this.target_oneliner.unregister();
+    }
+
     var notify: bool = VecDistanceSquared2D(
       thePlayer.GetWorldPosition(),
       this.GetWorldPosition()
