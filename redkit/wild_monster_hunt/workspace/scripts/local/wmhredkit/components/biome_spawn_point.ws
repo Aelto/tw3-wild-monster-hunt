@@ -70,6 +70,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		return RandNoiseF(point_seed + 0, 1.0) <= chances;
 	}
 
+	public function isSpawnForced(): bool {
+		return this.spawn_priority == WMH_BSP_SP_Forced;
+	}
+
 	public function isOccupied(): bool {
 		return this.respawn_ticker.isLocked();
 	}

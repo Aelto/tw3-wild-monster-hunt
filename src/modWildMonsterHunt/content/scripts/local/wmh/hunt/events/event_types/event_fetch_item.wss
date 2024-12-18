@@ -16,6 +16,8 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
     if (!this.canBeCompleted()) {
+      WMHHUD("You do not have the required items");
+
       return false;
     }
 

@@ -59,9 +59,14 @@ class WMH_Encounter {
   }
 
   public function onDestroy() {
+    var notify: bool = VecDistanceSquared2D(
+      thePlayer.GetWorldPosition(),
+      this.GetWorldPosition()
+    ) < 40 * 40;
+
     // do it before clearing the entities as it relies on the list to confirm
     // whether it was completed.
-    var is_completed: bool = this.isCompleted();
+    var is_completed: bool = notify && this.isCompleted();
 
     for entity: CEntity in this.entities {
       if (entity) {
@@ -78,11 +83,6 @@ class WMH_Encounter {
     if (this.target_oneliner) {
       this.target_oneliner.unregister();
     }
-
-    var notify: bool = VecDistanceSquared2D(
-      thePlayer.GetWorldPosition(),
-      this.GetWorldPosition()
-    ) < 40 * 40;
 
     if (notify) {
       if (

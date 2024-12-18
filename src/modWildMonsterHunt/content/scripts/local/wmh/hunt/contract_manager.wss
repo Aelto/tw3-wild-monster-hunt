@@ -121,6 +121,12 @@ class WMH_ContractManager {
     return output;
   }
 
+  // returns how many WMH_Levels are needed before a new milestone contract is
+  // generated.
+  public function milestoneContractsInterval(): int {
+    return 5;
+  }
+
   private function onContractCompleted(
     provider: WMH_RewardProvider,
     pending: WMH_PendingContract,
@@ -297,11 +303,5 @@ class WMH_ContractManager {
         );
       }
     }
-  }
-
-  // returns how many WMH_Levels are needed before a new milestone contract is
-  // generated.
-  private function milestoneContractsInterval(): int {
-    return 5;
   }
 }

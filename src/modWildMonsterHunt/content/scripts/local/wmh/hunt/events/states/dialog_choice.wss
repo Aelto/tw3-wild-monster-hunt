@@ -87,7 +87,7 @@ state DialogChoice in WMH_EventNpc {
       }
       else {
         Sleep(0.25);
-        return;
+        break;
       }
     }
     parent.conversation.stopSimulatingConversation();

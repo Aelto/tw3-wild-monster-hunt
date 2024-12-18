@@ -297,8 +297,8 @@ statemachine class WMH_Bestiary {
         continue;
       }
 
-      var can_spawn_wildlife: bool = RandNoiseF(point_seed + 1, 1.0)
-        <= 0.05 + (point.prefer_wildlife as float) * 0.1;
+      var can_spawn_wildlife: bool = !point.isSpawnForced()
+        && RandNoiseF(point_seed + 1, 1.0) <= 0.05 + (point.prefer_wildlife as float) * 0.1;
 
       if (can_spawn_wildlife) {
         var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(

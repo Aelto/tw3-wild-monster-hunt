@@ -51,13 +51,15 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
     // 1. activate spawn, tell it to force spawn,
     if (!this.canBeCompleted()) {
       this.poi.spawnPriorityForce();
-    }
+      
+      if (!this.oneliner) {
+        this.oneliner = WMH_gameplayOnelinerEntity(
+          "<img src='img://icons/quests/monsterhunt.png' vspace='-10' /> Clear area",
+          this.poi
+        );
 
-    if (!this.oneliner) {
-      this.oneliner = WMH_gameplayOnelinerEntity(
-        "<img src='img://icons/quests/monsterhunt.png' vspace='-10' /> Clear area",
-        this.poi
-      );
+        this.oneliner.offset = Vector(0, 0, 2.0);
+      }
     }
 
     super.tryStart();

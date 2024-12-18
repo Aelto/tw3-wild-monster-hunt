@@ -86,7 +86,9 @@ statemachine class WMH_EventNpc extends CNewNPC {
   }
 
   protected function generateEvents(seed: int) {
-    this.events.Clear();
+    if (this.events.Size() > 0) {
+      return;
+    }
 
     var max: int = 1;
     var i: int;

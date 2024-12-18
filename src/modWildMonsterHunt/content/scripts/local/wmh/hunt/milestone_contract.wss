@@ -11,8 +11,11 @@ class WMH_MilestoneContract extends WMH_PendingContract {
   ): WMH_MilestoneContract {
     this.affix_manager = new WMH_AffixManager in this;
     this.contract = contract;
+    this.milestone_level = WMH_Level(
+      contract.level.value / WMH_getContractManager().milestoneContractsInterval()
+    );
 
-    this.initFromMilestoneLevel(bestiary, contract.level);
+    this.initFromMilestoneLevel(bestiary, this.milestone_level);
 
     return this;
   }

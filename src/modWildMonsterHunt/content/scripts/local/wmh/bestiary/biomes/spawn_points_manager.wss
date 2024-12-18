@@ -13,7 +13,7 @@ class WMH_SpawnPointManager {
   private var region_refresh_ticker: WMH_Ticker;
 
   public function init(): WMH_SpawnPointManager {
-    this.nearby_refresh_ticker = (new WMH_Ticker in this).init(25); // seconds
+    this.nearby_refresh_ticker = (new WMH_Ticker in this).init(10); // seconds
     this.region_refresh_ticker = (new WMH_Ticker in this).init(180); // seconds
 
     return this;
