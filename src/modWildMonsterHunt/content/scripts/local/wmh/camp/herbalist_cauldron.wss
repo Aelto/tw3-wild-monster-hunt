@@ -141,7 +141,7 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   private function getCostPerYield(): int {
-    return this.getPointsPerYield();
+    return 50;
   }
 
   private function getCurrentTotalPoints(): int {
