@@ -36,6 +36,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	// stores the timestamp of the last time this spawn point was liberated after
 	// it spawned something
 	protected var last_clear_time: float;
+	protected var last_clues_time: float;
 
 	protected var spawn_priority: WMH_BiomeSpawnPoint_SpawnPriority;
 	
@@ -59,7 +60,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	): bool {
 		var chances: float = monster_spawn_chance;
 
-		if (this.spawn_priority == WMH_BSP_SP_Forced) {
+		if (this.isSpawnForced()) {
 			return true;
 		}
 
@@ -68,6 +69,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		}
 
 		return RandNoiseF(point_seed + 0, 1.0) <= chances;
+	}
+
+	public function canSpawnClues(): bool {
+		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clues_time);
 	}
 
 	public function isSpawnForced(): bool {
@@ -102,6 +107,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		WMH_getSpawnPointManager().onBiomeSpawnPointConsumed(this);
 	}
 
+	public function consumeForClues() {
+		this.last_clear_time = WMH_getEngineTimeAsSeconds();
+	}
+
 	public function liberate(optional encounter_was_killed: bool) {
 		this.respawn_ticker.reset();
 
@@ -122,6 +131,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		}
 
 		WMH_getSpawnPointManager().onBiomeSpawnPointLiberated(this);
+	}
+
+	public function liberateForClues() {
+		this.last_clues_time = 0;
 	}
 
 	// tells the spawn point to spawn its creatures as soon as possible, even if
@@ -157,12 +170,12 @@ class WMH_BiomeSpawnPointFallback extends WMH_BiomeSpawnPoint {
 		monster_spawn_chance: float
 	): bool {
 		var chances: float = monster_spawn_chance;
-
 		var db: WMH_HuntFactsDb = WMH_getHuntFactsDb();
 
-		return (
-			this.forbidden_hunt_fact == "" || !db.contains(this.forbidden_hunt_fact)
-			&& this.required_hunt_fact == "" || db.contains(this.required_hunt_fact)
-		) && super.canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
+		return this.isSpawnForced()
+			|| (
+				this.forbidden_hunt_fact == "" || !db.contains(this.forbidden_hunt_fact)
+				&& this.required_hunt_fact == "" || db.contains(this.required_hunt_fact)
+			) && super.canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
 	}
 }

@@ -284,6 +284,10 @@ class WMH_PendingContract {
 
       // WMHINFO("BiomeCluesPoint - heading_difference success");
 
+      if (!point.canSpawnClues()) {
+        continue;
+      }
+
       thePlayer.wmh.submitOnSpawnClues(
         this,
         this.target,
@@ -295,7 +299,7 @@ class WMH_PendingContract {
 
       // update position of the previous clue:
       this.available_locations[target_index].previous_clue_location = position;
-      point.consume();
+      point.consumeForClues();
     }
   }
 }
