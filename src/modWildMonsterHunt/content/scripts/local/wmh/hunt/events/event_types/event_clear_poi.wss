@@ -7,27 +7,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
   public function init(origin: WMH_EventNpc, seed: int) {
     super.init(origin, seed);
 
-    var entities: array<CGameplayEntity>;
-
-    // directly fetch the points in range instead of relying on the spawn point 
-    // manager as its cache could yield undesired results:
-    FindGameplayEntitiesInRange(
-      entities,
-      origin,
-      200,
-      100, // max results
-      'WMH_BiomeSpawnPoint'
-    );
-
-    var index: int = RandNoiseF(this.seed, entities.Size()) as int;
-    var entity: CGameplayEntity = entities[index];
-
-    this.poi = entity as WMH_BiomeSpawnPoint;
-    if (!this.poi) {
-      WMHERROR(
-        "EventClearPoi: selected point is not an instance of WMH_BiomeSpawnPoint"
-      );
-    }
+    this.findPointToClear();
   }
 
   public function description(): string {
@@ -44,22 +24,27 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       return;
     }
 
-    if (!this.poi) {
+    if (!this.findPointToClear()) {
+      WMHERROR("WMH_EventNpc_EventClearPoi::tryStart(), failed to find poi to clear");
       return;
     }
 
     // 1. activate spawn, tell it to force spawn,
     if (!this.canBeCompleted()) {
       this.poi.spawnPriorityForce();
+      WMH_getBestiary().onEventClearAreaStart(this, this.poi, this.seed);
       
       if (!this.oneliner) {
         this.oneliner = WMH_gameplayOnelinerEntity(
-          "<img src='img://icons/quests/monsterhunt.png' vspace='-10' /> Clear area",
+          "<img src='img://icons/quests/monsterhunt.png' vspace='-24' /> Clear area",
           this.poi
         );
 
         this.oneliner.offset = Vector(0, 0, 2.0);
       }
+    }
+    else {
+      WMHINFO("WMH_EventNpc_EventClearPoi::tryStart(), can already be completed");
     }
 
     super.tryStart();
@@ -84,6 +69,9 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
     if (this.poi) {
       return this.poi.wasKilledSinceStartOfHunt() && super.canBeCompleted();
     }
+    else {
+      WMHINFO("WMH_EventNpc_EventClearPoi::canBeCompleted(), missing POI");
+    }
 
     return super.canBeCompleted();
   }
@@ -92,5 +80,37 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
     if (this.oneliner) {
       this.oneliner.unregister();
     }
+  }
+
+  private function findPointToClear(): bool {
+    if (this.poi) {
+      return true;
+    }
+
+    var entities: array<CGameplayEntity>;
+
+    // directly fetch the points in range instead of relying on the spawn point 
+    // manager as its cache could yield undesired results:
+    FindGameplayEntitiesInRange(
+      entities,
+      origin,
+      200,
+      100, // max results
+      'WMH_BiomeSpawnPoint'
+    );
+
+    var index: int = RandNoiseF(this.seed, entities.Size()) as int;
+    var entity: CGameplayEntity = entities[index];
+
+    this.poi = entity as WMH_BiomeSpawnPoint;
+    if (!this.poi) {
+      WMHERROR(
+        "EventClearPoi: selected point is not an instance of WMH_BiomeSpawnPoint"
+      );
+
+      return false;
+    }
+
+    return true;
   }
 }
