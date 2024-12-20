@@ -12,6 +12,9 @@ statemachine class WMH_EventNpc extends CNewNPC {
       thePlayer.GetWorldPosition() - this.GetWorldPosition()
     );
 
+    // we don't want the NPC to drop anything in case he dies.
+    this.GetInventory().RemoveAllItems();
+
     var encounter: WMH_EncounterManager = WMH_getEncounterManager();
     encounter.onEventNpcSpawned(this);
   }
