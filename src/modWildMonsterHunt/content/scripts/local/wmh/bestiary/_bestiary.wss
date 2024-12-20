@@ -16,6 +16,7 @@ statemachine class WMH_Bestiary {
 
   protected var spawn_requests: array<WMH_SpawnRequest>;
   protected var spawn_instant_seed: WMH_DynInstantSeed;
+  protected var wildlife_instant_seed: WMH_DynInstantSeed;
 
   public function init(master: WMH_Master): WMH_Bestiary {
     this.master = master;
@@ -25,6 +26,7 @@ statemachine class WMH_Bestiary {
     this.biomes = (new WMH_BiomeManager in this).init();
 
     this.spawn_instant_seed = (new WMH_DynInstantSeed in this).init(30);
+    this.wildlife_instant_seed = (new WMH_DynInstantSeed in this).init(120);
 
     this.initEntries();
     this.GotoState('Waiting');
@@ -283,9 +285,12 @@ statemachine class WMH_Bestiary {
       .getValidSpawnPoints();
 
     var instant_seed: int = this.spawn_instant_seed
-      .dynSeedPlayerMovements(hunt_seed);
+      .dynSeedPlayerMovements(hunt_seed, 3.0);
 
+    // 1.
+    // first pass for monsters
     var monster_spawn_chance: float = 1.0;
+    var wildlife_spawn_chance: float = 0.0;
     var spawned_count: int = 0;
 
     for point: WMH_BiomeSpawnPoint in spawn_points {
@@ -293,11 +298,37 @@ statemachine class WMH_Bestiary {
         contract,
         point,
         instant_seed,
-        monster_spawn_chance
+        monster_spawn_chance,
+        wildlife_spawn_chance
       ) as int;
     }
 
-    WMHINFO("spawnNearbyAvailableSpawnPoints(), spawned_count = " + spawned_count);
+    WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count);
+
+
+    // 2.
+    // second pass for wildlife
+    var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
+      .getValidSpawnPoints(true);
+
+    var instant_seed: int = this.wildlife_instant_seed
+      .dynSeedPlayerMovements(hunt_seed, 10.0);
+
+    var monster_spawn_chance: float = 0.0;
+    var wildlife_spawn_chance: float = 0.2;
+    var spawned_count: int = 0;
+
+    for point: WMH_BiomeSpawnPoint in spawn_points {
+      spawned_count += this.trySpawnPoint(
+        contract,
+        point,
+        instant_seed,
+        monster_spawn_chance,
+        wildlife_spawn_chance
+      ) as int;
+    }
+
+    WMHINFO("spawnNearbyAvailableSpawnPoints(), wildlife spawned_count = " + spawned_count);
   }
 
   private function spawnNearbyAvailableSpawnPointFallbacks(
@@ -308,7 +339,7 @@ statemachine class WMH_Bestiary {
     this.spawn_points.getNearbyValidSpawnPointFallbacks(spawn_points);
 
     var instant_seed: int = this.spawn_instant_seed
-      .dynSeedPlayerMovements(hunt_seed);
+      .dynSeedPlayerMovements(hunt_seed, 3.0);
 
     var spawned_count: int = 0;
 
@@ -376,28 +407,36 @@ statemachine class WMH_Bestiary {
     contract: WMH_ContractManager,
     point: WMH_BiomeSpawnPoint,
     instant_seed: int,
-    monster_spawn_chance: float
+    monster_spawn_chance: float,
+    optional wildlife_spawn_chance: float
   ): bool {
-    var nearby_occupied_count: int = this.spawn_points
-      .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 30);
+    var can_spawn_monsters: bool = false;
+    var can_spawn_wildlife: bool = false;
 
-    // for every occupied point nearby, the chances of this point being used
-    // decreases
-    var altered_chance: float = monster_spawn_chance / (nearby_occupied_count + 1);
-    var point_seed: int = point.getPointSeed(instant_seed);
+    if (monster_spawn_chance > 0) {
+      var nearby_occupied_count: int = this.spawn_points
+        .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 30);
 
-    var can_spawn_monsters: bool = point
-      .canSpawnMonstersInHunt(point_seed, altered_chance);
+      // for every occupied point nearby, the chances of this point being used
+      // decreases
+      var altered_chance: float = monster_spawn_chance / (nearby_occupied_count + 1);
+      var point_seed: int = point.getPointSeed(instant_seed);
 
-    WMHINFO("spawnNearbyAvailableSpawnPoints(), chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters);
-
-    if (!can_spawn_monsters) {
-      return false;
+      can_spawn_monsters = point
+        .canSpawnMonstersInHunt(point_seed, altered_chance);
     }
 
-    var can_spawn_wildlife: bool = !point.isSpawnForced()
-      && RandNoiseF(point_seed + 1, 1.0) <= 0.05 + (point.prefer_wildlife as float) * 0.1;
+    WMHINFO(
+      "spawnNearbyAvailableSpawnPoints(),"
+      + " chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters
+    );
 
+    if (wildlife_spawn_chance > 0) {
+      can_spawn_wildlife = RandNoiseF(point_seed + 1, 1.0)
+        <= wildlife_spawn_chance * ((point.prefer_wildlife as float) + 1);
+    }
+
+    var bentries: array<WMH_BestiaryEntry>;
     if (can_spawn_wildlife) {
       var bentry: WMH_BestiaryEntry = this.active_view.getRandomEntryWildlife(
         this.biomes,
@@ -405,8 +444,16 @@ statemachine class WMH_Bestiary {
         point.biome_tags_bypass,
         point_seed
       );
+
+      if (bentry) {
+        bentries.PushBack(bentry);
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid wildlife entry");
+      }
     }
-    else {
+    
+    if (can_spawn_monsters) {
       var options: WMH_getRandomEntryOptions;
       options.exclude_strong_target = !point.allow_strong_targets;
       options.exclude_weak_target = !point.allow_weak_targets;
@@ -419,9 +466,16 @@ statemachine class WMH_Bestiary {
         point_seed,
         options
       );
+
+      if (bentry) {
+        bentries.PushBack(bentry);
+      }
+      else {
+        WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid monster entry");
+      }
     }
 
-    if (bentry) {
+    for bentry: WMH_BestiaryEntry in bentries {
       var request: WMH_SpawnRequest = (new WMH_SpawnRequest in this)
         .init()
         .withSpawnPoint(point)
@@ -429,14 +483,17 @@ statemachine class WMH_Bestiary {
         .withSeed(point_seed);
 
       this.requestSpawn(request);
-      point.consume();
+    }
+
+    if (bentries.Size() > 0) {
+      if (can_spawn_monsters) {
+        point.consume();
+      }
 
       return true;
     }
-    else {
-      WMHINFO("WMH_Bestiary::spawnRandomEntry() - no valid bestiary entry");
-      return false;
-    }
+
+    return false;
   }
 
   private function spawnNearbyEventNpcSpawnPoints(hunt_seed: int) {

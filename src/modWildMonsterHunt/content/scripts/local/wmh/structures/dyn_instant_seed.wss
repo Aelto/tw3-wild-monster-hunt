@@ -24,8 +24,15 @@ class WMH_DynInstantSeed {
   }
 
   /// Utility function to get a dynSeed that's affected by the player's movement
-  public function dynSeedPlayerMovements(seed: int): int {
+  public function dynSeedPlayerMovements(
+    seed: int,
+    optional multiplier: float
+  ): int {
     var horse_factor: float;
+
+    if (multiplier <= 0) {
+      multiplier = 1.0;
+    }
 
     if (thePlayer.IsUsingHorse()) {
       horse_factor += (thePlayer.GetUsedVehicle() as CActor)
@@ -35,7 +42,9 @@ class WMH_DynInstantSeed {
 
     return this.dynSeed(
       seed,
-      (thePlayer.GetMovingAgentComponent().GetSpeed() + horse_factor) * 3
+
+      (thePlayer.GetMovingAgentComponent().GetSpeed() + horse_factor)
+      * multiplier
     );
   }
 
