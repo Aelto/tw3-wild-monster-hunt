@@ -32,6 +32,7 @@ statemachine class WMH_HuntManager {
   private var start_time: GameTime;
   private var start_time_engine: float;
   private var save_lock: int;
+  default save_lock = -1;
 
   // stores the creatures that were killed during the current hunt, and that
   // should result in completed contracts the next time the player enters a
@@ -84,7 +85,7 @@ statemachine class WMH_HuntManager {
 
     if (!thePlayer.wmh.hasJustBooted()) {
       // theGame.SaveGame(SGT_QuickSave, -1);
-      // theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
+      theGame.CreateNoSaveLock("WMH_HuntStart", this.save_lock, true, false);
     }
 
     if (this.GetCurrentStateName() == 'Waiting') {
@@ -106,7 +107,9 @@ statemachine class WMH_HuntManager {
 
     if (!thePlayer.wmh.hasJustBooted()) {
       // theGame.SaveGame(SGT_QuickSave, -1);
-      // theGame.ReleaseNoSaveLockByName("WMH_HuntStart");
+      if (theGame.AreSavesLocked() && this.save_lock != -1) {
+        theGame.ReleaseNoSaveLock(this.save_lock);
+      }
     }
   }
 
