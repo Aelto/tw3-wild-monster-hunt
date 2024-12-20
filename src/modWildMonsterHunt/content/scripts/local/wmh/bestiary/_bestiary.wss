@@ -36,18 +36,7 @@ statemachine class WMH_Bestiary {
 
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
-
-    // if the player is in a repulsive's area then skip spawning regular
-    // encounters. It isn't as precise as checking if the spawn point itself is
-    // in the repulsive but this approximation can save a lot of resources as
-    // we skip everything until the player gets outside the repulsive's radius
-    var can_spawn: bool = !WMH_getEncounterManager()
-      .isInRepulsive(thePlayer.GetWorldPosition());
-
-    if (can_spawn) {
-      this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
-    }
-
+    this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
     this.spawnNearbyEventNpcSpawnPoints(hunt_seed);
     this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
   }
@@ -281,30 +270,41 @@ statemachine class WMH_Bestiary {
     contract: WMH_ContractManager,
     hunt_seed: int
   ) {
-    var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
-      .getValidSpawnPoints();
-
-    var instant_seed: int = this.spawn_instant_seed
-      .dynSeedPlayerMovements(hunt_seed, 3.0);
+    // if the player is in a repulsive's area then skip spawning regular
+    // encounters. It isn't as precise as checking if the spawn point itself is
+    // in the repulsive but this approximation can save a lot of resources as
+    // we skip everything until the player gets outside the repulsive's radius
+    var in_repulsive: bool = !WMH_getEncounterManager()
+      .isInRepulsive(thePlayer.GetWorldPosition());
 
     // 1.
     // first pass for monsters
-    var monster_spawn_chance: float = 1.0;
-    var wildlife_spawn_chance: float = 0.0;
-    var spawned_count: int = 0;
+    if (!in_repulsive) {
+      var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
+        .getValidSpawnPoints();
 
-    for point: WMH_BiomeSpawnPoint in spawn_points {
-      spawned_count += this.trySpawnPoint(
-        contract,
-        point,
-        instant_seed,
-        monster_spawn_chance,
-        wildlife_spawn_chance
-      ) as int;
+      var instant_seed: int = this.spawn_instant_seed
+        .dynSeedPlayerMovements(hunt_seed, 3.0);
+
+      var monster_spawn_chance: float = 1.0;
+      var wildlife_spawn_chance: float = 0.0;
+      var spawned_count: int = 0;
+
+      for point: WMH_BiomeSpawnPoint in spawn_points {
+        spawned_count += this.trySpawnPoint(
+          contract,
+          point,
+          instant_seed,
+          monster_spawn_chance,
+          wildlife_spawn_chance
+        ) as int;
+      }
+
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count);
     }
-
-    WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count);
-
+    else {
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive");
+    }
 
     // 2.
     // second pass for wildlife
@@ -314,8 +314,10 @@ statemachine class WMH_Bestiary {
     var instant_seed: int = this.wildlife_instant_seed
       .dynSeedPlayerMovements(hunt_seed, 10.0);
 
+    // repulsive prevents monsters from spawning, instead the amount of wildlife
+    // increases.
+    var wildlife_spawn_chance: float = 0.2 + (in_repulsive as float) * 0.1;
     var monster_spawn_chance: float = 0.0;
-    var wildlife_spawn_chance: float = 0.2;
     var spawned_count: int = 0;
 
     for point: WMH_BiomeSpawnPoint in spawn_points {
