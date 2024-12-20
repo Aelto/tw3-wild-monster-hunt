@@ -45,11 +45,18 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 			self_seed
 		);
 
-		SetFocusModeVisibility( FMV_Interactive );
-		ApplyAppearance( "1_full" );
-		Enable( true );
-
 		this.previous_refill_seed = hunt_seed;
 		this.RemoveTimer('maybeRefillForHunt');
+		this.AddTimer('maybeAdjustInteractivity', 10);
+	}
+
+	timer function maybeAdjustInteractivity(delta: float, id: int) {
+		if (this.IsEmpty()) {
+			return;
+		}
+
+		SetFocusModeVisibility(FMV_Interactive);
+		ApplyAppearance("1_full");
+		Enable(true);
 	}
 }
