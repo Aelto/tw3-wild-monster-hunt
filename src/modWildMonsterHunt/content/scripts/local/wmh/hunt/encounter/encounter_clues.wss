@@ -33,5 +33,9 @@ class WMH_EncounterClues extends WMH_Encounter {
     if (this.oneliner) {
       this.oneliner.unregister();
     }
+
+    if (this.spawn_point) {
+      this.spawn_point.liberateForClues();
+    }
   }
 }

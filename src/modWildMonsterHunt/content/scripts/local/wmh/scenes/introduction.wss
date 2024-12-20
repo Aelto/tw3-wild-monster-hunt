@@ -169,7 +169,7 @@ statemachine class WMH_SceneIntroduction {
       WMH_showLogo(false, 2, 125, 125);
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0, 12.5);
       theGame.SetHoursPerMinute(hpm * 1);
-      this.tick(1.5, camera, position, rotation);
+      this.tick(2, camera, position, rotation);
 
       // 0.1) start to move the camera below the bridge
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
@@ -183,7 +183,7 @@ statemachine class WMH_SceneIntroduction {
 
     if (true) {
       // 0.2) go towards the camp
-      this.tick(16.25, camera, position, rotation);
+      this.tick(15.75, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
         "Witcher Camp",
