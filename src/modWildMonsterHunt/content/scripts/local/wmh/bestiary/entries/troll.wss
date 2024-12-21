@@ -26,17 +26,17 @@ class WMH_BestiaryEntryTroll extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     pref_time!({{
-      if (altitude) += 0.3,
-      if (structures) += 0.3,
-      if (humidity) += 0.1,
-      if (vegetation) += 0.1,
+      if (altitude) += 0.1,
+      if (structures) += 0.1,
+      if (humidity) += 0.05,
 
-      morning *= 1.5,
-      afternoon *= 2.0,
+      morning *= 1.0,
+      afternoon *= 1.5,
 
       night {
         if (underground) += 1.0,
         if (underground && wide) += 1.0,
+        if (!underground) nospawn
       }
     }});
   }
