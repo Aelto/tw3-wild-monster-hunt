@@ -412,31 +412,32 @@ statemachine class WMH_Bestiary {
     monster_spawn_chance: float,
     optional wildlife_spawn_chance: float
   ): bool {
+    var point_seed: int = point.getPointSeed(instant_seed);
     var can_spawn_monsters: bool = false;
     var can_spawn_wildlife: bool = false;
 
-    if (monster_spawn_chance > 0) {
+    if (monster_spawn_chance > 0.0) {
       var nearby_occupied_count: int = this.spawn_points
         .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 30);
 
       // for every occupied point nearby, the chances of this point being used
       // decreases
       var altered_chance: float = monster_spawn_chance / (nearby_occupied_count + 1);
-      var point_seed: int = point.getPointSeed(instant_seed);
 
       can_spawn_monsters = point
         .canSpawnMonstersInHunt(point_seed, altered_chance);
     }
 
-    WMHINFO(
-      "spawnNearbyAvailableSpawnPoints(),"
-      + " chance = " + altered_chance + ", can_spawn = " + can_spawn_monsters
-    );
-
-    if (wildlife_spawn_chance > 0) {
+    if (wildlife_spawn_chance > 0.0) {
       can_spawn_wildlife = RandNoiseF(point_seed + 1, 1.0)
-        <= wildlife_spawn_chance * ((point.prefer_wildlife as float) + 1);
+        <= wildlife_spawn_chance * ((point.prefer_wildlife as float) + 1.0);
     }
+
+    // WMHINFO(
+    //   "trySpawnPoint(),"
+    //   + " monster, chance = " + monster_spawn_chance + ", can_spawn = " + can_spawn_monsters
+    //   + " wildlife, chance = " + wildlife_spawn_chance + ", can_spawn = " + can_spawn_wildlife
+    // );
 
     var bentries: array<WMH_BestiaryEntry>;
     if (can_spawn_wildlife) {
