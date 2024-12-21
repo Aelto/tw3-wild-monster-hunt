@@ -20,7 +20,7 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
       }
     }
 
-    if (!this.canSpawn()) {
+    if (!this.canSpawn(hunt_seed)) {
       WMHINFO("WMH_EventNpcSpawnPoint, trySpawnNpc(), cannot spawn");
       return;
     }
@@ -33,10 +33,14 @@ statemachine class WMH_EventNpcSpawnPoint extends CGameplayEntity {
     this.GotoState('Spawning');
   }
 
-  protected function canSpawn(): bool {
+  protected function canSpawn(hunt_seed: int): bool {
     var points: array<WMH_BiomeSpawnPoint>;
 
     if (this.npc) {
+      return false;
+    }
+
+    if (RandNoiseF(hunt_seed, 1.0) > 0.50) {
       return false;
     }
 
