@@ -274,7 +274,7 @@ statemachine class WMH_Bestiary {
     // encounters. It isn't as precise as checking if the spawn point itself is
     // in the repulsive but this approximation can save a lot of resources as
     // we skip everything until the player gets outside the repulsive's radius
-    var in_repulsive: bool = !WMH_getEncounterManager()
+    var in_repulsive: bool = WMH_getEncounterManager()
       .isInRepulsive(thePlayer.GetWorldPosition());
 
     // 1.
