@@ -30,6 +30,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	hint hunt_fact_remove_on_state_change = "If set to true, the hunt_facts are removed whenever the state clear/consumed changes. Leaving only the most recent hunt_fact.";
 
 	protected var respawn_ticker: WMH_Ticker;
+	protected var wildlife_ticker: WMH_Ticker;
 
 	// stores the timestamp of the last time this spawn point spawned something
 	protected var last_spawn_time: float;
@@ -42,6 +43,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
 		this.respawn_ticker = (new WMH_Ticker in this).init(180.0);
+		this.wildlife_ticker = (new WMH_Ticker in this).init(180.0);
 	}
 
 	public function getPointSeed(hunt_seed: int): int {
@@ -73,6 +75,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 
 	public function canSpawnClues(): bool {
 		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clues_time);
+	}
+
+	public function canSpawnWildlife(): bool {
+		return this.wildlife_ticker.hasExpired();
 	}
 
 	public function isSpawnForced(): bool {
@@ -109,6 +115,13 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 
 	public function consumeForClues() {
 		this.last_clear_time = WMH_getEngineTimeAsSeconds();
+	}
+
+	public function consumeForWildlife() {
+		// NOTE: that it doesn't lock the ticker but resets it, the wildlife 
+		// encounter still being alive won't prevent new wildlife encounters from
+		// respawning
+		this.wildlife_ticker.reset();
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {

@@ -316,7 +316,7 @@ statemachine class WMH_Bestiary {
 
     // repulsive prevents monsters from spawning, instead the amount of wildlife
     // increases.
-    var wildlife_spawn_chance: float = 0.2 + (in_repulsive as float) * 0.1;
+    var wildlife_spawn_chance: float = 0.4 + (in_repulsive as float) * 0.2;
     var monster_spawn_chance: float = 0.0;
     var spawned_count: int = 0;
 
@@ -429,8 +429,12 @@ statemachine class WMH_Bestiary {
     }
 
     if (wildlife_spawn_chance > 0.0) {
-      can_spawn_wildlife = RandNoiseF(point_seed + 1, 1.0)
-        <= wildlife_spawn_chance * ((point.prefer_wildlife as float) + 1.0);
+      can_spawn_wildlife = (
+        RandNoiseF(point_seed + 1, 1.0)
+        <= wildlife_spawn_chance * ((point.prefer_wildlife as float) + 1.0)
+      ) && point.canSpawnWildlife();
+
+      // WMHINFO("trySpawnPoint(), can_spawn_wildlife = " + can_spawn_wildlife);
     }
 
     // WMHINFO(
@@ -491,6 +495,10 @@ statemachine class WMH_Bestiary {
     if (bentries.Size() > 0) {
       if (can_spawn_monsters) {
         point.consume();
+      }
+
+      if (can_spawn_wildlife) {
+        point.consumeForClues();
       }
 
       return true;
