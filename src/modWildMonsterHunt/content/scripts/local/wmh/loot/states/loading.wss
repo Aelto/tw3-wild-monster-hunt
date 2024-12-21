@@ -1615,7 +1615,7 @@ state Loading in WMH_LootManager {
     this.tryAddSchematic('modwmh_lure_repulsive_recipe');
 
 
-    if (parent.maximum_loot_level.value > 30) {
+    if (parent.maximum_loot_level.value > 20) {
       this.tryAddSchematic('modwmh_trophy_medallion_recipe');
     }
 
