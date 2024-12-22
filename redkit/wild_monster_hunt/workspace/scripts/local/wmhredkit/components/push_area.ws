@@ -47,13 +47,23 @@ state Pushing in WMH_PushArea {
     push_starting_position = thePlayer.GetWorldPosition();
 
     while (true) {
+      // first draw a line from the center of the area to the player and
+      // extrapolate it.
       destination = VecInterpolate(
+        parent.GetWorldPosition(),
         thePlayer.GetWorldPosition(),
-        push_starting_position,
         1.01
       );
 
-      NP_slideEntityToPosition(
+      destination = VecInterpolate(
+        thePlayer.GetWorldPosition(),
+        // then use the mean position between the extrapolated destination
+        // and the position the player was when it entered the area
+        (push_starting_position + destination) / 2,
+        1.01
+      );
+
+      WMH_slideEntityToPosition(
         thePlayer,
         destination,
         0.25
@@ -64,7 +74,7 @@ state Pushing in WMH_PushArea {
   }
 }
 
-function NP_slideEntityToPosition(entity: CEntity, position: Vector, optional duration: float) {
+function WMH_slideEntityToPosition(entity: CEntity, position: Vector, optional duration: float) {
   var movement_adjustor: CMovementAdjustor;
   var slide_ticket: SMovementAdjustmentRequestTicket;
   var translation: Vector;
