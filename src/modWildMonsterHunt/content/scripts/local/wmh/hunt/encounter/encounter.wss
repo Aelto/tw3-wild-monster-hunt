@@ -24,8 +24,7 @@ class WMH_Encounter {
     this.entries = entries;
     this.entities = entities;
 
-    var display_oneliner: bool = encounter_tag == WMH_EncounterTag_ContractRegular
-      || encounter_tag == WMH_EncounterTag_ContractMilestone;
+    var display_oneliner: bool = this.isContractTarget();
 
     if (display_oneliner) {
       this.target_oneliner = WMH_gameplayOnelinerEntity(
@@ -85,10 +84,7 @@ class WMH_Encounter {
     }
 
     if (notify) {
-      if (
-        this.encounter_tag == WMH_EncounterTag_ContractRegular
-        || this.encounter_tag == WMH_EncounterTag_ContractMilestone
-      ) {
+      if (this.isContractTarget()) {
         WMHTUTOFACT(
           'WMH_EncounterContractHunterExpertise',
           "Hunter Expertise",
@@ -100,5 +96,19 @@ class WMH_Encounter {
         thePlayer.wmh.submitOnCreatureKilled(this, bentry, this.encounter_tag);
       }
     }
+  }
+
+  protected function isContractTarget(): bool {
+    var is_target: bool = false;
+    var contract_manager: WMH_ContractManager = WMH_getContractManager();
+
+    for bentry: WMH_Bestiary in this.entries {
+      if (contract_manager.isTargetted(bentry.id)) {
+        return true;
+      }
+    }
+
+    return this.encounter_tag == WMH_EncounterTag_ContractRegular
+        || this.encounter_tag == WMH_EncounterTag_ContractMilestone;
   }
 }
