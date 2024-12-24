@@ -188,7 +188,10 @@ class WMH_BiomeSpawnPointFallback extends WMH_BiomeSpawnPoint {
 		return this.isSpawnForced()
 			|| (
 				this.forbidden_hunt_fact == "" || !db.contains(this.forbidden_hunt_fact)
-				&& this.required_hunt_fact == "" || db.contains(this.required_hunt_fact)
-			) && super.canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
+			)
+			&& (
+				this.required_hunt_fact == "" || db.contains(this.required_hunt_fact)
+			)
+			&& super.canSpawnMonstersInHunt(point_seed, monster_spawn_chance);
 	}
 }
