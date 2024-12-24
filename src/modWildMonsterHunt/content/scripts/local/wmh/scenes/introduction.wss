@@ -60,6 +60,8 @@ statemachine class WMH_SceneIntroduction {
   latent function endScene() {
     FactsSet('wmh_scene_introduction', 1);
     FactsRemove('wmh_hunt_disabled');
+    Sleep(1.0);
+    theGame.SaveGame(SGT_QuickSave, -1);
   }
 
   latent function setupScene(): bool {
