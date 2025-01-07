@@ -7,6 +7,10 @@ statemachine class WMH_PushArea extends CEntity {
   hint disable_on_fact = "If set and if the fact it points to exists, the area will no longer push the player away";
 
   event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
     if (IsNameValid(this.disable_on_fact) && FactsDoesExist(this.disable_on_fact)) {
       return false;
     }
@@ -17,6 +21,10 @@ statemachine class WMH_PushArea extends CEntity {
 	}
 
 	event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
 		if (this.GetCurrentStateName() == 'Pushing') {
       this.GotoState('Waiting');
     }
