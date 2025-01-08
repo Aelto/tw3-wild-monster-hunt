@@ -85,6 +85,7 @@ statemachine class WMH_HorseOverride {
   }
 
   public function end() {
+    this.is_autowalking = false;
     // if (this.GetCurrentStateName() == 'Riding') {
     //   this.GotoState('Idle');
     // }
