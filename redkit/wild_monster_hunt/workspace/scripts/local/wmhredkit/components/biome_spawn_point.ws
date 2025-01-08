@@ -42,7 +42,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	protected var spawn_priority: WMH_BiomeSpawnPoint_SpawnPriority;
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
-		this.respawn_ticker = (new WMH_Ticker in this).init(180.0);
+		this.respawn_ticker = (new WMH_Ticker in this).init(240.0);
 		this.wildlife_ticker = (new WMH_Ticker in this).init(180.0);
 	}
 
