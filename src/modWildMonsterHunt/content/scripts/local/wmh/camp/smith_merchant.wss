@@ -16,6 +16,21 @@ function WMH_getSmithMerchants(): array<WMH_SmithMerchant> {
   return output;
 }
 
+function WMH_transferMoneyToSmithMerchant(quantity: int) {
+  var merchants: array<WMH_SmithMerchant> = WMH_getSmithMerchants();
+
+  if (merchants.Size() < 0) {
+    WMHERR("transferMoneyToSmithMerchant(), merchant not found");
+    return;
+  }
+
+  var merchant = WMH_SmithMerchant = merchants[0];
+
+  thePlayer.GetInventory()
+    .GiveMoneyTo(merchant.GetInventory(), quantity);
+  theSound.SoundEvent("gui_inventory_buy");
+}
+
 class WMH_SmithMerchant extends WMH_QuickMerchant {
   private var previous_refill_seed: int;
 	default previous_refill_seed = 0;

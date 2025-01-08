@@ -215,10 +215,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockHerbalist();
         WMHPOPUP("Herbalist hired");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockMerchant') {
         if (parent.isMerchantUnlocked()) {
@@ -233,10 +232,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockMerchant();
         WMHPOPUP("Merchant hired");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockArmors') {
         if (parent.isArmorsUnlocked()) {
@@ -251,10 +249,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockArmors();
         WMHPOPUP("Armor tools unlocked");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockWeapons') {
         if (parent.isWeaponsUnlocked()) {
@@ -269,10 +266,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockWeapons();
         WMHPOPUP("Weapon tools unlocked");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockGarden0') {
         if (parent.isGarden0Unlocked()) {
@@ -287,10 +283,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockGarden0();
         WMHPOPUP("Small garden plot unlocked");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else if (response.playGoChunk == 'UnlockGarden1') {
         if (parent.isGarden1Unlocked()) {
@@ -305,10 +300,9 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        thePlayer.RemoveMoney(cost);
+        WMH_transferMoneyToSmithMerchant(cost);
         parent.unlockGarden1();
         WMHPOPUP("Large garden plot unlocked");
-        theSound.SoundEvent("gui_inventory_buy");
       }
       else {
         parent.dialog_hover_camera_0.Stop();
@@ -316,7 +310,6 @@ state DialogChoice in WMH_CampManager {
         return;
       }
     }
-
   }
 
   event OnLeaveState( nextStateName : name ) {

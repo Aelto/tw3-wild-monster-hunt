@@ -106,7 +106,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
       return false;
     }
 
-    thePlayer.RemoveMoney(cost);
+    WMH_transferMoneyToSmithMerchant(cost);
     theSound.SoundEvent("gui_inventory_buy");
     this.addLevel();
     this.onUpgrade(cost);
