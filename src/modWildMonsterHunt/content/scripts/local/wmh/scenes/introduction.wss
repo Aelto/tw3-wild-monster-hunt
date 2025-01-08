@@ -19,7 +19,12 @@ statemachine class WMH_SceneIntroduction {
 
 
   public function start() {
-    if (FactsDoesExist("wmh_scene_introduction")) {
+    var world: string = theGame.GetWorld().GetDepotPath();
+
+    var cancel: bool = FactsDoesExist("wmh_scene_introduction")
+      || world == "levels\wmh_lv1\wmh_lv1.w2w";
+
+    if (cancel) {
       return;
     }
 
@@ -59,6 +64,7 @@ statemachine class WMH_SceneIntroduction {
 
   latent function endScene() {
     FactsSet('wmh_scene_introduction', 1);
+    FactsSet('q001_nightmare_ended', 1);
     FactsRemove('wmh_hunt_disabled');
     Sleep(1.0);
     theGame.SaveGame(SGT_QuickSave, -1);
