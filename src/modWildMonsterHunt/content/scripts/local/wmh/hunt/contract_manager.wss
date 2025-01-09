@@ -233,10 +233,9 @@ class WMH_ContractManager {
     }
 
     if (completed_any) {
+      thePlayer.wmh.submitOnMeldCauldron(provider);
       provider.transferItems(thePlayer.GetInventory());
       WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
-
-      thePlayer.wmh.submitOnMeldCauldron();
     }
   }
 

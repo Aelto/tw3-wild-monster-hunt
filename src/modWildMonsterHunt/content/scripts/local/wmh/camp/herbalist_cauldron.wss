@@ -1,10 +1,10 @@
 @addMethod(WMH_Master)
-function submitOnMeldCauldron() {
+function submitOnMeldCauldron(provider: WMH_RewardProvider) {
   var entity: CEntity = theGame.GetEntityByTag('WMH_HerbalistCauldron');
   var cauldron: WMH_HerbalistCauldron = entity as WMH_HerbalistCauldron;
 
   if (cauldron) {
-    cauldron.onMeldCauldron();
+    cauldron.onMeldCauldron(provider);
   }
 }
 
@@ -54,17 +54,22 @@ class WMH_HerbalistCauldron extends W3Container {
     this.updateOneliner();
   }
 
-  public function onMeldCauldron() {
+  public function onMeldCauldron(provider: WMH_RewardProvider) {
     var yields_count: int = this.getYieldsCount();
 
     if (yields_count > 0) {
+      var loot_manager: WMH_LootManager = WMH_getLootManager();
       var cost: int = this.getCostPerYield();
       var items_melded: int = 0;
       while (yields_count > 0 && thePlayer.GetMoney() > cost) {
         yields_count -= 1;
 
         thePlayer.RemoveMoney(cost);
-        thePlayer.wmh.submitOnMeldItem();
+
+        var seed: int = (thePlayer.wmh.storage.herbalist.melding_level.value as int)
+                      + yields_count;
+
+        loot_manager.onMeldItem(seed, provider);
         items_melded += 1;
       }
 
@@ -77,6 +82,7 @@ class WMH_HerbalistCauldron extends W3Container {
           + " items."
         );
 
+        thePlayer.wmh.submitOnMeldingLevelIncrease(items_melded);
         this.GetInventory().RemoveAllItems();
         theSound.SoundEvent("gui_inventory_potion_attach");
       }

@@ -261,5 +261,9 @@ class WMH_Master {
   ) {
     this.hunt.encounters.onRepulsivePlaced(center);
   }
+
+  public function submitOnMeldingLevelIncrease(amount: int) {
+    this.storage.herbalist.melding_level.value += amount;
+  }
 }
 
