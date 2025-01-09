@@ -216,16 +216,6 @@ class WMH_ContractManager {
       }
     }
 
-    for kill: WMH_HuntKill in killed_creatures {
-      var contract: WMH_PendingContract;
-      
-      for contract: WMH_PendingContract in this.pending_contracts {
-        if (contract.isTargetted(kill.bestiary_id)) {
-          completed_contracts.PushBack(contract);
-        }
-      }
-    }
-
     for contract: WMH_PendingContract in completed_contracts {
       this.removePendingContract(storage.contract, contract);
       this.onContractCompleted(provider, contract, storage, maximum_level);
