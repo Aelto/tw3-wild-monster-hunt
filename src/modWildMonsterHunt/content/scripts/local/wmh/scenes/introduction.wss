@@ -22,7 +22,7 @@ statemachine class WMH_SceneIntroduction {
     var world: string = theGame.GetWorld().GetDepotPath();
 
     var cancel: bool = FactsDoesExist("wmh_scene_introduction")
-      || world == "levels\wmh_lv1\wmh_lv1.w2w";
+      || world != "levels\wmh_lv1\wmh_lv1.w2w";
 
     if (cancel) {
       return;
@@ -177,13 +177,14 @@ statemachine class WMH_SceneIntroduction {
       WMH_showLogo(false, 2, 125, 125);
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_2', 0, 12.5);
       theGame.SetHoursPerMinute(hpm * 1);
-      this.tick(2, camera, position, rotation);
+      this.tick(1.0, camera, position, rotation);
+      horse.wmh_horse_override.setSpeed(1.0);
+      this.tick(1.0, camera, position, rotation);
 
       // 0.1) start to move the camera below the bridge
       this.addMilestoneAtTag('WMH_scene_welcome_camera_spawn_3', 0.5, 22.0);
       // tick for a bit, then teleport roach in front of the camp
       follow_rotation.intensity_target = 0;
-      horse.wmh_horse_override.setSpeed(1.0);
     }
     else {
       theGame.FadeInAsync(0.5);
