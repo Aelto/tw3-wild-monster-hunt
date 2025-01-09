@@ -211,8 +211,7 @@ class WMH_HerbalistCauldron extends W3Container {
     }
     else {
       message = "<u>The pot is empty</u><br/>Drop alchemy items for unique rewards."
-              + "<br/><font size='18'>Meld the items by completing contracts</font>"
-              + "<br/><font size='18'>Products are stored in the barrel nearby</font>";
+              + "<br/><font size='18'>Meld the items by completing contracts</font>";
     }
 
     this.oneliner.text = message;
