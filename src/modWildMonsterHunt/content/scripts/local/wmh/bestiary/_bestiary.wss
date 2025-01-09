@@ -316,7 +316,7 @@ statemachine class WMH_Bestiary {
 
     // repulsive prevents monsters from spawning, instead the amount of wildlife
     // increases.
-    var wildlife_spawn_chance: float = 0.4 + (in_repulsive as float) * 0.2;
+    var wildlife_spawn_chance: float = 0.3 + (in_repulsive as float) * 0.2;
     var monster_spawn_chance: float = 0.0;
     var spawned_count: int = 0;
 
