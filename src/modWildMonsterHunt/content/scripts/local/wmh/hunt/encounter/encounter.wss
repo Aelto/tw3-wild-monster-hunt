@@ -102,7 +102,7 @@ class WMH_Encounter {
     var is_target: bool = false;
     var contract_manager: WMH_ContractManager = WMH_getContractManager();
 
-    for bentry: WMH_Bestiary in this.entries {
+    for bentry: WMH_BestiaryEntry in this.entries {
       if (contract_manager.isTargetted(bentry.id)) {
         return true;
       }

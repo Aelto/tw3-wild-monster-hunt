@@ -20,11 +20,11 @@ function WMH_transferMoneyToSmithMerchant(quantity: int) {
   var merchants: array<WMH_SmithMerchant> = WMH_getSmithMerchants();
 
   if (merchants.Size() < 0) {
-    WMHERR("transferMoneyToSmithMerchant(), merchant not found");
+    WMHINFO("transferMoneyToSmithMerchant(), merchant not found");
     return;
   }
 
-  var merchant = WMH_SmithMerchant = merchants[0];
+  var merchant: WMH_SmithMerchant = merchants[0];
 
   thePlayer.GetInventory()
     .GiveMoneyTo(merchant.GetInventory(), quantity);
@@ -75,6 +75,7 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     var every5Levels: int = general.level.value * 0.2 as int;
 
     inventory.AddAnItem('Clearing Potion', 1);
+    inventory.AddAnItem('Geralt Shirt');
     inventory.AddAnItem('Bottled water', 1 + every10Levels);
     inventory.AddAnItem('Apple', 1 + every5Levels);
     inventory.AddAnItem('Potatoes', 1 + every5Levels);
