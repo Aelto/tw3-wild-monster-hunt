@@ -418,11 +418,13 @@ statemachine class WMH_Bestiary {
 
     if (monster_spawn_chance > 0.0) {
       var nearby_occupied_count: int = this.spawn_points
-        .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 55);
+        .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 60);
+
+      WMHINFO("trySpawnPoint(), nearby_occupied_count = " + nearby_occupied_count);
 
       // for every occupied point nearby, the chances of this point being used
       // decreases
-      var altered_chance: float = monster_spawn_chance / (nearby_occupied_count + 1);
+      var altered_chance: float = monster_spawn_chance - nearby_occupied_count * 0.1;
 
       can_spawn_monsters = point
         .canSpawnMonstersInHunt(point_seed, altered_chance);
