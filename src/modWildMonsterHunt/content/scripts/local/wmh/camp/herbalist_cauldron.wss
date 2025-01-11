@@ -59,12 +59,9 @@ class WMH_HerbalistCauldron extends W3Container {
 
     if (yields_count > 0) {
       var loot_manager: WMH_LootManager = WMH_getLootManager();
-      var cost: int = this.getCostPerYield();
       var items_melded: int = 0;
-      while (yields_count > 0 && thePlayer.GetMoney() > cost) {
+      while (yields_count > 0) {
         yields_count -= 1;
-
-        thePlayer.RemoveMoney(cost);
 
         var seed: int = (thePlayer.wmh.storage.herbalist.melding_level.value as int)
                       + yields_count;
@@ -74,14 +71,6 @@ class WMH_HerbalistCauldron extends W3Container {
       }
 
       if (items_melded > 0) {
-        WMHHUD(
-          "" 
-          + (cost * items_melded)
-          + " Crowns were used to meld "
-          + items_melded
-          + " items."
-        );
-
         thePlayer.wmh.submitOnMeldingLevelIncrease(items_melded);
         this.GetInventory().RemoveAllItems();
         theSound.SoundEvent("gui_inventory_potion_attach");
@@ -147,7 +136,7 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   private function getCostPerYield(): int {
-    return 10;
+    return 0; // used to cost crowns per yield, but no longer the case
   }
 
   private function getCurrentTotalPoints(): int {
@@ -201,9 +190,7 @@ class WMH_HerbalistCauldron extends W3Container {
       message = "<font size='28'>" + next_item_loc + "</font>"
               + "<br/>Next yield: "
               + points_til_next + "/"
-              + "<font size='18'>" + points_per_product + "</font>"
-              + "<br/>Cost: " + this.getCostPerYield() + crowns_icon
-              + "/<font size='18'>yield</font>";
+              + "<font size='18'>" + points_per_product + "</font>";
 
       if (yields_count > 0) {
         message += "<br/>Products in queue: " + yields_count;
