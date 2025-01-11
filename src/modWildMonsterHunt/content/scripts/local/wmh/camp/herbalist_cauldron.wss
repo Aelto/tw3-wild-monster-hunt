@@ -1,10 +1,10 @@
 @addMethod(WMH_Master)
-function submitOnMeldCauldron(provider: WMH_RewardProvider) {
+function submitOnMeldCauldron() {
   var entity: CEntity = theGame.GetEntityByTag('WMH_HerbalistCauldron');
   var cauldron: WMH_HerbalistCauldron = entity as WMH_HerbalistCauldron;
 
   if (cauldron) {
-    cauldron.onMeldCauldron(provider);
+    cauldron.onMeldCauldron();
   }
 }
 
@@ -28,7 +28,8 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   event OnInteractionActivated(actionName : string, activator : CEntity) {
-    // do not call super as it will probably disable the interaction.
+    // do not call super as it will probably disable the interaction and update
+    // the inventory's content.
     // super.OnInteractionActivated(actionName, activator);
 
     WMHTUTOFACT(
@@ -51,34 +52,35 @@ class WMH_HerbalistCauldron extends W3Container {
   // Called when an item is taken from the container
   event OnItemTaken(itemId: SItemUniqueId, quantity: int) {}
   event OnAreaEnter( area : CTriggerAreaComponent, activator : CComponent ) {
-    this.updateOneliner();
+    this.updateMeldPointsAndOneliner();
   }
 
-  public function onMeldCauldron(provider: WMH_RewardProvider) {
+  public function onMeldCauldron() {
     var yields_count: int = this.getYieldsCount();
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
 
-    if (yields_count > 0) {
-      var loot_manager: WMH_LootManager = WMH_getLootManager();
-      var items_melded: int = 0;
-      while (yields_count > 0) {
-        yields_count -= 1;
+    var loot_manager: WMH_LootManager = WMH_getLootManager();
+    var items_melded: int = 0;
+    while (this.getYieldsCount() > 0) {
+      var seed: int = (thePlayer.wmh.storage.herbalist.melding_level.value as int);
+      loot_manager.onMeldItem(seed, provider);
+      thePlayer.wmh.submitOnMeldingLevelIncrease(1);
 
-        var seed: int = (thePlayer.wmh.storage.herbalist.melding_level.value as int)
-                      + yields_count;
+      var new_points: int = this.getCurrentTotalPoints();
+      new_points -= this.getPointsPerYield();
+      this.setCurrentTotalPoints(new_points);
 
-        loot_manager.onMeldItem(seed, provider);
-        items_melded += 1;
-      }
+      items_melded += 1;
+    }
 
-      if (items_melded > 0) {
-        thePlayer.wmh.submitOnMeldingLevelIncrease(items_melded);
-        this.GetInventory().RemoveAllItems();
-        theSound.SoundEvent("gui_inventory_potion_attach");
-      }
+    if (items_melded > 0) {
+      theSound.SoundEvent("gui_inventory_potion_attach");
+      provider.transferItems(thePlayer.GetInventory());
+      WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
     }
 
     this.Enable( true, false, true );
-    this.updateOneliner();
+    this.updateMeldPointsAndOneliner();
   }
 
   private function openItemSelectionMenu() {
@@ -119,7 +121,8 @@ class WMH_HerbalistCauldron extends W3Container {
     
     theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
     theSound.SoundEvent("gui_pick_up_herbs");
-    AddTimer( 'RefreshOnelinerTimer', 0.1 );
+    this.AddTimer('RefreshOnelinerTimer', 0.1);
+    this.AddTimer('RefreshMeldingPointsTimer', 5.0);
   }
 
   timer function RefreshOnelinerTimer(delta: float , id: int) {
@@ -127,12 +130,23 @@ class WMH_HerbalistCauldron extends W3Container {
       this.AddTimer( 'RefreshOnelinerTimer', 0.1 );
     }
     else {
-      this.updateOneliner();
+      this.updateMeldPointsAndOneliner();
+    }
+  }
+
+  timer function RefreshMeldingPointsTimer(delta: float , id: int) {
+    if (this.popup_data) {
+      this.AddTimer('RefreshMeldingPointsTimers', 5.0);
+    }
+    else {
+      this.consumeInventoryForMeldPoints();
+      this.onMeldCauldron();
     }
   }
 
   private function getPointsPerYield(): int {
-    return 450;
+    return ((thePlayer.wmh.storage.herbalist.melding_level.value as int) + 1)
+         * 50;
   }
 
   private function getCostPerYield(): int {
@@ -140,6 +154,14 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   private function getCurrentTotalPoints(): int {
+    return Max(FactsQueryLatestValue("WMH_HerbalistCauldron_meldingPoints"), 0);
+  }
+
+  private function setCurrentTotalPoints(value: int) {
+    FactsSet("WMH_HerbalistCauldron_meldingPoints", value);
+  }
+
+  private function getInventoryItemsTotalCost(): int {
     var inventory: CInventoryComponent = this.GetInventory();
     var items: array<SItemUniqueId>;
 
@@ -160,32 +182,32 @@ class WMH_HerbalistCauldron extends W3Container {
     return this.getCurrentTotalPoints() / this.getPointsPerYield();
   }
 
-  private function updateOneliner() {
+  private function consumeInventoryForMeldPoints() {
+    var new_points: int = this.getInventoryItemsTotalCost();
+
+    this.setCurrentTotalPoints(this.getCurrentTotalPoints() + new_points);
+    this.GetInventory().RemoveAllItems();
+  }
+
+  /// update the meld points fact from any new item that's in the inventory.
+  /// Then update the oneliner to reflect the new amount of points
+  private function updateMeldPointsAndOneliner() {
     if (!this.oneliner) {
       this.oneliner = SU_onelinerEntity("", this);
     }
 
-    var inventory: CInventoryComponent = this.GetInventory();
-    var items: array<SItemUniqueId>;
-
-    inventory.GetAllItems(items);
-
     var message: string;
-    var total_prices: int = this.getCurrentTotalPoints();
+    var total_prices: int = this.getCurrentTotalPoints() + this.getInventoryItemsTotalCost();
     var points_per_product: int = this.getPointsPerYield();
     var yields_count: int = total_prices / points_per_product;
     var points_til_next: int = total_prices - points_per_product * yields_count;
     
-    if (items.Size() > 0) {
+    if (total_prices > 0) {
       var next_item: name = thePlayer.wmh.loot.getNextMeldItem(yields_count);
       var next_item_loc: string = GetLocStringByKeyExt(
         theGame.GetDefinitionsManager()
         .GetItemLocalisationKeyName(next_item)
       );
-
-      var crowns_icon: string = "<img src='img://"
-                      + inventory.GetItemIconPathByName('Crowns')
-                      + "' height='18' width='18' />";
 
       message = "<font size='28'>" + next_item_loc + "</font>"
               + "<br/>Next yield: "
@@ -197,8 +219,7 @@ class WMH_HerbalistCauldron extends W3Container {
       }
     }
     else {
-      message = "<u>The pot is empty</u><br/>Drop alchemy items for unique rewards."
-              + "<br/><font size='18'>Meld the items by completing contracts</font>";
+      message = "<u>The pot is empty</u><br/>Drop alchemy items for unique rewards.";
     }
 
     this.oneliner.text = message;

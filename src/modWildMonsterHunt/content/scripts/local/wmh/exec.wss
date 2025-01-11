@@ -7,10 +7,7 @@ exec function wmhcompletecontracts() {
 }
 
 exec function wmhmeldcauldron() {
-  var provider: WMH_RewardProvider = new WMH_RewardProvider in thePlayer;
-  thePlayer.wmh.submitOnMeldCauldron(provider);
-  provider.transferItems(thePlayer.GetInventory());
-  WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
+  thePlayer.wmh.submitOnMeldCauldron();
 }
 
 exec function wmhaddruneofpower() {
