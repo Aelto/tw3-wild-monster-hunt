@@ -31,6 +31,25 @@ function WMH_transferMoneyToSmithMerchant(quantity: int) {
   theSound.SoundEvent("gui_inventory_buy");
 }
 
+/// Extra funds: next time the merchant is interacted with, he gets additional
+/// money based on this value. The fact is reset once the money is added
+function WMH_addFundsToSmithMerchants(quantity: int) {
+  WMH_setSmithMerchantExtraFunds(WMh_getSmithMerchantExtraFunds() + quantity);
+}
+
+
+function WMH_setSmithMerchantExtraFunds(quantity: int) {
+  FactsSet("WMH_SmithMerchant_extra_funds", quantity);
+}
+
+function WMh_getSmithMerchantExtraFunds(): int {
+  return FactsQueryLatestValue("WMH_SmithMerchant_extra_funds");
+}
+
+exec function wmhsmithmerchantextrafunds(qty: int) {
+  WMH_setSmithMerchantExtraFunds(qty);
+}
+
 class WMH_SmithMerchant extends WMH_QuickMerchant {
   private var previous_refill_seed: int;
 	default previous_refill_seed = 0;
@@ -52,6 +71,10 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     this.GetInventory().AddMoney(5);
   }
 
+  public function addFunds(quantity: int) {
+    this.GetInventory().AddMoney(quantity);
+  }
+
   private function setupInventory() {
     var hunt_seed: int = WMH_getHuntSeedFact();
     if (this.previous_refill_seed > 0 && hunt_seed == this.previous_refill_seed) {
@@ -63,8 +86,11 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     var inventory: CInventoryComponent = this.GetInventory();
 
     var initial_money: int = inventory.GetMoney();
+    var extra_funds: int = WMh_getSmithMerchantExtraFunds();
+
     inventory.RemoveAllItems();
-    inventory.SetMoney(initial_money);
+    inventory.SetMoney(initial_money + extra_funds);
+    WMH_setSmithMerchantExtraFunds(0);
 
     var general: WMH_StorageGeneral = WMH_getStorageGeneral();
 
