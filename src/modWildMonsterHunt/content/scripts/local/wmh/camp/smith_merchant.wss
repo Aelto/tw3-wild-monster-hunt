@@ -26,8 +26,8 @@ function WMH_transferMoneyToSmithMerchant(quantity: int) {
 
   var merchant: WMH_SmithMerchant = merchants[0];
 
-  thePlayer.GetInventory()
-    .GiveMoneyTo(merchant.GetInventory(), quantity);
+  thePlayer.RemoveMoney(quantity);
+  WMH_addFundsToSmithMerchants(quantity);
   theSound.SoundEvent("gui_inventory_buy");
 }
 
