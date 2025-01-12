@@ -83,7 +83,7 @@ class WMH_Encounter {
       this.target_oneliner.unregister();
     }
 
-    if (notify) {
+    if (is_completed) {
       if (this.isContractTarget()) {
         WMHTUTOFACT(
           'WMH_EncounterContractHunterExpertise',
