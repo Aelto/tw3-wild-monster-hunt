@@ -300,7 +300,7 @@ statemachine class WMH_Bestiary {
         ) as int;
       }
 
-      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count);
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count + " points count = " + spawn_points.Size());
     }
     else {
       WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive");
@@ -417,14 +417,26 @@ statemachine class WMH_Bestiary {
     var can_spawn_wildlife: bool = false;
 
     if (monster_spawn_chance > 0.0) {
-      var nearby_occupied_count: int = this.spawn_points
-        .countNearbyOccupiedSpawnPoints(point.GetWorldPosition(), 60);
-
-      WMHINFO("trySpawnPoint(), nearby_occupied_count = " + nearby_occupied_count);
+      var all_occupied_count: WMH_Int4 = this.spawn_points
+        .countAllOccupiedSpawnPoints(point.GetWorldPosition());
 
       // for every occupied point nearby, the chances of this point being used
-      // decreases
-      var altered_chance: float = monster_spawn_chance - nearby_occupied_count * 0.1;
+      // decreases.
+      //
+      // The closer a point is, the higher its impact on the spawn chance of the
+      // current point.
+      var altered_chance: float = monster_spawn_chance
+        - all_occupied_count.a * 0.4
+        - all_occupied_count.b * 0.3
+        - all_occupied_count.c * 0.2
+        - all_occupied_count.d * 0.1;
+
+      WMHINFO(
+        "trySpawnPoint(), all_occupied_count = "
+        + all_occupied_count.a + ", " + all_occupied_count.b + ", "
+        + all_occupied_count.c + ", " + all_occupied_count.d
+        + ", altered_chance = " + altered_chance
+      );
 
       can_spawn_monsters = point
         .canSpawnMonstersInHunt(point_seed, altered_chance);

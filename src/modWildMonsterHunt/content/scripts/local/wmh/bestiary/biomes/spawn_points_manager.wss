@@ -96,8 +96,6 @@ class WMH_SpawnPointManager {
 
     var point: WMH_BiomeSpawnPoint;
     for point: WMH_BiomeSpawnPoint in this.nearby_spawn_points {
-      var position: Vector = point.GetWorldPosition();
-
       if (ignore_respawn || point.canRespawn()) {
         output.PushBack(point);
       }
@@ -223,6 +221,31 @@ class WMH_SpawnPointManager {
     return count;
   }
 
+  public function countAllOccupiedSpawnPoints(position: Vector): WMH_Int4 {
+    var output: WMH_Int4 = WMH_Int4(0, 0, 0, 0);
+
+    for point: WMH_BiomeSpawnPoint in this.occupied_spawn_points {
+      var distance: float = VecDistanceSquared2D(
+        position,
+        point.GetWorldPosition()
+      );
+
+      output.a += (distance <= 15 * 15) as int;
+      output.b += (distance <= 25 * 25) as int;
+      output.c += (distance <= 50 * 50) as int;
+      output.d += (distance <= 100 * 100) as int;
+    }
+
+    // since any point below 50m is obviously also below 100m, we remove the
+    // counts from the lower radius. This leave us the exact count of points
+    // below the current distance and above the previous one.
+    output.d -= output.c;
+    output.c -= output.b;
+    output.b -= output.a;
+
+    return output;
+  }
+
   private function findNearbySpawnPoints(
     out output: array<WMH_BiomeSpawnPoint>,
     radius: float,
@@ -281,4 +304,11 @@ class WMH_SpawnPointManager {
 
     return output;
   }
+}
+
+struct WMH_Int4 {
+  var a: int;
+  var b: int;
+  var c: int;
+  var d: int;
 }
