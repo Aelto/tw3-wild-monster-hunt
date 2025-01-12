@@ -135,9 +135,8 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {
-		this.respawn_ticker.restart();
-
 		if (encounter_was_killed) {
+			this.respawn_ticker.restart();
 			this.last_clear_time = WMH_getEngineTimeAsSeconds();
 			this.spawn_priority = WMH_BSP_SP_None;
 
@@ -151,6 +150,9 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 			) {
 				WMH_getHuntFactsDb().remove(this.hunt_fact_on_spawn);
 			}
+		}
+		else {
+			this.respawn_ticker.reset();
 		}
 
 		WMH_getSpawnPointManager().onBiomeSpawnPointLiberated(this);
