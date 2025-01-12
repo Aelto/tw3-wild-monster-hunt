@@ -94,7 +94,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
     }
 
-    this.respawn_ticker.reset();
+    this.respawn_ticker.restart();
     inventory.RemoveItem(lures[0], 1);
     inventory.RemoveItem(this.selected_item, 1);
 

@@ -22,6 +22,10 @@ class WMH_SpawnPointManager {
   public function onHuntStarted() {
     this.maybeRefresh(true);
     this.occupied_spawn_points.Clear();
+
+    for point: WMH_BiomeSpawnPoint in this.region_spawn_points {
+      point.reset();
+    }
   }
 
   public function onBiomeSpawnPointConsumed(point: WMH_BiomeSpawnPoint) {

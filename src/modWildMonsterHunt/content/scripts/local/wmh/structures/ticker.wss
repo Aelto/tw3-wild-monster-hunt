@@ -10,11 +10,18 @@ class WMH_Ticker {
   public function init(cooldown_seconds: float): WMH_Ticker {
     this.cooldown_seconds = cooldown_seconds;
     this.trigger_timestamp = (cooldown_seconds + 1) * -1;
+    this.lock_elapsed = 0;
 
     return this;
   }
 
   public function reset(optional cooldown_seconds: float) {
+    this.restart(cooldown_seconds);
+    this.trigger_timestamp = (cooldown_seconds + 1) * -1;
+    this.lock_elapsed = 0;
+  }
+
+  public function restart(optional cooldown_seconds: float) {
     this.internal_unlock();
 
     this.trigger_timestamp = SUH_now();
@@ -30,7 +37,7 @@ class WMH_Ticker {
   }
 
   public function unlock() {
-    this.reset();
+    this.restart();
     this.internal_unlock();
   }
 
@@ -53,7 +60,7 @@ class WMH_Ticker {
   /// WARNING: mutates the counter if it is expired
   public function validate(): bool {
     if (this.hasExpired()) {
-      this.reset();
+      this.restart();
       return true;
     }
     else {
