@@ -57,6 +57,7 @@ class WMH_BestiaryEntryNoonwraith extends WMH_BestiaryEntry {
 
       afternoon {
         if (structures) += 1.0,
+        if (structures && altitude) += 0.25,
       }
 
       if (clear) *= 1.5,

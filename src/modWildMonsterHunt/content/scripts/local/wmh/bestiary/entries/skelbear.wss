@@ -38,12 +38,14 @@ class WMH_BestiaryEntrySkelbear extends WMH_BestiaryEntry {
           else nospawn
         }
         
-        if (structures) += 0.5,
-        if (vegetation) += 0.5,
-        if (humidity) += 0.5,
+        if (structures) += 0.25,
+        if (vegetation) += 0.25,
+        if (humidity) += 0.25,
+        if (altitude) += 0.25,
       }
 
       night {
+        if (altitude) += 0.5,
         if (underground) += 1.0,
         if (!underground) *= 0.1,
       }
@@ -51,6 +53,6 @@ class WMH_BestiaryEntrySkelbear extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Skelbear";
+    return "Snow Bear";
   }
 }
