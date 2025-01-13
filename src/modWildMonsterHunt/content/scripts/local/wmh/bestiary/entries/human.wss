@@ -54,7 +54,35 @@ class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
     day_hour: float
   ): float {
     // humans can be anywhere
-    return 0.1;
+    pref_time!({{
+      morning += 0.05;
+      afternon += 0.1;
+      night += 0.025
+
+      morning {
+        if (structures) += 0.1,
+        if (vegetation) += 0.05,
+        if (lightlow) -= 0.01,
+      }
+
+      afternoon {
+        if (structures) += 0.2,
+        if (vegetation) += 0.02,
+        if (lightlow) -= 0.01,
+
+
+        if (underground) += 1.0,
+      }
+
+      night {
+        if (vegetation) += 0.2,
+        if (structures) += 0.2,
+        if (lightlow) += 0.2,
+
+        if (wide) += 0.5,
+        if (underground) += 0.5,
+      }
+    }});
   }
 
   public function getLocName(): string {
