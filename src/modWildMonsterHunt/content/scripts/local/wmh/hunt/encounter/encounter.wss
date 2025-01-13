@@ -61,7 +61,7 @@ class WMH_Encounter {
     var notify: bool = VecDistanceSquared2D(
       thePlayer.GetWorldPosition(),
       this.GetWorldPosition()
-    ) < 40 * 40;
+    ) < 60 * 60;
 
     // do it before clearing the entities as it relies on the list to confirm
     // whether it was completed.

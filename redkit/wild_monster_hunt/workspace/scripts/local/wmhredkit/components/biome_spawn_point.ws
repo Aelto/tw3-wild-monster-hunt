@@ -44,16 +44,23 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	event OnSpawned( spawnData : SEntitySpawnData ) {
 		super.OnSpawned(spawnData);
 
-		this.respawn_ticker = (new WMH_Ticker in this).init(240.0);
-		this.wildlife_ticker = (new WMH_Ticker in this).init(180.0);
+		this.reset();
 	}
 
+	// reset the spawn point to mark it as available right now
 	public function reset() {
-		this.respawn_ticker.reset();
-		this.wildlife_ticker.reset();
+		this.respawn_ticker = (new WMH_Ticker in this).init(1200.0);
+		this.wildlife_ticker = (new WMH_Ticker in this).init(300.0);
+		this.last_spawn_time = 0;
 		this.last_clear_time = 0;
 		this.last_clues_time = 0;
 		this.spawn_priority = WMH_BSP_SP_None;
+	}
+
+	// restart the spawn point to mark it as UNavailable until the respawn timer
+	// has passed.
+	public function restart() {
+		this.respawn_ticker.restart();
 	}
 
 	public function getPointSeed(hunt_seed: int): int {

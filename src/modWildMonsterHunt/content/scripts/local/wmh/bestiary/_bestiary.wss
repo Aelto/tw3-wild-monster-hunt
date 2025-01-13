@@ -25,7 +25,7 @@ statemachine class WMH_Bestiary {
     this.active_view = (new WMH_BestiaryActiveView in this).init();
     this.biomes = (new WMH_BiomeManager in this).init();
 
-    this.spawn_instant_seed = (new WMH_DynInstantSeed in this).init(30);
+    this.spawn_instant_seed = (new WMH_DynInstantSeed in this).init(300);
     this.wildlife_instant_seed = (new WMH_DynInstantSeed in this).init(120);
 
     this.initEntries();
@@ -37,8 +37,6 @@ statemachine class WMH_Bestiary {
   public function onSpawn(contract: WMH_ContractManager, hunt_seed: int) {
     this.maybeRefresh(contract);
     this.spawnNearbyAvailableSpawnPoints(contract, hunt_seed);
-    this.spawnNearbyEventNpcSpawnPoints(hunt_seed);
-    this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
   }
 
   /// Same logic as the regular onSpawn but delayed by a few seconds, to give
@@ -47,6 +45,9 @@ statemachine class WMH_Bestiary {
     contract: WMH_ContractManager,
     hunt_seed: int
   ) {
+    this.spawnNearbyEventNpcSpawnPoints(hunt_seed);
+    this.spawnNearbyGuardedTreasureSpawnPoints(hunt_seed);
+
     // if the player is in a repulsive's area then skip spawning regular
     // encounters. It isn't as precise as checking if the spawn point itself is
     // in the repulsive but this approximation can save a lot of resources as
@@ -277,50 +278,24 @@ statemachine class WMH_Bestiary {
     var in_repulsive: bool = WMH_getEncounterManager()
       .isInRepulsive(thePlayer.GetWorldPosition());
 
+    var point: WMH_BiomeSpawnPoint = this.spawn_points
+        .getRandomNearbyValidSpawnPoint(instant_seed);
+
+    if (!point) {
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), no available point");
+
+      return;
+    }
+
     // 1.
     // first pass for monsters
     if (!in_repulsive) {
-      var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
-        .getValidSpawnPoints();
-
-      var instant_seed: int = this.spawn_instant_seed
-        .dynSeedPlayerMovements(hunt_seed, 3.0);
+      var instant_seed: int = SUH_now() as int;
 
       var monster_spawn_chance: float = 1.0;
       var wildlife_spawn_chance: float = 0.0;
       var spawned_count: int = 0;
 
-      for point: WMH_BiomeSpawnPoint in spawn_points {
-        spawned_count += this.trySpawnPoint(
-          contract,
-          point,
-          instant_seed,
-          monster_spawn_chance,
-          wildlife_spawn_chance
-        ) as int;
-      }
-
-      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count + " points count = " + spawn_points.Size());
-    }
-    else {
-      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive");
-    }
-
-    // 2.
-    // second pass for wildlife
-    var spawn_points: array<WMH_BiomeSpawnPoint> = this.spawn_points
-      .getValidSpawnPoints(true);
-
-    var instant_seed: int = this.wildlife_instant_seed
-      .dynSeedPlayerMovements(hunt_seed, 10.0);
-
-    // repulsive prevents monsters from spawning, instead the amount of wildlife
-    // increases.
-    var wildlife_spawn_chance: float = 0.3 + (in_repulsive as float) * 0.2;
-    var monster_spawn_chance: float = 0.0;
-    var spawned_count: int = 0;
-
-    for point: WMH_BiomeSpawnPoint in spawn_points {
       spawned_count += this.trySpawnPoint(
         contract,
         point,
@@ -328,7 +303,32 @@ statemachine class WMH_Bestiary {
         monster_spawn_chance,
         wildlife_spawn_chance
       ) as int;
+
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count + " points count = " + 1);
     }
+    else {
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive");
+    }
+
+    // 2.
+    // second pass for wildlife
+    // var instant_seed: int = this.wildlife_instant_seed
+    //   .dynSeedPlayerMovements(hunt_seed, 10.0);
+    var instant_seed: int = SUH_now() as int;
+
+    // repulsive prevents monsters from spawning, instead the amount of wildlife
+    // increases.
+    var wildlife_spawn_chance: float = 0.3 + (in_repulsive as float) * 0.2;
+    var monster_spawn_chance: float = 0.0;
+    var spawned_count: int = 0;
+
+    spawned_count += this.trySpawnPoint(
+      contract,
+      point,
+      instant_seed,
+      monster_spawn_chance,
+      wildlife_spawn_chance
+    ) as int;
 
     WMHINFO("spawnNearbyAvailableSpawnPoints(), wildlife spawned_count = " + spawned_count);
   }
@@ -431,15 +431,23 @@ statemachine class WMH_Bestiary {
         - all_occupied_count.c * 0.2
         - all_occupied_count.d * 0.1;
 
+      can_spawn_monsters = altered_chance > 0
+        && point.canSpawnMonstersInHunt(point_seed, altered_chance);
+
       WMHINFO(
         "trySpawnPoint(), all_occupied_count = "
         + all_occupied_count.a + ", " + all_occupied_count.b + ", "
         + all_occupied_count.c + ", " + all_occupied_count.d
         + ", altered_chance = " + altered_chance
+        + ", can_spawn_monsters = " + can_spawn_monsters
       );
 
-      can_spawn_monsters = point
-        .canSpawnMonstersInHunt(point_seed, altered_chance);
+      // the point should be able to spawn monsters but due to the
+      // altered_chance it wasn't allowed this time. To avoid overcrowding the
+      // place we'll 
+      if (!can_spawn_monsters) {
+        point.restart();
+      }
     }
 
     if (wildlife_spawn_chance > 0.0) {

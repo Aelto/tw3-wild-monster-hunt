@@ -63,7 +63,7 @@ class WMH_SpawnPointManager {
     }
   }
 
-  public function UNUSED_getRandomNearbyValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
+  public function getRandomNearbyValidSpawnPoint(seed: int): WMH_BiomeSpawnPoint {
     var valid_spawn_points: array<WMH_BiomeSpawnPoint> = this
       .getValidSpawnPoints();
 
@@ -234,9 +234,9 @@ class WMH_SpawnPointManager {
         point.GetWorldPosition()
       );
 
-      output.a += (distance <= 15 * 15) as int;
-      output.b += (distance <= 25 * 25) as int;
-      output.c += (distance <= 50 * 50) as int;
+      output.a += (distance <= 30 * 30) as int;
+      output.b += (distance <= 50 * 50) as int;
+      output.c += (distance <= 70 * 70) as int;
       output.d += (distance <= 100 * 100) as int;
     }
 
