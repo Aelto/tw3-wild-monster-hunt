@@ -12,14 +12,21 @@ state Running in WMH_EncounterManager {
   }
 
   latent function tickEncounters() {
+    var to_remove: array<WMH_Encounter>;
+
     for encounter: WMH_Encounter in parent.encounters {
       var should_destroy: bool = encounter.onTick();
 
       if (should_destroy) {
         encounter.onDestroy();
+        to_remove.PushBack(encounter);
       }
 
       SleepOneFrame();
+    }
+
+    for encounter: WMH_Encounter in to_remove {
+      parent.encounters.Remove(encounter);
     }
   }
 }
