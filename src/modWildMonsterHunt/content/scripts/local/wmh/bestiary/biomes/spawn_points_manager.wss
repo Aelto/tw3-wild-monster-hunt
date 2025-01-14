@@ -49,7 +49,7 @@ class WMH_SpawnPointManager {
     }
 
     if (ignore_tickers || this.nearby_refresh_ticker.validate()) {
-      var radius: float = 500;
+      var radius: float = 300;
       var max: int = 250;
 
       this.nearby_spawn_points.Clear();
@@ -235,9 +235,9 @@ class WMH_SpawnPointManager {
       );
 
       output.a += (distance <= 30 * 30) as int;
-      output.b += (distance <= 50 * 50) as int;
-      output.c += (distance <= 70 * 70) as int;
-      output.d += (distance <= 100 * 100) as int;
+      output.b += (distance <= 60 * 60) as int;
+      output.c += (distance <= 90 * 90) as int;
+      output.d += (distance <= 120 * 200) as int;
     }
 
     // since any point below 50m is obviously also below 100m, we remove the

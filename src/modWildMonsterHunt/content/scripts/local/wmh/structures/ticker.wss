@@ -6,6 +6,7 @@ class WMH_Ticker {
   // when the Ticker is locked, the elapsed time since the last reset is stored
   // so that when unlocked the Ticker starts back exactly to the same duration
   private var lock_elapsed: float;
+  private var locked: bool;
 
   public function init(cooldown_seconds: float): WMH_Ticker {
     this.cooldown_seconds = cooldown_seconds;
@@ -36,7 +37,10 @@ class WMH_Ticker {
       return;
     }
 
-    this.lock_elapsed = this.timeLeftBeforeExpire();
+    // a minimum of 1 second of downtime after the unlock to ensure the ticker
+    // is seen as locked even if the ticker is expired when the lock starts
+    this.lock_elapsed = MaxF(this.timeLeftBeforeExpire(), 1);
+    this.locked = true;
   }
 
   public function unlock() {
@@ -45,7 +49,7 @@ class WMH_Ticker {
   }
 
   public function isLocked(): bool {
-    return this.lock_elapsed > 0;
+    return this.locked;
   }
 
   public function hasExpired(): bool {
@@ -79,9 +83,10 @@ class WMH_Ticker {
   }
 
   private function internal_unlock() {
-    if (this.isLocked() && this.lock_elapsed > 0) {
+    if (this.isLocked()) {
       this.trigger_timestamp = SUH_now() - (this.cooldown_seconds - this.lock_elapsed);
       this.lock_elapsed = 0;
+      this.locked = false;
     }
   }
 }

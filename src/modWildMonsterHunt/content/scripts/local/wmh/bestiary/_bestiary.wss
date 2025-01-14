@@ -271,6 +271,10 @@ statemachine class WMH_Bestiary {
     contract: WMH_ContractManager,
     hunt_seed: int
   ) {
+    // the * 100 is used to get a seed based on the milliseconds for more
+    // precision
+    var instant_seed: int = (SUH_now() * 100) as int;
+
     // if the player is in a repulsive's area then skip spawning regular
     // encounters. It isn't as precise as checking if the spawn point itself is
     // in the repulsive but this approximation can save a lot of resources as
@@ -289,9 +293,7 @@ statemachine class WMH_Bestiary {
 
     // 1.
     // first pass for monsters
-    if (!in_repulsive) {
-      var instant_seed: int = SUH_now() as int;
-
+    if (!in_repulsive && point.canRespawn()) {
       var monster_spawn_chance: float = 1.0;
       var wildlife_spawn_chance: float = 0.0;
       var spawned_count: int = 0;
@@ -307,14 +309,13 @@ statemachine class WMH_Bestiary {
       WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters spawned_count = " + spawned_count + " points count = " + 1);
     }
     else {
-      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive");
+      WMHINFO("spawnNearbyAvailableSpawnPoints(), monsters, cancelled, in repulsive or point waiting for respawn");
     }
 
     // 2.
     // second pass for wildlife
     // var instant_seed: int = this.wildlife_instant_seed
     //   .dynSeedPlayerMovements(hunt_seed, 10.0);
-    var instant_seed: int = SUH_now() as int;
 
     // repulsive prevents monsters from spawning, instead the amount of wildlife
     // increases.
@@ -426,10 +427,10 @@ statemachine class WMH_Bestiary {
       // The closer a point is, the higher its impact on the spawn chance of the
       // current point.
       var altered_chance: float = monster_spawn_chance
-        - all_occupied_count.a * 0.4
-        - all_occupied_count.b * 0.3
-        - all_occupied_count.c * 0.2
-        - all_occupied_count.d * 0.1;
+        - all_occupied_count.a * 0.8
+        - all_occupied_count.b * 0.6
+        - all_occupied_count.c * 0.4
+        - all_occupied_count.d * 0.2;
 
       can_spawn_monsters = altered_chance > 0
         && point.canSpawnMonstersInHunt(point_seed, altered_chance);
