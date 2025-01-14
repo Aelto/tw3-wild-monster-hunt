@@ -55,9 +55,9 @@ class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
   ): float {
     // humans can be anywhere
     pref_time!({{
-      morning += 0.05;
-      afternon += 0.1;
-      night += 0.025
+      morning += 0.05,
+      afternoon += 0.1,
+      night += 0.025,
 
       morning {
         if (structures) += 0.1,
