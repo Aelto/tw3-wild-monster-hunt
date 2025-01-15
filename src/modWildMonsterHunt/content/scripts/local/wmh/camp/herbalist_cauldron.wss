@@ -8,8 +8,94 @@ function submitOnMeldCauldron() {
   }
 }
 
+/// If set to true, the CR4ItemSelectionPopup class will display a quantity
+/// select modal after the item is selected.
+@addField(W3ItemSelectionPopupData)
+var wmh_quantity_selection: bool;
+
+// it's an event OnCallSelectItem,
+@wrapMethod(CR4ItemSelectionPopup)
+function OnCallSelectItem(item: SItemUniqueId) {
+  if (
+    this.m_DataObject.wmh_quantity_selection
+    && m_DataObject.selectionMode == EISPM_Painting
+    && thePlayer.GetInventory().GetItemQuantity(item) > 2
+  ) {
+    this.ClosePopup();
+
+    var cauldron: WMH_HerbalistCauldron;
+    cauldron = this.m_containerOwner as WMH_HerbalistCauldron;
+
+    if (cauldron) {
+      cauldron.onItemTransferSelectQuantity(item);
+    }
+  }
+  else {
+    return wrappedMethod(item);
+  }
+}
+
+
+class WMH_CauldronModuleDialog extends CR4HudModuleDialog {
+  var container_inventory: CInventoryComponent;
+  var item_id: SItemUniqueId;
+  var cauldron: WMH_HerbalistCauldron;
+  
+  function DialogueSliderDataPopupResult(value: float, optional isItemReward: bool) {
+    super.DialogueSliderDataPopupResult(0,false);
+
+    theGame.CloseMenu('PopupMenu');
+    theInput.SetContext(thePlayer.GetExplorationInputContext());
+    theGame.SetIsDialogOrCutscenePlaying(false);
+    theGame.GetGuiManager().RequestMouseCursor(false);
+    
+    if (value >= 1) {
+      thePlayer.GetInventory()
+        .GiveItemTo(this.cauldron.GetInventory(), this.item_id, value as int);
+
+      theSound.SoundEvent("gui_pick_up_herbs");
+    }
+
+    cauldron.RemoveTimer('RefreshOnelinerTimer');
+    cauldron.RemoveTimer('RefreshMeldingPointsTimer');
+    cauldron.AddTimer('RefreshOnelinerTimer', 0.1);
+    cauldron.AddTimer('RefreshMeldingPointsTimer', 5.0);
+  }
+
+  function openItemQuantitySelectorWindow(
+    cauldron: WMH_HerbalistCauldron,
+    item_to_transfer: SItemUniqueId
+  ) {
+    this.cauldron = cauldron;
+    this.item_id = item_to_transfer;
+
+    var data: BettingSliderData;
+    data = new BettingSliderData in this;
+    data.ScreenPosX = 0.62;
+    data.ScreenPosY = 0.65;
+
+    // var item_name: string = thePlayer.GetInventory()
+    //   .GetItemLocalizedNameByUniqueID(item_to_transfer);
+
+    var item_name: string = "<img src='img://"
+      + thePlayer.GetInventory().GetItemIconPathByUniqueID(item_to_transfer)
+      + "' height='18' width='18' />";
+
+    data.SetMessageTitle("Amount of " + item_name + " to drop in the cauldron?");
+		data.dialogueRef = this;
+		data.BlurBackground = false;
+
+    data.minValue = 0;
+		data.maxValue = thePlayer.GetInventory().GetItemQuantity(item_to_transfer);
+    data.currentValue = Max(1, data.maxValue - 5);
+
+    theGame.RequestMenu('PopupMenu', data);
+  }
+}
+
 class WMH_HerbalistCauldron extends W3Container {
   protected var popup_data: W3ItemSelectionPopupData;
+  protected var quantity_dialog: WMH_CauldronModuleDialog;
 
   // used to display real time information about what's in the cauldron,
   protected var oneliner: SU_OnelinerEntity;
@@ -83,6 +169,11 @@ class WMH_HerbalistCauldron extends W3Container {
     this.updateMeldPointsAndOneliner();
   }
 
+  public function onItemTransferSelectQuantity(item: SItemUniqueId) {
+    this.quantity_dialog = new WMH_CauldronModuleDialog in this;
+    this.quantity_dialog.openItemQuantitySelectorWindow(this, item);
+  }
+
   private function openItemSelectionMenu() {
     var itemSelectionPopup: CR4ItemSelectionPopup;  
     var tags: array<name>;  
@@ -118,9 +209,9 @@ class WMH_HerbalistCauldron extends W3Container {
     this.popup_data.selectionMode = EISPM_Painting;
     this.popup_data.checkTagsOR = true;
     this.popup_data.categoryFilterList = empty;
+    this.popup_data.wmh_quantity_selection = true;
     
     theGame.RequestPopup('ItemSelectionPopup', this.popup_data);
-    theSound.SoundEvent("gui_pick_up_herbs");
     this.AddTimer('RefreshOnelinerTimer', 0.1);
     this.AddTimer('RefreshMeldingPointsTimer', 5.0);
   }
