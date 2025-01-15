@@ -87,15 +87,46 @@ class WMH_ContractManager {
     }
   }
 
-  public function isTargetted(id: WMH_BestiaryId): bool {
+  public function isTargetted(
+    id: WMH_BestiaryId,
+    optional contract_type: WMH_PendingContractType
+  ): bool {
     var contract: WMH_PendingContract;
     for contract: WMH_PendingContract in this.pending_contracts {
+      // caller is targetting a specific type of contract
+      if (
+        contract_type != WMH_PendingContractType_DEFAULT
+        && contract.getType() != contract_type
+      ) {
+        continue;
+      }
+
       if (contract.isTargetted(id)) {
         return true;
       }
     }
 
     return false;
+  }
+
+  public function getTargettingContracts(
+    out contracts: array<WMH_PendingContract>,
+    id: WMH_BestiaryId,
+    optional contract_type: WMH_PendingContractType
+  ) {
+    for contract: WMH_PendingContract in this.pending_contracts {
+      // caller is targetting a specific type of contract
+      if (
+        contract_type != WMH_PendingContractType_DEFAULT
+        && contract.getType() != contract_type
+      ) {
+        continue;
+      }
+
+      if (contract.isTargetted(id)) {
+        contracts.PushBack(contract);
+      }
+    }
   }
 
   public function getPendingTargetsNameHtml(): array<string> {
@@ -238,7 +269,10 @@ class WMH_ContractManager {
     return false;
   }
 
-  private function finishExpiredContracts(storage_contract: WMH_StorageContract, level: WMH_Level) {
+  private function finishExpiredContracts(
+    storage_contract: WMH_StorageContract,
+    level: WMH_Level
+  ) {
     var expired_contracts: array<WMH_PendingContract>;
 
     var contract: WMH_PendingContract;

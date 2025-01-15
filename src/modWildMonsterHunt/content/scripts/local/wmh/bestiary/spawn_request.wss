@@ -101,6 +101,57 @@ class WMH_SpawnRequest {
 
     return this.spawn_position;
   }
+
+  public function tryPromoteToContractTargets(
+    contract_manager: WMH_ContractManager
+  ): bool {
+    var is_contract: bool = this.encounter_tag == WMH_EncounterTag_ContractRegular
+      || this.encounter_tag == WMH_EncounterTag_ContractMilestone;
+
+    // already marked as a contract better not tweak anything
+    if (is_contract) {
+      return true;
+    }
+
+    var target_contracts: array<WMH_PendingContract>;
+    for bentry: WMH_BestiaryEntry in this.entries {
+      contract_manager.getTargettingContracts(
+        target_contracts,
+        bentry.id,
+        WMH_PendingContractType_MILESTONE
+      );
+    }
+
+    // no milestone contracts target the bentries, look for regular ones
+    if (target_contracts.Size() <= 0) {
+      for bentry: WMH_BestiaryEntry in this.entries {
+        contract_manager.getTargettingContracts(
+          target_contracts,
+          bentry.id,
+          WMH_PendingContractType_DEFAULT
+        );
+      }
+    }
+
+    // at least one milestone contract targets the b_entries
+    if (target_contracts.Size() > 0) {
+      var seed: int = this.seed;
+
+      if (seed <= 0) {
+        seed = SUH_now() as int;
+      }
+
+      var index: int = RandNoiseF(seed, target_contracts.Size()) as int;
+      var contract: WMH_PendingContract = target_contracts[index];
+
+      this.withAffixes(contract.affix_manager);
+      this.withEncounterTag(WMH_EncounterTag_ContractMilestone);
+
+      return true;
+    }
+
+    return false;
+  }
 }
 
 class WMH_SpawnRequestClues extends WMH_SpawnRequest {

@@ -760,6 +760,9 @@ state Spawning in WMH_Bestiary {
     var position: Vector = request.GetWorldPosition();
     var contract_manager: WMH_ContractManager = WMH_getContractManager();
     var encounter_manager: WMH_EncounterManager = WMH_getEncounterManager();
+
+    request.tryPromoteToContractTargets(contract_manager);
+
     for bentry: WMH_BestiaryEntry in request.entries {
       // repulsives prevent regular monsters from spawning, contract targets
       // however are unaffected by them.
