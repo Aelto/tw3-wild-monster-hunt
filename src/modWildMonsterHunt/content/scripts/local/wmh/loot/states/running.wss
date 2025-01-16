@@ -28,9 +28,9 @@ state Running in WMH_LootManager {
 
     while (items_count < tags_count) {
       items_count += 1;
-      index = RandNoiseF(request.seed, tags_count) as int;
+      index = RandNoiseF(request.seed + items_count, tags_count) as int;
       
-      var can_add: bool = RandNoiseF(request.seed + index, max_chance)
+      var can_add: bool = RandNoiseF(request.seed + items_count + index, max_chance)
                         // the +1 means there is a chance to have 0 items
                         >= 1 + items_count;
 
@@ -45,7 +45,7 @@ state Running in WMH_LootManager {
         this.addRandomItemFromCategory(
           request.inventory,
           category,
-          request.seed + index
+          request.seed + index + items_count
         );
       }
     }
