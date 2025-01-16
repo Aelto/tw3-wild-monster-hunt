@@ -73,8 +73,8 @@ class WMH_BestiaryEntry {
     var spawn_count: int = RandNoiseF(
       seed,
       // todo: use other difficulties than medium
-      this.difficulty_scaling.maximum_count_medium,
-      this.difficulty_scaling.minimum_count_medium
+      this.difficulty_scaling.maximum_count_hard + 1,
+      this.difficulty_scaling.minimum_count_easy
     ) as int;
 
     // 1.
