@@ -194,8 +194,11 @@ class WMH_HerbalistCauldron extends W3Container {
     // Following filter settings are modified per child class type
     var tags: array<name>;
     tags.PushBack('CraftingIngredient');
+    tags.PushBack('crafting_ingredient');
     tags.PushBack('AlchemyIngredient');
     tags.PushBack('alchemy_ingredient');
+    tags.PushBack('mod_crafting');
+    tags.PushBack('mod_alchemy');
 
     var forbidden: array<name>;
     forbidden.PushBack('NoShow');
