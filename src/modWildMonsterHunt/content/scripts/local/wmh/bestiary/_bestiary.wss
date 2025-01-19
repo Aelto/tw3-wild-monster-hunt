@@ -821,12 +821,6 @@ state Spawning in WMH_Bestiary {
   ) {
     var templates: array<WMH_SpawnTemplateAndCount> = bentry.buildSpawnList(seed);
 
-    var group_positions: array<Vector> = WMH_getGroupPositions(
-      position,
-      templates.Size(),
-      /*density*/ 0.01
-    );
-
     var tags_array: array<name>;
     tags_array.PushBack('WildMonsterHuntEntity');
 
@@ -858,11 +852,17 @@ state Spawning in WMH_Bestiary {
 
       var persistance: EPersistanceMode = PM_DontPersist;
 
+      var group_positions: array<Vector> = WMH_getGroupPositions(
+        position,
+        templates[i].count,
+        /*density*/ 0.01
+      );
+
       var i_1: int = 0;
       for (i_1 = 0; i_1 < templates[i].count; i_1 += 1) {
         var created_entity: CEntity = theGame.CreateEntity(
           entity_template,
-          group_positions[i],
+          group_positions[i_1],
           current_rotation,,,,
           persistance,
           tags_array
