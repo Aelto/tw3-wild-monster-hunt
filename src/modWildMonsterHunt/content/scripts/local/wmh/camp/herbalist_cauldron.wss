@@ -239,8 +239,10 @@ class WMH_HerbalistCauldron extends W3Container {
   }
 
   private function getPointsPerYield(): int {
-    return ((thePlayer.wmh.storage.herbalist.melding_level.value as int) + 1)
-         * 50;
+    return Min(
+      100 + (thePlayer.wmh.storage.herbalist.melding_level.value as int) * 35,
+      500
+    );
   }
 
   private function getCostPerYield(): int {
