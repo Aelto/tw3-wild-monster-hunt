@@ -86,6 +86,6 @@ class WMH_BestiaryEntryHuman extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Human";
+    return "Bandit";
   }
 }
