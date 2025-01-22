@@ -25,7 +25,7 @@ statemachine class WMH_LootManager {
     tags: array<WMH_LootTag>, // not `out`, copies the array
     seed: int
   ) {
-    var runes_of_power_chance: float = 0.05;
+    var runes_of_power_chance: float = 0.01;
 
     // the container has no tags: use random tags
     var tags_size: int = tags.Size();
