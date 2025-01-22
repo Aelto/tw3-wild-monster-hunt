@@ -6,7 +6,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
 
   protected editable var upgrade_cost_base: int;
   hint upgrade_cost_base = "crowns needed for the first level";
-  default upgrade_cost_base = 100;
+  default upgrade_cost_base = 50;
 
   protected editable var upgrade_cost_per_level: int;
   hint upgrade_cost_per_level = "additional crowns needed to upgade for each levels already unlocked";
