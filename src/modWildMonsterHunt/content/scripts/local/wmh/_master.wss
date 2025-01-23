@@ -248,13 +248,6 @@ class WMH_Master {
     );
   }
 
-  public function submitOnMilestoneContractCompleted(
-    origin: WMH_MilestoneContract,
-    seed: int
-  ) {
-    this.loot.onMilestoneContractCompleted(seed);
-  }
-
   public function submitOnRepulsivePlaced(
     origin: WMH_LureSpot,
     center: Vector

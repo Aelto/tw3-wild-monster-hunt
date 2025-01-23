@@ -164,6 +164,9 @@ class WMH_PendingContract {
       if (can_drop_reagent) {
         provider.appendItem('modwmh_melding_reagent', 1);
       }
+
+      WMH_getLootManager()
+        .onPendingContractCompleted(this.getContractSeed());
     }
   }
 

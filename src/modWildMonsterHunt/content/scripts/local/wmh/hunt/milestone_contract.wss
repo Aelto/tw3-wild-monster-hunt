@@ -55,8 +55,8 @@ class WMH_MilestoneContract extends WMH_PendingContract {
       + this.milestone_level.value
     );
 
-    thePlayer.wmh
-      .submitOnMilestoneContractCompleted(this, this.getContractSeed());
+    WMH_getLootManager()
+      .onMilestoneContractCompleted(this.getContractSeed());
   }
 
   private function initFromMilestoneLevel(
