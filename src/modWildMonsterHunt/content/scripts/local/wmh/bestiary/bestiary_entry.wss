@@ -171,7 +171,9 @@ class WMH_BestiaryEntry {
 
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
-    // todo!("inventory.AddMoney(1)")
+    if (RandRangeF(100.0) < 25.0) {
+      inventory.AddAnItem('modwmh_monster_fluid', RandRange(3) + 1);
+    }
   }
 
   // returns a bestiary entry that is able to spawn clues for the current

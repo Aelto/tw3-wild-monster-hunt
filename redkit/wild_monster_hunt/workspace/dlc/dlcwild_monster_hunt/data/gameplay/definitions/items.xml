@@ -156,6 +156,22 @@
 					<a>base_wmh_quality_two</a>
 				</base_abilities>
 			</item>
+
+			<item
+        name="modwmh_monster_fluid"
+				category="alchemy_ingredient"
+				stackable="250"
+				weight="0"
+			  icon_path="icons/inventory/ingredients/monstrous/blood_nekker_64x64.png"
+        localisation_key_name="wmh_monster_fluid"
+        localisation_key_description="wmh_monster_fluid_desc"
+        price="1"
+      >
+				<tags>WMH_CauldronIngredient_One</tags>
+				<base_abilities>
+					<a>base_wmh_quality_two</a>
+				</base_abilities>
+			</item>
 		
 		</items>
 	</definitions>	
