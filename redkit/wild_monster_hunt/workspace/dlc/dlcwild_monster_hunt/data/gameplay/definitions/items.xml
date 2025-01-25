@@ -161,13 +161,14 @@
         name="modwmh_monster_fluid"
 				category="alchemy_ingredient"
 				stackable="250"
+				grid_size="1"
 				weight="0"
-			  icon_path="icons/inventory/ingredients/monstrous/blood_nekker_64x64.png"
+			  icon_path="icons/inventory/ingredients/monstrous/acid_kikimore_discharge_64x64.png"
         localisation_key_name="wmh_monster_fluid"
         localisation_key_description="wmh_monster_fluid_desc"
         price="1"
       >
-				<tags>WMH_CauldronIngredient_One</tags>
+				<tags>WMH_CauldronIngredient_One, mod_alchemy, AlchemyIngredient, mod_valuable</tags>
 				<base_abilities>
 					<a>base_wmh_quality_two</a>
 				</base_abilities>
