@@ -269,7 +269,7 @@ class WMH_HerbalistCauldron extends W3Container {
       WMHINFO("item price = " + inventory.GetItemPrice(item));
 
       if (inventory.ItemHasTag(item, 'WMH_CauldronIngredient_One')) {
-        output += 10.0;
+        output += 10;
       }
       else {
         output += inventory.GetItemPrice(item) * inventory.GetItemQuantity(item);

@@ -64,8 +64,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
 
   protected function openItemSelectionMenu() {
     var item_tags: array<name>;
-    items_tags.PushBack('AlchemyIngredient');
-    item_tags.PushBack('mod_precious');
+    item_tags.PushBack('AlchemyIngredient');
     item_tags.PushBack('mod_valuable');
 
     this.item_selection_listener = new WMH_LureItemSelectionListener in this;
