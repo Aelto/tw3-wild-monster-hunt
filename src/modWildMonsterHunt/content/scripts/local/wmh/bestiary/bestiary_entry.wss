@@ -171,8 +171,11 @@ class WMH_BestiaryEntry {
 
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
-    if (RandRangeF(100.0) < 25.0) {
-      inventory.AddAnItem('modwmh_monster_fluid', RandRange(3) + 1);
+    if (RandRangeF(100.0) < 25.0 + this.strength) {
+      inventory.AddAnItem(
+        'modwmh_monster_fluid',
+        RandRange(this.strength * 0.35 as int) + 1
+      );
     }
   }
 
