@@ -9,8 +9,12 @@ class WMH_AffixManager {
   public var health_regen_percent: float;
   default health_regen_percent = 0.0;
 
+  // @deprecated
   public var durability_loss_modifier: float;
   default durability_loss_modifier = 1.0;
+
+  public var armor_modifier: float;
+  default armor_modifier = 1.0;
 
   public var lifesteal_percent: float;
   default lifesteal_percent = 0.0;
@@ -81,22 +85,22 @@ class WMH_AffixManager {
       );
     }
 
-    var current_chance: float = base_chance / (1 + count);
-    if (RandNoiseF(seed + 7, current_chance) > 0.5) {
-      count += 1;
+    // var current_chance: float = base_chance / (1 + count);
+    // if (RandNoiseF(seed + 7, current_chance) > 0.5) {
+    //   count += 1;
 
-      this.durability_loss_modifier = 1 + RandNoiseF(
-        seed + 8,
-        // at level 25, the creature can have a maximum bonus of 50% durability
-        // loss
-        WMH_difficultyScaleUpPreF(
-          (level.value / 25) * 0.5,
-          // affix can be 10% stronger per difficulty level
-          0.1,
-          difficulty
-        )
-      );
-    }
+    //   this.durability_loss_modifier = 1 + RandNoiseF(
+    //     seed + 8,
+    //     // at level 25, the creature can have a maximum bonus of 50% durability
+    //     // loss
+    //     WMH_difficultyScaleUpPreF(
+    //       (level.value / 25) * 0.5,
+    //       // affix can be 10% stronger per difficulty level
+    //       0.1,
+    //       difficulty
+    //     )
+    //   );
+    // }
 
     var current_chance: float = base_chance / (1 + count);
     if (RandNoiseF(seed + 9, current_chance) > 0.5) {
@@ -108,6 +112,22 @@ class WMH_AffixManager {
         // the creature can have a maximum of 10% lifesteal
         WMH_difficultyScaleUpPreF(
           (level.value / 25) * 0.10,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
+      );
+    }
+
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 11, current_chance) > 0.5) {
+      count += 1;
+
+      this.armor_modifier = 1 + RandNoiseF(
+        seed + 12,
+        // at level 25, the creature can have a maximum bonus of 50% armor
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.5,
           // affix can be 10% stronger per difficulty level
           0.1,
           difficulty
@@ -148,9 +168,20 @@ class WMH_AffixManager {
     }
 
     if (this.durability_loss_modifier > 1.0) {
-      npc.WMH_addEffect(
-        (new WMH_HardenedEffect in npc)
-        .initHardened(-1, this.durability_loss_modifier)
+      // npc.WMH_addEffect(
+      //   (new WMH_HardenedEffect in npc)
+      //   .initHardened(-1, this.durability_loss_modifier)
+      // );
+    }
+
+    if (this.armor_modifier != 1.0) {
+      // 
+      npc.wmh_armor_bonus = SAbilityAttributeValue(
+        0.0,
+        // it's a bonus that's added to the vanilla value, see the comment
+        // on the wrapMethod for more info.
+        this.armor_modifier - 1,
+        0.0
       );
     }
   }
@@ -183,6 +214,13 @@ class WMH_AffixManager {
       else {
         output += "Regenerating ";
       }
+    }
+
+    if (this.armor_modifier > 1.0) {
+      output += "Armored ";
+    }
+    else if (this.armor_modifier < 1.0) {
+      output += "Exposed ";
     }
 
     if (this.durability_loss_modifier > 1.0) {

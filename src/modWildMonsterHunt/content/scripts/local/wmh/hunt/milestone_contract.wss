@@ -111,13 +111,13 @@ class WMH_MilestoneContract extends WMH_PendingContract {
 
       case 8:
         this.target = bestiary.getEntryByBiomeTagByPass('Endrega');
-        this.affix_manager.durability_loss_modifier = 0.5;
+        this.affix_manager.armor_modifier = 0.5;
         this.affix_manager.health_modifier = 1.5;
         break;
 
       case 9:
         this.target = bestiary.getEntryByBiomeTagByPass('Bear');
-        this.affix_manager.durability_loss_modifier = 0.25;
+        this.affix_manager.armor_modifier = 1.5;
         this.affix_manager.lifesteal_percent = 0.75;
         break;
 

@@ -1,59 +1,65 @@
-class WMH_HardenedEffect extends WMH_Effect {
-  default tag = 'WMH_HardenedEffect';
 
-  public function initHardened(duration: float, modifier: float): WMH_HardenedEffect {
-    this.init(duration);
-    this.intensity = modifier;
+// commented out for two reasons:
+// - durability loss increase on a monster is counter intuitive, the best way to
+// win would be to avoid the fight.
+// - compatibility with mods that change the durability code
 
-    return this;
-  }
+// class WMH_HardenedEffect extends WMH_Effect {
+//   default tag = 'WMH_HardenedEffect';
 
-  public function getModifier(): float {
-    return this.intensity;
-  }
-}
+//   public function initHardened(duration: float, modifier: float): WMH_HardenedEffect {
+//     this.init(duration);
+//     this.intensity = modifier;
 
-@wrapMethod(W3DamageManagerProcessor)
-function ProcessActionDamage_ReduceDurability() {
-  if (playerAttacker) {
-    var victim: CActor = this.action.victim as CActor;
+//     return this;
+//   }
 
-    if (victim) {
-      var effects: array<WMH_Effect> = victim.WMH_getEffectsByTag('WMH_HardenedEffect');
-      var total: float = 1.0;
+//   public function getModifier(): float {
+//     return this.intensity;
+//   }
+// }
 
-      for effect: WMH_Effect in effects {
-        var hardened: WMH_HardenedEffect = effect as WMH_HardenedEffect;
+// @wrapMethod(W3DamageManagerProcessor)
+// function ProcessActionDamage_ReduceDurability() {
+//   if (playerAttacker) {
+//     var victim: CActor = this.action.victim as CActor;
 
-        if (hardened) {
-          // direct attack
-          if (
-            this.playerAttacker
-            && this.playerAttacker.inv.IsIdValid(this.weaponId)
-            && this.playerAttacker.inv.HasItemDurability(this.weaponId)
-          ) {
-            total *= hardened.getModifier();
-          }
-        }
-      }
+//     if (victim) {
+//       var effects: array<WMH_Effect> = victim.WMH_getEffectsByTag('WMH_HardenedEffect');
+//       var total: float = 1.0;
 
-      // cache the value in a fact, it will be consumed on the next call to
-      // GetWeaponDurabilityLoseValue()
-      FactsSet("WMH_HardenedEffect", (total * 100) as int);
-    }
-  }
+//       for effect: WMH_Effect in effects {
+//         var hardened: WMH_HardenedEffect = effect as WMH_HardenedEffect;
 
-  wrappedMethod();
-}
+//         if (hardened) {
+//           // direct attack
+//           if (
+//             this.playerAttacker
+//             && this.playerAttacker.inv.IsIdValid(this.weaponId)
+//             && this.playerAttacker.inv.HasItemDurability(this.weaponId)
+//           ) {
+//             total *= hardened.getModifier();
+//           }
+//         }
+//       }
 
-@wrapMethod(W3GameParams)
-function GetWeaponDurabilityLoseValue(): float {
-  var modifier: float = (FactsQueryLatestValue("WMH_HardenedEffect") as float) * 0.01;
-  FactsRemove("WMH_HardenedEffect");
+//       // cache the value in a fact, it will be consumed on the next call to
+//       // GetWeaponDurabilityLoseValue()
+//       FactsSet("WMH_HardenedEffect", (total * 100) as int);
+//     }
+//   }
 
-  if (modifier <= 0) {
-    modifier = 1.0;
-  }
+//   wrappedMethod();
+// }
 
-  return wrappedMethod() * modifier;
-}
+// @wrapMethod(W3GameParams)
+// function GetWeaponDurabilityLoseValue(): float {
+//   var modifier: float = (FactsQueryLatestValue("WMH_HardenedEffect") as float) * 0.01;
+//   FactsRemove("WMH_HardenedEffect");
+
+//   if (modifier <= 0) {
+//     modifier = 1.0;
+//   }
+
+//   return wrappedMethod() * modifier;
+// }
