@@ -199,7 +199,7 @@ statemachine class WMH_LootManager {
     var item_index: int = RandNoiseF(seed, Min(max, max_index)) as int;
     var item: name = this.loot_by_category[category][item_index];
 
-    this.loot_by_category[category].EraseFast(item_index);
+    this.loot_by_category[category].Erase(item_index);
 
     return item;
   }
