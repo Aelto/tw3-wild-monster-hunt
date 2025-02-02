@@ -24,7 +24,10 @@ state Running in WMH_LootManager {
     var tags_count: int = request.tags.Size();
 
     // a small chance decrease as difficulty increases
-    var max_chance: float = WMH_difficultyScaleDownF(tags_count + 1, 0.05);
+    var max_chance: float = WMH_difficultyScaleDownF(
+      tags_count * 0.5 + 1,
+      0.05
+    );
 
     while (items_count < tags_count) {
       items_count += 1;
