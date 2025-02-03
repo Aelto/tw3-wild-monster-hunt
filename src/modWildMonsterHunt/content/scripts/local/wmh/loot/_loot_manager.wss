@@ -8,6 +8,7 @@ statemachine class WMH_LootManager {
 
   // it uses the value of WMH_LootTag as the first index.
   protected var loot_by_category: array<array<name>>;
+  protected var loot_by_category_rollers: array<WMH_RatiosRoller>;
 
   protected var runes_of_power_perks: array<ESkill>;
   protected var runes_of_power_perks_roller: WMH_RatiosRoller;
@@ -161,7 +162,8 @@ statemachine class WMH_LootManager {
       return '';
     }
 
-    var item_index: int = RandNoiseF(seed, max) as int;
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    var item_index: int = roller.roll(seed);
     var item: name = this.loot_by_category[category][item_index];
 
     return item;
@@ -171,8 +173,11 @@ statemachine class WMH_LootManager {
     this.loot_requests.PushBack(request);
   }
 
-  protected function registerLoot(category: WMH_LootTag, _level: int, item: name) {
+  protected function registerLoot(category: WMH_LootTag, level: int, item: name) {
     this.loot_by_category[category].PushBack(item);
+    
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    roller.addRatio(1.0 / (level as float));
   }
 
   // mutates the array from the category by popping the item out of the list
@@ -192,11 +197,13 @@ statemachine class WMH_LootManager {
       return '';
     }
 
-    if (max_index <= 0) {
-      max_index = max;
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    var item_index: int = roller.roll(seed, max_index);
+
+    if (item_index < 0) {
+      return '';
     }
 
-    var item_index: int = RandNoiseF(seed, Min(max, max_index)) as int;
     var item: name = this.loot_by_category[category][item_index];
 
     this.loot_by_category[category].Erase(item_index);

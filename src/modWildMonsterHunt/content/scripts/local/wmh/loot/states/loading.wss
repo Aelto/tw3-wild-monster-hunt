@@ -15,9 +15,12 @@ state Loading in WMH_LootManager {
     var i: int;
 
     parent.loot_by_category.Clear();
+    parent.loot_by_category_rollers.Clear();
     for (i = 0; i < EnumGetMax('WMH_LootTag') + 1; i += 1) {
       parent.loot_by_category.PushBack(empty);
+      parent.loot_by_category_rollers.PushBack(new WMH_RatiosRoller in parent);
     }
+
 
     this.witcher = GetWitcherPlayer();
 
