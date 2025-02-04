@@ -170,7 +170,7 @@
       >
 				<tags>WMH_CauldronIngredient_One, mod_alchemy, AlchemyIngredient, mod_valuable</tags>
 				<base_abilities>
-					<a>base_wmh_quality_two</a>
+					<a>base_wmh_quality_four</a>
 				</base_abilities>
 			</item>
 		

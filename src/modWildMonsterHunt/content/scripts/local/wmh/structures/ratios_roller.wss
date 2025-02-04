@@ -22,7 +22,7 @@ class WMH_RatiosRoller {
   }
 
   public function roll(seed: int, optional max_index: int): int {
-    var max: int = this.total;
+    var max: float = this.total;
     var i: int;
 
     if (max_index > 0) {
