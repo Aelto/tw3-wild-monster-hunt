@@ -178,33 +178,20 @@ statemachine class WMH_Bestiary {
     var output: array<WMH_BestiaryEntry>;
     var fallback: WMH_BestiaryEntry;
 
-    while (output.Size() < 5) {
+    // 1. find the ideal bonus range that's needed to get at least 10 targets:
+    var ideal_range: int = -1;
+    var found_targets: int = 0;
+    while (found_targets < 10) {
+      ideal_range += 1;
+      found_targets = 0;
       for bentry: WMH_BestiaryEntry in this.entries {
-        if (!fallback) {
-          fallback = bentry;
-        }
-
-        if (bentry.canBeTarget(level)) {
-          output.PushBack(bentry);
-        }
-        // the target could no be target, but it's stored as a possible fallback
-        // if after looping through all targets we couldn't get 5 valid entries
-        //
-        // over time this should get us the strongest target below the WMH_Level
-        else if (
-          fallback.strength < level.value 
-          && fallback.strength > bentry.strength
-        ) {
-          fallback = bentry;
-        }
+        found_targets += bentry.canBeTarget(level, ideal_range) as int;
       }
+    }
 
-      if (fallback) {
-        // adjust the level to be around the fallback's strength, that should
-        // open the door to new elite targets.
-        level.value = fallback.strength;
-      } else {
-        break;
+    for bentry: WMH_BestiaryEntry in this.entries {
+      if (bentry.canBeTarget(level, ideal_range)) {
+        roller.addItem(bentry.strength, bentry);
       }
     }
 
@@ -239,7 +226,13 @@ statemachine class WMH_Bestiary {
     seed: int
   ): WMH_BestiaryEntry {
     var elites: array<WMH_BestiaryEntry> = this.getEliteEntries(level);
-    var index: int = RandNoiseF(seed, elites.Size() as int) as int;
+    var roller: WMH_RatiosRoller = new WMH_RatiosRoller in this;
+
+    for bentry: WMH_BestiaryEntry in elites {
+      roller.addRatio(MaxF(LogF(bentry.strength + 2), 0.1));
+    }
+
+    var index: int = roller.roll(seed);
     var bentry: WMH_BestiaryEntry = elites[index];
 
     return bentry;
