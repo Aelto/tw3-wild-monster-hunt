@@ -19,7 +19,7 @@ class WMH_CampUpgradeBuff extends WMH_CampUpgradeBase {
         this,
         thePlayer,
         this.buff_on_use,
-        this.seconds_base + level * this.seconds_per_level
+        3600
       );
     }
 
