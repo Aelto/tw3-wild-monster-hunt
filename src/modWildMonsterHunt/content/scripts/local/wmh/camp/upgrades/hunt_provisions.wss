@@ -66,7 +66,7 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
   }
 
   private function getAvailableLureContainers(level: float): int {
-    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.25 * level);
+    return RoundF(this.getCompletedContractsSinceLastInteraction() * 0.2 * level);
   }
 
   private function getAvailableWater(level: float): int {
