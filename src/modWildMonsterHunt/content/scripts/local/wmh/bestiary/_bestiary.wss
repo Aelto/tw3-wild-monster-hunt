@@ -191,7 +191,7 @@ statemachine class WMH_Bestiary {
 
     for bentry: WMH_BestiaryEntry in this.entries {
       if (bentry.canBeTarget(level, ideal_range)) {
-        roller.addItem(bentry.strength, bentry);
+        output.PushBack(bentry);
       }
     }
 
