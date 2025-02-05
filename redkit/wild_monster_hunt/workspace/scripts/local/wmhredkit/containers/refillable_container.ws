@@ -12,9 +12,9 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 		
 		WMHINFO("WMH_RefillableContainer, OnStreamIn(), this.previous_refill_seed = " + this.previous_refill_seed);
 		
-		if (this.IsEmpty() || this.previous_refill_seed <= 0) {
+		// if (this.IsEmpty() || this.previous_refill_seed <= 0) {
 			this.AddTimer('maybeRefillForHunt', 10, true);
-		}
+		// }
 	}
 	
 
