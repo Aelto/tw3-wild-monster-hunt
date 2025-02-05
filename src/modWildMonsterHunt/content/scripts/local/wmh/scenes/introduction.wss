@@ -65,6 +65,10 @@ statemachine class WMH_SceneIntroduction {
   latent function endScene() {
     FactsSet('wmh_scene_introduction', 1);
     FactsSet('q001_nightmare_ended', 1);
+    FactsSet('tut_killed_ghouls', 1);
+    FactsSet('q001_ghouls_dead', 1);
+    FactsSet('tut_before_ghoul_fight', 1);
+    FactsSet('q001_vesemir_char_entry', 1);
     FactsRemove('wmh_hunt_disabled');
     Sleep(1.0);
     theGame.SaveGame(SGT_QuickSave, -1);
