@@ -153,7 +153,7 @@ class WMH_BestiaryEntry {
 
     var npc: CNewNPC = entity as CNewNPC;
     if (npc) {
-      npc.SetLevel(thePlayer.GetLevel());
+      npc.SetLevel(Max(thePlayer.GetLevel(), this.strength as int));
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
         npc.GetMaxHealth() * MaxF(this.strength * 0.25, 1.0)
