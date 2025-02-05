@@ -235,7 +235,7 @@ statemachine class WMH_CampManager {
   }
 
   protected function unlockMerchantPrice(): int {
-    return 50;
+    return 25;
   }
 
   protected function isMerchantUnlocked(): bool {
