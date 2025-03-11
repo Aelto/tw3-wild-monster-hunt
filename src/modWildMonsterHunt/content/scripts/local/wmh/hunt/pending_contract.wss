@@ -229,80 +229,43 @@ class WMH_PendingContract {
     var target_location_copy: WMH_PendingContractLocation = this
       .available_locations[target_index];
 
+    var target_position: Vector = target_location_copy.spawn_point
+      .GetWorldPosition();
+
     for point: WMH_BiomeSpawnPoint in spawn_points {
       if (!point.is_clues_location) {
         continue;
       }
 
-      var position: Vector = point.GetWorldPosition();
-      // WMHINFO("BiomeCluesPoint @ " + VecToString(position));
-
-      // this point is the target, no need to spawn clues there
-      if (position == target_location_copy.spawn_point.GetWorldPosition()) {
-        continue;
-      }
-
-      // the +10 is a simple offset to ensure this seed isn't use in other
-      // calculations using this point_seed.
-      var point_seed: int = (hunt_seed + position.X - position.Y + 10) as int;
-
-      // not all valid locations are used everytime,
-      if (RandNoiseF(point_seed, 1.0) < 0.5) {
-        continue;
-      }
-
-      // WMHINFO("BiomeCluesPoint - RandNoiseF success");
-
-      var point_to_target_heading: float = VecHeading(
-        target_location_copy.spawn_point.GetWorldPosition() - position
-      );
-
-      var previous_to_point_heading: float = VecHeading(
-        position - target_location_copy.previous_clue_location
-      );
-
-      // As we get closer to the target, the maximum angle increases to allow
-      // for more locations.
-      // Note that it is both 120deg left and right so a total of 240deg
-      var maximum_angle: float = MaxF(
-        120
-        // every 50m away from the target decreases the cone by 1deg 
-        - (
-          VecDistance(position, target_location_copy.previous_clue_location)
-          / 50
-        ),
-        20
-      );
-
-      // note that it is the angle from the current point to the target, and not
-      // from the previous to the current point.
-      var heading_difference: float = AngleDistance(
-        target_location_copy.general_heading,
-        point_to_target_heading
-      );
-
-      if (AbsF(heading_difference) > maximum_angle) {
-        continue;
-      }
-
-      // WMHINFO("BiomeCluesPoint - heading_difference success");
-
       if (!point.canSpawnClues()) {
         continue;
       }
 
-      thePlayer.wmh.submitOnSpawnClues(
-        this,
-        this.target,
-        point,
-        // the heading to the target destination
-        point_to_target_heading,
-        point_seed,
-      );
+      var position: Vector = point.GetWorldPosition();
+      var distance: float = VecDistanceSquared2D(target_position, position);
 
-      // update position of the previous clue:
-      this.available_locations[target_index].previous_clue_location = position;
-      point.consumeForClues();
+      // 10% less chances for every 50 meters
+      var chances: float = 1.0 - (distance / 50.0) * 0.1;
+      var point_seed: int = point.getPointSeed(hunt_seed);
+      var allowed: bool = RandNoiseF(point_seed, 1.0) < chances;
+      if (allowed) {
+        var point_to_target_heading: float = VecHeading(
+          target_position - position
+        );
+
+        thePlayer.wmh.submitOnSpawnClues(
+          this,
+          this.target,
+          point,
+          // the heading to the target destination
+          point_to_target_heading,
+          point_seed,
+        );
+
+        // update position of the previous clue:
+        this.available_locations[target_index].previous_clue_location = position;
+        point.consumeForClues();
+      }
     }
   }
 }
