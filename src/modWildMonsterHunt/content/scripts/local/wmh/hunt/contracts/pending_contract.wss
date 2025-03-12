@@ -128,6 +128,32 @@ class WMH_PendingContract {
     return WMH_PendingContractType_DEFAULT;
   }
 
+  public function canBeCompleted(
+    out killed_creatures: array<WMH_HuntKill>,
+    optional only_milestones: bool
+  ): bool {
+    for target: WMH_ContractTarget in this.targets {
+      var was_killed: bool = false;
+
+      var i: int;
+      for (i = 0; i < killed_creatures.Size() && !was_killed; i += 1) {
+        var tag: WMH_EncounterTag = killed_creatures[i].encounter_tag;
+
+        if (!only_milestones || tag == WMH_EncounterTag_ContractMilestone) {
+          if (target.isTargetted(killed_creatures[i].bestiary_id)) {
+            was_killed = true;
+          }
+        }
+      }
+
+      if (!was_killed) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
   public function onContractCompleted(provider: WMH_RewardProvider) {
     this.getItemRewards(provider);
 

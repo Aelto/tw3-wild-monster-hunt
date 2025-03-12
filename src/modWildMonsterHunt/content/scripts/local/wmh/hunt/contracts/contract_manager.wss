@@ -201,7 +201,7 @@ statemachine class WMH_ContractManager {
   }
 
   private function finishCompletedContracts(
-    killed_creatures: array<WMH_HuntKill>,
+    out killed_creatures: array<WMH_HuntKill>,
     storage: WMH_Storage,
     maximum_level: WMH_Level
   ) {
@@ -215,18 +215,10 @@ statemachine class WMH_ContractManager {
       var milestone: WMH_MilestoneContract = contract as WMH_MilestoneContract;
 
       if (milestone) {
-        var completed: bool = false;
-        for kill: WMH_HuntKill in killed_creatures {
-          if (
-            !completed
-            // milestone contract require you kill the creature spawned by it
-            // directly as the creature has special affixes and all that.
-            && kill.encounter_tag == WMH_EncounterTag_ContractMilestone
-            && milestone.isTargetted(kill.bestiary_id)
-          ) {
-            completed_contracts.PushBack(milestone);
-            completed = true;
-          }
+        var completed: bool = milestone.canBeCompleted(killed_creatures, true);
+
+        if (completed) {
+          completed_contracts.PushBack(milestone);
         }
       }
     }
@@ -241,12 +233,10 @@ statemachine class WMH_ContractManager {
     // 2.0
     // then complete the regular pending contracts
     for contract: WMH_PendingContract in this.pending_contracts {
-      var completed: bool = false;
-      for kill: WMH_HuntKill in killed_creatures {
-        if (!completed && contract.isTargetted(kill.bestiary_id)) {
-          completed_contracts.PushBack(contract);
-          completed = true;
-        }
+      var completed: bool = contract.canBeCompleted(killed_creatures);
+
+      if (completed) {
+        completed_contracts.PushBack(contract);
       }
     }
 
