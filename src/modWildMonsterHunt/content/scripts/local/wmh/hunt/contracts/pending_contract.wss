@@ -126,6 +126,15 @@ class WMH_PendingContract {
 
   public function onContractCompleted(provider: WMH_RewardProvider) {
     if (this.target) {
+      this.getItemRewards(provider);
+
+      WMH_getLootManager()
+        .onPendingContractCompleted(this.getContractSeed());
+    }
+  }
+
+  private function getItemRewards(out provider: WMH_RewardProvider) {
+    if (this.target) {
       // the entry sets the group name as well
       this.target.onContractCompleted(
         provider,
@@ -164,9 +173,6 @@ class WMH_PendingContract {
       if (can_drop_reagent) {
         provider.appendItem('modwmh_melding_reagent', 1);
       }
-
-      WMH_getLootManager()
-        .onPendingContractCompleted(this.getContractSeed());
     }
   }
 

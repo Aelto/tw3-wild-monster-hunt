@@ -31,3 +31,33 @@ function WMH_vectorToCardinalDescription(input: Vector): string {
 
   return output;
 }
+
+/// Rolls a random amount of procs (the returned value) as long as the proc
+/// chances are above 0. Each roll the chances are decreased by the supplied
+/// `chance_decrease_per_roll`.
+///
+function WMH_diminishingReturns(
+  seed: int,
+  /// a value in the ]0; Inf] range that represents a % chance to proc.
+  /// A value above 1.0 grants 100% chances for the next roll(s).
+  base_proc_chance: float,
+  /// for every roll, the chances for the next roll are decreased by this amount
+  chance_decrease_per_roll: float,
+): int {
+  var output: int;
+  var rolls: int;
+
+  // fail-safe: if no chance decrease then assign a default equal to the initial
+  // chance.
+  if (chance_decrease_per_roll <= 0) {
+    chance_decrease_per_roll = base_proc_chance;
+  }
+
+  while (base_proc_chance > 0) {
+    output += (RandNoiseF(seed + rolls, 1.0) <= base_proc_chance) as int;
+    base_proc_chance -= chance_decrease_per_roll;
+    rolls += 1;
+  }
+
+  return output;
+}

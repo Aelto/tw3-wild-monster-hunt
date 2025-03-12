@@ -3,13 +3,13 @@ var wmh_dialog_hover_contracts_selection: WMH_DialogHoverListener;
 
 
 @wrapMethod(CR4HudModuleDialog)
-event OnDialogOptionSelected(index: int) {
+function OnDialogOptionSelected(index: int) {
   var result: bool;
 
   result = wrappedMethod(index);
 
-  if (this.wmh_contracts_dialog_choice_hover) {
-    this.wmh_contracts_dialog_choice_hover
+  if (this.wmh_dialog_hover_contracts_selection) {
+    this.wmh_dialog_hover_contracts_selection
       .onHover(this.lastSetChoices[index], index);
   }
 

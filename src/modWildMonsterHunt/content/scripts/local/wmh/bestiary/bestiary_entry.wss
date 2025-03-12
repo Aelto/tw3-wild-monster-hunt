@@ -174,6 +174,27 @@ class WMH_BestiaryEntry {
     }
 
     provider.startGroup(this.getLocName() + prefix + " contract");
+
+    var loot: WMH_LootManager = WMH_getLootManager();
+    var items_count: int = WMH_diminishingReturns(
+      seed,
+      // a default chance of 20%, plus an increase of 100% every 25 levels
+      0.2 + contract.level.value * 0.04,
+      1.0
+    );
+
+    while (items_count > 0) {
+      provider.appendItem(
+        loot.getRandomItem(
+          loot.getRandomCategory(seed + items_count, false),
+          seed + items_count + 10,
+          FloorF(contract.level.value * 2) // max_index
+        ),
+        1 // quantity
+      );
+
+      items_count -= 1;
+    }
   }
 
   // Entries can override this function to add custom loot to their entities

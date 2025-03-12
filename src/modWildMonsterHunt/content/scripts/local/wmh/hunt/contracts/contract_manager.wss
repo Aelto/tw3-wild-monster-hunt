@@ -5,7 +5,7 @@ function WMH_getContractManager(): WMH_ContractManager {
 }
 
 // Keeps track of the currently active contract targets the player has
-class WMH_ContractManager {
+statemachine class WMH_ContractManager {
   private var pending_contracts: array<WMH_PendingContract>;
 
   public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {

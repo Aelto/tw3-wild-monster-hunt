@@ -1,6 +1,6 @@
 /// Provides a lock mechanism that can only be used once per hunt.
 class WMH_HuntLock {
-  private hunt_seed: int;
+  private var hunt_seed: int;
 
   public function init(): WMH_HuntLock {
     this.hunt_seed = -1;
