@@ -10,6 +10,7 @@ class WMH_ContractManager {
 
   public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {
     this.onHuntFinished(bestiary, storage);
+    this.GotoState('Running');
 
     return this;
   }
