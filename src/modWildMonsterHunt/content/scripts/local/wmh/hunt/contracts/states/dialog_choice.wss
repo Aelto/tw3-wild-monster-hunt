@@ -1,0 +1,57 @@
+@addField(CR4HudModuleDialog)
+var wmh_dialog_hover_contracts_selection: WMH_DialogHoverListener;
+
+
+@wrapMethod(CR4HudModuleDialog)
+event OnDialogOptionSelected(index: int) {
+  var result: bool;
+
+  result = wrappedMethod(index);
+
+  if (this.wmh_contracts_dialog_choice_hover) {
+    this.wmh_contracts_dialog_choice_hover
+      .onHover(this.lastSetChoices[index], index);
+  }
+
+  return result;
+}
+
+function WMH_setDialogHoverListener(add: bool): bool {
+  var hud: CR4ScriptedHud;
+
+  hud = theGame.GetHud() as CR4ScriptedHud;
+
+  if (!hud) {
+    return false;
+  }
+
+  var dialogue_module: CR4HudModuleDialog;
+  dialogue_module = hud.GetHudModule("DialogModule") as CR4HudModuleDialog;
+
+  if (add) {
+    dialogue_module.wmh_dialog_hover_contracts_selection
+      = new WMH_ContractsChoiceHoverInfo in dialogue_module;
+  }
+  else {
+  }
+
+  return true;
+}
+
+class WMH_ContractsChoiceHoverInfo extends WMH_DialogHoverListener {
+  function onHover(scene_choice: SSceneChoice, index: int) {
+    // todo: display information about contract at `index`
+  }
+}
+
+state DialogChoice in WMH_ContractManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.DialogChoice_main();
+  }
+
+  entry function DialogChoice_main() {
+    WMH_setDialogHoverListener(true);
+    WMH_setDialogHoverListener(false);
+  }
+}

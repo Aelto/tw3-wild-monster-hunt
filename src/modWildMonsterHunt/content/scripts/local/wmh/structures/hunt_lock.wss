@@ -1,0 +1,22 @@
+/// Provides a lock mechanism that can only be used once per hunt.
+class WMH_HuntLock {
+  private hunt_seed: int;
+
+  public function init(): WMH_HuntLock {
+    this.hunt_seed = -1;
+
+    return this;
+  }
+
+  /// Returns whether the lock permitted the action and is now locked for the
+  /// given hunt.
+  public function tryUse(hunt_seed: int): bool {
+    if (hunt_seed == this.hunt_seed || this.hunt_seed < 0) {
+      this.hunt_seed = hunt_seed;
+
+      return true;
+    }
+
+    return false;
+  }
+}
