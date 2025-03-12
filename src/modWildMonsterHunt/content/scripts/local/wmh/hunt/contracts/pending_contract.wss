@@ -35,27 +35,28 @@ class WMH_PendingContract {
   var contract: WMH_Contract;
   var affix_manager: WMH_AffixManager;
 
-  var target: WMH_BestiaryEntry;
+  var targets: array<WMH_ContractTarget>;
 
   var encounter_tag: WMH_EncounterTag;
   default encounter_tag = WMH_EncounterTag_ContractRegular;
 
-
-  // Dynamic, you may leave it empty as it will be defined during gameplay.
-  //
-  // Defines the available locations for the contract based on all the spawn
-  // points available in the level.
-  var available_locations: array<WMH_PendingContractLocation>;
-
-  var was_spawned: bool;
-
   public function init(bestiary: WMH_Bestiary, contract: WMH_Contract, optional do_not_inform_gui: bool): WMH_PendingContract {
     this.contract = contract;
 
-    this.target = bestiary.getRandomUnfilteredEliteEntry(
-      contract.level,
-      this.getContractSeed()
+    var targets_count: int = WMH_diminishingReturns(
+      this.getContractSeed(),
+      1.0 + contract.level.value * 0.01,
+      1.0
     );
+
+    while (targets_count > 0) {
+      this.targets.PushBack(
+        (new WMH_ContractTarget in this).initRandom(
+          this.getContractSeed(targets_count),
+          contract.level
+        )
+      );
+    }
 
     this.affix_manager = (new WMH_AffixManager in this)
       .init(this.contract.level, this.getContractSeed(1));
@@ -68,25 +69,9 @@ class WMH_PendingContract {
   }
 
   public function onHuntStarted(bestiary: WMH_Bestiary) {
-    var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
-      .getAvailableRegionSpawnPoints(this.target);
-
-    var player_position: Vector = thePlayer.GetWorldPosition();
-    
-    for point: WMH_BiomeSpawnPoint in spawn_points {
-      this.available_locations.PushBack(
-        WMH_PendingContractLocation(
-          point,
-          VecHeading(point.GetWorldPosition() - player_position),
-          // at the start there is no previous clue so we set it to the player's
-          // position
-          player_position
-        )
-      );
+    for target: WMH_ContractTarget in this.targets {
+      target.onHuntStarted(bestiary);
     }
-
-
-    this.was_spawned = false;
   }
 
   public function onSpawn(bestiary: WMH_Bestiary, hunt_seed: int) {
@@ -104,7 +89,13 @@ class WMH_PendingContract {
   }
 
   public function isTargetted(id: WMH_BestiaryId): bool {
-    return this.target.id.value == id.value;
+    for target: WMH_ContractTarget in this.targets {
+      if (target.isTargetted(id)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function getContractSeed(optional offset: int): int {
@@ -115,9 +106,22 @@ class WMH_PendingContract {
   }
 
   public function toTargetLocNameHtml(): string {
+    var add_space: bool;
+
     // note: the affixes are prefixed by a space
-    return this.affix_manager.toLocString()
-         + this.target.getLocName();
+    var output: string = this.affix_manager.toLocString();
+
+    for target: WMH_ContractTarget in this.targets {
+      output += target.toTargetLocNameHtml();
+
+      if (add_space) {
+        output += " ";
+      }
+
+      add_space = true;
+    }
+    
+    return output;
   }
 
   public function getType(): WMH_PendingContractType {
@@ -125,18 +129,16 @@ class WMH_PendingContract {
   }
 
   public function onContractCompleted(provider: WMH_RewardProvider) {
-    if (this.target) {
-      this.getItemRewards(provider);
+    this.getItemRewards(provider);
 
-      WMH_getLootManager()
-        .onPendingContractCompleted(this.getContractSeed());
-    }
+    WMH_getLootManager()
+      .onPendingContractCompleted(this.getContractSeed());
   }
 
   private function getItemRewards(out provider: WMH_RewardProvider) {
-    if (this.target) {
+    for target: WMH_ContractTarget in this.targets {
       // the entry sets the group name as well
-      this.target.onContractCompleted(
+      target.bentry.onContractCompleted(
         provider,
         this.contract,
         this.getContractSeed(10)
@@ -145,7 +147,7 @@ class WMH_PendingContract {
       var difficulty: int = theGame.GetDifficultyLevel();
 
       var money: int = WMH_difficultyScaleDownF(
-        this.target.strength * 1.5
+        target.bentry.strength * 1.5
         // at level 25 the rewards are doubled
         * (1 + this.contract.level.value / 25),
 
@@ -156,7 +158,7 @@ class WMH_PendingContract {
       provider.appendMoney(money);
 
       var experience: int = WMH_difficultyScaleUpF(
-        (40 + this.target.strength * 8)
+        (40 + target.bentry.strength * 8)
         // at level 100 the rewards are doubled, the XP should scale with
         // contract level, but it shouldn't be too high either:
         * (1 + this.contract.level.value / 100.0),
@@ -168,7 +170,7 @@ class WMH_PendingContract {
       provider.appendExperience(experience);
 
       var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
-        < MinF((this.target.strength as float) * 0.1, 0.5);
+        < MinF((target.bentry.strength as float) * 0.1, 0.5);
 
       if (can_drop_reagent) {
         provider.appendItem('modwmh_melding_reagent', 1);
@@ -176,102 +178,15 @@ class WMH_PendingContract {
     }
   }
 
-  private function getTargetLocationIndex(hunt_seed: int): int {
-    var seed: int = this.getContractSeed(hunt_seed);
-
-    // the target spawns on 1 pre-determined location for the contract.
-    var index: int = RandNoiseF(
-      seed,
-      this.available_locations.Size()
-    ) as int;
-
-    return index;
-  }
-
   private function trySpawningTarget(hunt_seed: int) {
-    if (this.was_spawned) {
-      return;
-    }
-
-    var index: int = this.getTargetLocationIndex(hunt_seed);
-    var location: WMH_PendingContractLocation = this.available_locations[index];
-
-    if (location.spawn_point) {
-      var max_distance: float = 150 * 150;
-      var distance: float = VecDistanceSquared2D(
-        thePlayer.GetWorldPosition(),
-        location.spawn_point.GetWorldPosition()
-      );
-
-      if (distance <= max_distance) {
-        thePlayer.wmh.submitOnSpawnContractTarget(
-          this,
-          this.target,
-          location.spawn_point,
-          this.encounter_tag,
-          hunt_seed
-        );
-
-        // note that we do not check for its validity before, we don't want
-        // regular spawns to postpone the appearance of the target.
-        location.spawn_point.consume();
-        this.was_spawned = true;
-      }
+    for target: WMH_ContractTarget in this.targets {
+      target.trySpawningTarget(hunt_seed, this, this.encounter_tag);
     }
   }
 
   private function trySpawningClues(bestiary: WMH_Bestiary, hunt_seed: int) {
-    if (this.was_spawned) {
-      return;
-    }
-
-    var clues_points: array<WMH_BiomeSpawnPoint>;
-    var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
-      .getAvailableNearbySpawnPoints(this.target);
-
-      // WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
-
-    var target_index: int = this.getTargetLocationIndex(hunt_seed);
-    var target_location_copy: WMH_PendingContractLocation = this
-      .available_locations[target_index];
-
-    var target_position: Vector = target_location_copy.spawn_point
-      .GetWorldPosition();
-
-    for point: WMH_BiomeSpawnPoint in spawn_points {
-      if (!point.is_clues_location) {
-        continue;
-      }
-
-      if (!point.canSpawnClues()) {
-        continue;
-      }
-
-      var position: Vector = point.GetWorldPosition();
-      var distance: float = VecDistanceSquared2D(target_position, position);
-
-      // 10% less chances for every 50 meters
-      var chances: float = 1.0 - (distance / 50.0) * 0.1;
-      var point_seed: int = point.getPointSeed(hunt_seed);
-      var allowed: bool = RandNoiseF(point_seed, 1.0) < chances;
-      if (allowed) {
-        var point_to_target_heading: float = VecHeading(
-          target_position - position
-        );
-
-        thePlayer.wmh.submitOnSpawnClues(
-          this,
-          this.target,
-          point,
-          // the heading to the target destination
-          point_to_target_heading,
-          point_seed,
-        );
-
-        // update position of the previous clue:
-        this.available_locations[target_index].previous_clue_location = position;
-        point.consumeForClues();
-      }
+    for target: WMH_ContractTarget in this.targets {
+      target.trySpawningClues(this, bestiary, hunt_seed);
     }
   }
 }

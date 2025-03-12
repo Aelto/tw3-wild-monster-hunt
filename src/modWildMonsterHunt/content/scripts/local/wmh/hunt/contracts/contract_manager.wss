@@ -144,10 +144,12 @@ statemachine class WMH_ContractManager {
     var output: array<WMH_HuntKill>;
 
     for pending: WMH_PendingContract in this.pending_contracts {
-      output.PushBack(WMH_HuntKill(
-        pending.target.id,
-        WMH_EncounterTag_ContractRegular
-      ));
+      for target: WMH_ContractTarget in pending.targets {
+        output.PushBack(WMH_HuntKill(
+          target.bentry.id,
+          WMH_EncounterTag_ContractRegular
+        ));
+      }
     }
 
     return output;
