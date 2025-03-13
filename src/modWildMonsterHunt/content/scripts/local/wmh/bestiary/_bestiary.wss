@@ -757,11 +757,14 @@ state Spawning in WMH_Bestiary {
     request.tryPromoteToContractTargets(contract_manager);
 
     for bentry: WMH_BestiaryEntry in request.entries {
+      var targeting_contracts_count: int = contract_manager
+        .getTargetingContractsCount(bentry.id);
+
       // repulsives prevent regular monsters from spawning, contract targets
       // however are unaffected by them.
       if (
         encounter_manager.isInRepulsive(position)
-        && !contract_manager.isTargetted(bentry.id)
+        && targeting_contracts_count <= 0
       ) {
         continue;
       }
@@ -770,7 +773,8 @@ state Spawning in WMH_Bestiary {
         bentry,
         request.GetWorldPosition(),
         request.heading,
-        request.affix_manager,
+        contract_manager.hunt_affix_manager,
+        targeting_contracts_count,
         request.seed,
         /*out*/ entities
       );
@@ -809,6 +813,7 @@ state Spawning in WMH_Bestiary {
     position: Vector,
     heading: float,
     affix_manager: WMH_AffixManager,
+    affix_amplifier: int,
     seed: int,
     out entities: array<CEntity>
   ) {
@@ -866,7 +871,7 @@ state Spawning in WMH_Bestiary {
         var npc: CNewNPC = created_entity as CNewNPC;
         if (npc) {
           if (affix_manager) {
-            affix_manager.applyToNpc(npc);
+            affix_manager.applyToNpc(npc, affix_amplifier);
           }
         }
 

@@ -138,11 +138,34 @@ class WMH_AffixManager {
     return this;
   }
 
-  public function applyToNpc(npc: CNewNPC) {
-    if (this.health_modifier != 1.0) {
+  /// Absord the values from the other affix manager to mutate the ones in this
+  /// instance. Perform a merge and not a full replacement of the values,
+  /// usually by multiplying the values rather than setting them.
+  public function absorb(other: WMH_AffixManager) {
+    this.health_modifier *= other.health_modifier;
+    this.damage_modifier *= other.damage_modifier;
+    this.durability_loss_modifier *= other.durability_loss_modifier;
+    this.armor_modifier *= other.armor_modifier;
+
+    // percents are also multiplied, but since they're usually in the [0;1]
+    // range, multiplying them together would decrease the values which is
+    // why we're temporarily adding 1 to the other's value.
+    this.health_regen_percent *= (1 + other.health_regen_percent);
+    this.lifesteal_percent *= (1 + other.lifesteal_percent);
+
+  }
+
+  /// the `amplifier` value can be used to amplify some of the affixes by the
+  /// given amount. Nothing changes unless `amplifier > 1`
+  public function applyToNpc(npc: CNewNPC, optional amplifier: int) {
+    if (amplifier < 1) {
+      amplifier = 0;
+    }
+
+    if (this.health_modifier != 1.0 || amplifier > 1) {
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
-        npc.GetMaxHealth() * this.health_modifier
+        npc.GetMaxHealth() * this.health_modifier + amplifier * 0.80
       );
     }
 

@@ -4,21 +4,30 @@ function WMH_getContractManager(): WMH_ContractManager {
   return thePlayer.wmh.hunt.contract;
 }
 
-// Keeps track of the currently active contract targets the player has
+/// Keeps track of the currently active contract targets the player has
 statemachine class WMH_ContractManager {
   private var pending_contracts: array<WMH_PendingContract>;
 
+  /// Hunt wide affixes applied to every creature that's spawned during it.
+  public var hunt_affix_manager: WMH_AffixManager;
+
   public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {
     this.onHuntFinished(bestiary, storage);
+    this.hunt_affix_manager = new WMH_AffixManager in this;
     this.GotoState('Running');
 
     return this;
   }
 
   public function onHuntStarted(bestiary: WMH_Bestiary) {
-    var contract: WMH_PendingContract;
+    // reset the affixes then merge the affixes from all contracts into this
+    // single manager:
+    this.hunt_affix_manager = new WMH_AffixManager in this;
+
     for contract: WMH_PendingContract in this.pending_contracts {
       contract.onHuntStarted(bestiary);
+
+      this.hunt_affix_manager.absorb(contract.affix_manager);
     }
   }
 
@@ -128,6 +137,16 @@ statemachine class WMH_ContractManager {
         contracts.PushBack(contract);
       }
     }
+  }
+
+  public function getTargetingContractsCount(id: WMH_BestiaryId): int {
+    var count: int = 0;
+
+    for contract: WMH_PendingContract in this.pending_contracts {
+      count += contract.isTargetted(id) as int;
+    }
+
+    return count;
   }
 
   public function getPendingTargetsNameHtml(): array<string> {
