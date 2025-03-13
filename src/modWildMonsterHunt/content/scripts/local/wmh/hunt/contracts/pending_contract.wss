@@ -159,6 +159,13 @@ class WMH_PendingContract {
 
     WMH_getLootManager()
       .onPendingContractCompleted(this.getContractSeed());
+
+    var storage: WMH_Storage = WMH_getStorage();
+    storage.contract.completed_contracts_history.Insert(0, this.contract);
+
+    while (storage.contract.completed_contracts_history.Size() > 10) {
+      storage.contract.completed_contracts_history.PopBack();
+    }
   }
 
   private function getItemRewards(out provider: WMH_RewardProvider) {

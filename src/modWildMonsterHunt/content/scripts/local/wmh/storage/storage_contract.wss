@@ -6,4 +6,7 @@ class WMH_StorageContract {
   public var completed_contracts_count: int;
 
   public var pending_contracts: array<WMH_Contract>;
+
+  /// stores the previously completed contracts
+  public var completed_contracts_history: array<WMH_Contract>;
 }
