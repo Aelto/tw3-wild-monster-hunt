@@ -20,15 +20,11 @@ statemachine class WMH_ContractManager {
   }
 
   public function onHuntStarted(bestiary: WMH_Bestiary) {
-    // reset the affixes then merge the affixes from all contracts into this
-    // single manager:
-    this.hunt_affix_manager = new WMH_AffixManager in this;
-
     for contract: WMH_PendingContract in this.pending_contracts {
       contract.onHuntStarted(bestiary);
-
-      this.hunt_affix_manager.absorb(contract.affix_manager);
     }
+
+    this.refreshCachedHuntData();
   }
 
   public function onHuntFinished(
@@ -82,6 +78,7 @@ statemachine class WMH_ContractManager {
     }
 
     this.loadContractsFromStorage(bestiary, storage.contract);
+    this.refreshCachedHuntData();
   }
 
   public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
@@ -168,6 +165,19 @@ statemachine class WMH_ContractManager {
           target.bentry.id,
           WMH_EncounterTag_ContractRegular
         ));
+      }
+    }
+
+    return output;
+  }
+
+  public function getHuntLevel(): WMH_Level {
+    var output: WMH_Level;
+
+    // get the highest level among the contracts
+    for contract: WMH_PendingContract in this.pending_contracts {
+      if (contract.contract.level.value > output.value) {
+        output = contract.contract.level;
       }
     }
 
@@ -351,6 +361,16 @@ statemachine class WMH_ContractManager {
             .init(bestiary, contract, true)
         );
       }
+    }
+  }
+
+  private function refreshCachedHuntData() {
+    // reset the affixes then merge the ones from all contracts into this
+    // single manager:
+    this.hunt_affix_manager = new WMH_AffixManager in this;
+
+    for contract: WMH_PendingContract in this.pending_contracts {
+      this.hunt_affix_manager.absorb(contract.affix_manager);
     }
   }
 }
