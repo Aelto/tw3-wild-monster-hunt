@@ -56,6 +56,8 @@ class WMH_PendingContract {
           contract.level
         )
       );
+
+      targets_count -= 1;
     }
 
     this.affix_manager = (new WMH_AffixManager in this)
