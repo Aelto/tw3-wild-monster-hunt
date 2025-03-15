@@ -6,15 +6,15 @@ function WMH_getContractManager(): WMH_ContractManager {
 
 /// Keeps track of the currently active contract targets the player has
 statemachine class WMH_ContractManager {
-  private var pending_contracts: array<WMH_PendingContract>;
+  public var pending_contracts: array<WMH_PendingContract>;
 
   /// Hunt wide affixes applied to every creature that's spawned during it.
   public var hunt_affix_manager: WMH_AffixManager;
 
   public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {
-    this.onHuntFinished(bestiary, storage);
     this.hunt_affix_manager = new WMH_AffixManager in this;
-    this.GotoState('Running');
+    this.onHuntFinished(bestiary, storage);
+    this.GotoState('Waiting');
 
     return this;
   }
@@ -79,6 +79,52 @@ statemachine class WMH_ContractManager {
 
     this.loadContractsFromStorage(bestiary, storage.contract);
     this.refreshCachedHuntData();
+  }
+
+  public function onContractReplaced(index: int, new_contract: WMH_Contract) {
+    if (index < this.pending_contracts.Size()) {
+      var pending: WMH_PendingContract = this.pending_contracts[index];
+      
+      if (pending) {
+        if (pending.contract.type == WMH_PendingContractType_MILESTONE) {
+          return;
+        }
+
+        this.pending_contracts[index] = (new WMH_PendingContract in this)
+          .init(
+            WMH_getBestiary(),
+            new_contract,
+            true
+          );
+      }
+    }
+  }
+
+  public function onContractLevelChanged(index: int, change: int) {
+    if (index < this.pending_contracts.Size()) {
+      var pending: WMH_PendingContract = this.pending_contracts[index];
+      
+      if (pending) {
+        if (pending.contract.type == WMH_PendingContractType_MILESTONE) {
+          return;
+        }
+
+        var general: WMH_StorageGeneral = WMH_getStorageGeneral();
+        var contract: WMH_Contract = pending.contract;
+        contract.level.value = Clamp(
+          FloorF(contract.level.value + change),
+          0,
+          FloorF(general.level.value)
+        );
+
+        this.pending_contracts[index] = (new WMH_PendingContract in this)
+          .init(
+            WMH_getBestiary(),
+            contract,
+            true
+          );
+      }
+    }
   }
 
   public function onSpawn(bestiary: WMH_Bestiary, seed: int) {
@@ -188,6 +234,25 @@ statemachine class WMH_ContractManager {
   // generated.
   public function milestoneContractsInterval(): int {
     return 5;
+  }
+
+  public function toContractsDescriptionHtml(): string {
+    var output: string;
+    var br: string = "<br/>";
+
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+
+    output += "TARGETS:" + br;
+    for pending: WMH_PendingContract in this.pending_contracts {
+      output += " - " + pending.toTargetLocNameHtml() + br;
+
+      pending.getItemRewards(provider);
+    }
+
+    output += "AFFIXES: " + this.hunt_affix_manager.toLocString() + br;
+    output += "REWARDS: " + provider.toHtml(thePlayer.GetInventory(), true) + br;
+
+    return output;
   }
 
   private function onContractCompleted(

@@ -11,6 +11,10 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     this.setupContractOneliners(thePlayer.wmh.hunt.contract);
   }
 
+  event OnInteraction(actionName: string, activator: CEntity) {
+    WMH_getContractManager().GotoState('DialogChoice');
+  }
+
   event OnInteractionActivated(interactionComponentName : string, activator : CEntity) {
     super.OnInteractionActivated(interactionComponentName, activator);
 

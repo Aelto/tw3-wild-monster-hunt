@@ -1,3 +1,7 @@
+function WMH_getStorageContract(): WMH_StorageContract {
+  return thePlayer.wmh.storage.contract;
+}
+
 class WMH_StorageContract {
   /// this is currently unused, the milestone level is obtained by dividing the
   /// general level by 5.
@@ -9,4 +13,6 @@ class WMH_StorageContract {
 
   /// stores the previously completed contracts
   public var completed_contracts_history: array<WMH_Contract>;
+
+  public var favourite_contracts: array<WMH_Contract>;
 }

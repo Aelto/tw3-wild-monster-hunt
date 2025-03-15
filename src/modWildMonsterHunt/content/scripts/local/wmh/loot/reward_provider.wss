@@ -106,12 +106,17 @@ class WMH_RewardProvider {
     return this;
   }
 
-  public function toHtml(inventory: CInventoryComponent): string {
+  public function toHtml(
+    inventory: CInventoryComponent,
+    optional skip_reason: bool
+  ): string {
     var message: string;
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
-      message += "<u>" + this.groups[i].reason + "</u>";
+      if (!skip_reason) {
+        message += "<u>" + this.groups[i].reason + "</u>";
+      }
 
       if (this.groups[i].experience > 0) {
         message += "<br /> XP <font size='18'>"

@@ -124,6 +124,22 @@ class WMH_PendingContract {
     return output;
   }
 
+  public function toContractDescriptionHtml(): string {
+    var output: string;
+    var br: string = "<br/>";
+
+
+    output += "TARGETS: " + this.toTargetLocNameHtml() + br;
+    output += "AFFIXES: " + this.affix_manager.toLocString() + br;
+
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+    this.getItemRewards(provider);
+
+    output += "REWARDS:" + provider.toHtml(thePlayer.GetInventory(), true) + br;
+
+    return output;
+  }
+
   public function getType(): WMH_PendingContractType {
     return WMH_PendingContractType_DEFAULT;
   }
@@ -168,7 +184,7 @@ class WMH_PendingContract {
     }
   }
 
-  private function getItemRewards(out provider: WMH_RewardProvider) {
+  public function getItemRewards(out provider: WMH_RewardProvider) {
     for target: WMH_ContractTarget in this.targets {
       // the entry sets the group name as well
       target.bentry.onContractCompleted(
