@@ -50,6 +50,7 @@ function WMH_setdialogHoverContractsListener(
   }
 
   dialogue_module.wmh_dialog_hover_contracts_selection = listener;
+  listener.onListenerAdded();
 }
 
 abstract class WMH_DialogHoverContractsListener extends WMH_DialogHoverListener {
@@ -61,6 +62,8 @@ abstract class WMH_DialogHoverContractsListener extends WMH_DialogHoverListener 
       this.previous_message = message;
     }
   }
+
+  public function onListenerAdded() {}
 }
 
 /// Provides info about one contract at a time based on the array of contracts
@@ -84,6 +87,10 @@ class WMH_DHCL_ContractInfo extends WMH_DialogHoverContractsListener {
 
     this.displayLongLastingPopup(contract.toContractDescriptionHtml());
   }
+
+  public function onListenerAdded() {
+    this.onHover(SSceneChoice(), 0);
+  }
 }
 
 class WMH_DHCL_HuntInfo extends WMH_DialogHoverContractsListener {
@@ -91,5 +98,9 @@ class WMH_DHCL_HuntInfo extends WMH_DialogHoverContractsListener {
     this.displayLongLastingPopup(
       WMH_getContractManager().toContractsDescriptionHtml()
     );
+  }
+
+  public function onListenerAdded() {
+    this.onHover(SSceneChoice(), 0);
   }
 }

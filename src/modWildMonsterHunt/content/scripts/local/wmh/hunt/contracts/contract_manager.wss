@@ -241,6 +241,7 @@ statemachine class WMH_ContractManager {
     var br: string = "<br/>";
 
     var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+    provider.startGroup("REWARDS").lockGroups(true);
 
     output += "TARGETS:" + br;
     for pending: WMH_PendingContract in this.pending_contracts {

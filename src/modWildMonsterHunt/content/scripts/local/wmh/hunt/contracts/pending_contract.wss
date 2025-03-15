@@ -135,6 +135,8 @@ class WMH_PendingContract {
     output += "AFFIXES: " + this.affix_manager.toLocString() + br;
 
     var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
+    provider.startGroup("REWARDS").lockGroups(true);
+
     this.getItemRewards(provider);
 
     output += "REWARDS:" + provider.toHtml(thePlayer.GetInventory(), true) + br;

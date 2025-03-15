@@ -18,9 +18,18 @@ class WMH_RewardProvider {
   var groups: array<WMH_RewardGroup>;
 
   private var active_group: string;
+  private var ignore_group: bool;
 
   public function startGroup(group: string): WMH_RewardProvider {
-    this.active_group = group;
+    if (!this.ignore_group) {
+      this.active_group = group;
+    }
+
+    return this;
+  }
+
+  public function lockGroups(lock: bool): WMH_RewardProvider {
+    this.ignore_group = lock;
 
     return this;
   }
