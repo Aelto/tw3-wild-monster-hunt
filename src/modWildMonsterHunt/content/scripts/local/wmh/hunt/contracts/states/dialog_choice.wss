@@ -1,15 +1,59 @@
 
 state DialogChoice in WMH_ContractManager {
+  var camera: WMH_StaticCamera;
+
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
     this.DialogChoice_main();
   }
 
   entry function DialogChoice_main() {
+    Sleep(0.1);
+
+    this.camera = WMH_getStaticCamera();
+    var noticeboard: W3NoticeBoard = this.getNearbyNoticeboard();
+
+    if (noticeboard) {
+      this.camera.teleportAndLookAt(
+        noticeboard.GetWorldPosition()
+          + VecFromHeading(noticeboard.GetHeading()) * 4
+          + Vector(0, 0, 1.5),
+        noticeboard.GetWorldPosition()
+          + Vector(0, 0, 1.5)
+      );
+
+      theGame.FadeOut(0.2);
+      this.camera.start();
+      theGame.FadeInAsync(0.4);
+    }
+    
     this.displayChoicesMain();
     WMH_setdialogHoverContractsListener(NULL);
     WMHPOPUP("", 1);
+    this.camera.Stop();
     parent.GotoState('Waiting');
+  }
+
+  public function getNearbyNoticeboard(): W3NoticeBoard {
+    var entities: array<CGameplayEntity>;
+    var board: W3NoticeBoard;
+    var i: int;
+
+    FindGameplayEntitiesInRange(
+      entities,
+      thePlayer,
+      20, // range, 
+      1, // max results
+      , // tag: optional value
+      FLAG_ExcludePlayer,
+      , // optional value
+      'W3NoticeBoard'
+    );
+
+    // bold move here, if there are no noticeboard nearby the game will crash.
+    board = entities[0] as W3NoticeBoard;
+
+    return board;
   }
 
   latent function displayChoicesMain() {
