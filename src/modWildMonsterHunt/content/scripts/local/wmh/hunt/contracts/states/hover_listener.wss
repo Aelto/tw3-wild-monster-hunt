@@ -53,8 +53,13 @@ function WMH_setdialogHoverContractsListener(
 }
 
 abstract class WMH_DialogHoverContractsListener extends WMH_DialogHoverListener {
+  var previous_message: string;
+
   protected function displayLongLastingPopup(message: string) {
-    WMHPOPUP(message, 60 * 5);
+    if (message != this.previous_message) {
+      WMHPOPUP(message, 60 * 5 * 1000);
+      this.previous_message = message;
+    }
   }
 }
 
