@@ -31,9 +31,25 @@ enum WMH_PendingContractType {
   WMH_PendingContractType_MILESTONE = 1,
 }
 
+struct WMH_ContractSpawnInfluence {
+  var bestiary_id: WMH_BestiaryId;
+
+  /// A value that can be both positive or negative and that represents how
+  /// much % should be added (or removed if negative) to the base ratio.
+  ///
+  /// No matter the actual spawn rate of a bestiary entry, its base ratio
+  /// is 1. Because `ratio * 1` has no effect on the value.
+  /// - an influence of 0.1 would turn the base ratio into 1.1, or a flat
+  /// increase of 10%.
+  /// - an influence of -0.3 would turn the base ratio to 0.7, or a flat decrease of 30%.
+  var influence: float;
+}
+
 class WMH_PendingContract {
   var contract: WMH_Contract;
+
   var affix_manager: WMH_AffixManager;
+  var spawn_influences: array<WMH_ContractSpawnInfluence>;
 
   var targets: array<WMH_ContractTarget>;
 
@@ -62,6 +78,23 @@ class WMH_PendingContract {
 
     this.affix_manager = (new WMH_AffixManager in this)
       .init(this.contract.level, this.getContractSeed(1));
+
+    var influences_count: int = WMH_diminishingReturns(
+      this.getContractSeed(2),
+      MinF(0.25 + contract.level.value * 0.01, 3.0),
+      1.0
+    );
+
+    while (influences_count > 0) {
+      this.spawn_influences.PushBack(
+        this.generateRandomSpawnInfluence(
+          this.getContractSeed(3 + influences_count * 10),
+          contract.level
+        )
+      );
+
+      influences_count -= 1;
+    }
 
     if (!do_not_inform_gui) {
       WMHHUD("New contract: " + this.toTargetLocNameHtml());
@@ -131,15 +164,40 @@ class WMH_PendingContract {
     var br: string = "<br/>";
 
 
-    output += "TARGETS: " + this.toTargetLocNameHtml() + br;
-    output += "AFFIXES: " + this.affix_manager.toLocString() + br;
+    output += "<font size='24' color='#8a5551'>TARGETS:</font>";
+    output += this.toTargetLocNameHtml() + br;
+
+    if (this.affix_manager.has_affix) {
+      output += br + br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.affix_manager.toLocString() + br;
+    }
+
+    if (this.spawn_influences.Size()) {
+      output += br + br + "<font size='24' color='#8a5551'>INFLUENCES:</font>" + br;
+      output += "<font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>";
+      output += br;
+
+      var bestiary: WMH_Bestiary = WMH_getBestiary();
+
+      for influence: WMH_ContractSpawnInfluence in this.spawn_influences {
+        var bentry: WMH_BestiaryEntry = bestiary.entries[influence.bestiary_id.value];
+        var influence_perc: int = Abs(FloorF(influence.influence * 100));
+        var sign: string = "<font color='#1c8139' size='22'>+";
+
+        if (influence.influence < 0) {
+          sign = "<font color='#cf222e' size='22'>-";
+        }
+
+        output += " - " + bentry.getLocName() + ": ";
+        output += sign + influence_perc + "%</font>" + br;
+      }
+    }
 
     var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
     provider.startGroup("REWARDS").lockGroups(true);
 
     this.getItemRewards(provider);
 
-    output += "REWARDS:" + provider.toHtml(thePlayer.GetInventory(), true) + br;
+    output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true) + br;
 
     return output;
   }
@@ -223,7 +281,7 @@ class WMH_PendingContract {
       provider.appendExperience(experience);
 
       var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
-        < MinF((target.bentry.strength as float) * 0.1, 0.5);
+        < MinF(target.bentry.strength * 0.1, 0.5);
 
       if (can_drop_reagent) {
         provider.appendItem('modwmh_melding_reagent', 1);
@@ -241,5 +299,34 @@ class WMH_PendingContract {
     for target: WMH_ContractTarget in this.targets {
       target.trySpawningClues(this, bestiary, hunt_seed);
     }
+  }
+
+  private function generateRandomSpawnInfluence(
+    seed: int,
+    level: WMH_Level
+  ): WMH_ContractSpawnInfluence {
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+    var max_id: WMH_BestiaryId = bestiary.getMaxBestiaryId();
+
+    // the influence's value work in increments of 20%, smaller values would
+    // feel too small for any effect.
+    var min_influence: float = 1.0;
+    var max_influence: float = 1.0 + level.value * 0.04;
+    var value: float = FloorF(RandNoiseF(seed + 1, max_influence, min_influence));
+
+    var sign_negative: bool = RandNoiseF(seed + 2, 1.0) < 0.5;
+    if (sign_negative) {
+      value *= -1;
+    }
+
+    return WMH_ContractSpawnInfluence(
+      WMH_BestiaryId(RandNoiseF(seed, max_id.value + 1) as int),
+
+      ClampF(
+        value * 0.20,
+        -0.7,
+        1.5
+      )
+    );
   }
 }

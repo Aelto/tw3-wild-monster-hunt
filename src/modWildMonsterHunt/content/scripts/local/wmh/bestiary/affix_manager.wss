@@ -19,6 +19,8 @@ class WMH_AffixManager {
   public var lifesteal_percent: float;
   default lifesteal_percent = 0.0;
 
+  public var has_affix: bool;
+
   public function init(level: WMH_Level, seed: int): WMH_AffixManager {
     var difficulty: int = WMH_getDifficulty();
     var count: int = 0;
@@ -38,6 +40,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 1, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.health_modifier = 1 + RandNoiseF(
         seed + 2,
         // at level 25, difficulty 1:
@@ -55,6 +58,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 3, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.damage_modifier = 1 + RandNoiseF(
         seed + 4,
         // at level 25, difficulty 1:
@@ -72,6 +76,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 5, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.health_regen_percent = RandNoiseF(
         seed + 6,
         // at level 25 difficulty 1:
@@ -106,6 +111,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 9, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.lifesteal_percent = RandNoiseF(
         seed + 10,
         // at level 25, difficulty 1:
@@ -123,6 +129,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 11, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.armor_modifier = 1 + RandNoiseF(
         seed + 12,
         // at level 25, the creature can have a maximum bonus of 50% armor
@@ -153,6 +160,7 @@ class WMH_AffixManager {
     this.health_regen_percent *= (1 + other.health_regen_percent);
     this.lifesteal_percent *= (1 + other.lifesteal_percent);
 
+    this.has_affix = this.has_affix || other.has_affix;
   }
 
   /// the `amplifier` value can be used to amplify some of the affixes by the

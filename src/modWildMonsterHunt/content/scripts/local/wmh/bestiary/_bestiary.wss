@@ -250,6 +250,18 @@ statemachine class WMH_Bestiary {
     return null;
   }
 
+  public function getMaxBestiaryId(): WMH_BestiaryId {
+    var size: int = this.entries.Size();
+
+    if (size <= 0) {
+      return WMH_BestiaryId(0);
+    }
+
+    var bentry: WMH_BestiaryEntry = this.entries[size - 1];
+
+    return bentry.id;
+  }
+
   public function toPseudoRngBuffer(): WMH_PseudoRngBuffer {
     var buffer: WMH_PseudoRngBuffer = new WMH_PseudoRngBuffer in this;
 

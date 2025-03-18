@@ -58,6 +58,8 @@ state DialogChoice in WMH_ContractManager {
 
   latent function displayChoicesMain() {
     var choices: array<SSceneChoice>;
+    var storage: WMH_StorageContract = WMH_getStorageContract();
+
     while (true) {
       WMH_setdialogHoverContractsListener(new WMH_DHCL_HuntInfo in this);
 
@@ -71,14 +73,27 @@ state DialogChoice in WMH_ContractManager {
         'ViewEditActiveContracts'
       ));
 
-      choices.PushBack(SSceneChoice(
-        "Favourite contracts",
-        true, // emphasis
-        false, // previouslyChoosen
-        false, // disabled
-        DialogAction_MONSTERCONTRACT,
-        'ViewEditFavouriteContracts'
-      ));
+      if (storage.favourite_contracts.Size() > 0) {
+        choices.PushBack(SSceneChoice(
+          "Favorite contracts",
+          false, // emphasis
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_NONE,
+          'ViewEditFavouriteContracts'
+        ));
+      }
+
+      if (storage.completed_contracts_history.Size()) {
+        choices.PushBack(SSceneChoice(
+          "Completed contracts history",
+          false, // emphasis
+          true, // previouslyChoosen
+          false, // disabled
+          DialogAction_NONE,
+          'ViewContractsHistory'
+        ));
+      }
 
       choices.PushBack(SSceneChoice(
         "Cancel",
@@ -97,6 +112,9 @@ state DialogChoice in WMH_ContractManager {
       }
       else if (response.playGoChunk == 'ViewEditFavouriteContracts') {
         this.displayChoicesViewEditFavouriteContracts();
+      }
+      else if (response.playGoChunk == 'ViewContractsHistory') {
+        this.displayChoicesContractsHistory();
       }
       else { // Cancel option
         return;
@@ -320,15 +338,14 @@ state DialogChoice in WMH_ContractManager {
         var pending: WMH_PendingContract = (new WMH_PendingContract in this)
           .init(bestiary, contracts_storage.favourite_contracts[i], true);
 
-
         hover_info.contracts.PushBack(pending);
         choices.PushBack(SSceneChoice(
-          pending.toTargetLocNameHtml(),
+          "#" + (i+1) + " " + pending.toTargetLocNameHtml(),
           false,
-          true,
+          false,
           false,
           DialogAction_MONSTERCONTRACT,
-          'Cancel'
+          'Contract'
         ));
       }
 
@@ -341,7 +358,7 @@ state DialogChoice in WMH_ContractManager {
       }
 
       for (i = 0; i < choices.Size(); i += 1) {
-        if (response.description == choices[i].description) {
+        if (StrFindFirst(response.description, choices[i].description) >= 0) {
           // -1 due to the 'Cancel' being the first option
           contract = contracts_storage.favourite_contracts[i - 1];
           return true;
@@ -349,7 +366,83 @@ state DialogChoice in WMH_ContractManager {
       }
     }
 
-
     return false;
+  }
+
+  latent function displayChoicesContractsHistory() {
+    var hover_info: WMH_DHCL_ContractInfo = new WMH_DHCL_ContractInfo in this;
+    var contracts_storage: WMH_StorageContract = WMH_getStorageContract();
+    var choices: array<SSceneChoice>;
+
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+
+    while (true) {
+      choices.Clear();
+      hover_info.contracts.Clear();
+
+      hover_info.contracts.PushBack(NULL);
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
+      var i: int;
+      for (i = 0; i < contracts_storage.completed_contracts_history.Size(); i += 1) {
+        var pending: WMH_PendingContract = (new WMH_PendingContract in this)
+          .init(bestiary, contracts_storage.completed_contracts_history[i], true);
+
+        var already_favourite: bool = WMH_isContractFavourite(
+          contracts_storage,
+          contracts_storage.completed_contracts_history[i]
+        );
+
+        hover_info.contracts.PushBack(pending);
+        choices.PushBack(SSceneChoice(
+          "#" + (i+1) + " " + pending.toTargetLocNameHtml(),
+          already_favourite, // emphasis
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_MONSTERCONTRACT,
+          'Contract'
+        ));
+      }
+
+      WMH_setdialogHoverContractsListener(hover_info);
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'Cancel') {
+        return;
+      }
+
+      for (i = 0; i < choices.Size(); i += 1) {
+        if (StrFindFirst(response.description, choices[i].description) >= 0) {
+          WMHINFO("new_favourite found");
+          // -1 due to the 'Cancel' being the first option
+          var new_favourite: WMH_Contract = contracts_storage
+              .completed_contracts_history[i - 1];
+
+          var already_favourite: bool = WMH_isContractFavourite(
+            contracts_storage,
+            new_favourite
+          );
+
+          if (already_favourite) {
+            contracts_storage.favourite_contracts.Remove(new_favourite);
+            WMHHUD("The contract is no longer marked as favorite");
+            Sleep(3.0);
+          }
+          else {
+            contracts_storage.favourite_contracts.PushBack(new_favourite);
+            WMHHUD("The contract was added to the favorites");
+            Sleep(3.0);
+          }
+        }
+      }
+    }
   }
 }
