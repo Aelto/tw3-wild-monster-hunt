@@ -11,7 +11,7 @@ statemachine class WMH_ContractManager {
   /// Hunt wide affixes applied to every creature that's spawned during it.
   public var hunt_affix_manager: WMH_AffixManager;
   /// Hunt wide spawn influences from all the pending contracts
-  public var hunt_spawn_influences: array<WMH_ContractSpawnInfluence>;
+  public var hunt_spawn_influences: array<float>;
 
   public function init(bestiary: WMH_Bestiary, storage: WMH_Storage): WMH_ContractManager {
     this.hunt_affix_manager = new WMH_AffixManager in this;
@@ -256,25 +256,36 @@ statemachine class WMH_ContractManager {
       output += br + br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.hunt_affix_manager.toLocString() + br;
     }
 
-    if (this.hunt_spawn_influences.Size()) {
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+    var has_influences: bool = false;
+    var influences_segment: string;
+    var i: int;
+    for (i = 0; i < this.hunt_spawn_influences.Size(); i += 1) {
+      // minus 1, to get the difference it would make and not the actual value
+      var influence: float = this.hunt_spawn_influences[i] - 1;
+
+      if (influence == 1.0) {
+        continue;
+      }
+
+      has_influences = true;
+
+      var bentry: WMH_BestiaryEntry = bestiary.entries[i];
+      var influence_perc: int = Abs(FloorF(influence * 100));
+      var sign: string = "<font color='#1c8139' size='22'>+";
+
+      if (influence < 0) {
+        sign = "<font color='#cf222e' size='22'>-";
+      }
+
+      influences_segment += " - " + bentry.getLocName() + ": ";
+      influences_segment += sign + influence_perc + "%</font>" + br;
+    }
+
+    if (has_influences) {
       output += br + br + "<font size='24' color='#8a5551'>INFLUENCES:</font>" + br;
       output += "<font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>";
-      output += br;
-
-      var bestiary: WMH_Bestiary = WMH_getBestiary();
-
-      for influence: WMH_ContractSpawnInfluence in this.hunt_spawn_influences {
-        var bentry: WMH_BestiaryEntry = bestiary.entries[influence.bestiary_id.value];
-        var influence_perc: int = Abs(FloorF(influence.influence * 100));
-        var sign: string = "<font color='#1c8139' size='22'>+";
-
-        if (influence.influence < 0) {
-          sign = "<font color='#cf222e' size='22'>-";
-        }
-
-        output += " - " + bentry.getLocName() + ": ";
-        output += sign + influence_perc + "%</font>" + br;
-      }
+      output += br + influences_segment;
     }
 
     output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true) + br;
@@ -462,27 +473,21 @@ statemachine class WMH_ContractManager {
     this.hunt_affix_manager = new WMH_AffixManager in this;
     this.hunt_spawn_influences.Clear();
 
+    // initialize influences to 1.0 by default
+    var i: int;
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+    for (i = 0; i < bestiary.entries.Size(); i += 1) {
+      this.hunt_spawn_influences.PushBack(1.0);
+    }
+
     for contract: WMH_PendingContract in this.pending_contracts {
       this.hunt_affix_manager.absorb(contract.affix_manager);
 
       for influence: WMH_ContractSpawnInfluence in contract.spawn_influences {
-        this.addHuntSpawnInfluence(influence);
+        var index: int = influence.bestiary_id.value;
+
+        this.hunt_spawn_influences[index] += influence.influence;
       }
     }
-  }
-
-  private function addHuntSpawnInfluence(influence: WMH_ContractSpawnInfluence) {
-    var i: int;
-
-    
-    for (i = 0; i < this.hunt_spawn_influences.Size(); i += 1) {
-      if (influence.bestiary_id == this.hunt_spawn_influences[i].bestiary_id) {
-        this.hunt_spawn_influences[i].influence += influence.influence;
-
-        return;
-      }
-    }
-
-    this.hunt_spawn_influences.PushBack(influence);
   }
 }

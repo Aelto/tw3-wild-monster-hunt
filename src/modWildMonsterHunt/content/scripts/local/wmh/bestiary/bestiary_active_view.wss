@@ -81,6 +81,8 @@ class WMH_BestiaryActiveView {
     var pseudo_rng_buffer: WMH_PseudoRngBuffer = 
         WMH_getHuntManagerSpawnratesPseudoRng();
 
+    var contracts: WMH_ContractManager = WMH_getContractManager();
+
     // 1.
     // start by building a list of the entries that could spawn from the
     // provided biome tags.
@@ -121,8 +123,13 @@ class WMH_BestiaryActiveView {
       // note: the roll is not given to the pseudo_rng_buffer here but once the
       // spawn request is fulfilled, this allows to keep this function somewhat
       // pure with no side effects.
-      roller
-        .addRatio(pseudo_rng_buffer.getAlteredRatio(current.id.value, ratio));
+      ratio = pseudo_rng_buffer.getAlteredRatio(current.id.value, ratio);
+
+      if (contracts.hunt_spawn_influences.Size() >= current.id.value) {
+        ratio *= contracts.hunt_spawn_influences[current.id.value];
+      }
+
+      roller.addRatio(ratio);
     }
 
     var index: int = roller.roll(seed);

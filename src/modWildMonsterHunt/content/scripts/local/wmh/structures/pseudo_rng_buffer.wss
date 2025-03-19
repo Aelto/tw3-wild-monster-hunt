@@ -24,6 +24,15 @@ class WMH_PseudoRngBuffer {
     this.ratios_modifiers.PushBack(modifier);
   }
 
+  public function setEntry(index: int, ratio: float, optional modifier: float) {
+    if (modifier <= 0) {
+      modifier = 1.0;
+    }
+
+    this.ratios_variances[index] = ratio;
+    this.ratios_modifiers[index] = modifier;
+  }
+
   public function getAlteredRatio(index: int, ratio: float): float {
     return this.ratios_modifiers[index] * ratio;
   }
