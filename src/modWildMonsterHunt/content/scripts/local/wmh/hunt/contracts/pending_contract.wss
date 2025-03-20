@@ -164,7 +164,7 @@ class WMH_PendingContract {
     var br: string = "<br/>";
 
 
-    output += "<font size='24' color='#8a5551'>TARGETS:</font>";
+    output += "<font size='24' color='#8a5551'>TARGETS:</font> ";
     output += this.toTargetLocNameHtml() + br;
 
     if (this.affix_manager.has_affix) {

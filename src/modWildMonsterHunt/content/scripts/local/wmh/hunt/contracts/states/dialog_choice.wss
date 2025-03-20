@@ -174,7 +174,7 @@ state DialogChoice in WMH_ContractManager {
         var index: int = chunks.FindFirst(response.playGoChunk);
 
         if (index >= 0) {
-          this.displayChoicesViewEditContract(0);
+          this.displayChoicesViewEditContract(index);
         }
         else {
           WMHERROR("invalid contract index for displayChoicesViewEditContract()");
@@ -302,6 +302,7 @@ state DialogChoice in WMH_ContractManager {
 
         if (selected_any) {
           WMH_getContractManager().onContractReplaced(index, new_contract);
+          return;
         }
       }
       else { // Cancel option
@@ -361,6 +362,7 @@ state DialogChoice in WMH_ContractManager {
         if (StrFindFirst(response.description, choices[i].description) >= 0) {
           // -1 due to the 'Cancel' being the first option
           contract = contracts_storage.favourite_contracts[i - 1];
+          index = i;
           return true;
         }
       }

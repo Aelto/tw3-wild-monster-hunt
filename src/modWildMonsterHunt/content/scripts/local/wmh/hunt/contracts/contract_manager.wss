@@ -98,6 +98,8 @@ statemachine class WMH_ContractManager {
             new_contract,
             true
           );
+
+        this.refreshCachedHuntData();
       }
     }
   }
@@ -264,7 +266,7 @@ statemachine class WMH_ContractManager {
       // minus 1, to get the difference it would make and not the actual value
       var influence: float = this.hunt_spawn_influences[i] - 1;
 
-      if (influence == 1.0) {
+      if (influence == 0.0) {
         continue;
       }
 
