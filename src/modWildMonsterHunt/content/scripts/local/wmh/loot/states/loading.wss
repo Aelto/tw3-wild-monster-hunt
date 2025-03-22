@@ -15,9 +15,12 @@ state Loading in WMH_LootManager {
     var i: int;
 
     parent.loot_by_category.Clear();
+    parent.loot_by_category_rollers.Clear();
     for (i = 0; i < EnumGetMax('WMH_LootTag') + 1; i += 1) {
       parent.loot_by_category.PushBack(empty);
+      parent.loot_by_category_rollers.PushBack(new WMH_RatiosRoller in parent);
     }
+
 
     this.witcher = GetWitcherPlayer();
 
@@ -295,6 +298,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Heavy boots 04');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Nilfgaardian casual shoes');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Skellige casual shoes');
+      parent.registerLoot(WMH_LootTag_Gear, 10, 'Horse Bag 1');
     }
 
     if (parent.maximum_loot_level.value >= 20) {
@@ -401,6 +405,7 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Boots 06');
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Boots 07');
       parent.registerLoot(WMH_LootTag_Gear, 20, 'Boots 05');
+      parent.registerLoot(WMH_LootTag_Gear, 20, 'Horse Bag 2');
     }
 
     if (parent.maximum_loot_level.value >= 30) {
@@ -544,6 +549,11 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 30, 'q704 vampire silver sword');
       parent.registerLoot(WMH_LootTag_Gear, 30, 'Olgierd Sabre');
       parent.registerLoot(WMH_LootTag_Gear, 30, 'PC Caretaker Shovel');
+      parent.registerLoot(WMH_LootTag_Gear, 30, 'Horse Bag 3');
+    }
+
+    if (parent.maximum_loot_level.value >= 40) {
+      parent.registerLoot(WMH_LootTag_Gear, 40, 'Toussaint horsebag');
     }
   }
 

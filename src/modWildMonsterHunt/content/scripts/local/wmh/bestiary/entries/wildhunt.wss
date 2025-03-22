@@ -71,6 +71,8 @@ class WMH_BestiaryEntryWildhunt extends WMH_BestiaryEntry {
       if (underground) nospawn
 
       if (snow && structures) += 0.05,
+      if (altitude && structures) += 0.01,
+      if (snow && altitude && structures) += 0.05,
     }});
   }
 

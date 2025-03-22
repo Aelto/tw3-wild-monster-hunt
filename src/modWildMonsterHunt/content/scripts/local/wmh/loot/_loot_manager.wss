@@ -1,9 +1,3 @@
-@addMethod(WMH_Master)
-function submitOnMeldItem() {
-  this.loot.onMeldItem(this.storage.herbalist.melding_level.value as int);
-  this.storage.herbalist.melding_level.value += 1;
-}
-
 function WMH_getLootManager(): WMH_LootManager {
   return thePlayer.wmh.loot;
 }
@@ -14,6 +8,7 @@ statemachine class WMH_LootManager {
 
   // it uses the value of WMH_LootTag as the first index.
   protected var loot_by_category: array<array<name>>;
+  protected var loot_by_category_rollers: array<WMH_RatiosRoller>;
 
   protected var runes_of_power_perks: array<ESkill>;
   protected var runes_of_power_perks_roller: WMH_RatiosRoller;
@@ -31,7 +26,7 @@ statemachine class WMH_LootManager {
     tags: array<WMH_LootTag>, // not `out`, copies the array
     seed: int
   ) {
-    var runes_of_power_chance: float = 0.05;
+    var runes_of_power_chance: float = 0.01;
 
     // the container has no tags: use random tags
     var tags_size: int = tags.Size();
@@ -70,24 +65,39 @@ statemachine class WMH_LootManager {
     this.GotoState('Loading');
   }
 
-  public function onMilestoneContractCompleted(seed: int) {
-    var count: int = 4;
+  public function onPendingContractCompleted(seed: int) {
+    var count: int = 1;
     while (count > 0) {
       count -= 1;
 
-      var item: name = this.popRandomItem(WMH_LootTag_Schematic, seed);
+      var item: name = this.popRandomItem(WMH_LootTag_Schematic, seed, 5);
       WMHINFO("onMilestoneContractCompleted(), item = " + item);
 
       if (item == '') {
         break;
       }
 
+      GetWitcherPlayer().AddCraftingSchematic(item);
+    }
+  }
+
+  public function onMilestoneContractCompleted(seed: int) {
+    var count: int = 3;
+    while (count > 0) {
+      count -= 1;
+
+      var item: name = this.popRandomItem(WMH_LootTag_Schematic, seed, 15);
+      WMHINFO("onMilestoneContractCompleted(), item = " + item);
+
+      if (item == '') {
+        break;
+      }
 
       GetWitcherPlayer().AddCraftingSchematic(item);
     }
   }
 
-  public function onMeldItem(seed: int) {
+  public function onMeldItem(seed: int, provider: WMH_RewardProvider) {
     var item: name = this.popRandomItem(WMH_LootTag_Recipe, seed);
     WMHINFO("onMeldItem(), item = " + item);
 
@@ -100,12 +110,7 @@ statemachine class WMH_LootManager {
       return;
     }
 
-    var entity: CEntity = theGame.GetEntityByTag('WMH_HerbalistContainer');
-    var container: WMH_HerbalistContainer = entity as WMH_HerbalistContainer;
-
-    if (container) {
-      container.addItem(item);
-    }
+    provider.addItem("Item Melding", item, 1);
   }
 
   public function getNextMeldItem(optional offset: int): name {
@@ -150,14 +155,32 @@ statemachine class WMH_LootManager {
     return runes;
   }
 
-  public function getRandomItem(category: WMH_LootTag, seed: int): name {
+  public function getRandomCategory(seed: int, optional include_recipes: bool): WMH_LootTag {
+    var max: int = WMH_LootTag_Recipe as int;
+
+    if (include_recipes) {
+      max = EnumGetMax('WMH_AnimationCategory');
+    }
+
+    return FloorF(RandNoiseF(seed, max + 1)) as WMH_LootTag;
+  }
+
+  public function getRandomItem(
+    category: WMH_LootTag,
+    seed: int,
+    /// the max index can be used to prioritize lower items in the list, useful
+    /// when giving random items that get progressively better as the list grows
+    /// such as schematics or recipes
+    optional max_index: int
+  ): name {
     var max: int = this.loot_by_category[category].Size();
 
     if (max <= 0) {
       return '';
     }
 
-    var item_index: int = RandNoiseF(seed, max) as int;
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    var item_index: int = roller.roll(seed, max_index);
     var item: name = this.loot_by_category[category][item_index];
 
     return item;
@@ -167,24 +190,40 @@ statemachine class WMH_LootManager {
     this.loot_requests.PushBack(request);
   }
 
-  protected function registerLoot(category: WMH_LootTag, _level: int, item: name) {
+  protected function registerLoot(category: WMH_LootTag, level: int, item: name) {
     this.loot_by_category[category].PushBack(item);
+    
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    roller.addRatio(1.0 / (level as float));
   }
 
   // mutates the array from the category by popping the item out of the list
   // and returning it. Mostly useful for recipes that are given straight to the
   // player
-  protected function popRandomItem(category: WMH_LootTag, seed: int): name {
+  protected function popRandomItem(
+    category: WMH_LootTag,
+    seed: int,
+    /// the max index can be used to prioritize lower items in the list, useful
+    /// when giving random items that get progressively better as the list grows
+    /// such as schematics or recipes
+    optional max_index: int
+  ): name {
     var max: int = this.loot_by_category[category].Size();
 
     if (max <= 0) {
       return '';
     }
 
-    var item_index: int = RandNoiseF(seed, max) as int;
+    var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
+    var item_index: int = roller.roll(seed, max_index);
+
+    if (item_index < 0) {
+      return '';
+    }
+
     var item: name = this.loot_by_category[category][item_index];
 
-    this.loot_by_category[category].EraseFast(item_index);
+    this.loot_by_category[category].Erase(item_index);
 
     return item;
   }

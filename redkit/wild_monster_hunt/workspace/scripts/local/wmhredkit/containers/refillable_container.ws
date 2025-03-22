@@ -12,9 +12,9 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 		
 		WMHINFO("WMH_RefillableContainer, OnStreamIn(), this.previous_refill_seed = " + this.previous_refill_seed);
 		
-		if (this.IsEmpty() || this.previous_refill_seed <= 0) {
+		// if (this.IsEmpty() || this.previous_refill_seed <= 0) {
 			this.AddTimer('maybeRefillForHunt', 10, true);
-		}
+		// }
 	}
 	
 
@@ -34,7 +34,7 @@ class WMH_RefillableContainer extends W3AnimatedContainer {
 		}
 
 		position = this.GetWorldPosition();
-		self_seed = hunt_seed + (int)position.X + (int)position.Y;
+		self_seed = hunt_seed + (int)(position.X * 10) + (int)(position.Y * 10);
 
 		inventory = this.GetInventory();
 		inventory.RemoveAllItems();

@@ -1,7 +1,6 @@
-//#region feint instead of death
 @wrapMethod(CPlayer)
 function OnDeath(damageAction: W3DamageAction) {
-  if (thePlayer.wmh.hunt.isInHunt()) {
+  if (thePlayer.wmh.hunt.isInHunt() || WMH_isInWmhLevel()) {
     super.OnDeath( damageAction );
 		this.ClearAttitudes( true, false, false );
 
@@ -25,4 +24,3 @@ function HideWeapon() {
     thePlayer.wmh.submitOnDeath(this);
   }
 }
-//#endregion

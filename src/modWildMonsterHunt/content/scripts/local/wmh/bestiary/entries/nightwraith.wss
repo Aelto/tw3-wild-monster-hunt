@@ -55,6 +55,7 @@ class WMH_BestiaryEntryNightwraith extends WMH_BestiaryEntry {
 
       night {
         if (structures) += 1.0,
+        if (altitude) += 0.2,
       }
     }});
   }

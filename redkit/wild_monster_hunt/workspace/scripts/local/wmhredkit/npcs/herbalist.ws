@@ -1,3 +1,8 @@
+/*
+the code is currently unused, commented out for when it'll finally be used but
+note that it can cause a conflict with the more-quickslots mod.
+
+
 // A type of merchant that doesn't use a scene to open its selling menu, interacting
 // with it goes straight to the menu.
 class WMH_HerbalistNPC extends W3MerchantNPC {
@@ -101,3 +106,4 @@ class WMH_HerbalistGuiShopInventoryComponent extends W3GuiShopInventoryComponent
     return success;
   }
 }
+*/

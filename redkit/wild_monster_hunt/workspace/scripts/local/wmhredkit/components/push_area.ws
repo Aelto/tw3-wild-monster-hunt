@@ -54,31 +54,35 @@ state Pushing in WMH_PushArea {
     WMHHUD(parent.push_message);
     push_starting_position = thePlayer.GetWorldPosition();
 
-    while (true) {
-      // first draw a line from the center of the area to the player and
-      // extrapolate it.
-      destination = VecInterpolate(
-        parent.GetWorldPosition(),
-        thePlayer.GetWorldPosition(),
-        1.01
-      );
+    // disabled:
+    // pushing the player around proved immersion breaking and could also cause
+    // a few issues when the player was mounted or in combat.
+    //
+    // while (true) {
+    //   // first draw a line from the center of the area to the player and
+    //   // extrapolate it.
+    //   destination = VecInterpolate(
+    //     parent.GetWorldPosition(),
+    //     thePlayer.GetWorldPosition(),
+    //     1.01
+    //   );
 
-      destination = VecInterpolate(
-        thePlayer.GetWorldPosition(),
-        // then use the mean position between the extrapolated destination
-        // and the position the player was when it entered the area
-        (push_starting_position + destination) / 2,
-        1.01
-      );
+    //   destination = VecInterpolate(
+    //     thePlayer.GetWorldPosition(),
+    //     // then use the mean position between the extrapolated destination
+    //     // and the position the player was when it entered the area
+    //     (push_starting_position + destination) / 2,
+    //     1.01
+    //   );
 
-      WMH_slideEntityToPosition(
-        thePlayer,
-        destination,
-        0.25
-      );
+    //   WMH_slideEntityToPosition(
+    //     thePlayer,
+    //     destination,
+    //     0.25
+    //   );
 
-      Sleep(0.10);
-    }
+    //   Sleep(0.10);
+    // }
   }
 }
 

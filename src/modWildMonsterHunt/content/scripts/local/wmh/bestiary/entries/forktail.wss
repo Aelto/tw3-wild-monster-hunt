@@ -50,6 +50,7 @@ class WMH_BestiaryEntryForktail extends WMH_BestiaryEntry {
       }
 
       afternoon {
+        if (altitude) += 0.5,
         if (vegetation) *= 0.3,
         if (rain) *= 0.1,
       }

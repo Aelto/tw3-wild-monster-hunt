@@ -61,7 +61,7 @@ class WMH_Encounter {
     var notify: bool = VecDistanceSquared2D(
       thePlayer.GetWorldPosition(),
       this.GetWorldPosition()
-    ) < 40 * 40;
+    ) < 60 * 60;
 
     // do it before clearing the entities as it relies on the list to confirm
     // whether it was completed.
@@ -83,12 +83,12 @@ class WMH_Encounter {
       this.target_oneliner.unregister();
     }
 
-    if (notify) {
+    if (is_completed) {
       if (this.isContractTarget()) {
         WMHTUTOFACT(
           'WMH_EncounterContractHunterExpertise',
           "Hunter Expertise",
-          "<font color='#CD7D03'>You completed a contract</font>.<br/><br/>You are free to go back to the camp now to get the reward or you can continue your hunt at the risk of losing your progress in the event a feint.<br/><br/>Keep note of the location you found this target, but also the weather and the time of day, so the next time a similar creature emerges you will have an easier time finding it."
+          "<font color='#CD7D03'>You completed a contract</font>.<br/><br/>You are free to go back to the camp now to get the reward or you can continue your hunt at the risk of losing your progress in the event a feint.<br/><br/>Keep note of the location you found this target, but also the weather and the time of day, so the next time a similar creature emerges you will have an easier time hunting it."
         );
       }
 
@@ -102,7 +102,7 @@ class WMH_Encounter {
     var is_target: bool = false;
     var contract_manager: WMH_ContractManager = WMH_getContractManager();
 
-    for bentry: WMH_Bestiary in this.entries {
+    for bentry: WMH_BestiaryEntry in this.entries {
       if (contract_manager.isTargetted(bentry.id)) {
         return true;
       }

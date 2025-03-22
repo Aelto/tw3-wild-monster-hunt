@@ -10,14 +10,27 @@ class WMH_PseudoRngBuffer {
   /// multiply the ratios to obtain the final altered value.
   private var ratios_modifiers: array<float>;
 
-  public function registerEntry(ratio: float) {
+  public function registerEntry(ratio: float, optional modifier: float) {
+    if (modifier <= 0) {
+      modifier = 1.0;
+    }
+    
     // Currently the higher the base ratio the smaller the variance.
     // This means that on successive missed rolls the high base ratios should
     // see small changes to their modifiers, on the other hand the high base
     // ratios vary a lot more that allows them to get back to high values faster
     // after a successfull roll.
     this.ratios_variances.PushBack(1.0 / ratio);
-    this.ratios_modifiers.PushBack(1.0);
+    this.ratios_modifiers.PushBack(modifier);
+  }
+
+  public function setEntry(index: int, ratio: float, optional modifier: float) {
+    if (modifier <= 0) {
+      modifier = 1.0;
+    }
+
+    this.ratios_variances[index] = ratio;
+    this.ratios_modifiers[index] = modifier;
   }
 
   public function getAlteredRatio(index: int, ratio: float): float {

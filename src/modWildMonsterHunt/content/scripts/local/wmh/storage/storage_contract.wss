@@ -1,3 +1,7 @@
+function WMH_getStorageContract(): WMH_StorageContract {
+  return thePlayer.wmh.storage.contract;
+}
+
 class WMH_StorageContract {
   /// this is currently unused, the milestone level is obtained by dividing the
   /// general level by 5.
@@ -6,4 +10,28 @@ class WMH_StorageContract {
   public var completed_contracts_count: int;
 
   public var pending_contracts: array<WMH_Contract>;
+
+  /// stores the previously completed contracts
+  public var completed_contracts_history: array<WMH_Contract>;
+
+  public var favourite_contracts: array<WMH_Contract>;
+}
+
+function WMH_isContractFavourite(
+  storage: WMH_StorageContract,
+  out contract: WMH_Contract
+): bool {
+  var i: int;
+  for (i = 0; i < storage.favourite_contracts.Size(); i += 1) {
+    if (
+      storage.favourite_contracts[i].level.value == contract.level.value
+      && storage.favourite_contracts[i].created_at_minutes == contract.created_at_minutes
+      && storage.favourite_contracts[i].index == contract.index
+      && storage.favourite_contracts[i].type == contract.type
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }

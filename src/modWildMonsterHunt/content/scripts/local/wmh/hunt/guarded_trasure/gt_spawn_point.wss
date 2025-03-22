@@ -100,6 +100,8 @@ state Spawning in WMH_GuardTreasureSpawnPoint {
       )
       .rollItem(point_seed);
 
+    WMHINFO("WMH_GuardTreasureSpawnPoint, variant = " + variant);
+
     var template: CEntityTemplate = LoadResourceAsync(
       variant,
       true

@@ -2,8 +2,11 @@ class WMH_CampUpgradeBuff extends WMH_CampUpgradeBase {
   protected editable var buff_on_use: name;
   hint buff_on_use = "abilityName of the buff to apply when used";
 
+  protected editable var seconds_base: int;
+  default seconds_base = 600;
+
   protected editable var seconds_per_level: int;
-  default seconds_per_level = 600;
+  default seconds_per_level = 300;
   hint seconds_per_level = "duration of the buff in seconds and multiplied by the level of the upgrade";
 
   protected function onApply(level: int) {
@@ -16,7 +19,7 @@ class WMH_CampUpgradeBuff extends WMH_CampUpgradeBase {
         this,
         thePlayer,
         this.buff_on_use,
-        level * this.seconds_per_level
+        3600
       );
     }
 

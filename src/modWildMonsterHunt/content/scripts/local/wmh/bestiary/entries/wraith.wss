@@ -67,6 +67,7 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
       if (wide) *= 0.5,
 
       morning {
+        if (altitude) += 0.5,
         if (clear) *= 0.1,
       }
 
@@ -75,6 +76,7 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
       }
 
       night {
+        if (altitude) += 0.5,
         if (!clear) *= 1.5,
       }
     }});

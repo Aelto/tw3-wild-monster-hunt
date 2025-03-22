@@ -1,3 +1,7 @@
+function WMH_isInWmhLevel(): bool {
+  return theGame.GetWorld().GetDepotPath() == "levels\wmh_lv1\wmh_lv1.w2w";
+}
+
 class WMH_Master {
   public var storage: WMH_Storage;
   public var logger: WMH_Logger;
@@ -248,18 +252,15 @@ class WMH_Master {
     );
   }
 
-  public function submitOnMilestoneContractCompleted(
-    origin: WMH_MilestoneContract,
-    seed: int
-  ) {
-    this.loot.onMilestoneContractCompleted(seed);
-  }
-
   public function submitOnRepulsivePlaced(
     origin: WMH_LureSpot,
     center: Vector
   ) {
     this.hunt.encounters.onRepulsivePlaced(center);
+  }
+
+  public function submitOnMeldingLevelIncrease(amount: int) {
+    this.storage.herbalist.melding_level.value += amount;
   }
 }
 

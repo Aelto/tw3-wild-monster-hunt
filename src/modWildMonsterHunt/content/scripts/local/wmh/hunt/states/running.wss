@@ -10,15 +10,20 @@ state Running in WMH_HuntManager {
     while (true) {
       // split the sleep in two so spawns are created as soon as the hunt begins
       Sleep(2.0);
-      thePlayer.wmh.submitOnSpawn(
-        parent,
-        parent.contract,
-        parent.seed,
-        parent.seed + parent.getSecondsSinceStart()
-      );
-      Sleep(5.0);
+      var i: int = 0;
+
+      for (i = 0; i < 100; i += 1) {
+        if (!thePlayer.IsInCombat()) {
+          thePlayer.wmh.submitOnSpawn(
+            parent,
+            parent.contract,
+            parent.seed,
+            parent.seed + parent.getSecondsSinceStart()
+          );
+        }
+        Sleep(0.2);
+      }
       WMH_getBestiary().onSpawnDelayed(parent.contract, parent.seed);
-      Sleep(8.0);
     }
     
   }

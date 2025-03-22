@@ -1,0 +1,106 @@
+@addField(CR4HudModuleDialog)
+var wmh_dialog_hover_contracts_selection: WMH_DialogHoverContractsListener;
+
+
+@wrapMethod(CR4HudModuleDialog)
+function OnDialogOptionSelected(index: int) {
+  var result: bool;
+
+  result = wrappedMethod(index);
+
+  if (this.wmh_dialog_hover_contracts_selection) {
+    this.wmh_dialog_hover_contracts_selection
+      .onHover(this.lastSetChoices[index], index);
+  }
+
+  return result;
+}
+
+function WMH_getDialogHoverContractsListener(): WMH_DialogHoverContractsListener {
+  var hud: CR4ScriptedHud = theGame.GetHud() as CR4ScriptedHud;
+
+  if (!hud) {
+    return NULL;
+  }
+
+  var dialogue_module: CR4HudModuleDialog;
+  dialogue_module = hud.GetHudModule("DialogModule") as CR4HudModuleDialog;
+
+  if (!dialogue_module) {
+    return NULL;
+  }
+
+  return dialogue_module.wmh_dialog_hover_contracts_selection;
+}
+
+function WMH_setdialogHoverContractsListener(
+  listener: WMH_DialogHoverContractsListener
+) {
+  var hud: CR4ScriptedHud = theGame.GetHud() as CR4ScriptedHud;
+
+  if (!hud) {
+    return;
+  }
+
+  var dialogue_module: CR4HudModuleDialog;
+  dialogue_module = hud.GetHudModule("DialogModule") as CR4HudModuleDialog;
+
+  if (!dialogue_module) {
+    return;
+  }
+
+  dialogue_module.wmh_dialog_hover_contracts_selection = listener;
+  listener.onListenerAdded();
+}
+
+abstract class WMH_DialogHoverContractsListener extends WMH_DialogHoverListener {
+  var previous_message: string;
+
+  protected function displayLongLastingPopup(message: string) {
+    if (message != this.previous_message) {
+      WMHPOPUP(message, 60 * 5 * 1000);
+      this.previous_message = message;
+    }
+  }
+
+  public function onListenerAdded() {}
+}
+
+/// Provides info about one contract at a time based on the array of contracts
+/// it's given at init. If an index is NULL or out of bound then nothing is
+/// displayed.
+class WMH_DHCL_ContractInfo extends WMH_DialogHoverContractsListener {
+  public var contracts: array<WMH_PendingContract>;
+
+  function onHover(scene_choice: SSceneChoice, index: int) {
+    // out of bound
+    if (index >= contracts.Size()) {
+      return;
+    }
+
+    var contract: WMH_PendingContract = this.contracts[index];
+
+    // null
+    if (!contract) {
+      return;
+    }
+
+    this.displayLongLastingPopup(contract.toContractDescriptionHtml());
+  }
+
+  public function onListenerAdded() {
+    this.onHover(SSceneChoice(), 0);
+  }
+}
+
+class WMH_DHCL_HuntInfo extends WMH_DialogHoverContractsListener {
+  function onHover(scene_choice: SSceneChoice, index: int) {
+    this.displayLongLastingPopup(
+      WMH_getContractManager().toContractsDescriptionHtml()
+    );
+  }
+
+  public function onListenerAdded() {
+    this.onHover(SSceneChoice(), 0);
+  }
+}

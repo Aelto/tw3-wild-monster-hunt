@@ -18,35 +18,34 @@ state Running in WMH_LootManager {
   }
 
   private function addLoot(out request: WMH_LootRequest) {
-    var index: int;
-    var items_count: int;
-
-    var tags_count: int = request.tags.Size();
-
     // a small chance decrease as difficulty increases
-    var max_chance: float = WMH_difficultyScaleDownF(tags_count + 1, 0.05);
+    var tags_count: int = request.tags.Size();
+    var max_chance: float = WMH_difficultyScaleDownF(
+      // 1 tag  = 10% chance for the first item's roll
+      // 2 tags = 40%
+      // 3 tags = 90%
+      tags_count * tags_count * 0.1,
+      0.1
+    );
 
-    while (items_count < tags_count) {
-      items_count += 1;
-      index = RandNoiseF(request.seed, tags_count) as int;
-      
-      var can_add: bool = RandNoiseF(request.seed + index, max_chance)
-                        // the +1 means there is a chance to have 0 items
-                        >= 1 + items_count;
+    var items_count: int = 0;
+    var i: int;
+    for (i = 0; i < tags_count; i += 1) {
+      var can_add: bool = RandNoiseF(request.seed + i, 1.0)
+                        <= max_chance - items_count * 0.35;
 
-      can_add = true;
-      if (!can_add) {
-        break;
-      }
+      if (can_add) {
+        var category: WMH_LootTag = request.tags[i];
 
-      var category: WMH_LootTag = request.tags[index];
+        if (parent.loot_by_category.Size() > (category as int)) {
+          this.addRandomItemFromCategory(
+            request.inventory,
+            category,
+            request.seed + i
+          );
 
-      if (parent.loot_by_category.Size() > (category as int)) {
-        this.addRandomItemFromCategory(
-          request.inventory,
-          category,
-          request.seed + index
-        );
+          items_count += 1;
+        }
       }
     }
 

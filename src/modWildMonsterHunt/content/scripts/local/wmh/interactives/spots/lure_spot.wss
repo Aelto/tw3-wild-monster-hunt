@@ -16,9 +16,14 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
   protected var respawn_ticker: WMH_Ticker;
   protected var spawn_strong_creature: bool;
   
-  private var prompt: WMH_LureYesNoPrompt;
   private var item_selection_listener: WMH_LureItemSelectionListener;
   private var selected_item: SItemUniqueId;
+
+  public function getSeed(): int {
+    var position: Vector = this.GetWorldPosition();
+
+    return (position.X + position.Y) as int;
+  }
 
   public function onAllowedInteraction(
     action: string,
@@ -27,7 +32,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     WMHTUTOFACT(
       'WMH_LureSpot',
       "Luring Spot",
-      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>The prey you will get depends entirely on the quality of the lure that you use, adjust the ingredients based on your needs, whether you want a safe encounter or a tough opponent.<br/><br/><i>Once a Luring Spot is repaired, it remains available for all of your future hunts.<i>"
+      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>Each spot is able to lure two specific types of creatures, a powerful monster or a weaker one. If you decide to go after the tougher foe then additional materials will be needed to prepare the lure.<br/><br/><i>You can get <font color='#CD7D03'>Repair Tools</font> from the <font color='#CD7D03'>Witcher Camp's Merchant</font>, and once a Luring Spot is repaired it remains available for all of your future hunts.<i/>"
     );
 
     if (!this.respawn_ticker) {
@@ -44,20 +49,23 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       return WMHHUD("You need a " + lure_container + " to set up a lure here");
     }
 
-    this.prompt = new WMH_LureYesNoPrompt in this;
-    prompt.spot = this;
-    prompt.display();
+    this.GotoState('DialogChoice');
   }
 
-  public function trySetupLure() {
+  public function onTryLuringWeakTarget() {
+    this.spawn_strong_creature = false;
+    this.AddTimer('finishLureSetup', 0.1);
+  }
+
+  public function onTryLuringStrongTarget() {
+    this.spawn_strong_creature = true;
     this.openItemSelectionMenu();
   }
 
-  private function openItemSelectionMenu() {
+  protected function openItemSelectionMenu() {
     var item_tags: array<name>;
-    item_tags.PushBack('CraftingIngredient');
     item_tags.PushBack('AlchemyIngredient');
-    item_tags.PushBack('WMH_LureRepulsive');
+    item_tags.PushBack('mod_valuable');
 
     this.item_selection_listener = new WMH_LureItemSelectionListener in this;
     this.item_selection_listener.lure = this;
@@ -66,7 +74,7 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       this.required_fact,
       this.GetInventory(),
       item_tags,
-      true,
+      false,
       this.item_selection_listener
     );
   }
@@ -94,45 +102,41 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       this.respawn_ticker = (new WMH_Ticker in this).init(60.0 * 15);
     }
 
-    this.respawn_ticker.reset();
+    this.respawn_ticker.restart();
     inventory.RemoveItem(lures[0], 1);
-    inventory.RemoveItem(this.selected_item, 1);
+    this.setSpawnedCreatureKnown(this.spawn_strong_creature);
 
-    if (inventory.ItemHasTag(this.selected_item, 'WMH_LureRepulsive')) {
-      thePlayer.wmh.submitOnRepulsivePlaced(this, this.GetWorldPosition());
-      theSound.SoundEvent('gui_inventory_repair');
+    if (this.spawn_strong_creature) {
+      inventory.RemoveItem(this.selected_item, 1);
+
+      if (inventory.ItemHasTag(this.selected_item, 'WMH_LureRepulsive')) {
+        thePlayer.wmh.submitOnRepulsivePlaced(this, this.GetWorldPosition());
+        theSound.SoundEvent('gui_inventory_repair');
+
+        return;
+      }
     }
-    else {
-      var price: int = inventory.GetItemPrice(this.selected_item);
-      this.spawn_strong_creature = price >= this.strong_creature_threshold;
 
-      theSound.SoundEvent('gui_inventory_repair');
-      this.GotoState('StartLuring');
+    theSound.SoundEvent('gui_inventory_repair');
+    this.GotoState('StartLuring');
+  }
+
+  protected function getSpotFact(optional strong_creature: bool): string {
+    var fact: string = "WMH_LureSpot_known_" + this.getSeed();
+
+    if (strong_creature) {
+      fact += "_strong";
     }
+
+    return fact;
   }
 
-  public function getSeed(): int {
-    var position: Vector = this.GetWorldPosition();
-
-    return (position.X + position.Y) as int;
-  }
-}
-
-class WMH_LureYesNoPrompt extends WMH_YesNoPrompt {
-  var spot: WMH_LureSpot;
-
-  public function title(): string {
-    return "Luring spot";
+  protected function isSpawnedCreatureKnown(strong_creature: bool): bool {
+    return FactsDoesExist(this.getSpotFact(strong_creature));
   }
 
-  public function description(): string {
-    var lure_container: string = GetLocStringByKey('wmh_lure_container');
-
-    return "Use a " + lure_container + " and materials to lure monsters?";
-  }
-
-  public function onResponse(accepted: bool) {
-    this.spot.trySetupLure();
+  protected function setSpawnedCreatureKnown(strong_creature: bool) {
+    FactsSet(this.getSpotFact(strong_creature), 1);
   }
 }
 
@@ -143,6 +147,88 @@ class WMH_LureItemSelectionListener extends WMH_ItemSelectionListener {
     this.lure.onLureItemSelected(item);
 
     return true; // close the popup
+  }
+}
+
+state Waiting in WMH_LureSpot {}
+
+state DialogChoice in WMH_LureSpot {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.DialogChoice_main();
+  }
+
+  entry function DialogChoice_main() {
+    var choices: array<SSceneChoice>;
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+
+    while (true) {
+      choices.Clear();
+
+      var small_creature_message: string = "Lure small creature";
+      if (parent.isSpawnedCreatureKnown(false)) {
+        var bentry: WMH_BestiaryEntry = bestiary
+          .getEntryByBiomeTagByPass(parent.weak_creature_bypass_tag);
+
+        if (bentry) {
+          small_creature_message = "Lure " + bentry.getLocName();
+        }
+      }
+
+      choices.PushBack(SSceneChoice(
+        small_creature_message,
+        false, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        'LureWeak'
+      ));
+
+      var strong_creature_message: string = "Lure powerful monster";
+      if (parent.isSpawnedCreatureKnown(true)) {
+        var bentry: WMH_BestiaryEntry = bestiary
+          .getEntryByBiomeTagByPass(parent.strong_creature_bypass_tag);
+
+        if (bentry) {
+          strong_creature_message = "Lure " + bentry.getLocName();
+        }
+      }
+
+
+      choices.PushBack(SSceneChoice(
+        strong_creature_message,
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        'LureStrong'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        'Cancel'
+      ));
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'LureWeak') {
+        parent.onTryLuringWeakTarget();
+        break;
+      }
+      else if (response.playGoChunk == 'LureStrong') {
+        parent.onTryLuringStrongTarget();
+        break;
+      }
+      else {
+        parent.GotoState('Waiting');
+        break;
+      }
+    }
   }
 }
 
@@ -183,6 +269,7 @@ state PlayLuring in WMH_LureSpot {
     WMHINFO("WMH_LureSpot_PlayLuring, found spawn node");
 
     this.playGeraltMeditation(camera_node, meditation_node, spawn_node);
+    parent.GotoState('Waiting');
   }
 
   private function getNearbyCameraNode(): CNode {

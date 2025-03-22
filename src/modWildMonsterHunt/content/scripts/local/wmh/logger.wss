@@ -139,6 +139,24 @@ function WMHTUTOFACT(
   return true;
 }
 
+function WMH_leftPad(
+  content: string,
+  min_width: int
+): string {
+  var len: int = StrLen(content);
+
+  if (len >= min_width) {
+    return content;
+  }
+
+  var padding: string;
+  for (len = len; len <= min_width; len += 1) {
+    padding += "&nbsp;&nbsp;";
+  }
+
+  return padding + content;
+}
+
 state Loading in WMH_Logger {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);

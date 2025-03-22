@@ -7,6 +7,10 @@ class WMH_EffectArmorBonus extends WMH_VanillaEffect {
   default isNeutral = false;
   default isNegative = false;
 
+  public function initArmorBonusOnNpc(npc: CNewNPC, optional duration: float) {
+    this.initVanillaEffect(npc, npc, 'WMHeffectArmorBonus', duration);
+  }
+
   public function initArmorBonusOnPlayer(
     owner: CGameplayEntity,
     optional duration: float
@@ -21,4 +25,37 @@ exec function wmhtestarmoreffect() {
 
   effect.initArmorBonusOnPlayer(thePlayer);
   thePlayer.WMH_getEffectManager().WMH_addEffect(effect);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// alternative way to change a NPC's armor value but in a permanent way, useful
+// for monster affixes for example.
+
+// pasted here for documentation purposes:
+// 
+// import struct SAbilityAttributeValue
+// {
+// 	import saved var valueAdditive : float;
+// 	import saved var valueMultiplicative : float;
+// 	import saved var valueBase : float;
+// }
+//
+// it's used in this formula:
+//
+// return att.valueBase * att.valueMultiplicative + att.valueAdditive;
+
+@addField(CActor)
+var wmh_armor_bonus: SAbilityAttributeValue;
+
+/// IMPORTANT: it's added so a value of 1.0 in the multiplicative is ADDED to
+/// the vanilla value that's already 1.0 so it ends up at 2.0 !
+@wrapMethod(CActor)
+function GetTotalArmor(): SAbilityAttributeValue {
+  return wrappedMethod() + this.wmh_armor_bonus;
+}
+
+exec function wmhtestarmorbonus() {
+  var player: CR4Player = thePlayer;
+
+  player.wmh_armor_bonus = SAbilityAttributeValue(0.0, 2.0);
 }

@@ -1,3 +1,5 @@
+#define const DetlaffStrength = 25;
+
 class WMH_BestiaryEntryDetlaff extends WMH_BestiaryEntry {
   public function init(id: WMH_BestiaryId) {
     super.init(id);
@@ -16,7 +18,7 @@ class WMH_BestiaryEntryDetlaff extends WMH_BestiaryEntry {
     this.difficulty_scaling.minimum_count_hard = 1;
     this.difficulty_scaling.maximum_count_hard = 1;
 
-    this.strength = 25;
+    this.strength = DetlaffStrength!;
     this.biome_tag_bypass = 'Detlaff';
   }
 

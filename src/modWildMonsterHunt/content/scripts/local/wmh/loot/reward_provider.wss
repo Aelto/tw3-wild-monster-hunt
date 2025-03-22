@@ -18,9 +18,18 @@ class WMH_RewardProvider {
   var groups: array<WMH_RewardGroup>;
 
   private var active_group: string;
+  private var ignore_group: bool;
 
   public function startGroup(group: string): WMH_RewardProvider {
-    this.active_group = group;
+    if (!this.ignore_group) {
+      this.active_group = group;
+    }
+
+    return this;
+  }
+
+  public function lockGroups(lock: bool): WMH_RewardProvider {
+    this.ignore_group = lock;
 
     return this;
   }
@@ -106,17 +115,23 @@ class WMH_RewardProvider {
     return this;
   }
 
-  public function toHtml(inventory: CInventoryComponent): string {
+  public function toHtml(
+    inventory: CInventoryComponent,
+    optional skip_reason: bool
+  ): string {
     var message: string;
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
-      message += "<u>" + this.groups[i].reason + "</u>";
+      if (!skip_reason) {
+        message += "<u>" + this.groups[i].reason + "</u>";
+      }
 
       if (this.groups[i].experience > 0) {
-        message += "<br /> XP <font size='18'>"
-                 + this.groups[i].experience
-                 + "</font>";
+        message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; XP &nbsp;&nbsp;&nbsp;&nbsp;"
+                + "<font size='18'>"
+                + WMH_leftPad(this.groups[i].experience, 3)
+                + "</font>";
       }
 
       var k: int;
@@ -124,8 +139,8 @@ class WMH_RewardProvider {
         message += "<br/> <img src='img://"
                  + inventory.GetItemIconPathByName(this.groups[i].items[k].item)
                  + "' height='48' width='48' />"
-                 + "<font size='18'>" + this.groups[i].items[k].quantity
-                 + "x</font> "
+                 + "<font size='18'>"
+                 + WMH_leftPad(this.groups[i].items[k].quantity, 3) + "x</font> "
                  + GetLocStringByKeyExt(
                   theGame.GetDefinitionsManager()
                   .GetItemLocalisationKeyName(this.groups[i].items[k].item)

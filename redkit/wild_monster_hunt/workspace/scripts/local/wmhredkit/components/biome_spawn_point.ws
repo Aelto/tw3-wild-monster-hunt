@@ -42,8 +42,25 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	protected var spawn_priority: WMH_BiomeSpawnPoint_SpawnPriority;
 	
 	event OnSpawned( spawnData : SEntitySpawnData ) {
-		this.respawn_ticker = (new WMH_Ticker in this).init(240.0);
-		this.wildlife_ticker = (new WMH_Ticker in this).init(180.0);
+		super.OnSpawned(spawnData);
+
+		this.reset();
+	}
+
+	// reset the spawn point to mark it as available right now
+	public function reset() {
+		this.respawn_ticker = (new WMH_Ticker in this).init(1200.0);
+		this.wildlife_ticker = (new WMH_Ticker in this).init(300.0);
+		this.last_spawn_time = 0;
+		this.last_clear_time = 0;
+		this.last_clues_time = 0;
+		this.spawn_priority = WMH_BSP_SP_None;
+	}
+
+	// restart the spawn point to mark it as UNavailable until the respawn timer
+	// has passed.
+	public function restart() {
+		this.respawn_ticker.restart();
 	}
 
 	public function getPointSeed(hunt_seed: int): int {
@@ -121,13 +138,12 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		// NOTE: that it doesn't lock the ticker but resets it, the wildlife 
 		// encounter still being alive won't prevent new wildlife encounters from
 		// respawning
-		this.wildlife_ticker.reset();
+		this.wildlife_ticker.restart();
 	}
 
 	public function liberate(optional encounter_was_killed: bool) {
-		this.respawn_ticker.reset();
-
 		if (encounter_was_killed) {
+			this.respawn_ticker.restart();
 			this.last_clear_time = WMH_getEngineTimeAsSeconds();
 			this.spawn_priority = WMH_BSP_SP_None;
 
@@ -141,6 +157,9 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 			) {
 				WMH_getHuntFactsDb().remove(this.hunt_fact_on_spawn);
 			}
+		}
+		else {
+			this.respawn_ticker.reset();
 		}
 
 		WMH_getSpawnPointManager().onBiomeSpawnPointLiberated(this);

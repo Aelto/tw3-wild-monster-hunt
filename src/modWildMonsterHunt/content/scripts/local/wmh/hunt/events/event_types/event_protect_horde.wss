@@ -68,7 +68,7 @@ statemachine class WMH_EventNpc_EventProtectHorde extends WMH_EventNpc_BaseEvent
       output.PushBack(
         bestiary.getRandomUnfilteredEliteEntry(
           WMH_Level(0),
-          this.seed + 1
+          this.seed + 1 + i
         )
       );
     }

@@ -24,17 +24,23 @@ class WMH_BestiaryEntry {
     return this.strength > NoonWraithStrength!;
   }
 
-  public function canBeTarget(level: WMH_Level): bool {
+  public function canBeTarget(level: WMH_Level, optional bonus_range: int): bool {
     if (this.strength <= 0) {
       return false;
     }
+
+    // the level requirements on the strengths are all multiplied by two so
+    var contracts_per_strength: float = 3;
      
     // in the early levels we only target the small monsters
-    if (level.value < NoonWraithStrength! && !this.isStrongTarget()) {
+    if (
+      level.value < NoonWraithStrength! * contracts_per_strength
+      && !this.isStrongTarget()
+    ) {
       return true;
     }
 
-    return this.strength >= level.value - 1 && this.strength <= level.value + 1;
+    return level.value >= (this.strength - (1 + bonus_range)) * contracts_per_strength;
   }
 
   // This can also be used to determine if an entry can spawn. If the ratio is
@@ -73,8 +79,8 @@ class WMH_BestiaryEntry {
     var spawn_count: int = RandNoiseF(
       seed,
       // todo: use other difficulties than medium
-      this.difficulty_scaling.maximum_count_medium,
-      this.difficulty_scaling.minimum_count_medium
+      this.difficulty_scaling.maximum_count_hard + 1,
+      this.difficulty_scaling.minimum_count_easy
     ) as int;
 
     // 1.
@@ -147,11 +153,12 @@ class WMH_BestiaryEntry {
 
     var npc: CNewNPC = entity as CNewNPC;
     if (npc) {
-      npc.SetLevel(thePlayer.GetLevel());
+      npc.SetLevel(Max(thePlayer.GetLevel(), this.strength as int));
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
         npc.GetMaxHealth() * MaxF(this.strength * 0.25, 1.0)
       );
+      npc.ForceSetStat(BCS_Vitality, npc.abilityManager.GetStatMax(BCS_Vitality));
     }
   }
 
@@ -167,11 +174,37 @@ class WMH_BestiaryEntry {
     }
 
     provider.startGroup(this.getLocName() + prefix + " contract");
+
+    var loot: WMH_LootManager = WMH_getLootManager();
+    var items_count: int = WMH_diminishingReturns(
+      seed,
+      // a default chance of 20%, plus an increase of 100% every 25 levels
+      0.2 + contract.level.value * 0.04,
+      1.0
+    );
+
+    while (items_count > 0) {
+      provider.appendItem(
+        loot.getRandomItem(
+          loot.getRandomCategory(seed + items_count, false),
+          seed + items_count + 10,
+          FloorF(contract.level.value * 2) // max_index
+        ),
+        1 // quantity
+      );
+
+      items_count -= 1;
+    }
   }
 
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
-    // todo!("inventory.AddMoney(1)")
+    if (RandRangeF(100.0) < 25.0 + this.strength) {
+      inventory.AddAnItem(
+        'modwmh_monster_fluid',
+        RandRange(this.strength * 0.35 as int) + 1
+      );
+    }
   }
 
   // returns a bestiary entry that is able to spawn clues for the current

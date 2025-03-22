@@ -215,7 +215,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockHerbalist();
         WMHPOPUP("Herbalist hired");
       }
@@ -232,7 +233,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockMerchant();
         WMHPOPUP("Merchant hired");
       }
@@ -249,7 +251,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockArmors();
         WMHPOPUP("Armor tools unlocked");
       }
@@ -266,7 +269,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockWeapons();
         WMHPOPUP("Weapon tools unlocked");
       }
@@ -283,7 +287,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockGarden0();
         WMHPOPUP("Small garden plot unlocked");
       }
@@ -300,7 +305,8 @@ state DialogChoice in WMH_CampManager {
           continue;
         }
 
-        WMH_transferMoneyToSmithMerchant(cost);
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockGarden1();
         WMHPOPUP("Large garden plot unlocked");
       }

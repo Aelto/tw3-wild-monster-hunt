@@ -9,11 +9,17 @@ class WMH_AffixManager {
   public var health_regen_percent: float;
   default health_regen_percent = 0.0;
 
+  // @deprecated
   public var durability_loss_modifier: float;
   default durability_loss_modifier = 1.0;
 
+  public var armor_modifier: float;
+  default armor_modifier = 1.0;
+
   public var lifesteal_percent: float;
   default lifesteal_percent = 0.0;
+
+  public var has_affix: bool;
 
   public function init(level: WMH_Level, seed: int): WMH_AffixManager {
     var difficulty: int = WMH_getDifficulty();
@@ -34,6 +40,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 1, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.health_modifier = 1 + RandNoiseF(
         seed + 2,
         // at level 25, difficulty 1:
@@ -51,6 +58,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 3, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.damage_modifier = 1 + RandNoiseF(
         seed + 4,
         // at level 25, difficulty 1:
@@ -68,6 +76,7 @@ class WMH_AffixManager {
     if (RandNoiseF(seed + 5, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.health_regen_percent = RandNoiseF(
         seed + 6,
         // at level 25 difficulty 1:
@@ -81,27 +90,28 @@ class WMH_AffixManager {
       );
     }
 
-    var current_chance: float = base_chance / (1 + count);
-    if (RandNoiseF(seed + 7, current_chance) > 0.5) {
-      count += 1;
+    // var current_chance: float = base_chance / (1 + count);
+    // if (RandNoiseF(seed + 7, current_chance) > 0.5) {
+    //   count += 1;
 
-      this.durability_loss_modifier = 1 + RandNoiseF(
-        seed + 8,
-        // at level 25, the creature can have a maximum bonus of 50% durability
-        // loss
-        WMH_difficultyScaleUpPreF(
-          (level.value / 25) * 0.5,
-          // affix can be 10% stronger per difficulty level
-          0.1,
-          difficulty
-        )
-      );
-    }
+    //   this.durability_loss_modifier = 1 + RandNoiseF(
+    //     seed + 8,
+    //     // at level 25, the creature can have a maximum bonus of 50% durability
+    //     // loss
+    //     WMH_difficultyScaleUpPreF(
+    //       (level.value / 25) * 0.5,
+    //       // affix can be 10% stronger per difficulty level
+    //       0.1,
+    //       difficulty
+    //     )
+    //   );
+    // }
 
     var current_chance: float = base_chance / (1 + count);
     if (RandNoiseF(seed + 9, current_chance) > 0.5) {
       count += 1;
 
+      this.has_affix = true;
       this.lifesteal_percent = RandNoiseF(
         seed + 10,
         // at level 25, difficulty 1:
@@ -115,14 +125,55 @@ class WMH_AffixManager {
       );
     }
 
+    var current_chance: float = base_chance / (1 + count);
+    if (RandNoiseF(seed + 11, current_chance) > 0.5) {
+      count += 1;
+
+      this.has_affix = true;
+      this.armor_modifier = 1 + RandNoiseF(
+        seed + 12,
+        // at level 25, the creature can have a maximum bonus of 50% armor
+        WMH_difficultyScaleUpPreF(
+          (level.value / 25) * 0.5,
+          // affix can be 10% stronger per difficulty level
+          0.1,
+          difficulty
+        )
+      );
+    }
+
     return this;
   }
 
-  public function applyToNpc(npc: CNewNPC) {
-    if (this.health_modifier != 1.0) {
+  /// Absord the values from the other affix manager to mutate the ones in this
+  /// instance. Perform a merge and not a full replacement of the values,
+  /// usually by multiplying the values rather than setting them.
+  public function absorb(other: WMH_AffixManager) {
+    this.health_modifier *= other.health_modifier;
+    this.damage_modifier *= other.damage_modifier;
+    this.durability_loss_modifier *= other.durability_loss_modifier;
+    this.armor_modifier *= other.armor_modifier;
+
+    // percents are also multiplied, but since they're usually in the [0;1]
+    // range, multiplying them together would decrease the values which is
+    // why we're temporarily adding 1 to the other's value.
+    this.health_regen_percent *= (1 + other.health_regen_percent);
+    this.lifesteal_percent *= (1 + other.lifesteal_percent);
+
+    this.has_affix = this.has_affix || other.has_affix;
+  }
+
+  /// the `amplifier` value can be used to amplify some of the affixes by the
+  /// given amount. Nothing changes unless `amplifier > 1`
+  public function applyToNpc(npc: CNewNPC, optional amplifier: int) {
+    if (amplifier < 1) {
+      amplifier = 0;
+    }
+
+    if (this.health_modifier != 1.0 || amplifier > 1) {
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
-        npc.GetMaxHealth() * this.health_modifier
+        npc.GetMaxHealth() * this.health_modifier + amplifier * 0.80
       );
     }
 
@@ -148,9 +199,20 @@ class WMH_AffixManager {
     }
 
     if (this.durability_loss_modifier > 1.0) {
-      npc.WMH_addEffect(
-        (new WMH_HardenedEffect in npc)
-        .initHardened(-1, this.durability_loss_modifier)
+      // npc.WMH_addEffect(
+      //   (new WMH_HardenedEffect in npc)
+      //   .initHardened(-1, this.durability_loss_modifier)
+      // );
+    }
+
+    if (this.armor_modifier != 1.0) {
+      // 
+      npc.wmh_armor_bonus = SAbilityAttributeValue(
+        0.0,
+        // it's a bonus that's added to the vanilla value, see the comment
+        // on the wrapMethod for more info.
+        this.armor_modifier - 1,
+        0.0
       );
     }
   }
@@ -183,6 +245,13 @@ class WMH_AffixManager {
       else {
         output += "Regenerating ";
       }
+    }
+
+    if (this.armor_modifier > 1.0) {
+      output += "Armored ";
+    }
+    else if (this.armor_modifier < 1.0) {
+      output += "Exposed ";
     }
 
     if (this.durability_loss_modifier > 1.0) {

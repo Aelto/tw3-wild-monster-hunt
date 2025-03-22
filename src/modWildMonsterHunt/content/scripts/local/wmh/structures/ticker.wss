@@ -6,15 +6,23 @@ class WMH_Ticker {
   // when the Ticker is locked, the elapsed time since the last reset is stored
   // so that when unlocked the Ticker starts back exactly to the same duration
   private var lock_elapsed: float;
+  private var locked: bool;
 
   public function init(cooldown_seconds: float): WMH_Ticker {
     this.cooldown_seconds = cooldown_seconds;
-    this.trigger_timestamp = (cooldown_seconds + 1) * -1;
+    this.trigger_timestamp = 0;
+    this.lock_elapsed = 0;
 
     return this;
   }
 
   public function reset(optional cooldown_seconds: float) {
+    this.restart(cooldown_seconds);
+    this.trigger_timestamp = 0;
+    this.lock_elapsed = 0;
+  }
+
+  public function restart(optional cooldown_seconds: float) {
     this.internal_unlock();
 
     this.trigger_timestamp = SUH_now();
@@ -24,24 +32,33 @@ class WMH_Ticker {
     }
   }
 
-  // when set to true the Ticker will never be marked as
   public function lock() {
-    this.lock_elapsed = SUH_elapsed(this.trigger_timestamp);
+    if (this.isLocked()) {
+      return;
+    }
+
+    // a minimum of 1 second of downtime after the unlock to ensure the ticker
+    // is seen as locked even if the ticker is expired when the lock starts
+    this.lock_elapsed = MaxF(this.timeLeftBeforeExpire(), 1);
+    this.locked = true;
   }
 
   public function unlock() {
-    this.reset();
+    this.restart();
     this.internal_unlock();
   }
 
   public function isLocked(): bool {
-    return this.lock_elapsed > 0;
+    return this.locked;
   }
 
   public function hasExpired(): bool {
     // a locked Ticker cannot be considered expired
     return !this.isLocked()
-        && SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds);
+        && (
+          this.trigger_timestamp <= 0
+          || SUH_hasElapsed(this.trigger_timestamp, this.cooldown_seconds)
+        );
   }
 
   public function isWaitingToExpire(): bool {
@@ -53,7 +70,7 @@ class WMH_Ticker {
   /// WARNING: mutates the counter if it is expired
   public function validate(): bool {
     if (this.hasExpired()) {
-      this.reset();
+      this.restart();
       return true;
     }
     else {
@@ -61,10 +78,15 @@ class WMH_Ticker {
     }
   }
 
+  public function timeLeftBeforeExpire(): float {
+    return MaxF(this.cooldown_seconds - SUH_elapsed(this.trigger_timestamp), 0);
+  }
+
   private function internal_unlock() {
     if (this.isLocked()) {
-      this.trigger_timestamp -= this.lock_elapsed;
+      this.trigger_timestamp = SUH_now() - (this.cooldown_seconds - this.lock_elapsed);
       this.lock_elapsed = 0;
+      this.locked = false;
     }
   }
 }
