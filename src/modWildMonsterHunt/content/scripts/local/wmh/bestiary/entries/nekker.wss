@@ -90,4 +90,10 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
       provider.appendItem('Orichalcum mineral', (RandNoiseF(seed, 2.0) as int) + 1);
     }
   }
+
+  public function addCustomLoot(inventory: CInventoryComponent) {
+    // a nekker w2ent has this relic item, for how easy it is to kill it
+    // shouldn't drop it.
+    inventory.RemoveItemByName('Devine');
+  }
 }
