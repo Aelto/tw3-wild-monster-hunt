@@ -147,12 +147,11 @@ class WMH_PendingContract {
     var output: string = this.affix_manager.toLocString();
 
     for target: WMH_ContractTarget in this.targets {
-      output += target.toTargetLocNameHtml();
-
       if (add_space) {
-        output += " ";
+        output += ", ";
       }
 
+      output += target.toTargetLocNameHtml();
       add_space = true;
     }
     
