@@ -79,11 +79,11 @@
         name="modwmh_trap_repair_tools"
 				category="crafting_ingredient"
 				stackable="20"
-				weight="3"
+				weight="5"
 			  icon_path="icons/inventory/quests/sq108_smith_tools.png"
         localisation_key_name="wmh_trap_repair_tools"
         localisation_key_description="wmh_trap_repair_tools_desc"
-        price="10"
+        price="20"
       >
 				<tags>WMH_TrapRepairTools</tags>
 				<base_abilities>
@@ -95,12 +95,12 @@
         name="modwmh_trap_device"
 				category="crafting_ingredient"
 				stackable="20"
-				weight="1"
+				weight="5"
 				
 			  icon_path="icons/inventory/quests/q603_sharley_trophy_64x64.png"
         localisation_key_name="wmh_trap_device"
         localisation_key_description="wmh_trap_device_desc"
-        price="8"
+        price="20"
       >
 				<tags>WMH_TrapDevice</tags>
 				<base_abilities>
@@ -112,7 +112,7 @@
         name="modwmh_silver_shrapnel"
 				category="crafting_ingredient"
 				stackable="20"
-				weight="1"
+				weight="5"
 				
 			  icon_path="icons/inventory/ingredients/alchemy/powder_blasting_64x64.png"
         localisation_key_name="wmh_silver_shrapnel"
@@ -129,11 +129,11 @@
         name="modwmh_lure_container"
 				category="crafting_ingredient"
 				stackable="20"
-				weight="1"
+				weight="5"
 			  icon_path="icons/inventory/quests/mh107_czart_lure_64x64.png"
         localisation_key_name="wmh_lure_container"
         localisation_key_description="wmh_lure_container_desc"
-        price="4"
+        price="20"
       >
 				<tags>WMH_LureContainer</tags>
 				<base_abilities>
@@ -145,7 +145,7 @@
         name="modwmh_lure_repulsive"
 				category="crafting_ingredient"
 				stackable="20"
-				weight="1"
+				weight="5"
 			  icon_path="icons/inventory/quests/mh107_czart_lure_64x64.png"
         localisation_key_name="wmh_lure_repulsive"
         localisation_key_description="wmh_lure_repulsive_desc"
@@ -154,23 +154,6 @@
 				<tags>WMH_LureRepulsive</tags>
 				<base_abilities>
 					<a>base_wmh_quality_two</a>
-				</base_abilities>
-			</item>
-
-			<item
-        name="modwmh_monster_fluid"
-				category="alchemy_ingredient"
-				stackable="250"
-				grid_size="1"
-				weight="0"
-			  icon_path="icons/inventory/ingredients/monstrous/acid_kikimore_discharge_64x64.png"
-        localisation_key_name="wmh_monster_fluid"
-        localisation_key_description="wmh_monster_fluid_desc"
-        price="1"
-      >
-				<tags>WMH_CauldronIngredient_One, mod_alchemy, AlchemyIngredient, mod_valuable</tags>
-				<base_abilities>
-					<a>base_wmh_quality_four</a>
 				</base_abilities>
 			</item>
 		
