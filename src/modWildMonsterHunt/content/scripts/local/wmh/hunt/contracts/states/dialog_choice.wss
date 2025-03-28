@@ -264,7 +264,7 @@ state DialogChoice in WMH_ContractManager {
         ));
 
         choices.PushBack(SSceneChoice(
-          "Replace with favourite contract",
+          "Replace with favorite contract",
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled

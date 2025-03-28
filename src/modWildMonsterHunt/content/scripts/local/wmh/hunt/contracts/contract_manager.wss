@@ -248,14 +248,20 @@ statemachine class WMH_ContractManager {
     provider.startGroup("REWARDS").lockGroups(true);
 
     output += "<font size='24' color='#8a5551'>TARGETS:</font>" + br;
+    var add_space: bool = false;
     for pending: WMH_PendingContract in this.pending_contracts {
-      output += " - " + pending.toTargetLocNameHtml() + br;
+      if (add_space) {
+        output += ", ";
+      }
+
+      output += pending.toTargetLocNameHtml();
+      add_space = true;
 
       pending.getItemRewards(provider);
     }
 
     if (this.hunt_affix_manager.has_affix) {
-      output += br + br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.hunt_affix_manager.toLocString() + br;
+      output += br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.hunt_affix_manager.toLocString() + br;
     }
 
     var bestiary: WMH_Bestiary = WMH_getBestiary();
@@ -285,7 +291,7 @@ statemachine class WMH_ContractManager {
     }
 
     if (has_influences) {
-      output += br + br + "<font size='24' color='#8a5551'>INFLUENCES:</font>" + br;
+      output += br + "<font size='24' color='#8a5551'>INFLUENCES:</font>" + br;
       output += "<font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>";
       output += br + influences_segment;
     }
