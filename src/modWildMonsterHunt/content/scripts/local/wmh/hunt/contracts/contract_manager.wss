@@ -80,27 +80,21 @@ statemachine class WMH_ContractManager {
     }
 
     this.loadContractsFromStorage(bestiary, storage.contract);
-    this.refreshCachedHuntData();
   }
 
   public function onContractReplaced(index: int, new_contract: WMH_Contract) {
-    if (index < this.pending_contracts.Size()) {
-      var pending: WMH_PendingContract = this.pending_contracts[index];
-      
-      if (pending) {
-        if (pending.contract.type == WMH_PendingContractType_MILESTONE) {
-          return;
-        }
+    var contracts: WMH_StorageContract = WMH_getStorageContract();
 
-        this.pending_contracts[index] = (new WMH_PendingContract in this)
-          .init(
-            WMH_getBestiary(),
-            new_contract,
-            true
-          );
+    if (index < contracts.pending_contracts.Size()) {
+      var contract: WMH_Contract = contracts.pending_contracts[index];
 
-        this.refreshCachedHuntData();
+      if (contract.type == WMH_PendingContractType_MILESTONE) {
+        WMHHUD("Milestone contracts cannot be replaced");
+        return;
       }
+
+      contracts.pending_contracts[index] = new_contract;
+      this.loadContractsFromStorage(WMH_getBestiary(), contracts);
     }
   }
 
@@ -479,6 +473,8 @@ statemachine class WMH_ContractManager {
         );
       }
     }
+
+    this.refreshCachedHuntData();
   }
 
   private function refreshCachedHuntData() {
