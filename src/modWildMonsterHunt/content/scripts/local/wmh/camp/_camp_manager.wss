@@ -49,7 +49,7 @@ statemachine class WMH_CampManager {
 
     if (choice.playGoChunk == 'UnlockHerbalist') {
       this.swapAndMoveCamera(
-        Vector(738.371, 635.173, 499.505, 0),
+        Vector(738.371, 635.173, 199.505, 0),
         EulerAngles(-362.055, 15400.5, 0),
         45.0
       );
@@ -57,7 +57,7 @@ statemachine class WMH_CampManager {
     }
     if (choice.playGoChunk == 'UnlockMerchant') {
       this.swapAndMoveCamera(
-        Vector(723.572, 630.203, 499.606, 0),
+        Vector(723.572, 630.203, 199.606, 0),
         EulerAngles(-355.014, 15355.1, 0),
         25.0
       );
@@ -65,7 +65,7 @@ statemachine class WMH_CampManager {
     }
     if (choice.playGoChunk == 'UnlockGarden0') {
       this.swapAndMoveCamera(
-        Vector(750.008, 627.179, 509.439, 0),
+        Vector(750.008, 627.179, 209.439, 0),
         EulerAngles(-387.015, 15238.9, 0),
         45.0
       );
@@ -73,10 +73,10 @@ statemachine class WMH_CampManager {
     }
     if (choice.playGoChunk == 'UnlockGarden1') {
       this.swapAndMoveCamera(
-        Vector(730.812, 674.511, 507.323),
+        Vector(730.812, 674.511, 207.323),
         EulerAngles(-393.415, 15240.6, 0),
         40.0
-        // Vector(730.378, 681.878, 506.585, 0),
+        // Vector(730.378, 681.878, 206.585, 0),
         // EulerAngles(-381.575, 15263.5, 0),
         // 40.0
       );
@@ -84,7 +84,7 @@ statemachine class WMH_CampManager {
     }
     if (choice.playGoChunk == 'UnlockArmors') {
       this.swapAndMoveCamera(
-        Vector(729.304, 632.865, 500.714, 0),
+        Vector(729.304, 632.865, 200.714, 0),
         EulerAngles(-368.454, 15291.4, 0),
         25.0
       );
@@ -92,7 +92,7 @@ statemachine class WMH_CampManager {
     }
     if (choice.playGoChunk == 'UnlockWeapons') {
       this.swapAndMoveCamera(
-        Vector(726.204, 625.454, 501.816, 0),
+        Vector(726.204, 625.454, 201.816, 0),
         EulerAngles(-378.054, 15403.1, 0),
         25.0
       );
