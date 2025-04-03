@@ -157,6 +157,8 @@ statemachine class WMH_LootManager {
 
   public function getRandomCategory(seed: int, optional include_recipes: bool): WMH_LootTag {
     var max: int = WMH_LootTag_Recipe as int;
+    // -1 as we don't want recipes to be included unless the option is `true`
+    max -= 1;
 
     if (include_recipes) {
       max = EnumGetMax('WMH_AnimationCategory');
