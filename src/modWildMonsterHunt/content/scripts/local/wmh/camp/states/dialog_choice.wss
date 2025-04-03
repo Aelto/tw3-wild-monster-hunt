@@ -53,11 +53,11 @@ state DialogChoice in WMH_CampManager {
 
     while (true) {
       this.camera.teleportAndLookAt(
-        Vector(732.089, 627.481, 205.123),
+        Vector(732.089, 627.481, 105.123),
         Vector(
           724.006,
           624.475,
-          199.528
+          99.528
         )
       );
       this.camera.SetFov(40.0);
@@ -68,7 +68,7 @@ state DialogChoice in WMH_CampManager {
 
       theGame.FadeOut(0.5);
       thePlayer.TeleportWithRotation(
-        Vector(724.10, 624.88, 200.05, position.W),
+        Vector(724.10, 624.88, 100.05, position.W),
         rotation
       );
       this.camera.start();
