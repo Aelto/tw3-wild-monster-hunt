@@ -272,13 +272,13 @@ class WMH_PendingContract {
       provider.appendMoney(money);
 
       var experience: int = WMH_difficultyScaleUpF(
-        (40 + target.bentry.strength * 8)
+        (35 + target.bentry.strength * 7)
         // at level 100 the rewards are doubled, the XP should scale with
         // contract level, but it shouldn't be too high either:
         * (1 + this.contract.level.value / 100.0),
 
-        // increases it by 10% for every difficulty level
-        0.1
+        // increases it by 5% for every difficulty level
+        0.05
       ) as int;
 
       provider.appendExperience(experience);
