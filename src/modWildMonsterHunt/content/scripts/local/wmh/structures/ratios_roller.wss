@@ -56,8 +56,8 @@ class WMH_RatiosRollerGen<T> extends WMH_RatiosRoller {
     return this;
   }
 
-  public function rollItem(seed: int): T {
-    var index: int = this.roll(seed);
+  public function rollItem(seed: int, optional max_index: int): T {
+    var index: int = this.roll(seed, max_index);
 
     return this.items[index];
   }
