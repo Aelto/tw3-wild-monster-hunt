@@ -26,8 +26,8 @@ class WMH_BestiaryEntryCow extends WMH_BestiaryEntry {
     pref_time!({{
       if (underground) nospawn
 
-      if (altitude && wide) += 1.0,
-      if (!altitude && wide) += 0.5,
+      if (altitude && wide) += 0.5,
+      if (!altitude && wide) += 0.25,
       if (structures) += 0.2,
 
       night nospawn

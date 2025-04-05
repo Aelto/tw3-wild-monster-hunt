@@ -27,7 +27,7 @@ class WMH_BestiaryEntryGoat extends WMH_BestiaryEntry {
       if (underground) nospawn
 
       if (altitude) += 1.0,
-      else -= 0.5,
+      else -= 0.25,
 
       if (vegetation) += 0.2,
       if (wide) += 0.2,

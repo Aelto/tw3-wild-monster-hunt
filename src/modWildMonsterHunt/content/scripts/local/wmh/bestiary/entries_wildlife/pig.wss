@@ -26,7 +26,7 @@ class WMH_BestiaryEntryPig extends WMH_BestiaryEntry {
     pref_time!({{
       if (underground) nospawn
       
-      if (vegetation) += 0.5,
+      if (vegetation) += 0.2,
       if (structures) += 0.5,
 
       night {

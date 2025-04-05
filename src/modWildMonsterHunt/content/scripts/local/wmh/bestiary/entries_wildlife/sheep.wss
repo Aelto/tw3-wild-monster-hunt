@@ -28,7 +28,8 @@ class WMH_BestiaryEntrySheep extends WMH_BestiaryEntry {
       if (humidity) nospawn
 
       if (altitude) += 0.5,
-      if (wide) += 0.5,
+      if (wide) += 0.25,
+      if (structures) += 0.25,
 
       night nospawn
     }});

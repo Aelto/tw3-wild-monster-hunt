@@ -26,8 +26,8 @@ class WMH_BestiaryEntryHare extends WMH_BestiaryEntry {
     pref_time!({{
       if (underground || structures) nospawn
 
-      if (vegetation) += 1.0,
-      if (wide) -= 0.5,
+      if (vegetation) += 0.2,
+      if (wide) -= 0.2,
 
       if (snow || rain) *= 0.1,
     }});
