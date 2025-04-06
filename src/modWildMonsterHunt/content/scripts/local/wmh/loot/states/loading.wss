@@ -21,16 +21,6 @@ state Loading in WMH_LootManager {
       parent.loot_by_category_rollers.PushBack(new WMH_RatiosRoller in parent);
     }
 
-    parent.loot_category_roller = new WMH_RatiosRollerGen<WMH_LootTag> in parent;
-    parent.loot_category_roller.addRatio(4, WMH_LootTag_Food);
-    parent.loot_category_roller.addRatio(1, WMH_LootTag_Gear);
-    parent.loot_category_roller.addRatio(4, WMH_LootTag_Herb);
-    parent.loot_category_roller.addRatio(2.5, WMH_LootTag_Alchemy);
-    parent.loot_category_roller.addRatio(2, WMH_LootTag_Material);
-    parent.loot_category_roller.addRatio(1, WMH_LootTag_Ore);
-    parent.loot_category_roller.addRatio(0.5, WMH_LootTag_Recipe);
-    parent.loot_category_roller.addRatio(0.5, WMH_LootTag_Schematic);
-
     this.witcher = GetWitcherPlayer();
 
     this.registerLootFood();
@@ -607,9 +597,22 @@ state Loading in WMH_LootManager {
   function registerLootAlchemy() {
     parent.registerLoot(WMH_LootTag_Alchemy, 0, 'Empty bottle');
     parent.registerLoot(WMH_LootTag_Alchemy, 0, 'Alcohest');
+    parent.registerLoot(WMH_LootTag_Alchemy, 10, 'Nilfgaardian Lemon');
 
-    if (parent.maximum_loot_level.value >= 30) {
-      parent.registerLoot(WMH_LootTag_Alchemy, 30, 'Mandrake cordial');
+    // out of if on purpose:
+    parent.registerLoot(WMH_LootTag_Alchemy, 20, 'Mahakam Spirit');
+
+    if (parent.maximum_loot_level.value >= 20) {
+      parent.registerLoot(WMH_LootTag_Alchemy, 20, 'Dwarven spirit');
+      parent.registerLoot(WMH_LootTag_Alchemy, 20, 'Cherry Cordial');
+
+      if (parent.maximum_loot_level.value >= 30) {
+        parent.registerLoot(WMH_LootTag_Alchemy, 30, 'Redanian Herbal');
+
+        if (parent.maximum_loot_level.value >= 40) {
+          parent.registerLoot(WMH_LootTag_Alchemy, 40, 'Mandrake cordial');
+        }
+      }
     }
   }
 
