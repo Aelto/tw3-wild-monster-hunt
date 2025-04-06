@@ -32,15 +32,15 @@ statemachine class WMH_LootManager {
     // the container has no tags: use random tags
     var tags_size: int = tags.Size();
     if (tags_size <= 0) {
-      var new_tags_count: int = WMH_diminishingReturns(
+      var tags_size: int = WMH_diminishingReturns(
         seed,
         0.5,
         0.2
       );
 
-      while (new_tags_count > 0) {
+      while (tags_size > 0) {
         tags.PushBack(this.getRandomCategory(seed + tags_size * 2));
-        tags_size += 1;
+        tags_size -= 1;
       }
     }
 
@@ -160,6 +160,21 @@ statemachine class WMH_LootManager {
     if (include_recipes) {
       max = EnumGetMax('WMH_LootTag');
     }
+
+    // it's done here as this function may be called before the initialization
+    // is finished
+    if (!this.loot_category_roller) {
+      this.loot_category_roller = new WMH_RatiosRollerGen<WMH_LootTag> in this;
+      this.loot_category_roller.addItem(4, WMH_LootTag_Food);
+      this.loot_category_roller.addItem(1, WMH_LootTag_Gear);
+      this.loot_category_roller.addItem(4, WMH_LootTag_Herb);
+      this.loot_category_roller.addItem(2.5, WMH_LootTag_Alchemy);
+      this.loot_category_roller.addItem(2, WMH_LootTag_Material);
+      this.loot_category_roller.addItem(1, WMH_LootTag_Ore);
+      this.loot_category_roller.addItem(0.5, WMH_LootTag_Recipe);
+      this.loot_category_roller.addItem(0.5, WMH_LootTag_Schematic);
+    }
+    
 
     return this.loot_category_roller.rollItem(seed, max);
   }
