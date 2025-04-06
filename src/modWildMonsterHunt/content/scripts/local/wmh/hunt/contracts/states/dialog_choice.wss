@@ -184,53 +184,48 @@ state DialogChoice in WMH_ContractManager {
   }
 
   latent function displayChoicesViewEditFavouriteContracts() {
+    var choices: array<SSceneChoice>;
     var contract: WMH_Contract;
     var index: int;
 
-    var selected_any: bool = this.displayChoicesSelectFavouriteContract(
-      contract,
-      index
-    );
+    while (true) {
+      var selected_any: bool = this.displayChoicesSelectFavouriteContract(
+        contract,
+        index
+      );
 
-    WMH_setdialogHoverContractsListener(NULL);
-    if (selected_any) {
-      var choices: array<SSceneChoice>;
+      WMH_setdialogHoverContractsListener(NULL);
 
-      while (true) {
-        choices.Clear();
-
-        choices.PushBack(SSceneChoice(
-          "Delete",
-          false,
-          true,
-          false,
-          DialogAction_NONE,
-          'Delete'
-        ));
-
-        choices.PushBack(SSceneChoice(
-          "Cancel",
-          false,
-          true,
-          false,
-          DialogAction_GETBACK,
-          'Cancel'
-        ));
-
-        var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
-        SU_closeDialogChoiceInterface();
-
-        if (response.playGoChunk == 'Delete') {
-          var storage: WMH_StorageContract = WMH_getStorageContract();
-          storage.favourite_contracts.Erase(index);
-
-          return;
-        }
-        else {
-          return;
-        }
+      if (!selected_any) {
+        return;
       }
+      
+      choices.Clear();
+      choices.PushBack(SSceneChoice(
+        "Delete",
+        false,
+        true,
+        false,
+        DialogAction_NONE,
+        'Delete'
+      ));
 
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'Delete') {
+        var storage: WMH_StorageContract = WMH_getStorageContract();
+        storage.favourite_contracts.Erase(index);
+      }
     }
   }
 
