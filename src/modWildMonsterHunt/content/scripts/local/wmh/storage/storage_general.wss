@@ -2,6 +2,12 @@ function WMH_getStorageGeneral(): WMH_StorageGeneral {
   return thePlayer.wmh.storage.general;
 }
 
+function WMH_getStorageGeneralLevel(): WMH_Level {
+  var gen: WMH_StorageGeneral = WMH_getStorageGeneral();
+
+  return gen.level;
+}
+
 class WMH_StorageGeneral {
   public var level: WMH_Level;
 }

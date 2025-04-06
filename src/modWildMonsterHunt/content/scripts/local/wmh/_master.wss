@@ -36,7 +36,6 @@ class WMH_Master {
 
     this.exit_debounce = (new WMH_Ticker in this).init(5.0);
     this.enter_debounce = (new WMH_Ticker in this).init(5.0);
-    
     // var a: int = "compile_fail";
   }
 

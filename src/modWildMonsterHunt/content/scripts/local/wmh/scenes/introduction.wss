@@ -72,6 +72,15 @@ statemachine class WMH_SceneIntroduction {
     FactsRemove('wmh_hunt_disabled');
     Sleep(1.0);
     theGame.SaveGame(SGT_QuickSave, -1);
+    Sleep(45.0);
+    var level: WMH_Level = WMH_getStorageGeneralLevel();
+    if (level.value <= 0 && GameTimeHours(theGame.CalculateTimePlayed()) > 6) {
+      WMHTUTOFACT(
+        'WMH_overleveled',
+        "The road ahead",
+        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>.It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start"
+      );
+    }
   }
 
   latent function setupScene(): bool {

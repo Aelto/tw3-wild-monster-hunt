@@ -250,7 +250,7 @@ state DialogChoice in WMH_ContractManager {
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
-          DialogAction_MONSTERCONTRACT,
+          DialogAction_NONE,
           'ViewEditContractLowerDifficulty'
         ));
 
@@ -259,7 +259,7 @@ state DialogChoice in WMH_ContractManager {
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
-          DialogAction_MONSTERCONTRACT,
+          DialogAction_NONE,
           'ViewEditContractRaiseDifficulty'
         ));
 

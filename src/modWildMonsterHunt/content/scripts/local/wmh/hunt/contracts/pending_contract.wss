@@ -167,7 +167,7 @@ class WMH_PendingContract {
     output += this.toTargetLocNameHtml() + br;
 
     output += "<font size='18'>";
-    output += "Difficulty level " + this.contract.level.value;
+    output += "Difficulty level " + FloorF(this.contract.level.value);
     output += "</font>" + br;
 
     if (this.affix_manager.has_affix) {

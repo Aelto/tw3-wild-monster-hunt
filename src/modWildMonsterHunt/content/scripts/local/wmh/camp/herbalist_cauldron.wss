@@ -275,7 +275,7 @@ class WMH_HerbalistCauldron extends W3Container {
       }
       if (inventory.ItemHasTag(item, 'HerbGameplay')) {
         
-        output += MaxF(inventory.GetItemPrice(item), 5) * qty;
+        output += Max(inventory.GetItemPrice(item), 5) * qty;
       }
       else {
         output += inventory.GetItemPrice(item) * qty;

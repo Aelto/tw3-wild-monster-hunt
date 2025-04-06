@@ -95,6 +95,7 @@ statemachine class WMH_ContractManager {
 
       contracts.pending_contracts[index] = new_contract;
       this.loadContractsFromStorage(WMH_getBestiary(), contracts);
+      theSound.SoundEvent("gui_journal_track_quest");
     }
   }
 
@@ -255,7 +256,7 @@ statemachine class WMH_ContractManager {
     }
 
     if (this.hunt_affix_manager.has_affix) {
-      output += br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.hunt_affix_manager.toLocString() + br;
+      output += br + br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.hunt_affix_manager.toLocString() + br;
     }
 
     var bestiary: WMH_Bestiary = WMH_getBestiary();
@@ -384,7 +385,7 @@ statemachine class WMH_ContractManager {
       WMHTUTOFACT(
         'WMH_onContractCompleted',
         "Controlling the hunt",
-        "<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorite and re-used to replace unwanted contracts. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being combined result of all active contracts, keep an eye on the board for particularly efficient contracts in order to maximize the rewards each time you go out."
+        "<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorite and re-used to replace unwanted contracts. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being the combined result of all active contracts, try to keep an eye on the board for particularly efficient ones in order to maximize the rewards each time you go out."
       );
 
       provider.transferItems(thePlayer.GetInventory());
