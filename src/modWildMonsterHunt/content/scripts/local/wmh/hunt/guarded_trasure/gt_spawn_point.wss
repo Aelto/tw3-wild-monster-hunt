@@ -98,6 +98,11 @@ state Spawning in WMH_GuardTreasureSpawnPoint {
         - (parent.biome_tags.underground as int),
         "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_totem.w2ent"
       )
+      .addItem(
+        0.5
+        - (parent.biome_tags.underground as int),
+        "dlc\dlcwild_monster_hunt\data\gameplay\guarded_treasures\gt_ruins.w2ent"
+      )
       .rollItem(point_seed);
 
     WMHINFO("WMH_GuardTreasureSpawnPoint, variant = " + variant);
