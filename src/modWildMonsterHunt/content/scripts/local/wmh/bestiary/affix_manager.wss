@@ -173,7 +173,7 @@ class WMH_AffixManager {
     if (this.health_modifier != 1.0 || amplifier > 1) {
       npc.abilityManager.SetStatPointMax(
         BCS_Vitality,
-        npc.GetMaxHealth() * this.health_modifier + amplifier * 0.80
+        npc.GetMaxHealth() * (this.health_modifier + amplifier * 0.80)
       );
     }
 

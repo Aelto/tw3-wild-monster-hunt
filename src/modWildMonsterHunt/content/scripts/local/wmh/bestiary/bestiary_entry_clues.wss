@@ -19,7 +19,11 @@ class WMH_BestiaryClues extends WMH_BestiaryEntry {
     this.difficulty_scaling.maximum_count_hard = 6;
   }
 
-  public function onEntitySpawned(entity: CEntity) {
+  public function onEntitySpawned(
+    entity: CEntity,
+    seed: int,
+    hunt_level: WMH_Level
+  ) {
     var clues: WMH_MonsterClue = entity as WMH_MonsterClue;
 
     // assign the localized name of the creature this clue is from

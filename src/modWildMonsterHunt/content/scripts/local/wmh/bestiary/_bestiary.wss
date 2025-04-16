@@ -868,6 +868,8 @@ state Spawning in WMH_Bestiary {
         /*density*/ 0.01
       );
 
+      var hunt_level: WMH_Level = WMH_getContractManager().getHuntLevel();
+
       var i_1: int = 0;
       for (i_1 = 0; i_1 < templates[i].count; i_1 += 1) {
         var created_entity: CEntity = theGame.CreateEntity(
@@ -878,7 +880,7 @@ state Spawning in WMH_Bestiary {
           tags_array
         );
 
-        bentry.onEntitySpawned(created_entity);
+        bentry.onEntitySpawned(created_entity, seed + i_1, hunt_level);
 
         var npc: CNewNPC = created_entity as CNewNPC;
         if (npc) {

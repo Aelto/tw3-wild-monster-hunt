@@ -148,18 +148,37 @@ class WMH_BestiaryEntry {
   }
 
   // Entries can override this function to tweak the newly spawned entities
-  public function onEntitySpawned(entity: CEntity) {
+  public function onEntitySpawned(
+    entity: CEntity,
+    seed: int,
+    hunt_level: WMH_Level
+  ) {
     this.addCustomLoot((entity as CActor).GetInventory());
 
+    var variation: float = RandNoiseF(seed, 1.15, 0.85);
     var npc: CNewNPC = entity as CNewNPC;
     if (npc) {
-      npc.SetLevel(Max(thePlayer.GetLevel(), this.strength as int));
-      npc.abilityManager.SetStatPointMax(
-        BCS_Vitality,
-        npc.GetMaxHealth() * MaxF(this.strength * 0.25, 1.0)
-      );
-      npc.ForceSetStat(BCS_Vitality, npc.abilityManager.GetStatMax(BCS_Vitality));
+      var level: int = FloorF(MaxF(
+        thePlayer.GetLevel(),
+        this.strength + hunt_level.value * 0.5
+      ));
+      npc.SetLevel(Min(level, Min(thePlayer.GetLevel() + 20, 100)));
+
+      var health: float = npc.GetMaxHealth()
+        * (1 + this.strength * 0.02) // +100% every 50 points
+        * (1 + hunt_level.value * 0.01) // +100% every 100 points
+        * variation;
+
+      // the variation cannot bring the health lower than 95% of the vanilla
+      // value:
+      health = MaxF(health, 0.95);
+
+      npc.abilityManager.SetStatPointMax(BCS_Vitality, health);
+      npc.ForceSetStat(BCS_Vitality, health);
     }
+
+    var scale: float = variation;
+    entity.GetRootAnimatedComponent().SetScale(Vector(scale, scale, scale, scale));
   }
 
   public function onContractCompleted(
