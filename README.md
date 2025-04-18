@@ -1,5 +1,5 @@
 
-For information on how to use the mod head to the [official homepage](https://github.com/Aelto/tw3-wild-monster-hunt)
+For information on how to use the mod head to the [official homepage](https://modspot.dev/u/aeltoth/Wild-Monster-Hunt)
 
 # Development
 - The mod depends on other script utilities like tw3-sharedutils
