@@ -100,29 +100,25 @@ statemachine class WMH_ContractManager {
   }
 
   public function onContractLevelChanged(index: int, change: int) {
-    if (index < this.pending_contracts.Size()) {
-      var pending: WMH_PendingContract = this.pending_contracts[index];
+    var contracts: WMH_StorageContract = WMH_getStorageContract();
+
+    if (index < contracts.pending_contracts.Size()) {
+      var contract: WMH_Contract = contracts.pending_contracts[index];
       
-      if (pending) {
-        if (pending.contract.type == WMH_PendingContractType_MILESTONE) {
-          return;
-        }
-
-        var general: WMH_StorageGeneral = WMH_getStorageGeneral();
-        var contract: WMH_Contract = pending.contract;
-        contract.level.value = Clamp(
-          FloorF(contract.level.value + change),
-          0,
-          FloorF(general.level.value)
-        );
-
-        this.pending_contracts[index] = (new WMH_PendingContract in this)
-          .init(
-            WMH_getBestiary(),
-            contract,
-            true
-          );
+      if (contract.type == WMH_PendingContractType_MILESTONE) {
+        return;
       }
+
+      var general: WMH_StorageGeneral = WMH_getStorageGeneral();
+      contract.level.value = Clamp(
+        FloorF(contract.level.value + change),
+        0,
+        FloorF(general.level.value)
+      );
+
+      contracts.pending_contracts[index] = contract;
+      this.loadContractsFromStorage(WMH_getBestiary(), contracts);
+      theSound.SoundEvent("gui_journal_track_quest");
     }
   }
 
