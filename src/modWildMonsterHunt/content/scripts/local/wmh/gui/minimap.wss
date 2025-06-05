@@ -1,0 +1,22 @@
+@wrapMethod(CR4HudModuleMinimap2)
+function DoFading(fadeOut: bool, immediately: bool) {
+  wrappedMethod(fadeOut || WMH_isInWmhLevel(), true);
+}
+
+@wrapMethod(CR4HudModuleBase)
+function SetEnabled(value: bool) {
+  if (this.mcAnchorMiniMap != "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
+    value = false;
+  }
+
+  wrappedMethod(value);
+}
+
+@wrapMethod(CR4HudModuleBase)
+function ShowElement(show: bool, optional bImmediately: bool) {
+  if (this.mcAnchorMiniMap != "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
+    show = false;
+  }
+
+  wrappedMethod(show, bImmediately);
+}

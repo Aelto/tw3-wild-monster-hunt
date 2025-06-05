@@ -1,0 +1,67 @@
+@wrapMethod(CR4HudModuleQuests)
+function SendQuestName() {
+  if (!WMH_isInWmhLevel()) {
+    wrappedMethod();
+    return;
+  }
+
+  var flashValueStorage: CScriptedFlashValueStorage = this.GetModuleFlashValueStorage();
+
+  this.m_fxSetSystemQuestInfo.InvokeSelfThreeArgs(
+    FlashArgString("Active contracts"),
+    FlashArgInt(0xc0c0c0),
+    FlashArgBool(false)
+  );
+}
+
+@wrapMethod(CR4HudModuleQuests)
+function SendObjectives() {
+  if (!WMH_isInWmhLevel()) {
+    wrappedMethod();
+    return;
+  }
+
+  var flash_array: CScriptedFlashArray = this.GetModuleFlashValueStorage()
+    .CreateTempFlashArray();
+
+  var contracts: WMH_ContractManager = WMH_getContractManager();
+  for pending: WMH_PendingContract in contracts.pending_contracts {
+    var flash_object: CScriptedFlashObject = this.GetModuleFlashValueStorage()
+      .CreateTempFlashObject();
+
+    var target: string = pending.toTargetLocNameHtml();
+    if (pending.getType() == WMH_PendingContractType_MILESTONE) {
+
+    }
+    
+    flash_object.SetMemberFlashString("name", target);
+    flash_object.SetMemberFlashBool(
+      "isHighlighted",
+      pending.getType() == WMH_PendingContractType_MILESTONE
+    );
+    flash_object.SetMemberFlashBool("isMutuallyExclusive", false);
+    flash_object.SetMemberFlashBool("isNew", false);
+    flash_array.PushBackFlashObject(flash_object);
+  }
+
+  this.GetModuleFlashValueStorage().SetFlashArray("hud.quest.system.objectives", flash_array );
+  this.ShowQuestTracker(WMH_getHuntManager().isInHunt());
+}
+
+@addMethod(CR4HudModuleQuests)
+function WMH_updateQuestTrackerObjectives() {
+  // this method is private, hence the @addMethod to access it
+  this.UpdateQuest();
+}
+
+function WMH_updateQuestTrackerObjectives() {
+  var hud: CR4ScriptedHud = theGame.GetHud() as CR4ScriptedHud;
+  if (hud) {
+    var questsModule: CR4HudModuleQuests = hud
+      .GetHudModule( "QuestsModule" ) as CR4HudModuleQuests;
+
+    if (questsModule) {
+      questsModule.WMH_updateQuestTrackerObjectives();
+    }
+  }
+}
