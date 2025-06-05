@@ -78,7 +78,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_overleveled',
         "The road ahead",
-        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>.It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start"
+        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>. It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start"
       );
     }
   }
@@ -223,7 +223,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCampMaster',
         "Camp Master",
-        "Need to upgrade the camp or recruit new craftsmen? The <font color='#CD7D03'>Camp Master</font> can arrange the Witcher Camp by adding new upgrades and by hiring people who can get you better gear.<br/><br/>Additionally, if you look around the camp, you will find different furnitures that he set up for you. They provide various advantages for your hunts and can be improved for greater & longer effects."
+        "The <font color='#CD7D03'>Camp Master</font> can arrange the Witcher Camp by adding new upgrades and by hiring people who can get you better gear.<br/><br/>Additionally, if you look around the camp, you will find different furnitures that he set up for you. They provide various advantages for your hunts and can be improved for greater & longer effects."
       );
     }
 
@@ -288,7 +288,7 @@ statemachine class WMH_SceneIntroduction {
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
       "Prepare for the Hunt",
-      "Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your skills and <font color='#CD7D03'>ready yourself for the trials that await</font>."
+      "Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your swords and <font color='#CD7D03'>ready yourself for the trials that await</font>."
     );
 
     this.tick(2, camera, position, rotation);

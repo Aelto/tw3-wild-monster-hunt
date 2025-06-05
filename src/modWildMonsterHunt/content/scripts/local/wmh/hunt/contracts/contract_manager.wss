@@ -381,7 +381,7 @@ statemachine class WMH_ContractManager {
       WMHTUTOFACT(
         'WMH_onContractCompleted',
         "Controlling the hunt",
-        "<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorite and re-used to replace unwanted contracts. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being the combined result of all active contracts, try to keep an eye on the board for particularly efficient ones in order to maximize the rewards each time you go out."
+        "<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorites and re-used to replace unwanted ones. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being the combined result of all active contracts, try to keep an eye on the board for particularly efficient ones in order to maximize the rewards each time you go out."
       );
 
       provider.transferItems(thePlayer.GetInventory());
