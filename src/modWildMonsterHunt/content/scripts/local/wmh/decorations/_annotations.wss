@@ -9,36 +9,74 @@
   - 
 */
 
-@addMethod(W3PlayerAbilityManager)
-function WMH_DECO_clearDecorationPerks() {
+@wrapMethod(W3PlayerAbilityManager)
+function IsSkillEquipped(skill: ESkill): bool {
+  return wrappedMethod(skill)
+      || thePlayer.wmh.storage.decorations.decoration_perks.Contains(skill);
+}
+
+@wrapMethod(W3PlayerAbilityManager)
+function CanUseSkill(skill : ESkill) : bool {
+  return wrappedMethod(skill)
+      || thePlayer.wmh.storage.decorations.decoration_perks.Contains(skill);
+}
+
+@wrapMethod(W3PlayerAbilityManager)
+function GetSkillLevel(skill: ESkill): int {
+  var count: int;
+
   for perk: ESkill in thePlayer.wmh.storage.decorations.decoration_perks {
-    // replicate what the vanilla code does
-    this.skills[perk].level -= 1;
-    this.skills[perk].isTemporary = false;
-
-    this.pathPointsSpent[this.skills[perk].skillPath] -= 1;
-
-    if (this.skills[perk].level < 1) {
-      var index: int = this.GetSkillSlotID(perk);
-
-      if (index >= 0) {
-        this.UnequipSkill(index);
-      }
-    }
+    count += (skill == perk) as int;
   }
 
-  thePlayer.wmh.storage.decorations.decoration_perks.Clear();
+  return wrappedMethod(skill) + count;
+}
+
+@wrapMethod(W3PlayerAbilityManager)
+function GetBoughtSkillLevel(skill: ESkill): int {
+  var count: int;
+
+  for perk: ESkill in thePlayer.wmh.storage.decorations.decoration_perks {
+    count += (skill == perk) as int;
+  }
+
+  return wrappedMethod(skill) + count;
+}
+
+@addMethod(W3PlayerAbilityManager)
+function WMH_DECO_clearDecorationPerks() {
+  // commented out as we don't add temporary skills anymore, instead we wrap
+  // all getter methods about skills and modify values based on the decorations
+  // storage on top of the vanilla results
+
+  // for perk: ESkill in thePlayer.wmh.storage.decorations.decoration_perks {
+  //   // replicate what the vanilla code does
+  //   this.skills[perk].level -= 1;
+  //   this.skills[perk].isTemporary = false;
+
+  //   this.pathPointsSpent[this.skills[perk].skillPath] -= 1;
+
+  //   if (this.skills[perk].level < 1) {
+  //     var index: int = this.GetSkillSlotID(perk);
+
+  //     if (index >= 0) {
+  //       this.UnequipSkill(index);
+  //     }
+  //   }
+  // }
 }
 
 @addMethod(CR4Player)
 function WMH_DECO_clearDecorationPerks() {
-  if (this.abilityManager && this.abilityManager.IsInitialized()) {
-    (this.abilityManager as W3PlayerAbilityManager)
-      .WMH_DECO_clearDecorationPerks();
+  // if (this.abilityManager && this.abilityManager.IsInitialized()) {
+  //   (this.abilityManager as W3PlayerAbilityManager)
+  //     .WMH_DECO_clearDecorationPerks();
 
-    (this.abilityManager as W3PlayerAbilityManager)
-      .WMH_DECO_clearDecorationPerks();
-  }
+  //   (this.abilityManager as W3PlayerAbilityManager)
+  //     .WMH_DECO_clearDecorationPerks();
+  // }
+
+  thePlayer.wmh.storage.decorations.decoration_perks.Clear();
 }
 
 @wrapMethod(W3PlayerWitcher)
@@ -211,6 +249,6 @@ function WMH_DECO_addDecorationPerk(skill: ESkill) {
 
   WMHINFO("WMH_DECO_addDecorationPerk, skill = " + skill);
 
-  thePlayer.AddSkill(skill, is_temporary);
+  // thePlayer.AddSkill(skill, is_temporary);
   thePlayer.wmh.storage.decorations.decoration_perks.PushBack(skill);
 }
