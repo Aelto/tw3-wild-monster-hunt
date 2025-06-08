@@ -108,16 +108,6 @@ class WMH_Master {
     );
   }
 
-  public function submitOnSpawnClues(
-    origin: WMH_PendingContract,
-    bentry: WMH_BestiaryEntry,
-    location: WMH_BiomeSpawnPoint,
-    clues_heading: float,
-    seed: int
-  ) {
-    this.bestiary.onSpawnClues(bentry, location, clues_heading, seed);
-  }
-
   public function submitOnSpawnLure(
     origin: WMH_LureSpot,
     creature_bypass_tag: name,
@@ -147,18 +137,6 @@ class WMH_Master {
 
     this.hunt.onEncounterSpawned(entries);
     this.hunt.encounters.onEncounterSpawned(encounter);
-  }
-
-  public function submitOnCluesSpawned(
-    origin: WMH_SpawnRequestClues,
-    spawn_point: WMH_BiomeSpawnPoint,
-    entries: array<WMH_BestiaryEntry>,
-    entities: array<CEntity>
-  ) {
-    var encounter: WMH_EncounterClues = (new WMH_EncounterClues in this)
-      .initClues(spawn_point, entries, entities);
-
-    this.hunt.encounters.onCluesSpawned(encounter);
   }
 
   public function submitOnLureSpawned(

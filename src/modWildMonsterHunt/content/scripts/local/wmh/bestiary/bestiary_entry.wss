@@ -44,7 +44,7 @@ class WMH_BestiaryEntry {
   }
 
   // This can also be used to determine if an entry can spawn. If the ratio is
-  // greater than 0 than it can potentially spawn.
+  // greater than 0 then it can potentially spawn.
   public function canSpawn(
     biome: WMH_BiomeTags,
     day_hour: float,

@@ -1,21 +1,33 @@
 class WMH_EncounterClues extends WMH_Encounter {
-  private var oneliner: WMH_GameplayOnelinerEntity;
+  private var oneliner_distant: WMH_GameplayOnelinerEntity;
+  private var oneliner_close: WMH_GameplayOnelinerEntity;
+
+  private var contract: WMH_PendingContract;
 
   public function initClues(
     spawn_point: WMH_BiomeSpawnPoint,
     entries: array<WMH_BestiaryEntry>,
-    entities: array<CEntity>
+    entities: array<CEntity>,
+    contract: WMH_PendingContract
   ): WMH_EncounterClues {
     this.spawn_point = spawn_point;
     this.entries = entries;
     this.entities = entities;
+    this.contract = contract;
 
-    this.oneliner = WMH_gameplayOnelinerEntity(
+    this.oneliner_distant = WMH_gameplayOnelinerEntity(
       "<img src='img://icons/perks/s_perk_1.png' vspace='-10' />",
       this.spawn_point
     );
-    this.oneliner.render_distance = 50;
-    this.oneliner.offset = Vector(0, 0, 1.5);
+    this.oneliner_distant.render_distance = 150;
+    this.oneliner_distant.offset = Vector(0, 0, 1.5);
+
+    this.oneliner_distant = WMH_gameplayOnelinerEntity(
+      contract.toTargetLocNameHtml() + " tracks",
+      this.spawn_point
+    );
+    this.oneliner_distant.render_distance = 20;
+    this.oneliner_distant.offset = Vector(0, 0, 0.5);
 
     return this;
   }
@@ -30,8 +42,8 @@ class WMH_EncounterClues extends WMH_Encounter {
       entity.Destroy();
     }
 
-    if (this.oneliner) {
-      this.oneliner.unregister();
+    if (this.oneliner_distant) {
+      this.oneliner_distant.unregister();
     }
 
     if (this.spawn_point) {

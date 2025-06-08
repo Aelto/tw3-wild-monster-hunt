@@ -155,15 +155,24 @@ class WMH_SpawnRequest {
 }
 
 class WMH_SpawnRequestClues extends WMH_SpawnRequest {
+  private var pending_contract: WMH_PendingContract;
+
   public function onRequestFinished(entities: array<CEntity>) {
     WMHINFO("WMH_SpawnRequestClues::onRequestFinished, entities.Size() = " + entities.Size());
 
-    thePlayer.wmh.submitOnCluesSpawned(
-      this,
-      this.spawn_point,
-      this.entries,
-      entities
-    );
+    var encounter: WMH_EncounterClues = (new WMH_EncounterClues in this)
+      .initClues(
+        this.spawn_point,
+        this.entries,
+        entities,
+        this.pending_contract
+      );
+
+    WMH_getEncounterManager().onCluesSpawned(encounter);
+  }
+
+  public function withPendingContract(pending: WMH_PendingContract) {
+    this.pending_contract = pending;
   }
 }
 
