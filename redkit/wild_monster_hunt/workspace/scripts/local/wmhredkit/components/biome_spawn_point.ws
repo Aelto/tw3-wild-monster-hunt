@@ -91,7 +91,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	}
 
 	public function canSpawnClues(): bool {
-		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clues_time);
+		return !WMH_getHuntManager().hasHappenedDuringHunt(this.last_clues_time);
 	}
 
 	public function canSpawnWildlife(): bool {
