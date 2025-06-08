@@ -27,6 +27,7 @@ statemachine class WMH_ContractManager {
     }
 
     this.refreshCachedHuntData();
+    WMH_updateQuestTrackerObjectives();
   }
 
   public function onHuntFinished(

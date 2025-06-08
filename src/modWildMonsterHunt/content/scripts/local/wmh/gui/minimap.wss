@@ -5,7 +5,7 @@ function DoFading(fadeOut: bool, immediately: bool) {
 
 @wrapMethod(CR4HudModuleBase)
 function SetEnabled(value: bool) {
-  if (this.mcAnchorMiniMap != "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
+  if (this.m_anchorName == "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
     value = false;
   }
 
@@ -14,7 +14,7 @@ function SetEnabled(value: bool) {
 
 @wrapMethod(CR4HudModuleBase)
 function ShowElement(show: bool, optional bImmediately: bool) {
-  if (this.mcAnchorMiniMap != "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
+  if (this.m_anchorName == "mcAnchorMiniMap" && WMH_isInWmhLevel()) {
     show = false;
   }
 
