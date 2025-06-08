@@ -282,9 +282,11 @@ state DialogChoice in WMH_ContractManager {
 
       if (response.playGoChunk == 'ViewEditContractLowerDifficulty') {
         WMH_getContractManager().onContractLevelChanged(index, -5);
+        return;
       }
       else if (response.playGoChunk == 'ViewEditContractRaiseDifficulty') {
         WMH_getContractManager().onContractLevelChanged(index, 5);
+        return;
       }
       else if (response.playGoChunk == 'ViewEditContractReplaceFavourite') {
         var new_contract: WMH_Contract;
