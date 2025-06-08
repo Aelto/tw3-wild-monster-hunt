@@ -499,4 +499,12 @@ statemachine class WMH_ContractManager {
       }
     }
   }
+
+  private function refreshNearbyNoticeboards() {
+    var boards: array<WMH_NoticeBoard> = WMH_findNearbyNoticeboards();
+
+    for board: WMH_NoticeBoard in boards {
+      board.setupContractOneliners(true);
+    }
+  }
 }

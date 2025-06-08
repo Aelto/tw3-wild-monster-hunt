@@ -1,3 +1,28 @@
+function WMH_findNearbyNoticeboards(): array<WMH_NoticeBoard> {
+  var entities: array<CGameplayEntity>;
+  var output: array<WMH_NoticeBoard>;
+  var board: WMH_NoticeBoard;
+  var i: int;
+
+  FindGameplayEntitiesInRange(
+    entities,
+    thePlayer as CNode,
+    radius,
+    count, // max results
+    'WMH_NoticeBoard'
+  );
+
+  for (i = 0; i < entities.Size(); i += 1) {
+    var board = (WMH_NoticeBoard)entities[i];
+
+    if (board) {
+      output.PushBack(board);
+    }
+  }
+
+  return output;
+}
+
 class WMH_NoticeBoard extends W3NoticeBoard {
   private var oneliners: array<SU_OnelinerEntity>;
   private var general_oneliner: SU_OnelinerEntity;
@@ -8,7 +33,7 @@ class WMH_NoticeBoard extends W3NoticeBoard {
   event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
     super.OnAreaEnter(area, activator);
 
-    this.setupContractOneliners(thePlayer.wmh.hunt.contract);
+    this.setupContractOneliners();
   }
 
   event OnInteraction(actionName: string, activator: CEntity) {
@@ -33,22 +58,26 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     );
 
     if (activator == thePlayer) {
-      this.setupContractOneliners(thePlayer.wmh.hunt.contract);
+      this.setupContractOneliners();
     }
   }
 
-  public function setupContractOneliners(contract_manager: WMH_ContractManager) {
-    this.contract_manager = contract_manager;
+  public function setupContractOneliners(optional force: bool) {
+    this.contract_manager = WMH_getContractManager();
 
     if (!this.update_cooldown) {
       this.update_cooldown = (new WMH_Ticker in this).init(5.0);
+    }
+
+    if (force) {
+      this.update_cooldown.reset();
     }
 
     this.AddTimer('setupContractOnelinersTimer', 2.0);
   }
 
   private timer function setupContractOnelinersTimer(delta: float, id: int) {
-    var target_names: array<string> = this.contract_manager.getPendingTargetsNameHtml();
+    var target_names: array<string> =   .getPendingTargetsNameHtml();
     var oneliner: SU_OnelinerEntity;
     var contract_level: WMH_Level;
     var general_text: string;
