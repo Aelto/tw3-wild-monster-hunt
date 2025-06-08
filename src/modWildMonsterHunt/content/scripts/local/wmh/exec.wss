@@ -23,7 +23,7 @@ exec function wmhaddruneofpower() {
   WMH_runeSetPerk(
     thePlayer.inv,
     rune,
-    S_Magic_s06
+    S_Magic_s03
   );
 }
 
