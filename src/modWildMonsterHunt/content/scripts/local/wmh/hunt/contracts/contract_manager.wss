@@ -81,6 +81,7 @@ statemachine class WMH_ContractManager {
     }
 
     this.loadContractsFromStorage(bestiary, storage.contract);
+    WMH_updateQuestTrackerObjectives();
   }
 
   public function onContractReplaced(index: int, new_contract: WMH_Contract) {
