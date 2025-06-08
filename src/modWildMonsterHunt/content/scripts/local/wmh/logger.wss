@@ -60,6 +60,16 @@ enum WMH_LogLevel {
   WMHLL_Hud = 3
 }
 
+#define function println(code) {
+  #pragma find {
+  #pragma replace "+
+
+  #pragma find }
+  #pragma replace +"
+
+  WMHINFO(code)
+};
+
 function WMHINFO(message: string) {
   #ifdef DEBUG {
     thePlayer.wmh.logger.log(message, WMHLL_Info);
