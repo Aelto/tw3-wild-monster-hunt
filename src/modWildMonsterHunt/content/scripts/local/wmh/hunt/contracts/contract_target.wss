@@ -103,11 +103,10 @@ class WMH_ContractTarget {
       return;
     }
 
-    var clues_points: array<WMH_BiomeSpawnPoint>;
     var spawn_points: array<WMH_BiomeSpawnPoint> = bestiary
-      .getAvailableNearbySpawnPoints(this.bentry);
+      .getAvailableNearbySpawnPoints(this.bentry, true);
 
-      // WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
+      WMHINFO("trySpawningClues(), points.Size() = " + spawn_points.Size());
 
     var target_index: int = this.getTargetLocationIndex();
     var target_location_copy: WMH_PendingContractLocation = this
@@ -128,16 +127,18 @@ class WMH_ContractTarget {
       var position: Vector = point.GetWorldPosition();
       var distance: float = VecDistanceSquared2D(target_position, position);
 
-      // 10% less chances for every 50 meters
-      var chances: float = 1.0 - (distance / 50.0) * 0.1;
+      // 10% less chances for every 100 meters
+      var chances: float = MaxF(0.1, 1.0 - (distance / (100.0*100.0)) * 0.1);
       var point_seed: int = point.getPointSeed(hunt_seed);
-      var allowed: bool = RandNoiseF(point_seed, 1.0) < chances;
+      var allowed: bool = chances > 0 && RandNoiseF(point_seed, 1.0) < chances;
+
+      WMHINFO("trySpawningClues(), chances = " + chances + " allowed = " + allowed);
       if (allowed) {
         var point_to_target_heading: float = VecHeading(
           target_position - position
         );
 
-        thePlayer.wmh.submitOnSpawnClues(
+        WMH_getBestiary().onSpawnClues(
           pending_contract,
           this.bentry,
           point,
