@@ -35,11 +35,7 @@ statemachine class WMH_ContractManager {
     storage: WMH_Storage,
     optional killed_creatures: array<WMH_HuntKill>
   ) {
-    var previous_level: WMH_Level = storage.general.level;
-    var next_milestone: WMH_Level = WMH_Level(
-      ((previous_level.value as int) / this.milestoneContractsInterval() + 1)
-      * this.milestoneContractsInterval()
-    );
+    var next_milestone: WMH_Level = this.getNextMilestoneLevel();
 
     this.loadContractsFromStorage(bestiary, storage.contract);
 
@@ -227,10 +223,31 @@ statemachine class WMH_ContractManager {
     return output;
   }
 
+  public function getNextMilestoneLevel(): WMH_Level {
+    var storage: WMH_Storage = WMH_getStorage();
+    var previous_level: WMH_Level = storage.general.level;
+    var next_milestone: WMH_Level = WMH_Level(
+      ((previous_level.value as int) / this.milestoneContractsInterval() + 1)
+      * this.milestoneContractsInterval()
+    );
+
+    return next_milestone;
+  }
+
   // returns how many WMH_Levels are needed before a new milestone contract is
   // generated.
   public function milestoneContractsInterval(): int {
     return 5;
+  }
+
+  public function hasPendingMilestoneContract(): bool {
+    for contract: WMH_PendingContract in this.pending_contracts {
+      if (contract.getType() == WMH_PendingContractType_MILESTONE) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function toContractsDescriptionHtml(): string {
@@ -309,28 +326,6 @@ statemachine class WMH_ContractManager {
     }
 
     storage.contract.completed_contracts_count += 1;
-
-    // experience gain is locked until the milestone contract is completed.
-    if (!this.hasPendingMilestoneContract()) {
-      WMHINFO("onContractCompleted, old level = " +  storage.general.level.value);
-      // the formula makes that any contract of the same level grants 100% of a
-      // level as experience. Then as the general.level increases it will require
-      // stronger and stronger contracts to level up.
-      var gain: float = MinF(
-        ((pending.contract.level.value + 1.0) as float)
-        / ((storage.general.level.value + 1.0) as float),
-
-        // the maximum of levels that we can get from a single contract:
-        2
-      );
-
-      storage.general.level.value = MinF(
-        maximum_level.value,
-        storage.general.level.value + gain
-      );
-
-      WMHINFO("onContractCompleted, new level = " +  storage.general.level.value);
-    }
   }
 
   private function finishCompletedContracts(
@@ -389,16 +384,6 @@ statemachine class WMH_ContractManager {
       provider.transferItems(thePlayer.GetInventory());
       WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
     }
-  }
-
-  private function hasPendingMilestoneContract(): bool {
-    for contract: WMH_PendingContract in this.pending_contracts {
-      if (contract.getType() == WMH_PendingContractType_MILESTONE) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   private function finishExpiredContracts(

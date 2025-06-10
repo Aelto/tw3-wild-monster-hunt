@@ -8,6 +8,7 @@ struct WMH_RewardGroup {
   var reason: string;
   var items: array<WMH_ItemQuantity>;
   var experience: int;
+  var reputation: float;
 }
 
 
@@ -44,6 +45,10 @@ class WMH_RewardProvider {
 
   public function appendExperience(quantity: int): WMH_RewardProvider {
     return this.addExperience(this.active_group, quantity);
+  }
+
+  public function appendReputation(quantity: float): WMH_RewardProvider {
+    return this.addReputation(this.active_group, quantity);
   }
 
   public function addMoney(reason: string, quantity: int): WMH_RewardProvider {
@@ -115,6 +120,31 @@ class WMH_RewardProvider {
     return this;
   }
 
+  public function addReputation(
+    reason: string,
+    quantity: float
+  ): WMH_RewardProvider {
+    var i: int;
+
+    if (quantity <= 0) {
+      return this;
+    }
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      if (this.groups[i].reason == reason) {
+        this.groups[i].float += quantity;
+        return this;
+      }
+    }
+
+    // no group with the given name was found, add it
+    this.groups.PushBack(WMH_RewardGroup(reason));
+    this.groups[this.groups.Size() - 1].float += quantity;
+
+
+    return this;
+  }
+
   public function toHtml(
     inventory: CInventoryComponent,
     optional skip_reason: bool,
@@ -140,6 +170,18 @@ class WMH_RewardProvider {
                 + "<font size='18'>"
                 + WMH_leftPad(this.groups[i].experience, 3)
                 + "</font>";
+      }
+
+      if (this.groups[i].reputation > 0) {
+        if (WMH_getContractManager().hasPendingMilestoneContract()) {
+          message += "<br/> milestone contract active: REP gains locked"
+        }
+        else {
+          message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; REP &nbsp;&nbsp;&nbsp;&nbsp;"
+                  + "<font size='18'>"
+                  + WMH_leftPad(FloorF(this.groups[i].reputation * 10) * 0.1, 3)
+                  + "</font>";
+        }
       }
 
       if (!include_item_names) {
@@ -186,6 +228,7 @@ class WMH_RewardProvider {
 
   public function transferItems(inventory: CInventoryComponent) {
     var total_experience: int = 0;
+    var total_reputation: float = 0;
     var i: int;
 
     for (i = 0; i < this.groups.Size(); i += 1) {
@@ -209,11 +252,28 @@ class WMH_RewardProvider {
       }
 
       total_experience += this.groups[i].experience;
+      total_reputation += this.groups[i].reputation;
     }
 
     // experience is hardcoded for the player:
     if (total_experience > 0) {
       GetWitcherPlayer().AddPoints(EExperiencePoint, total_experience, true);
+    }
+
+    if (total_reputation > 0) {
+      var contracts: WMH_ContractManager = WMH_getContractManager();
+
+      if (!contracts.hasPendingMilestoneContract()) {
+        var maximum: WMH_Level = contracts.getNextMilestoneLevel();
+        var storage: WMH_Storage = WMH_getStorage();
+
+        WMHINFO("transferItems, old reputation = " +  storage.general.level.value);
+        storage.general.level.value = MinF(
+          maximum_level.value,
+          storage.general.level.value + total_reputation
+        );
+        WMHINFO("transferItems, new reputation = " +  storage.general.level.value);
+      }
     }
   }
 

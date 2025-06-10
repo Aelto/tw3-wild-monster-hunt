@@ -282,6 +282,9 @@ class WMH_PendingContract {
       ) as int;
 
       provider.appendExperience(experience);
+      provider.appendReputation(
+        this.getReputationReward(WMH_getStorageGeneralLevel())
+      );
 
       var can_drop_reagent: bool = RandNoiseF(this.getContractSeed(), 1.0)
         < MinF(target.bentry.strength * 0.1, 0.5);
@@ -290,6 +293,18 @@ class WMH_PendingContract {
         provider.appendItem('modwmh_melding_reagent', 1);
       }
     }
+  }
+
+  public function getReputationReward(current_level: float): float {
+    // the formula makes that any contract of the same level grants 100% of a
+    // level as experience. Then as the current_level increases it will require
+    // stronger and stronger contracts to level up.
+    return MinF(
+      ((this.contract.level.value + 1.0) as float) / (current_level + 1.0),
+
+      // the maximum of levels that we can get from a single contract:
+      2
+    );
   }
 
   private function trySpawningTarget(hunt_seed: int) {
