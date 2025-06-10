@@ -117,10 +117,18 @@ class WMH_RewardProvider {
 
   public function toHtml(
     inventory: CInventoryComponent,
-    optional skip_reason: bool
+    optional skip_reason: bool,
+    optional max_lines: int
   ): string {
     var message: string;
     var i: int;
+
+    if (max_lines <= 0) {
+      max_lines = 15;
+    }
+
+    var include_item_names: bool = this.countLines() < max_lines;
+    
 
     for (i = 0; i < this.groups.Size(); i += 1) {
       if (!skip_reason) {
@@ -134,17 +142,40 @@ class WMH_RewardProvider {
                 + "</font>";
       }
 
+      if (!include_item_names) {
+        message += "<br/>";
+      }
+
       var k: int;
+      var items_counter: int;
       for (k = 0; k < this.groups[i].items.Size(); k += 1) {
-        message += "<br/> <img src='img://"
-                 + inventory.GetItemIconPathByName(this.groups[i].items[k].item)
-                 + "' height='48' width='48' vspace='-24' />"
-                 + "<font size='18'>"
-                 + WMH_leftPad(this.groups[i].items[k].quantity, 3) + "x</font> "
-                 + GetLocStringByKeyExt(
-                  theGame.GetDefinitionsManager()
-                  .GetItemLocalisationKeyName(this.groups[i].items[k].item)
-                 );
+        var item_icon: string = "<img src='img://"
+                  + inventory.GetItemIconPathByName(this.groups[i].items[k].item)
+                  + "' height='48' width='48' vspace='-24' />";
+
+        var item_count: string = "<font size='18'>"
+                  + WMH_leftPad(this.groups[i].items[k].quantity, 3)
+                  + "x</font> ";
+
+        // a line break is added every 3 icons, or every line if item names are
+        // included:
+        items_counter += 1;
+        if (items_counter >= 3 || include_item_names) {
+          message += "<br/> ";
+          items_counter = 0;
+        }
+
+        if (include_item_names) {
+          message += item_icon
+                  + item_count
+                  + GetLocStringByKeyExt(
+                    theGame.GetDefinitionsManager()
+                    .GetItemLocalisationKeyName(this.groups[i].items[k].item)
+                  );
+        }
+        else {
+          message += " " + item_count + item_icon + "&nbsp;&nbsp;&nbsp;";
+        }
       }
 
       message += "<br />";
@@ -184,5 +215,20 @@ class WMH_RewardProvider {
     if (total_experience > 0) {
       GetWitcherPlayer().AddPoints(EExperiencePoint, total_experience, true);
     }
+  }
+
+  public function countLines(optional skip_reason: bool): int {
+    var output: int;
+    var i: int;
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      if (!skip_reason) {
+        output += 1; // for the reason
+      }
+
+      output += this.groups[i].items.Size();
+    }
+
+    return output;
   }
 }

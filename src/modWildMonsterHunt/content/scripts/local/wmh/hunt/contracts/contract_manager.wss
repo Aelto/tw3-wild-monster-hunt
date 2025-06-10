@@ -289,7 +289,7 @@ statemachine class WMH_ContractManager {
       output += br + influences_segment;
     }
 
-    output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true) + br;
+    output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true, 10) + br;
 
     return output;
   }
