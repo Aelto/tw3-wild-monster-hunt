@@ -129,7 +129,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	}
 
 	public function consumeForClues() {
-		this.last_clues = WMH_getEngineTimeAsSeconds();
+		this.last_clues_time = WMH_getEngineTimeAsSeconds();
 	}
 
 	public function consumeForWildlife() {
