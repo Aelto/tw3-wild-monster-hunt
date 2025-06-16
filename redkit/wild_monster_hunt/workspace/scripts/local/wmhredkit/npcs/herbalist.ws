@@ -1,109 +1,1 @@
-/*
-the code is currently unused, commented out for when it'll finally be used but
-note that it can cause a conflict with the more-quickslots mod.
-
-
-// A type of merchant that doesn't use a scene to open its selling menu, interacting
-// with it goes straight to the menu.
-class WMH_HerbalistNPC extends W3MerchantNPC {
-  private var quickMerchantScenePlayer: WMH_QuickMerchantScenePlayer;
-
-  event OnInteraction(actionName: string, activator: CEntity) {
-    var inventory: CInventoryComponent;
-    
-    inventory = this.GetInventory();
-    
-    // notice the switch between `inventory` and `this` sometimes.
-    if (!inventory.HasTag('Merchant')) {
-      inventory.AddTag('Merchant');
-    }
-    
-    if (this.HasTag('Merchant')) {
-      this.AddTag('Merchant');
-    }
-    
-    this.quickMerchantScenePlayer = new WMH_QuickMerchantScenePlayer in this;
-    this.quickMerchantScenePlayer.entity = (CGameplayEntity)this;
-    this.quickMerchantScenePlayer.start();
-  }
-}
-
-// a custom class that controls the price of selling/buying items
-class WMH_HerbalistGuiShopInventoryComponent extends W3GuiShopInventoryComponent {
-  protected function ShopHasInfiniteFunds(): bool {
-    return true;
-  }
-
-  // Shop is selling Item to the Player
-  public function GiveItem( itemId : SItemUniqueId, customer : W3GuiBaseInventoryComponent, optional quantity : int, optional out newItemID : SItemUniqueId ) : bool
-  {
-    var customerMoney : int;
-    var itemPrice : int;
-    var success : bool;
-    var invItem : SInventoryItem;
-
-    success = false;
-    
-    if( quantity < 1 )
-    {
-      quantity = 1;
-    }
-
-    customerMoney = customer._inv.GetMoney();
-
-    invItem = _inv.GetItem( itemId );
-    
-    // items are bought for 5 crowns, it acts as a small gold sink.
-    itemPrice = 5; // _inv.GetInventoryItemPriceModified( invItem, false ) * quantity;
-    
-    if ( customerMoney >= itemPrice )
-    {
-      success = super.GiveItem( itemId, customer, quantity, newItemID );
-      if ( success )
-      {
-        customer._inv.RemoveMoney( itemPrice );
-        
-        // if ( !ShopHasInfiniteFunds() )
-        // {
-        //   _inv.AddMoney( itemPrice );
-        // }
-      }
-    }
-    return success;
-  }
-
-  // Shop is purchasing Item from the Player; Giver = Player
-  public function ReceiveItem( itemId : SItemUniqueId, giver : W3GuiBaseInventoryComponent, optional quantity : int, optional out newItemID : SItemUniqueId ) : bool
-  {
-    // this is a copy of the vanilla code, except for the place where it gets
-    // the item's price.
-    var shopMoney : int;
-    var itemCost : int;
-    var success : bool;
-    var invItem : SInventoryItem;
-
-    shopMoney = _inv.GetMoney();
-
-    invItem = giver._inv.GetItem( itemId );
-    
-    // items are always sold for 1 crown
-    itemCost = 1; // _inv.GetInventoryItemPriceModified( invItem, true ) * quantity;
-
-    success = false;
-
-    if ( itemCost >= 0 && ( shopMoney >= itemCost || ShopHasInfiniteFunds() ) )
-    {
-      success = super.ReceiveItem( itemId, giver, quantity, newItemID );
-      if ( success )
-      {
-        // if ( !ShopHasInfiniteFunds() )
-        // {
-        //   _inv.RemoveMoney( itemCost );
-        // }
-        giver._inv.AddMoney( itemCost );
-      }
-    }
-    return success;
-  }
-}
-*/
+뼯⨍ੴ桥⁣潤攠楳⁣畲牥湴汹⁵湵獥搬⁣潭浥湴敤⁯畴⁦潲⁷桥渠楴❬氠晩湡汬礠扥⁵獥搠扵琍੮潴攠瑨慴⁩琠捡渠捡畳攠愠捯湦汩捴⁷楴栠瑨攠浯牥⵱畩捫獬潴猠浯搮ഊഊഊ⼯⁁⁴祰攠潦⁭敲捨慮琠瑨慴⁤潥獮❴⁵獥⁡⁳捥湥⁴漠潰敮⁩瑳⁳敬汩湧⁭敮甬⁩湴敲慣瑩湧ഊ⼯⁷楴栠楴⁧潥猠獴牡楧桴⁴漠瑨攠浥湵⸍੣污獳⁗䵈彈敲扡汩獴乐䌠數瑥湤猠圳䵥牣桡湴乐䌠笍ਠ⁰物癡瑥⁶慲ⁱ畩捫䵥牣桡湴卣敮敐污祥爺⁗䵈彑畩捫䵥牣桡湴卣敮敐污祥爻ഊഊ†敶敮琠佮䥮瑥牡捴楯渨慣瑩潮乡浥㨠獴物湧Ⱐ慣瑩癡瑯爺⁃䕮瑩瑹⤠笍ਠ†⁶慲⁩湶敮瑯特㨠䍉湶敮瑯特䍯浰潮敮琻ഊ††ഊ††楮癥湴潲礠㴠瑨楳⹇整䥮癥湴潲礨⤻ഊ††ഊ††⼯⁮潴楣攠瑨攠獷楴捨⁢整睥敮⁠楮癥湴潲祠⁡湤⁠瑨楳怠獯浥瑩浥献ഊ††楦 Ⅹ湶敮瑯特⹈慳呡木❍敲捨慮琧⤩⁻ഊ†††楮癥湴潲礮䅤摔慧⠧䵥牣桡湴✩㬍ਠ†⁽ഊ††ഊ††楦 瑨楳⹈慳呡木❍敲捨慮琧⤩⁻ഊ†††瑨楳⹁摤呡木❍敲捨慮琧⤻ഊ††納ਠ†‍ਠ†⁴桩献煵楣歍敲捨慮瑓捥湥偬慹敲‽⁮敷⁗䵈彑畩捫䵥牣桡湴卣敮敐污祥爠楮⁴桩猻ഊ††瑨楳⹱畩捫䵥牣桡湴卣敮敐污祥爮敮瑩瑹‽ 䍇慭数污祅湴楴礩瑨楳㬍ਠ†⁴桩献煵楣歍敲捨慮瑓捥湥偬慹敲⹳瑡牴⠩㬍ਠ⁽ഊ納਍ਯ⼠愠捵獴潭⁣污獳⁴桡琠捯湴牯汳⁴桥⁰物捥⁯映獥汬楮术扵祩湧⁩瑥浳ഊ捬慳猠坍䡟䡥牢慬楳瑇畩卨潰䥮癥湴潲祃潭灯湥湴⁥硴敮摳⁗㍇畩卨潰䥮癥湴潲祃潭灯湥湴⁻ഊ†灲潴散瑥搠晵湣瑩潮⁓桯灈慳䥮晩湩瑥䙵湤猨⤺⁢潯氠笍ਠ†⁲整畲渠瑲略㬍ਠ⁽ഊഊ†⼯⁓桯瀠楳⁳敬汩湧⁉瑥洠瑯⁴桥⁐污祥爍ਠ⁰畢汩挠晵湣瑩潮⁇楶敉瑥洨⁩瑥浉搠㨠卉瑥浕湩煵敉搬⁣畳瑯浥爠㨠圳䝵楂慳敉湶敮瑯特䍯浰潮敮琬⁯灴楯湡氠煵慮瑩瑹›⁩湴Ⱐ潰瑩潮慬⁯畴⁮敷䥴敭䥄›⁓䥴敭啮楱略䥤 ›⁢潯氍ਠ⁻ഊ††癡爠捵獴潭敲䵯湥礠㨠楮琻ഊ††癡爠楴敭偲楣攠㨠楮琻ഊ††癡爠獵捣敳猠㨠扯潬㬍ਠ†⁶慲⁩湶䥴敭›⁓䥮癥湴潲祉瑥活ഊഊ††獵捣敳猠㴠晡汳攻ഊ††ഊ††楦⠠煵慮瑩瑹‼‱ ഊ††笍ਠ††ⁱ畡湴楴礠㴠ㄻഊ††納਍ਠ†⁣畳瑯浥牍潮敹‽⁣畳瑯浥爮彩湶⹇整䵯湥礨⤻ഊഊ††楮癉瑥洠㴠彩湶⹇整䥴敭⠠楴敭䥤 㬍ਠ†‍ਠ† ⼠楴敭猠慲攠扯畧桴⁦潲‵⁣牯睮猬⁩琠慣瑳⁡猠愠獭慬氠杯汤⁳楮欮ഊ††楴敭偲楣攠㴠㔻 ⼠彩湶⹇整䥮癥湴潲祉瑥浐物捥䵯摩晩敤⠠楮癉瑥洬⁦慬獥 ‪ⁱ畡湴楴礻ഊ††ഊ††楦 ⁣畳瑯浥牍潮敹‾㴠楴敭偲楣攠⤍ਠ†⁻ഊ†††獵捣敳猠㴠獵灥爮䝩癥䥴敭⠠楴敭䥤Ⱐ捵獴潭敲Ⱐ煵慮瑩瑹Ⱐ湥睉瑥浉䐠⤻ഊ†††楦 ⁳畣捥獳 ഊ†††笍ਠ†††⁣畳瑯浥爮彩湶⹒敭潶敍潮敹⠠楴敭偲楣攠⤻ഊ††††ഊ††††⼯⁩映⠠⅓桯灈慳䥮晩湩瑥䙵湤猨⤠⤍ਠ††† ⼠笍ਠ††† ⼠†彩湶⹁摤䵯湥礨⁩瑥浐物捥 㬍ਠ††† ⼠納ਠ††⁽ഊ††納ਠ†⁲整畲渠獵捣敳猻ഊ†納਍ਠ ⼠卨潰⁩猠灵牣桡獩湧⁉瑥洠晲潭⁴桥⁐污祥爻⁇楶敲‽⁐污祥爍ਠ⁰畢汩挠晵湣瑩潮⁒散敩癥䥴敭⠠楴敭䥤›⁓䥴敭啮楱略䥤Ⱐ杩癥爠㨠圳䝵楂慳敉湶敮瑯特䍯浰潮敮琬⁯灴楯湡氠煵慮瑩瑹›⁩湴Ⱐ潰瑩潮慬⁯畴⁮敷䥴敭䥄›⁓䥴敭啮楱略䥤 ›⁢潯氍ਠ⁻ഊ††⼯⁴桩猠楳⁡⁣潰礠潦⁴桥⁶慮楬污⁣潤攬⁥硣数琠景爠瑨攠灬慣攠睨敲攠楴⁧整猍ਠ† ⼠瑨攠楴敭❳⁰物捥⸍ਠ†⁶慲⁳桯灍潮敹›⁩湴㬍ਠ†⁶慲⁩瑥浃潳琠㨠楮琻ഊ††癡爠獵捣敳猠㨠扯潬㬍ਠ†⁶慲⁩湶䥴敭›⁓䥮癥湴潲祉瑥活ഊഊ††獨潰䵯湥礠㴠彩湶⹇整䵯湥礨⤻ഊഊ††楮癉瑥洠㴠杩癥爮彩湶⹇整䥴敭⠠楴敭䥤 㬍ਠ†‍ਠ† ⼠楴敭猠慲攠慬睡祳⁳潬搠景爠ㄠ捲潷渍ਠ†⁩瑥浃潳琠㴠ㄻ ⼠彩湶⹇整䥮癥湴潲祉瑥浐物捥䵯摩晩敤⠠楮癉瑥洬⁴牵攠⤠⨠煵慮瑩瑹㬍਍ਠ†⁳畣捥獳‽⁦慬獥㬍਍ਠ†⁩映⠠楴敭䍯獴‾㴠〠☦ ⁳桯灍潮敹‾㴠楴敭䍯獴⁼簠卨潰䡡獉湦楮楴敆畮摳⠩  ഊ††笍ਠ††⁳畣捥獳‽⁳異敲⹒散敩癥䥴敭⠠楴敭䥤Ⱐ杩癥爬ⁱ畡湴楴礬⁮敷䥴敭䥄 㬍ਠ††⁩映⠠獵捣敳猠⤍ਠ††⁻ഊ††††⼯⁩映⠠⅓桯灈慳䥮晩湩瑥䙵湤猨⤠⤍ਠ††† ⼠笍ਠ††† ⼠†彩湶⹒敭潶敍潮敹⠠楴敭䍯獴 㬍ਠ††† ⼠納ਠ†††⁧楶敲⹟楮瘮䅤摍潮敹⠠楴敭䍯獴 㬍ਠ††⁽ഊ††納ਠ†⁲整畲渠獵捣敳猻ഊ†納੽ഊ⨯

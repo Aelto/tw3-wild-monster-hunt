@@ -1,7 +1,1 @@
-exec function gotowmh(){
-  theGame.ScheduleWorldChangeToPosition(
-    "levels\wmh_lv1\wmh_lv1.w2w",
-    Vector(745.888, 647.898, 503.458),
-    EulerAngles(0, 0, 0)
-  );
-}
+뽥硥挠晵湣瑩潮⁧潴潷浨⠩笍ਠ⁴桥䝡浥⹓捨敤畬敗潲汤䍨慮来呯偯獩瑩潮⠍ਠ†•汥癥汳屷浨彬瘱屷浨彬瘱⹷㉷∬ഊ††噥捴潲⠷㐴⸵㜬㜰ㄮ㈰ⰱ〵⸰〩Ⰽਠ†⁅畬敲䅮杬敳⠰Ⱐ〬‰⤍ਠ 㬍੽ഊ
