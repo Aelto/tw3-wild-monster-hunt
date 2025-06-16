@@ -1,1 +1,111 @@
-뽳瑡瑥浡捨楮攠捬慳猠坍䡟䅲敡印慷湐潩湴⁥硴敮摳⁃䝡浥灬慹䕮瑩瑹⁻ഊ†敤楴慢汥⁶慲⁴敭灬慴敟灡瑨猺⁡牲慹㱳瑲楮朾㬍ਠ⁨楮琠瑥浰污瑥彰慴桳‽•灡瑨猠瑯⁴桥⁷㉥湴⁴桩猠灯楮琠捡渠獰慷渮∻ഊഊ†敤楴慢汥⁶慲⁳灡睮彣潵湴彭慸㨠楮琻ഊ†摥晡畬琠獰慷湟捯畮瑟浡砠㴠ㄻഊഊ†敤楴慢汥⁶慲⁳灡睮彣潵湴彭楮㨠楮琻ഊ†摥晡畬琠獰慷湟捯畮瑟浩渠㴠ㄻഊഊ†敤楴慢汥⁶慲⁲敳灡睮彣潯汤潷渺⁩湴㬍ਠ⁨楮琠牥獰慷湟捯潬摯睮‽•瑩浥⁩渠獥捯湤猠扥瑷敥渠瑷漠獰慷湳⁣牥慴敤⁢礠瑨楳⁳灡睮⁰潩湴⸢㬍ਠ⁤敦慵汴⁲敳灡睮彣潯汤潷渠㴠㘰〻ഊഊ†敤楴慢汥⁶慲⁥湴楴祟瑡杳㨠慲牡礼湡浥㸻ഊ†桩湴⁥湴楴祟瑡杳‽•瑡杳⁴桡琠獨潵汤⁢攠杩癥渠瑯⁴桥⁳灡睮敤⁥湴楴楥献∻ഊഊ†⼯⼠獴潲攠瑨攠瑩浥獴慭瀠潦⁴桥⁬慳琠瑩浥Ⱐ睨敮⁣潭灡牥搠瑯⁴桥⁣畲牥湴⁴業敳瑡浰ഊ†⼯⼠慮搠睩瑨⁴桩献牥獰慷湟捯潬摯睮⁴桩猠睩汬⁢攠畳敤⁴漠摥瑥捴⁷桥渠愠牥獰慷渠楳ഊ†⼯⼠慬汯睥搮ഊ†灲楶慴攠癡爠獰慷湟瑩浥獴慭瀺⁦汯慴㬍਍ਠ⁰物癡瑥⁶慲⁥湴楴楥猺⁡牲慹㱃乥睎偃㸻ഊഊ†敶敮琠佮印慷湥搨獰慷湄慴愺⁓䕮瑩瑹印慷湄慴愩⁻ഊ††獵灥爮佮印慷湥搨獰慷湄慴愩㬍਍ਠ†⁴桩献䝯瑯却慴攨❉摬攧⤻ഊ†納਍ਠ⁥癥湴⁏湁牥慅湴敲⡡牥愺⁃呲楧来牁牥慃潭灯湥湴Ⱐ慣瑩癡瑯爺⁃䍯浰潮敮琩⁻ഊ††楦 慣瑩癡瑯爮䝥瑅湴楴礨⤠ℽ⁴桥偬慹敲⤠笍ਠ††⁲整畲渠晡汳攻ഊ††納਍ਠ†⁩映⡴桩献捡湒敳灡睮⠩…☠瑨楳⹇整䍵牲敮瑓瑡瑥乡浥⠩‡㴠❓灡睮楮朧⤠笍ਠ††⁴桩献獰慷湟瑩浥獴慭瀠㴠瑨敇慭攮䝥瑅湧楮敔業敁獓散潮摳⠩㬍ਠ††⁴桩献䝯瑯却慴攨❓灡睮楮朧⤻ഊ††納ਠ⁽ഊഊ†灲楶慴攠晵湣瑩潮⁣慮剥獰慷渨⤺⁢潯氠笍ਠ†⁶慲⁮潷㨠晬潡琠㴠瑨敇慭攮䝥瑅湧楮敔業敁獓散潮摳⠩㬍ਠ†⁶慲⁤敬瑡㨠晬潡琠㴠湯眠ⴠ瑨楳⹳灡睮彴業敳瑡浰㬍਍ਠ†⁲整畲渠瑨楳⹳灡睮彴業敳瑡浰‼㴠〠籼⁤敬瑡‾㴠瑨楳⹲敳灡睮彣潯汤潷渻ഊ†納੽ഊഊ獴慴攠䥤汥⁩渠坍䡟䅲敡印慷湐潩湴⁻納ੳ瑡瑥⁓灡睮楮朠楮⁗䵈彁牥慓灡睮偯楮琠笍ਠ⁥癥湴⁏湅湴敲却慴攨灲敶楯畳彳瑡瑥彮慭攺⁮慭攩⁻ഊ††獵灥爮佮䕮瑥牓瑡瑥⡰牥癩潵獟獴慴敟湡浥⤻ഊ††瑨楳⹓灡睮楮束浡楮⠩㬍ਠ⁽ഊഊ†敮瑲礠晵湣瑩潮⁓灡睮楮束浡楮⠩⁻ഊ††癡爠牥獯畲捥㨠䍅湴楴祔敭灬慴攻ഊ††癡爠瑥浰污瑥彰慴栺⁳瑲楮朻ഊ††癡爠敮瑩瑹㨠䍅湴楴礻ഊ††癡爠捯畮琺⁩湴㬍ਠ†‍ਠ†⁣潵湴‽⁴桩献捡汣畬慴敓灡睮䍯畮琨⤻ഊ††楦 捯畮琠㰽‰⤠笍ਠ††⁰慲敮琮䝯瑯却慴攨❉摬攧⤻ഊ†††牥瑵牮㬍ਠ†⁽ഊഊ††睨楬攠⡣潵湴‾‰⤠笍ਠ††⁣潵湴‭㴠ㄻഊഊ†††⼯⁴桥牥⁩猠慮⁯扶楯畳⁦污眠桥牥Ⱐ楦⁡⁲敳潵牣攠景爠愠瑥浰污瑥彰慴栠睡猍ਠ†† ⼠慬牥慤礠汯慤敤⁩渠愠灲敶楯畳⁩瑥牡瑩潮⁴桩猠睩汬⁬潡搠楴⁡条楮⁷桥渍ਠ†† ⼠楴⁣潵汤⁨慶攠扥敮⁣慣桥搮ഊ†††⼯ഊ†††⼯⁈潰敦畬汹⁴桥⁥湧楮攠摯敳⁩琠景爠畳⁵湤敲⁴桥⁨潯搬⁯瑨敲睩獥⁷攧汬ഊ†††⼯⁨慶攠瑯⁷物瑥⁡⁢楴⁯映捯摥⁴漠桡湤汥⁴桡琠楦⁩琠扥捯浥猠灲潢汥浡瑩挍ਠ††⁴敭灬慴敟灡瑨‽⁴桩献来瑒慮摯浔敭灬慴攨⤻ഊ†††牥獯畲捥‽ 䍅湴楴祔敭灬慴攩䱯慤剥獯畲捥䅳祮挨瑥浰污瑥彰慴栬⁴牵攩㬍ਠ††⁥湴楴礠㴠瑨敇慭攮䍲敡瑥䕮瑩瑹⠍ਠ†††⁲敳潵牣攬ഊ††††⼯⁰潳楴楯渺ഊ††††灡牥湴⹇整坯牬摐潳楴楯渨⤠⬠噥捒楮杒慮搨〮〬‵⸰⤬ഊഊ††††⼯⁲潴慴楯渺ഊ††††噥捔潒潴慴楯渨噥捒楮杒慮搨ㄬ′⤩ⰬⰬഊഊ††††⼯⁰敲獩獴慮捥Ⱐ睨整桥爠敮瑩瑩敳⁳瑡祳⁢整睥敮⁲敬潡摳ഊ††††偍彄潮瑐敲獩獴Ⰽ਍ਠ†††⁰慲敮琮敮瑩瑹彴慧猍ਠ†† 㬍ਠ†⁽ഊഊ††灡牥湴⹇潴潓瑡瑥⠧䥤汥✩㬍ਠ⁽ഊഊ†灲楶慴攠晵湣瑩潮⁣慬捵污瑥印慷湃潵湴⠩㨠楮琠笍ਠ†⁩映⡰慲敮琮獰慷湟捯畮瑟浡砠㴽⁰慲敮琮獰慷湟捯畮瑟浩温⁻ഊ†††牥瑵牮⁰慲敮琮獰慷湟捯畮瑟浡砻ഊ††納਍ਠ†⁲整畲渠剡湤剡湧攨灡牥湴⹳灡睮彣潵湴彭慸Ⱐ灡牥湴⹳灡睮彣潵湴彭楮⤻ഊ†納਍ਠ⁰物癡瑥⁦畮捴楯渠来瑒慮摯浔敭灬慴攨⤺⁳瑲楮朠笍ਠ†⁶慲⁩湤數㨠楮琠㴠剡湤剡湧攨灡牥湴⹴敭灬慴敟灡瑨献卩穥⠩⤻ഊഊ††牥瑵牮⁰慲敮琮瑥浰污瑥彰慴桳孩湤數崻ഊ†納੽
+statemachine class WMH_AreaSpawnPoint extends CGameplayEntity {
+  editable var template_paths: array<string>;
+  hint template_paths = "paths to the w2ent this point can spawn.";
+
+  editable var spawn_count_max: int;
+  default spawn_count_max = 1;
+
+  editable var spawn_count_min: int;
+  default spawn_count_min = 1;
+
+  editable var respawn_cooldown: int;
+  hint respawn_cooldown = "time in seconds between two spawns created by this spawn point.";
+  default respawn_cooldown = 600;
+
+  editable var entity_tags: array<name>;
+  hint entity_tags = "tags that should be given to the spawned entities.";
+
+  /// store the timestamp of the last time, when compared to the current timestamp
+  /// and with this.respawn_cooldown this will be used to detect when a respawn is
+  /// allowed.
+  private var spawn_timestamp: float;
+
+  private var entities: array<CNewNPC>;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
+    super.OnSpawned(spawnData);
+
+    this.GotoState('Idle');
+  }
+
+  event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+      return false;
+    }
+
+    if (this.canRespawn() && this.GetCurrentStateName() != 'Spawning') {
+      this.spawn_timestamp = theGame.GetEngineTimeAsSeconds();
+      this.GotoState('Spawning');
+    }
+  }
+
+  private function canRespawn(): bool {
+    var now: float = theGame.GetEngineTimeAsSeconds();
+    var delta: float = now - this.spawn_timestamp;
+
+    return this.spawn_timestamp <= 0 || delta >= this.respawn_cooldown;
+  }
+}
+
+state Idle in WMH_AreaSpawnPoint {}
+state Spawning in WMH_AreaSpawnPoint {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Spawning_main();
+  }
+
+  entry function Spawning_main() {
+    var resource: CEntityTemplate;
+    var template_path: string;
+    var entity: CEntity;
+    var count: int;
+    
+    count = this.calculateSpawnCount();
+    if (count <= 0) {
+      parent.GotoState('Idle');
+      return;
+    }
+
+    while (count > 0) {
+      count -= 1;
+
+      // there is an obvious flaw here, if a resource for a template_path was
+      // already loaded in a previous iteration this will load it again when
+      // it could have been cached.
+      //
+      // Hopefully the engine does it for us under the hood, otherwise we'll
+      // have to write a bit of code to handle that if it becomes problematic
+      template_path = this.getRandomTemplate();
+      resource = (CEntityTemplate)LoadResourceAsync(template_path, true);
+      entity = theGame.CreateEntity(
+        resource,
+        // position:
+        parent.GetWorldPosition() + VecRingRand(0.0, 5.0),
+
+        // rotation:
+        VecToRotation(VecRingRand(1, 2)),,,,
+
+        // persistance, whether entities stays between reloads
+        PM_DontPersist,
+
+        parent.entity_tags
+      );
+    }
+
+    parent.GotoState('Idle');
+  }
+
+  private function calculateSpawnCount(): int {
+    if (parent.spawn_count_max == parent.spawn_count_min) {
+      return parent.spawn_count_max;
+    }
+
+    return RandRange(parent.spawn_count_max, parent.spawn_count_min);
+  }
+
+  private function getRandomTemplate(): string {
+    var index: int = RandRange(parent.template_paths.Size());
+
+    return parent.template_paths[index];
+  }
+}
