@@ -1,0 +1,7 @@
+class WMH_DyndecoSlot_ruinWalls extends WMH_DyndecoSlot {
+  default decorations_templates = {{
+    "dlc\dlcwild_monster_hunt\data\gameplay\dyndecos\slot_entities\skellige_ruins\castle_ruins_pillar.w2ent",
+    "dlc\dlcwild_monster_hunt\data\gameplay\dyndecos\slot_entities\skellige_ruins\castle_ruins_pillar_top.w2ent",
+    "dlc\dlcwild_monster_hunt\data\gameplay\dyndecos\slot_entities\skellige_ruins\castle_ruins_medium_long.w2ent"
+  }};
+}
