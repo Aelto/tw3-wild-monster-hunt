@@ -295,12 +295,12 @@ class WMH_PendingContract {
     }
   }
 
-  public function getReputationReward(current_level: float): float {
+  public function getReputationReward(current_level: WMH_Level): float {
     // the formula makes that any contract of the same level grants 100% of a
     // level as experience. Then as the current_level increases it will require
     // stronger and stronger contracts to level up.
     return MinF(
-      ((this.contract.level.value + 1.0) as float) / (current_level + 1.0),
+      ((this.contract.level.value + 1.0) as float) / (current_level.value + 1.0),
 
       // the maximum of levels that we can get from a single contract:
       2

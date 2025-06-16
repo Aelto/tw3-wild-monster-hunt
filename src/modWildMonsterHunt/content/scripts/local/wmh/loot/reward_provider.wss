@@ -132,14 +132,14 @@ class WMH_RewardProvider {
 
     for (i = 0; i < this.groups.Size(); i += 1) {
       if (this.groups[i].reason == reason) {
-        this.groups[i].float += quantity;
+        this.groups[i].reputation += quantity;
         return this;
       }
     }
 
     // no group with the given name was found, add it
     this.groups.PushBack(WMH_RewardGroup(reason));
-    this.groups[this.groups.Size() - 1].float += quantity;
+    this.groups[this.groups.Size() - 1].reputation += quantity;
 
 
     return this;
@@ -174,7 +174,7 @@ class WMH_RewardProvider {
 
       if (this.groups[i].reputation > 0) {
         if (WMH_getContractManager().hasPendingMilestoneContract()) {
-          message += "<br/> milestone contract active: REP gains locked"
+          message += "<br/> milestone contract active: REP gains locked";
         }
         else {
           message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; REP &nbsp;&nbsp;&nbsp;&nbsp;"
@@ -269,7 +269,7 @@ class WMH_RewardProvider {
 
         WMHINFO("transferItems, old reputation = " +  storage.general.level.value);
         storage.general.level.value = MinF(
-          maximum_level.value,
+          maximum.value,
           storage.general.level.value + total_reputation
         );
         WMHINFO("transferItems, new reputation = " +  storage.general.level.value);
