@@ -15,7 +15,7 @@ function OnDeath(damageAction: W3DamageAction) {
 
 // 2) wrap the hideweapon of the state to introduce timeflow & teleport the
 // player back to the FeintRespawn location.
-@wrapMethod(Unconscious)
+@wrapMethod(CR4PlayerStateUnconscious)
 function HideWeapon() {
   wrappedMethod();
 
