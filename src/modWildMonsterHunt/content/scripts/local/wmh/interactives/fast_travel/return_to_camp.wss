@@ -1,5 +1,8 @@
 statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
   private var prompt: WMH_ReturnToCampYesNoPrompt;
+  private var prompt_wo: WMH_ReturnToCampYesNoWhiteOrchardPrompt;
+
+  private editable var offer_travel_to_prolog: bool;
 
   event OnInteraction(actionName: string, activator: CEntity) {
     this.GotoState('Waiting');
@@ -7,9 +10,16 @@ statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
       thePlayer.DisplayActionDisallowedHudMessage(EIAB_OpenMap);
     }
     else {
-      this.prompt = new WMH_ReturnToCampYesNoPrompt in this;
-      prompt.entity = this;
-      prompt.display();
+      if (this.offer_travel_to_prolog) {
+        this.prompt_wo = new WMH_ReturnToCampYesNoWhiteOrchardPrompt in this;
+        prompt.entity = this;
+        prompt.display();
+      }
+      else {
+        this.prompt = new WMH_ReturnToCampYesNoPrompt in this;
+        prompt.entity = this;
+        prompt.display();
+      }
     }
   }
 }
@@ -34,20 +44,57 @@ state FastTravel in WMH_ReturnToCampEntity {
   }
 }
 
+state FastTravelWhiteOrchard in WMH_ReturnToCampEntity {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.FastTravel_main();
+  }
+
+  entry function FastTravel_main() {
+    WMH_fastTravelToWhiteOrchard();
+  }
+}
+
 class WMH_ReturnToCampYesNoPrompt extends WMH_YesNoPrompt {
   var entity: WMH_ReturnToCampEntity;
 
   public function title(): string {
-    return "Return to camp";
+    if (WMH_isInWmhLevel()) {
+      return "Return to camp";
+    }
+
+    return "Enter Wild Monster Hunt";
   }
 
   public function description(): string {
-    return "Fast travel back to camp?";
+    if (WMH_isInWmhLevel()) {
+      return "Fast travel back to camp?";
+    }
+
+    return "Fast travel to the camp?";
   }
 
   public function onResponse(accepted: bool) {
     if (accepted) {
       this.entity.GotoState('FastTravel');
+    }
+  }
+}
+
+class WMH_ReturnToCampYesNoWhiteOrchardPrompt extends WMH_YesNoPrompt {
+  var entity: WMH_ReturnToCampEntity;
+
+  public function title(): string {
+    return "Leave Wild Monster Hunt";
+  }
+
+  public function description(): string {
+    return "Fast travel to White Orchard?";
+  }
+
+  public function onResponse(accepted: bool) {
+    if (accepted) {
+      this.entity.GotoState('FastTravelWhiteOrchard');
     }
   }
 }
@@ -64,7 +111,24 @@ function WMH_teleportToFeintRespawn() {
 }
 
 latent function WMH_fastTravelToCamp() {
-  theGame.FadeOut(0.5);
-  WMH_teleportToFeintRespawn();
-  theGame.FadeInAsync(1.0);
+  if (WMH_isInWmhLevel()) {
+    theGame.FadeOut(0.5);
+    WMH_teleportToFeintRespawn();
+    theGame.FadeInAsync(1.0);
+  }
+  else {
+    theGame.ScheduleWorldChangeToPosition(
+      "levels\wmh_lv1\wmh_lv1.w2w",
+      Vector(744.57,701.20,105.00),
+      EulerAngles(0, 0, 0)
+    );
+  }
+}
+
+function WMH_fastTravelToWhiteOrchard() {
+  theGame.ScheduleWorldChangeToPosition(
+    "levels\prolog_village\prolog_village.w2w",
+    Vector(515.41,77.47,32.12),
+    EulerAngles(0, 0, 90.0)
+  );
 }
