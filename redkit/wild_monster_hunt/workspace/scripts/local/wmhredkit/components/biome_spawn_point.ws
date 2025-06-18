@@ -180,6 +180,10 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public function wasKilledSinceStartOfHunt(): bool {
 		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_clear_time);
 	}
+
+	public function wasSpawnedSinceStartOfHunt(): bool {
+		return WMH_getHuntManager().hasHappenedDuringHunt(this.last_spawn_time);
+	}
 }
 
 enum WMH_BiomeSpawnPoint_SpawnPriority {

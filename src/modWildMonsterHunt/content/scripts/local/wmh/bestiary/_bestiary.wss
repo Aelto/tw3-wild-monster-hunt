@@ -174,6 +174,20 @@ statemachine class WMH_Bestiary {
 
     this.requestSpawn(request);
   }
+
+  public function onSpawnAreaSpawnPoint(
+    origin: WMH_AreaSpawnPoint,
+    bentry: WMH_BestiaryEntry,
+  ) {
+    var request: WMH_SpawnRequest = new WMH_SpawnRequest in this;
+
+    // do it in multiple lines to avoid downcasting it
+    request.withBestiaryEntry(bentry);
+    request.withSeed(origin.getPointSeed(WMH_getHuntSeedFact()));
+    request.withSpawnPoint(origin);
+
+    this.requestSpawn(request);
+  }
   
 
   // The elite entries are the closest ones to the given WMH_Level

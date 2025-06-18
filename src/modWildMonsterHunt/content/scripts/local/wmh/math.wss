@@ -61,3 +61,7 @@ function WMH_diminishingReturns(
 
   return output;
 }
+
+function WMH_seedPositionOffset(seed: int, position: Vector): int {
+  return seed + FloorF(position.X) - FloorF(position.Y);
+}
