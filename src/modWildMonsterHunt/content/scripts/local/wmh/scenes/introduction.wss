@@ -83,7 +83,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_overleveled',
         "The road ahead",
-        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>. It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start"
+        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>. It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start, or alternative you can start a regular playthrough and interact with the new Fast Travel signpost near the White Orchard bridge."
       );
     }
   }
@@ -214,7 +214,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
         "Witcher Camp",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>The neighbouring region is overrun by monsters, and this modest bastion is the last line of defence. Use it to organize hunting expeditions in the hope of clearing out the area."
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>Thank you for trying out the mod and I hope you'll enjoy exploring this new world as much as I enjoyed making it!<br/><br/>Have fun roaming around these lands, and as it doesn't offer a concrete finish line, please remember to treat it as the calming experience it's meant to be.Take your time, make sure to read the tutorials about the new mechanics, enjoy the view from time to time, and look for the little secrets I may have left!<br/><br/>                              - <font color='#7e6d57'>Aeltoth</ font>"
       );
 
       // 1) look at camp manager, explain unlocking upgrades
@@ -240,7 +240,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeLeavingCamp',
         "On the Path",
-        "The world beyond the camp is your <font color='#CD7D03'>hunting ground</font>. Explore the surrounding lands, gather, loot, and track down monstrous threats."
+        "The world beyond the camp is your <font color='#CD7D03'>hunting ground</font>. Explore the surrounding lands, gather, loot, and track down the threats designated by your contracts."
       );
     }
 
@@ -258,7 +258,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeNoticeboard',
         "A Witcher's Duty",
-        "Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades."
+        "Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades:<br/> - Each completed contracts grants you but also all merchants additional crowns for you to trade items of greater rarity.<br/> - Gear schematics are awarded as your <font color='#CD7D03'>Reputation</font> increases from the completed contracts"
       );
     }
     else {
