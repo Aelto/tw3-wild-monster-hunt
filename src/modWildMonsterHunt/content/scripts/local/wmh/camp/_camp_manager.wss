@@ -61,7 +61,7 @@ statemachine class WMH_CampManager {
         EulerAngles(-1071.19, 13336.9, 0),
         45.0
       );
-      this.unlockHerbalist(true);
+      this.unlockBarber(true);
     }
     if (choice.playGoChunk == 'UnlockMerchant') {
       this.swapAndMoveCamera(

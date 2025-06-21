@@ -251,6 +251,24 @@ state DialogChoice in WMH_CampManager {
         parent.unlockMerchant();
         WMHPOPUP("Merchant hired");
       }
+      else if (response.playGoChunk == 'UnlockBarber') {
+        if (parent.isBarberUnlocked()) {
+          WMHPOPUP("You already have a Barber in your camp");
+          continue;
+        }
+
+        var cost: int = parent.unlockBarberPrice();
+
+        if (thePlayer.GetMoney() < cost) {
+          WMHPOPUP("Insufficient funds");
+          continue;
+        }
+
+        thePlayer.RemoveMoney(cost);
+        WMH_addFundsToSmithBarbers(cost);
+        parent.unlockBarber();
+        WMHPOPUP("Barber hired");
+      }
       else if (response.playGoChunk == 'UnlockArmors') {
         if (parent.isArmorsUnlocked()) {
           WMHPOPUP("You already have armor tools in your camp");
