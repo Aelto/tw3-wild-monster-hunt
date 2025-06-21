@@ -1,0 +1,72 @@
+@addMethod(W3MerchantNPC)
+function WMH_getFirstEmbededScene(): MerchantNPCEmbeddedScenes {
+  return this.embeddedScenes[0];
+}
+
+class WMH_Barber extends W3MerchantNPC {
+  default voiceTag = 'NOVIGRAD TRADER 04';
+
+  private editable var scene_exit_location_tag: name;
+  hint scene_exit_location_tag = "the NPC can be teleported to this location once the scene exits, if a tag is provided";
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    return interactionComponentName == "talk"
+        && activator == thePlayer
+        && this.HasValidEmbeddedScene();
+  }
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    if (actionName == "Talk") {
+      this.StartEmbeddedScene();
+    }
+  }
+  
+  function StartEmbeddedScene(): bool {
+    if (!this.HasEmbeddedScenes()) {
+      return false;
+    }
+
+		this.AddTimer('sceneStartAction', 0.5, true);
+    var scene: MerchantNPCEmbeddedScenes = this.WMH_getFirstEmbededScene();
+
+    theGame
+      .GetStorySceneSystem()
+      .PlayScene(scene.storyScene, scene.input);
+
+    return true;
+	}
+
+  function HasValidEmbeddedScene(): bool {
+    return this.HasEmbeddedScenes();
+  }
+
+  /// 2 steps timers, first it wait until the fact no longer exists,
+  /// then it starts a second timer that waits until that fact is back:
+  timer function sceneStartAction(delta: float, id: int) {
+    if (!FactsDoesExist("barber_scene_off")) {
+      this.RemoveTimer('sceneStartAction');
+
+      // start the second step:
+      this.AddTimer('sceneEndAction', 0.5, true);
+    }
+  }
+
+  timer function sceneEndAction(delta: float, id: int) {
+    if (FactsDoesExist("barber_scene_off")) {
+		  this.RemoveTimer('sceneEndAction');
+      
+      if (this.scene_exit_location_tag != '') {
+        var entity: CEntity = theGame
+          .GetEntityByTag(this.scene_exit_location_tag);
+
+        this.TeleportWithRotation(
+          entity.GetWorldPosition(),
+          entity.GetWorldRotation()
+        );
+      }
+    }
+	}
+}

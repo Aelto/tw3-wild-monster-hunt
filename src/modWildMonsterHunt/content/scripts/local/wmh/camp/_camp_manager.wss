@@ -55,6 +55,14 @@ statemachine class WMH_CampManager {
       );
       this.unlockHerbalist(true);
     }
+    if (choice.playGoChunk == 'UnlockBarber') {
+      this.swapAndMoveCamera(
+        Vector(748.434, 639.394, 97.2683, 0),
+        EulerAngles(-1071.19, 13336.9, 0),
+        45.0
+      );
+      this.unlockHerbalist(true);
+    }
     if (choice.playGoChunk == 'UnlockMerchant') {
       this.swapAndMoveCamera(
         Vector(723.572, 630.203, 99.606, 0),
@@ -263,5 +271,27 @@ statemachine class WMH_CampManager {
   protected function isHerbalistUnlocked(): bool {
     return FactsDoesExist('WMH_HerbalistUnlocked')
         && !this.temporary_unlocks.Contains('WMH_HerbalistUnlocked');
+  }
+
+  //--
+
+  protected function unlockBarber(optional temporarily: bool) {
+    if (temporarily && !FactsDoesExist('WMH_BarberUnlocked')) {
+      this.temporary_unlocks.PushBack('WMH_BarberUnlocked');
+    }
+    else {
+      this.temporary_unlocks.Remove('WMH_BarberUnlocked');
+    }
+
+    FactsSet('WMH_BarberUnlocked', 1);
+  }
+
+  protected function unlockBarberPrice(): int {
+    return 50;
+  }
+
+  protected function isBarberUnlocked(): bool {
+    return FactsDoesExist('WMH_BarberUnlocked')
+        && !this.temporary_unlocks.Contains('WMH_BarberUnlocked');
   }
 }

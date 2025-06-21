@@ -124,6 +124,19 @@ state DialogChoice in WMH_CampManager {
 
       choices.PushBack(SSceneChoice(
         StrReplace(
+          "Hire Barber ({{price}})",
+          "{{price}}",
+          parent.unlockBarberPrice()
+        ),
+        true, // emphasis
+        parent.isBarberUnlocked(), // previouslyChoosen
+        false, // disabled
+        DialogAction_SHOPPING,
+        'UnlockBarber'
+      ));
+
+      choices.PushBack(SSceneChoice(
+        StrReplace(
           "Hire Merchant ({{price}})",
           "{{price}}",
           parent.unlockMerchantPrice()
