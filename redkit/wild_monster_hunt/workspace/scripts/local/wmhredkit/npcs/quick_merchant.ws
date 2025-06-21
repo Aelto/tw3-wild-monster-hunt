@@ -1,1 +1,40 @@
-⼯⁁⁴祰攠潦⁭敲捨慮琠瑨慴⁤潥獮❴⁵獥⁡⁳捥湥⁴漠潰敮⁩瑳⁳敬汩湧⁭敮甬⁩湴敲慣瑩湧ഊ⼯⁷楴栠楴⁧潥猠獴牡楧桴⁴漠瑨攠浥湵⸍੣污獳⁗䵈彑畩捫䵥牣桡湴⁥硴敮摳⁗㍍敲捨慮瑎偃⁻ഊ॰物癡瑥⁶慲ⁱ畩捫䵥牣桡湴卣敮敐污祥爺⁗䵈彑畩捫䵥牣桡湴卣敮敐污祥爻ഊ॥癥湴⁏湉湴敲慣瑩潮⡡捴楯湎慭攺⁳瑲楮本⁡捴楶慴潲㨠䍅湴楴礩⁻ഊउ瑨楳⹱畩捫䵥牣桡湴卣敮敐污祥爠㴠湥眠坍䡟兵楣歍敲捨慮瑓捥湥偬慹敲⁩渠瑨楳㬍ਉॴ桩献煵楣歍敲捨慮瑓捥湥偬慹敲⹥湴楴礠㴠⡃䝡浥灬慹䕮瑩瑹⥴桩猻ഊउ瑨楳⹱畩捫䵥牣桡湴卣敮敐污祥爮獴慲琨⤻ഊॽഊ納਍ੳ瑡瑥浡捨楮攠捬慳猠坍䡟兵楣歍敲捨慮瑓捥湥偬慹敲⁻ഊॶ慲⁥湴楴示⁃䝡浥灬慹䕮瑩瑹㬍ਉഊ॰畢汩挠晵湣瑩潮⁳瑡牴⠩⁻ഊउ瑨楳⹇潴潓瑡瑥⠧偬慹楮朧⤻ഊॽഊ納਍ੳ瑡瑥⁗慩瑩湧⁩渠坍䡟兵楣歍敲捨慮瑓捥湥偬慹敲⁻納ੳ瑡瑥⁐污祩湧⁩渠坍䡟兵楣歍敲捨慮瑓捥湥偬慹敲⁻ഊ॥癥湴⁏湅湴敲却慴攨灲敶楯畳彳瑡瑥㨠湡浥⤠笍ਉॳ異敲⹏湅湴敲却慴攨灲敶楯畳彳瑡瑥⤻ഊउ瑨楳⹐污祩湧彭慩渨⤻ഊॽഊऍਉ敮瑲礠晵湣瑩潮⁐污祩湧彭慩渨⤠笍ਉॶ慲⁩湩瑄慴慏扪散琠㨠圳䥮癥湴潲祉湩瑄慴愠㴠湥眠圳䥮癥湴潲祉湩瑄慴愠楮⁴桥䝡浥⹇整䝵楍慮慧敲⠩㬍ਉॶ慲⁳桯灉湶敮瑯特㨠䍉湶敮瑯特䍯浰潮敮琠㴠灡牥湴⹥湴楴礮䝥瑉湶敮瑯特⠩㬍ਉऍਉ३映⡳桯灉湶敮瑯特⤠笍ਉउ獨潰䥮癥湴潲礮䅵瑯䉡污湡捥䥴敭獗楴桐污祥牌敶敬⠩㬍ਉॽഊउഊउ䱯权桡湮敬⠧坍䠧Ⱐ≑畩捫䵥牣桡湴却慴敭慣桩湥㨠佰敮䥮癥湴潲礢⤻ഊउऍਉ३湩瑄慴慏扪散琮捯湴慩湥牎偃‽ 䍇慭数污祅湴楴礩灡牥湴⹥湴楴礻ഊउ佰敮䝕䥐慮敬䙯牓捥湥⠠❉湶敮瑯特䵥湵✬‧䍯浭潮䵥湵✬⁰慲敮琮敮瑩瑹Ⱐ楮楴䑡瑡佢橥捴 㬍ਉ納੽
+// A type of merchant that doesn't use a scene to open its selling menu, interacting
+// with it goes straight to the menu.
+class WMH_QuickMerchant extends W3MerchantNPC {
+	private var quickMerchantScenePlayer: WMH_QuickMerchantScenePlayer;
+	event OnInteraction(actionName: string, activator: CEntity) {
+		this.quickMerchantScenePlayer = new WMH_QuickMerchantScenePlayer in this;
+		this.quickMerchantScenePlayer.entity = (CGameplayEntity)this;
+		this.quickMerchantScenePlayer.start();
+	}
+}
+
+statemachine class WMH_QuickMerchantScenePlayer {
+	var entity: CGameplayEntity;
+	
+	public function start() {
+		this.GotoState('Playing');
+	}
+}
+
+state Waiting in WMH_QuickMerchantScenePlayer {}
+state Playing in WMH_QuickMerchantScenePlayer {
+	event OnEnterState(previous_state: name) {
+		super.OnEnterState(previous_state);
+		this.Playing_main();
+	}
+	
+	entry function Playing_main() {
+		var initDataObject : W3InventoryInitData = new W3InventoryInitData in theGame.GetGuiManager();
+		var shopInventory: CInventoryComponent = parent.entity.GetInventory();
+		
+		if (shopInventory) {
+			shopInventory.AutoBalanaceItemsWithPlayerLevel();
+		}
+		
+		LogChannel('WMH', "QuickMerchantStatemachine: OpenInventory");
+			
+		initDataObject.containerNPC = (CGameplayEntity)parent.entity;
+		OpenGUIPanelForScene( 'InventoryMenu', 'CommonMenu', parent.entity, initDataObject );
+	}
+}
