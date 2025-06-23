@@ -265,7 +265,7 @@ state DialogChoice in WMH_CampManager {
         }
 
         thePlayer.RemoveMoney(cost);
-        WMH_addFundsToSmithBarbers(cost);
+        WMH_addFundsToSmithMerchants(cost);
         parent.unlockBarber();
         WMHPOPUP("Barber hired");
       }
