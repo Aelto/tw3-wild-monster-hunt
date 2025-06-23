@@ -138,6 +138,13 @@ class WMH_SpawnRequest {
       var seed: int = this.seed;
 
       if (seed <= 0) {
+        seed = WMH_seedPositionOffset(
+          WMH_getHuntSeedFact(),
+          this.GetWorldPosition()
+        );
+      }
+
+      if (seed <= 0) {
         seed = SUH_now() as int;
       }
 
