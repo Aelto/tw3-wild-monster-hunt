@@ -374,6 +374,10 @@ statemachine class WMH_ContractManager {
       completed_any = true;
     }
 
+    if (this.completeHuntMiniquests(provider)) {
+      completed_any = true;
+    }
+
     if (completed_any) {
       WMHTUTOFACT(
         'WMH_onContractCompleted',
@@ -384,6 +388,19 @@ statemachine class WMH_ContractManager {
       provider.transferItems(thePlayer.GetInventory());
       WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
     }
+  }
+
+  private function completeHuntMiniquests(provider: WMH_RewardProvider): bool {
+    var merchant_goods: int = WMH_getMerchantGoodsFacts();
+    var received_anything: bool;
+
+    if (merchant_goods > 0) {
+      received_anything = true;
+      provider.addMoney("Merchant Goods", merchant_goods * 2);
+      WMH_resetMerchantGoodsFacts();
+    }
+
+    return received_anything;
   }
 
   private function finishExpiredContracts(

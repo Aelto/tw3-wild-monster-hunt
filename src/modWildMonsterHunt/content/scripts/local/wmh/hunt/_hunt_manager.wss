@@ -147,6 +147,7 @@ statemachine class WMH_HuntManager {
 
   public function onPlayerDeath() {
     this.killed_creatures.Clear();
+    WMH_resetMerchantGoodsFacts();
   }
 
   public function onEncounterSpawned(entries: array<WMH_BestiaryEntry>) {

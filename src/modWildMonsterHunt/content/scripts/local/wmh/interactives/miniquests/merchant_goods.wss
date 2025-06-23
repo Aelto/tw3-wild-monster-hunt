@@ -1,0 +1,57 @@
+class WMH_MerchantGoods extends CGameplayEntity {
+  private var hunt_lock: WMH_HuntLock;
+
+  event OnInteractionActivationTest(
+    interactionComponentName: string,
+    activator : CEntity
+  ) {
+    return WMH_huntLockIsAvailable(this.hunt_lock);
+  }
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    println!("WMH_MerchantGoods, onInteraction, {actionName}, {this.hunt_lock.hunt_seed}");
+
+    if (!WMH_huntLockTryUse(this.hunt_lock)) {
+      return false;
+    }
+
+    WMH_updateMerchantGoodsFact(1);
+    var displayed_fact: bool = WMHTUTOFACT(
+      'WMH_MerchantGoods_PickedUp',
+      "Merchant Goods",
+      "You picked up <font color='#CD7D03'>Merchant Goods</font>. If you successfully bring them back to the camp, it will refill the camp merchant's stock and slightly increase his funds as well as yours for your troubles.<br/><br/>Picking up multiple goods in a single or multiple hunts will further expand his stock, allowing him to refill one additional time for every retrieval."
+    );
+
+    if (!displayed_fact) {
+      WMHHUD("You found merchant goods, the camp merchant's will refill his stock on your next visit.");
+    }
+    return true;
+  }
+
+  function setMeshesVisibility(visible: bool)
+	{
+		var meshes: array<CComponent> = this
+      .GetComponentsByClassName('CStaticMeshComponent');
+
+		var i: int;
+    for (i = 0; i < meshes.Size(); i += 1) {
+      var static_mesh: CStaticMeshComponent = meshes[i] as CStaticMeshComponent;
+
+      if (static_mesh) {
+        static_mesh.SetVisible(visible);
+      }
+    }
+	}
+}
+
+function WMH_getMerchantGoodsFacts(): int {
+  return FactsQuerySum("WMH_MerchantGoods_carrying_count");
+}
+
+function WMH_updateMerchantGoodsFact(optional offset: int) {
+  FactsSet("WMH_MerchantGoods_carrying_count", WMH_getMerchantGoodsFacts() + offset);
+}
+
+function WMH_resetMerchantGoodsFacts() {
+  FactsRemove("WMH_MerchantGoods_carrying_count");
+}

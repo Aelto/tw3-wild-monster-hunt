@@ -1,22 +1,25 @@
 /// Provides a lock mechanism that can only be used once per hunt.
-class WMH_HuntLock {
-  private var hunt_seed: int;
+/// struct based variant so no initialization has to be performed
+struct WMH_HuntLock {
+  var hunt_seed: int;
+  default hunt_seed = -1;
+}
 
-  public function init(): WMH_HuntLock {
-    this.hunt_seed = -1;
+function WMH_huntLockTryUse(out data: WMH_HuntLock): bool {
+  var seed: int = WMH_getHuntSeedFact();
 
-    return this;
+  if (WMH_huntLockIsAvailable(data, seed)) {
+    data.hunt_seed = seed;
+    return true;
   }
 
-  /// Returns whether the lock permitted the action and is now locked for the
-  /// given hunt.
-  public function tryUse(hunt_seed: int): bool {
-    if (hunt_seed == this.hunt_seed || this.hunt_seed < 0) {
-      this.hunt_seed = hunt_seed;
+  return false;
+}
 
-      return true;
-    }
-
-    return false;
+function WMH_huntLockIsAvailable(out data: WMH_HuntLock, optional seed: int): bool {
+  if (seed < 0) {
+    seed = WMH_getHuntSeedFact();
   }
+
+  return data.hunt_seed < 0 || data.hunt_seed != seed;
 }
