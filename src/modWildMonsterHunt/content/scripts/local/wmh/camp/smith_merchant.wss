@@ -37,7 +37,6 @@ function WMH_addFundsToSmithMerchants(quantity: int) {
   WMH_setSmithMerchantExtraFunds(WMh_getSmithMerchantExtraFunds() + quantity);
 }
 
-
 function WMH_setSmithMerchantExtraFunds(quantity: int) {
   FactsSet("WMH_SmithMerchant_extra_funds", quantity);
 }
@@ -45,6 +44,16 @@ function WMH_setSmithMerchantExtraFunds(quantity: int) {
 function WMh_getSmithMerchantExtraFunds(): int {
   return FactsQueryLatestValue("WMH_SmithMerchant_extra_funds");
 }
+
+function WMH_setSmithMerchantRefillAllowed(quantity: int) {
+  FactsSet("WMH_SmithMerchant_refill_allowed", quantity);
+}
+
+function WMh_getSmithMerchantRefillAllowedCount(): int {
+  return FactsQueryLatestValue("WMH_SmithMerchant_refill_allowed");
+}
+
+
 
 exec function wmhsmithmerchantextrafunds(qty: int) {
   WMH_setSmithMerchantExtraFunds(qty);
@@ -81,17 +90,31 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
       return;
     }
 
-    this.previous_refill_seed = hunt_seed;
-
+    var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
     var inventory: CInventoryComponent = this.GetInventory();
-
     var initial_money: int = inventory.GetMoney();
-    var extra_funds: int = WMh_getSmithMerchantExtraFunds();
 
-    inventory.RemoveAllItems();
+    var allowed_refills: int = WMh_getSmithMerchantRefillAllowedCount();
+    if (allowed_refills > 0) {
+      this.addItems(inventory, provider);
+      // +1 to count the crowns
+      if (provider.countLines(true) + 1 > inventory.GetItemCount(false)) {
+        inventory.RemoveAllItems();
+        provider.transferItems(inventory);
+        WMH_updateMerchantGoodsFact(-1);
+        this.previous_refill_seed = hunt_seed;
+      }
+    }
+
+    var extra_funds: int = WMh_getSmithMerchantExtraFunds();
     inventory.SetMoney(initial_money + extra_funds);
     WMH_setSmithMerchantExtraFunds(0);
+  }
 
+  private function addItems(
+    inventory: CInventoryComponent,
+    provider: WMH_RewardProvider
+  ): WMH_RewardProvider {
     var general: WMH_StorageGeneral = WMH_getStorageGeneral();
 
     var every80Levels: int = general.level.value * 0.0125 as int;
@@ -100,45 +123,48 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     var every10Levels: int = general.level.value * 0.1 as int;
     var every5Levels: int = general.level.value * 0.2 as int;
 
-    inventory.AddAnItem('Clearing Potion', 1);
-    inventory.AddAnItem('Geralt Shirt');
-    inventory.AddAnItem('Bottled water', 1 + every10Levels);
-    inventory.AddAnItem('Apple', 1 + every5Levels);
-    inventory.AddAnItem('Potatoes', 1 + every5Levels);
-    inventory.AddAnItem('Honeycomb', 2 + every10Levels);
+    provider.startGroup("Merchant Goods");
+    provider.appendItem('Clearing Potion', 1);
+    provider.appendItem('Geralt Shirt', 1);
+    provider.appendItem('Bottled water', 1 + every10Levels);
+    provider.appendItem('Apple', 1 + every5Levels);
+    provider.appendItem('Potatoes', 1 + every5Levels);
+    provider.appendItem('Honeycomb', 2 + every10Levels);
 
-    inventory.AddAnItem('Blunt Bolt Legendary', 5 + every10Levels * 5); // ~10dmg
-    inventory.AddAnItem('Local pepper vodka', 1 + every20Levels);
-    inventory.AddAnItem('Temerian Rye', 1 + every20Levels);
+    provider.appendItem('Blunt Bolt Legendary', 5 + every10Levels * 5); // ~10dmg
+    provider.appendItem('Local pepper vodka', 1 + every20Levels);
+    provider.appendItem('Temerian Rye', 1 + every20Levels);
 
-    inventory.AddAnItem('Whetstone', 1 + every20Levels);
-    inventory.AddAnItem('Whetstone elven', 1 + every40Levels);
-    inventory.AddAnItem('Whetstone dwarven', 1 + every80Levels);
-    inventory.AddAnItem('Whetstone gnomish', 1);
+    provider.appendItem('Whetstone', 1 + every20Levels);
+    provider.appendItem('Whetstone elven', 1 + every40Levels);
+    provider.appendItem('Whetstone dwarven', 1 + every80Levels);
+    provider.appendItem('Whetstone gnomish', 1);
 
-    inventory.AddAnItem('Smithing tools', 1 + every20Levels);
-    inventory.AddAnItem('Smithing tools elven', 1 + every40Levels);
-    inventory.AddAnItem('Smithing tools dwarven', 1 + every80Levels);
-    inventory.AddAnItem('Smithing tools gnomish', 1);
+    provider.appendItem('Smithing tools', 1 + every20Levels);
+    provider.appendItem('Smithing tools elven', 1 + every40Levels);
+    provider.appendItem('Smithing tools dwarven', 1 + every80Levels);
+    provider.appendItem('Smithing tools gnomish', 1);
 
-    inventory.AddAnItem('modwmh_melding_reagent', 10);
-    inventory.AddAnItem('modwmh_trap_repair_tools', 1 + every10Levels);
-    inventory.AddAnItem('modwmh_lure_container', 1 + every20Levels);
-    inventory.AddAnItem('modwmh_trap_device', 1 + every20Levels);
+    provider.appendItem('modwmh_melding_reagent', 10);
+    provider.appendItem('modwmh_trap_repair_tools', 1 + every10Levels);
+    provider.appendItem('modwmh_lure_container', 1 + every20Levels);
+    provider.appendItem('modwmh_trap_device', 1 + every20Levels);
 
     if (every20Levels > 0) {
-      inventory.AddAnItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
+      provider.appendItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
     }
 
     if (every40Levels > 0) {
-      inventory.AddAnItem('Tracking Point Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
-      inventory.AddAnItem('Explosive Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
-      inventory.AddAnItem('Broadhead Bolt Legendary', 0 + every40Levels * 2); // bleed
+      provider.appendItem('Tracking Point Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
+      provider.appendItem('Explosive Bolt Legendary', 0 + every40Levels * 2); // ~20dmg
+      provider.appendItem('Broadhead Bolt Legendary', 0 + every40Levels * 2); // bleed
       
-      inventory.AddAnItem('Dwarven spirit', 0 + every40Levels);
-      inventory.AddAnItem('Cherry Cordial', 0 + every40Levels);
-      inventory.AddAnItem('Alcohest', 0 + every80Levels);
-      inventory.AddAnItem('Mandrake cordial', 0 + every80Levels);
+      provider.appendItem('Dwarven spirit', 0 + every40Levels);
+      provider.appendItem('Cherry Cordial', 0 + every40Levels);
+      provider.appendItem('Alcohest', 0 + every80Levels);
+      provider.appendItem('Mandrake cordial', 0 + every80Levels);
     }
+
+    return provider;
   }
 }
