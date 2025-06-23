@@ -8,6 +8,15 @@ state Loading in WMH_LootManager {
     this.Loading_main();
   }
 
+  /// the chances being divided by a number, and as these numbers grow as the 
+  /// level increases, this means that if the base value is lowered then the
+  /// chances INCREASES and it's increased then the chances LOWERS.
+  private var everyOneLevels: int;
+  private var everyFiveLevels: int;
+  private var everyTenLevels: int;
+  private var everyTwentyLevels: int;
+  private var everyThirtyLevels: int;
+
   entry function Loading_main() {
     // WMHINFO("WMH_LootManagerStateLoading:Loading_main()");
 
@@ -22,6 +31,12 @@ state Loading in WMH_LootManager {
     }
 
     this.witcher = GetWitcherPlayer();
+
+    this.everyOneLevels = FloorF(parent.maximum_loot_level.value);
+    this.everyFiveLevels = FloorF(parent.maximum_loot_level.value / 5.0);
+    this.everyTenLevels = FloorF(parent.maximum_loot_level.value / 10.0);
+    this.everyTwentyLevels = FloorF(parent.maximum_loot_level.value / 20.0);
+    this.everyThirtyLevels = FloorF(parent.maximum_loot_level.value / 30.0);
 
     this.registerLootFood();
     this.registerLootGear();
@@ -617,183 +632,155 @@ state Loading in WMH_LootManager {
   }
 
   function registerLootMaterial() {
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Cotton');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Thread');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'String');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Child doll');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Linen');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bag of grain');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Patchwork vest');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Silk');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Glyph infusion lesser');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Glyph infusion greater');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fiber');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Note');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Flowers');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Voodoo doll');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Twine');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Jumping rope');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rope');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fishing net');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Dye');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Sap');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Resin');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bag of weed');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Timber');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Flute_junk');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Mug');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ladle');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Smoking pipe');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Platter');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fishing rod');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Casket');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Drum');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Hardened timber');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Haft');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Broken paddle');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Broken rakes');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wooden rung rope ladder');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ashes');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Feather');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Skull');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Valuable fossil');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rotten meat');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wolf liver');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Oil');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Leather straps');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Nilfgaardian special forces insignia');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Redanian special forces insignia');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Temerian special forces insignia');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Leather squares');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Worn leather pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Old goat skin');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Old sheep skin');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fur square');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Scoiatael trophies');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rabbit pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fox pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Parchment');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Book');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Leather');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Goat hide');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Pig hide');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Deer hide');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wolf pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'White wolf pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Old bear skin');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Hardened leather');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bear pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'White bear pelt');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Horse hide');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Cow hide');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Chitin scale');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Endriag chitin plates');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Dragon scales');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Draconide leather');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wax');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Iron oil candle');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Iron Lamp');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Candle');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Shell');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Seashell');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Aether');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Alchemical paste');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Alchemists powder');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Albedo');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bear fat');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Blasting powder');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Coal');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Calcium equum');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Dog tallow');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ducal water');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fifth essence');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Hydragenum');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Lunar shards');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Nigredo');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Optima mater');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Phosphorus');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Quebrith');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Quicksilver solution');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rebis');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rubedo');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Saltpetre');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Stammelfords dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Sulfur');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Vermilion');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Vitriol');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wine stone');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Glass');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Empty vial');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Inkwell');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Perfume');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Jar');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Flask');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bottle');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Jug');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Fisstech');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Glamarye');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Powdered pearl');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Pearl');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Black pearl dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Black pearl');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amber dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amber fossil');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amber');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amber flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amethyst dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amethyst');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Amethyst flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Diamond dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Diamond');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Diamond flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Emerald dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Emerald');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Emerald flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ruby dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ruby');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Ruby flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Sapphire dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Sapphire');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Sapphire flawless');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Infused dust');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Infused shard');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Infused crystal');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Lead ore');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Melitele figurine');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold mineral');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold ring');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold ruby ring');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold pearl necklace');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold sapphire ring');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold sapphire necklace');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold diamond ring');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold diamond necklace');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold ore');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Gold candelabra');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Golden mug');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Golden platter');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Golden casket');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Iron ore');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Bandalur butter knife');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Goblet');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Nails');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Old rusty breadknife');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Salt pepper shaker');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Razor');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Iron ingot');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Candelabra');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wire');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Lute');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Wire rope');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Steel ingot');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Axe head');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Pickaxe head');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Rusty hammer head');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Blunt axe');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Blunt pickaxe');
-    parent.registerLoot(WMH_LootTag_Material, 0, 'Chain');
+    // chance decreases as level goes up
+    var junk_chances: int = 1 + this.everyOneLevels;
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Cotton');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Thread');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'String');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Child doll');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Linen');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bag of grain');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Patchwork vest');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Silk');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Glyph infusion lesser');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Glyph infusion greater');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fiber');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Note');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Flowers');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Voodoo doll');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Twine');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Jumping rope');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rope');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fishing net');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Dye');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Sap');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Resin');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bag of weed');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Timber');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Flute_junk');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Mug');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Ladle');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Smoking pipe');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Platter');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fishing rod');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Casket');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Drum');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Hardened timber');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Haft');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Broken paddle');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Broken rakes');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wooden rung rope ladder');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Ashes');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Feather');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Skull');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Valuable fossil');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rotten meat');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wolf liver');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Oil');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Leather straps');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Nilfgaardian special forces insignia');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Redanian special forces insignia');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Temerian special forces insignia');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Leather squares');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Worn leather pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Old goat skin');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Old sheep skin');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fur square');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Scoiatael trophies');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rabbit pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fox pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Parchment');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Book');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Leather');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Goat hide');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Pig hide');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Deer hide');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wolf pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'White wolf pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Old bear skin');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Hardened leather');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bear pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'White bear pelt');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Horse hide');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Cow hide');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Chitin scale');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Endriag chitin plates');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Dragon scales');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Draconide leather');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wax');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Iron oil candle');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Iron Lamp');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Candle');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Shell');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Seashell');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Aether');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Alchemical paste');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Alchemists powder');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Albedo');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bear fat');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Blasting powder');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Coal');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Calcium equum');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Dog tallow');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Ducal water');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fifth essence');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Hydragenum');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Lunar shards');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Nigredo');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Optima mater');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Phosphorus');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Quebrith');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Quicksilver solution');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rebis');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rubedo');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Saltpetre');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Stammelfords dust');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Sulfur');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Vermilion');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Vitriol');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wine stone');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Glass');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Empty vial');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Inkwell');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Perfume');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Jar');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Flask');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bottle');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Jug');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Fisstech');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Glamarye');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Powdered pearl');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Pearl');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Black pearl dust');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Black pearl');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Melitele figurine');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Gold mineral');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Gold candelabra');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Golden mug');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Golden platter');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Golden casket');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Bandalur butter knife');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Goblet');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Nails');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Old rusty breadknife');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Salt pepper shaker');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Razor');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Iron ingot');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Candelabra');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wire');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Lute');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Wire rope');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Steel ingot');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Axe head');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Pickaxe head');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Rusty hammer head');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Blunt axe');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Blunt pickaxe');
+    parent.registerLoot(WMH_LootTag_Material, junk_chances, 'Chain');
 
     if (parent.maximum_loot_level.value >= 10) {
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Pearl');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Black pearl');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Runestone lesser');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Runestone greater');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Smithing tools');
@@ -801,11 +788,6 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 10, 'Smithing tools dwarven');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Smithing tools gnomish');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Steel plate');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dark iron ore');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dark iron ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dark iron plate');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dark steel ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dark steel plate');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver mineral');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver pantaloons');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver amber ring');
@@ -814,7 +796,6 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver emerald necklace');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver amber necklace');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver ruby necklace');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Silver ore');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silverware');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver teapot');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver mug');
@@ -826,25 +807,27 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 10, 'Ornate silver sword replica');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Silver plate');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Ornate silver shield replica');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite ore');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite plate');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite silver ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite silver plate');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Glowing ore');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Glowing ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeryte ore');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeritium shackles');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeryte ingot');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeritium chains');
-      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeryte plate');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Whetstone');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Whetstone elven');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Whetstone dwarven');
       parent.registerLoot(WMH_LootTag_Material, 10, 'Whetstone gnomish');
+
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Dark iron ingot');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Dark steel ingot');
+
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Dark iron plate');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Dark steel plate');
     }
 
     if (parent.maximum_loot_level.value >= 20) {
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold ring');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold ruby ring');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold pearl necklace');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold sapphire ring');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold sapphire necklace');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold diamond ring');
+      parent.registerLoot(WMH_LootTag_Material, 20, 'Gold diamond necklace');
+
       parent.registerLoot(WMH_LootTag_Material, 20, 'Monstrous brain');
       parent.registerLoot(WMH_LootTag_Material, 20, 'Drowner brain');
       parent.registerLoot(WMH_LootTag_Material, 20, 'Monstrous blood');
@@ -926,6 +909,27 @@ state Loading in WMH_LootManager {
     }
 
     if (parent.maximum_loot_level.value >= 30) {
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold ruby ring');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold sapphire ring');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold emerald ring');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold diamond ring');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold amber necklace');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold ruby necklace');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold sapphire necklace');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold emerald necklace');
+      parent.registerLoot(WMH_LootTag_Material, 30, 'Green gold diamond necklace');
+
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite ingot');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite plate');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite silver ingot');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Meteorite silver plate');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Glowing ingot');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeritium shackles');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeryte ingot');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeritium chains');
+      parent.registerLoot(WMH_LootTag_Material, 10, 'Dwimeryte plate');
+
+      //#region mutagens
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen red');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen green');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Greater mutagen blue');
@@ -962,60 +966,54 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Material, 30, 'Werewolf mutagen');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Nekker Warrior mutagen');
       parent.registerLoot(WMH_LootTag_Material, 30, 'Leshy mutagen');
+      //#endregion
     }
   }
 
   function registerLootOre() {
-    parent.registerLoot(WMH_LootTag_Ore, 0, 'Pearl');
-    parent.registerLoot(WMH_LootTag_Ore, 0, 'Black pearl');
+    //#region ores
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Lead ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Gold ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Iron ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Meteorite ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Glowing ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Dwimeryte ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Silver ore');
+    parent.registerLoot(WMH_LootTag_Ore, 10 - this.everyFiveLevels, 'Dark iron ore');
+    //#endregion
 
+    //#region gems
     if (parent.maximum_loot_level.value >= 10) {
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver mug');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver platter');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver casket');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver plate');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Gold candelabra');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Gold ring');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Gold ruby ring');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Gold pearl necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Golden mug');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Golden platter');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Golden casket');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver amber ring');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver sapphire ring');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver emerald ring');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver emerald necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver amber necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 10, 'Silver ruby necklace');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Amber dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Diamond dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Amethyst dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Sapphire dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Emerald dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Ruby dust');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyOneLevels, 'Infused dust');
     }
 
     if (parent.maximum_loot_level.value >= 20) {
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Emerald');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Amethyst');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Diamond');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Amber');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Ruby');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Sapphire');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Amber');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Ruby');
-      parent.registerLoot(WMH_LootTag_Ore, 20, 'Sapphire');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Amber fossil');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Amber');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Amethyst');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Diamond');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Emerald');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Ruby');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Sapphire');
+      parent.registerLoot(WMH_LootTag_Ore, 30 - this.everyFiveLevels, 'Infused shard');
     }
 
     if (parent.maximum_loot_level.value >= 30) {
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold diamond ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold diamond necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold sapphire necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Gold sapphire ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold ruby ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold sapphire ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold emerald ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold diamond ring');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold amber necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold ruby necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold sapphire necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold emerald necklace');
-      parent.registerLoot(WMH_LootTag_Ore, 30, 'Green gold diamond necklace');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Amber flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Amethyst flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Diamond flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Emerald flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Ruby flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Sapphire flawless');
+      parent.registerLoot(WMH_LootTag_Ore, 30, 'Infused crystal');
     }
+    //#endregion
   }
 
   function registerRecipesMisc() {

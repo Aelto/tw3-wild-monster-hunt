@@ -208,7 +208,7 @@ statemachine class WMH_LootManager {
     this.loot_by_category[category].PushBack(item);
     
     var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
-    roller.addRatio(1.0 / (level as float));
+    roller.addRatio(1.0 / MaxF(level, 1));
   }
 
   // mutates the array from the category by popping the item out of the list
