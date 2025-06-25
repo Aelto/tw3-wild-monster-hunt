@@ -1,6 +1,7 @@
-@wrapMethod(IngameMenuStructureCreator)
+﻿@wrapMethod(IngameMenuStructureCreator)
 function CreateNewGameListArray(): CScriptedFlashArray {
-  var l_ChildMenuFlashArray: CScriptedFlashArray;
+  var difficulties: CScriptedFlashArray;
+  var difficulty: CScriptedFlashObject;
   var l_DataFlashObject: CScriptedFlashObject;
   var output: CScriptedFlashArray;
 
@@ -8,24 +9,32 @@ function CreateNewGameListArray(): CScriptedFlashArray {
 
   // then inject our own NewGame option
   l_DataFlashObject = CreateMenuItem(
-    "NewGame",
+    "new_game_wmh1",
     "new_game_wmh1",
     NameToFlashUInt('WildMonsterHunt'),
-    // IMPORTANT: pick a random number above 27 that is not 100.
-    //
-    // This number is then passed as the `actionType` in the wrapper below,
-    // you must then check against that number to detect when your NewGame is
-    // used.
-    76,
+    IGMActionType_MenuHolder,
     false,
     "newgame_difficulty"
   );
 
-  l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP1_Save);
-  l_DataFlashObject.SetMemberFlashArray("subElements", l_ChildMenuFlashArray);
+  difficulties = m_flashValueStorage.CreateTempFlashArray();
+
+  difficulty = m_flashValueStorage.CreateTempFlashObject();
+  difficulty = m_flashValueStorage.CreateTempFlashObject();
+  difficulty.SetMemberFlashString("id", "mainmenu_Tutorials");
+  difficulty.SetMemberFlashUInt("tag", 0); // tag
+  difficulty.SetMemberFlashString("label", "Fresh Start");
+  difficulty.SetMemberFlashString(
+    "description",
+    "A completely fresh start with a level 0 Geralt"
+  );
+  difficulties.PushBackFlashObject(difficulty);
+
+  l_DataFlashObject.SetMemberFlashArray("subElements", difficulties);
+
   l_DataFlashObject.SetMemberFlashString(
     "description",
-    GetLocStringByKeyExt("panel_mainmenu_start_wmh_description")
+    "Start a new Wild Monster Hunt playthrough"
   );
   
   output.PushBackFlashObject(l_DataFlashObject);
@@ -33,14 +42,34 @@ function CreateNewGameListArray(): CScriptedFlashArray {
   return output;
 }
 
+@addField(CR4IngameMenu)
+var wmh_is_newgame_selected: bool;
+
 @wrapMethod(CR4IngameMenu)
-function OnItemActivated(actionType: int, menuTag: int): void {
-  // see the IMPORTANT comment above explaining this random number,
-  // if the number matches then we may launch a new game using our .redgame file
-  if (actionType == 76) {
+function OnOptionSelectionChanged(optionName: name, value: bool) {
+  if (value && optionName != 'mainmenu_Tutorials') {
+    this.wmh_is_newgame_selected = optionName == 'WildMonsterHunt'
+                                || optionName == 'new_game_wmh1';
+  }
+
+  return wrappedMethod(optionName, value);
+}
+
+exec function wmhstart() {
+  theGame.SetDifficultyLevel(EDM_Medium);
+  theGame.RequestNewGame("levels\wmh_lv1\wmh_lv1.redgame");
+  theGame.HideHardwareCursor();
+  theGame.GetGuiManager().RequestMouseCursor(false);
+  // OnPlaySoundEvent("gui_global_game_start");
+  // GetRootMenu().CloseMenu();
+}
+
+@wrapMethod(CR4IngameMenu)
+function OnItemActivated(actionType: InGameMenuActionType, menuTag: int): void {
+  if (this.wmh_is_newgame_selected) {
     fetchNewGameConfigFromTag(menuTag);
 
-    theGame.SetDifficultyLevel(currentNewGameConfig.difficulty);
+    theGame.SetDifficultyLevel(EDM_Medium);
     theGame.RequestNewGame("levels\wmh_lv1\wmh_lv1.redgame");
     theGame.HideHardwareCursor();
     theGame.GetGuiManager().RequestMouseCursor(false);
