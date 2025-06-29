@@ -1,3 +1,7 @@
+function WMH_getBiomeManager(): WMH_BiomeManager {
+  return thePlayer.wmh.bestiary.biomes;
+}
+
 // Keeps track of global [WMH_BiomeTags], can be used to alter the spawn
 // rates on a global aspect.
 class WMH_BiomeManager {

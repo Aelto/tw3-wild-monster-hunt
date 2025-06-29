@@ -137,12 +137,26 @@ class WMH_SpawnPreferences {
 struct WMH_TimeRangeScaling {
   // from 04:00 to 12:00
   var multiplier_morning: float;
+  default multiplier_morning = 1.0;
 
   // from 12:00 to 20:00
   var multiplier_afternoon: float;
+  default multiplier_afternoon = 1.0;
 
   // from 20:00 to 04:00
   var multiplier_night: float;
+  default multiplier_night = 1.0;
+}
+
+struct WMH_TimeRangeFlags {
+  editable var morning: bool;
+  default morning = true;
+
+  editable var afternoon: bool;
+  default afternoon = true;
+
+  editable var night: bool;
+  default night = true;
 }
 
 function WMH_getScaling(range: WMH_TimeRangeScaling, hours: float): float {
@@ -157,6 +171,17 @@ function WMH_getScaling(range: WMH_TimeRangeScaling, hours: float): float {
   }
 
   return range.multiplier_afternoon;
+}
+
+function WMH_getTimeFlag(flags: WMH_TimeRangeFlags, hours: float): bool {
+  return WMH_getScaling(
+    WMH_TimeRangeScaling(
+      flags.morning as float,
+      flags.afternoon as float,
+      flags.night as float
+    ),
+    hours
+  ) > 0;
 }
 
 enum WMH_WeatherType {

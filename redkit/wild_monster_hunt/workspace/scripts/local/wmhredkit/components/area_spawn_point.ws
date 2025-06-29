@@ -1,4 +1,6 @@
 statemachine class WMH_AreaSpawnPoint extends WMH_BiomeSpawnPoint {
+  protected editable var spawn_time_flags: WMH_TimeRangeFlags;
+
   event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
     var bentry: WMH_BestiaryEntry;
 
@@ -11,7 +13,7 @@ statemachine class WMH_AreaSpawnPoint extends WMH_BiomeSpawnPoint {
       this.reset();
     }
 
-    if (!this.canRespawn()) {
+    if (!this.canRespawn() || !this.isTimeValid()) {
       return false;
     }
 
@@ -50,5 +52,11 @@ statemachine class WMH_AreaSpawnPoint extends WMH_BiomeSpawnPoint {
     }
 
     return false;
+  }
+
+  private function isTimeValid(): bool {
+    var hours: int = WMH_getBiomeManager().getDayHour();
+
+    return WMH_getTimeFlag(this.spawn_time_flags, hours);
   }
 }
