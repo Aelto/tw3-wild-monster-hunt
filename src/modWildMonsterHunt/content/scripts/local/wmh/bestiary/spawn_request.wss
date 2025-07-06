@@ -159,6 +159,14 @@ class WMH_SpawnRequest {
 
     return false;
   }
+
+  public function canCorrectPositionZ(): bool {
+    if (this.spawn_point) {
+      return !this.spawn_point.biome_tags.underground;
+    }
+
+    return false;
+  }
 }
 
 class WMH_SpawnRequestClues extends WMH_SpawnRequest {

@@ -780,6 +780,7 @@ state Spawning in WMH_Bestiary {
     var entities: array<CEntity>;
 
     var position: Vector = request.GetWorldPosition();
+    var can_correct_position_z: bool = request.canCorrectPositionZ();
     var contract_manager: WMH_ContractManager = WMH_getContractManager();
     var encounter_manager: WMH_EncounterManager = WMH_getEncounterManager();
 
@@ -802,6 +803,7 @@ state Spawning in WMH_Bestiary {
         bentry,
         request.GetWorldPosition(),
         request.heading,
+        can_correct_position_z,
         contract_manager.hunt_affix_manager,
         targeting_contracts_count,
         request.seed,
@@ -841,6 +843,7 @@ state Spawning in WMH_Bestiary {
     bentry: WMH_BestiaryEntry,
     position: Vector,
     heading: float,
+    can_correct_position_z: bool,
     affix_manager: WMH_AffixManager,
     affix_amplifier: int,
     seed: int,
@@ -889,6 +892,10 @@ state Spawning in WMH_Bestiary {
 
       var i_1: int = 0;
       for (i_1 = 0; i_1 < templates[i].count; i_1 += 1) {
+        if (can_correct_position_z) {
+          WMH_FixZAxis(/*out*/ group_positions[i_1]);
+        }
+
         var created_entity: CEntity = theGame.CreateEntity(
           entity_template,
           group_positions[i_1],
