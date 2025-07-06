@@ -1,4 +1,4 @@
-class WMH_BiomeAreaTrigger extends CEntity {
+﻿class WMH_BiomeAreaTrigger extends CEntity {
 	public editable var biome_tags: WMH_BiomeTags;
 
 	event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {

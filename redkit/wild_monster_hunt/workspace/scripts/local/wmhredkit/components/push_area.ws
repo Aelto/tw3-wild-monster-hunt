@@ -1,1 +1,124 @@
-獴慴敭慣桩湥⁣污獳⁗䵈彐畳桁牥愠數瑥湤猠䍅湴楴礠笍ਠ⁰畢汩挠敤楴慢汥⁶慲⁰畳桟浥獳慧攺⁳瑲楮朻ഊ†摥晡畬琠灵獨彭敳獡来‽•奯甠慲攠慰灲潡捨楮朠畮晩湩獨敤⁴敲牡楮∻ഊ†桩湴⁰畳桟浥獳慧攠㴠≓整⁡⁭敳獡来⁴桩猠灵獨⁡牥愠睩汬⁤楳灬慹⁷桥渠瑨攠灬慹敲⁥湴敲猠楴∻ഊഊ†灵扬楣⁥摩瑡扬攠癡爠摩獡扬敟潮彦慣琺⁮慭攻ഊ†桩湴⁤楳慢汥彯湟晡捴‽•䥦⁳整⁡湤⁩映瑨攠晡捴⁩琠灯楮瑳⁴漠數楳瑳Ⱐ瑨攠慲敡⁷楬氠湯⁬潮来爠灵獨⁴桥⁰污祥爠慷慹∻ഊഊ†敶敮琠佮䅲敡䕮瑥爨慲敡㨠䍔物杧敲䅲敡䍯浰潮敮琬⁡捴楶慴潲㨠䍃潭灯湥湴⤠笍ਠ†⁩映⡡捴楶慴潲⹇整䕮瑩瑹⠩‡㴠瑨敐污祥爩⁻ഊउॲ整畲渠晡汳攻ഊउ納਍ਠ†⁩映⡉獎慭敖慬楤⡴桩献摩獡扬敟潮彦慣琩…☠䙡捴獄潥獅硩獴⡴桩献摩獡扬敟潮彦慣琩⤠笍ਠ††⁲整畲渠晡汳攻ഊ††納਍ਉ३映⡴桩献䝥瑃畲牥湴却慴敎慭攨⤠ℽ‧偵獨楮朧⤠笍ਠ††⁴桩献䝯瑯却慴攨❐畳桩湧✩㬍ਠ†⁽ഊॽഊഊ॥癥湴⁏湁牥慅硩琨慲敡㨠䍔物杧敲䅲敡䍯浰潮敮琬⁡捴楶慴潲㨠䍃潭灯湥湴⤠笍ਠ†⁩映⡡捴楶慴潲⹇整䕮瑩瑹⠩‡㴠瑨敐污祥爩⁻ഊउॲ整畲渠晡汳攻ഊउ納਍ਉ३映⡴桩献䝥瑃畲牥湴却慴敎慭攨⤠㴽‧偵獨楮朧⤠笍ਠ††⁴桩献䝯瑯却慴攨❗慩瑩湧✩㬍ਠ†⁽ഊॽഊ納਍ੳ瑡瑥⁗慩瑩湧⁩渠坍䡟偵獨䅲敡⁻ഊ†敶敮琠佮䕮瑥牓瑡瑥⡰牥癩潵獟獴慴敟湡浥㨠湡浥⤠笍ਠ†⁳異敲⹏湅湴敲却慴攨灲敶楯畳彳瑡瑥彮慭攩㬍਍ਠ†⁴桥偬慹敲ഊ†††⹇整䵯癩湧䅧敮瑃潭灯湥湴⠩ഊ†††⹇整䵯癥浥湴䅤橵獴潲⠩ഊ†††⹃慮捥求祎慭攨❓桡牥摕瑩汳卬楤敔潐潳楴楯渧⤻ഊ†納੽ഊ獴慴攠偵獨楮朠楮⁗䵈彐畳桁牥愠笍ਠ⁥癥湴⁏湅湴敲却慴攨灲敶楯畳彳瑡瑥彮慭攺⁮慭攩⁻ഊ††獵灥爮佮䕮瑥牓瑡瑥⡰牥癩潵獟獴慴敟湡浥⤻ഊ††瑨楳⹐畳桩湧彭慩渨⤻ഊ†納਍ਠ⁥湴特⁦畮捴楯渠偵獨楮束浡楮⠩⁻ഊ††癡爠摥獴楮慴楯渺⁖散瑯爻ഊ††癡爠灵獨彳瑡牴楮束灯獩瑩潮㨠噥捴潲㬍਍ਠ†⁗䵈䡕䐨灡牥湴⹰畳桟浥獳慧攩㬍ਠ†⁰畳桟獴慲瑩湧彰潳楴楯渠㴠瑨敐污祥爮䝥瑗潲汤偯獩瑩潮⠩㬍਍ਠ† ⼠摩獡扬敤㨍ਠ† ⼠灵獨楮朠瑨攠灬慹敲⁡牯畮搠灲潶敤⁩浭敲獩潮⁢牥慫楮朠慮搠捯畬搠慬獯⁣慵獥ഊ††⼯⁡⁦敷⁩獳略猠睨敮⁴桥⁰污祥爠睡猠浯畮瑥搠潲⁩渠捯浢慴⸍ਠ† ⼍ਠ† ⼠睨楬攠⡴牵攩⁻ഊ††⼯† ⼠晩牳琠摲慷⁡⁬楮攠晲潭⁴桥⁣敮瑥爠潦⁴桥⁡牥愠瑯⁴桥⁰污祥爠慮損ਠ† ⼠†⼯⁥硴牡灯污瑥⁩琮ഊ††⼯†⁤敳瑩湡瑩潮‽⁖散䥮瑥牰潬慴攨ഊ††⼯††⁰慲敮琮䝥瑗潲汤偯獩瑩潮⠩Ⰽਠ† ⼠††瑨敐污祥爮䝥瑗潲汤偯獩瑩潮⠩Ⰽਠ† ⼠††ㄮ〱ഊ††⼯† 㬍਍ਠ† ⼠†摥獴楮慴楯渠㴠噥捉湴敲灯污瑥⠍ਠ† ⼠††瑨敐污祥爮䝥瑗潲汤偯獩瑩潮⠩Ⰽਠ† ⼠††⼯⁴桥渠畳攠瑨攠浥慮⁰潳楴楯渠扥瑷敥渠瑨攠數瑲慰潬慴敤⁤敳瑩湡瑩潮ഊ††⼯†† ⼠慮搠瑨攠灯獩瑩潮⁴桥⁰污祥爠睡猠睨敮⁩琠敮瑥牥搠瑨攠慲敡ഊ††⼯†† 灵獨彳瑡牴楮束灯獩瑩潮‫⁤敳瑩湡瑩潮⤠⼠㈬ഊ††⼯††‱⸰ㄍਠ† ⼠†⤻ഊഊ††⼯†⁗䵈彳汩摥䕮瑩瑹呯偯獩瑩潮⠍ਠ† ⼠††瑨敐污祥爬ഊ††⼯††⁤敳瑩湡瑩潮Ⰽਠ† ⼠††〮㈵ഊ††⼯† 㬍਍ਠ† ⼠†卬敥瀨〮㄰⤻ഊ††⼯⁽ഊ†納੽ഊഊ晵湣瑩潮⁗䵈彳汩摥䕮瑩瑹呯偯獩瑩潮⡥湴楴示⁃䕮瑩瑹Ⱐ灯獩瑩潮㨠噥捴潲Ⱐ潰瑩潮慬⁤畲慴楯渺⁦汯慴⤠笍ਠ⁶慲⁭潶敭敮瑟慤橵獴潲㨠䍍潶敭敮瑁摪畳瑯爻ഊ†癡爠獬楤敟瑩捫整㨠卍潶敭敮瑁摪畳瑭敮瑒敱略獴呩捫整㬍ਠ⁶慲⁴牡湳污瑩潮㨠噥捴潲㬍਍ਠ⁩映⡤畲慴楯渠㰽‰⤠笍ਠ†⁤畲慴楯渠㴠㈻ ⼠瑷漠獥捯湤猍ਠ⁽ഊഊ†瑲慮獬慴楯渠㴠灯獩瑩潮‭⁥湴楴礮䝥瑗潲汤偯獩瑩潮⠩㬍਍ਠ⁭潶敭敮瑟慤橵獴潲‽ ⡃䅣瑯爩敮瑩瑹⤍ਠ†‮䝥瑍潶楮杁来湴䍯浰潮敮琨⤍ਠ†‮䝥瑍潶敭敮瑁摪畳瑯爨⤻ഊഊ†⼯⁣慮捥氠慮礠慤橵獴敭敮琠浡摥⁷楴栠瑨攠獡浥⁮慭攍ਠ⁭潶敭敮瑟慤橵獴潲⹃慮捥求祎慭攨❓桡牥摕瑩汳卬楤敔潐潳楴楯渧⤻ഊഊ†⼯⁡湤⁮潷⁷攠捲敡瑥⁡⁮敷⁲敱略獴ഊ†獬楤敟瑩捫整‽⁭潶敭敮瑟慤橵獴潲⹃牥慴敎敷剥煵敳琨❓桡牥摕瑩汳卬楤敔潐潳楴楯渧⤻ഊഊ†浯癥浥湴彡摪畳瑯爮䅤橵獴浥湴䑵牡瑩潮⠍ਠ†⁳汩摥彴楣步琬ഊ††摵牡瑩潮ഊ†⤻ഊഊ†浯癥浥湴彡摪畳瑯爮卬楤敔漨ഊ††獬楤敟瑩捫整Ⰽਠ†⁰潳楴楯測ഊ†⤻ഊഊ†浯癥浥湴彡摪畳瑯爮副瑡瑥呯⠍ਠ†⁳汩摥彴楣步琬ഊ††噥捈敡摩湧⡴牡湳污瑩潮⤍ਠ 㬍੽
+﻿statemachine class WMH_PushArea extends CEntity {
+  public editable var push_message: string;
+  default push_message = "You are approaching unfinished terrain";
+  hint push_message = "Set a message this push area will display when the player enters it";
+
+  public editable var disable_on_fact: name;
+  hint disable_on_fact = "If set and if the fact it points to exists, the area will no longer push the player away";
+
+  event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
+    if (IsNameValid(this.disable_on_fact) && FactsDoesExist(this.disable_on_fact)) {
+      return false;
+    }
+
+		if (this.GetCurrentStateName() != 'Pushing') {
+      this.GotoState('Pushing');
+    }
+	}
+
+	event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
+		if (this.GetCurrentStateName() == 'Pushing') {
+      this.GotoState('Waiting');
+    }
+	}
+}
+
+state Waiting in WMH_PushArea {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+
+    thePlayer
+      .GetMovingAgentComponent()
+      .GetMovementAdjustor()
+      .CancelByName('SharedUtilsSlideToPosition');
+  }
+}
+state Pushing in WMH_PushArea {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Pushing_main();
+  }
+
+  entry function Pushing_main() {
+    var destination: Vector;
+    var push_starting_position: Vector;
+
+    WMHHUD(parent.push_message);
+    push_starting_position = thePlayer.GetWorldPosition();
+
+    // disabled:
+    // pushing the player around proved immersion breaking and could also cause
+    // a few issues when the player was mounted or in combat.
+    //
+    // while (true) {
+    //   // first draw a line from the center of the area to the player and
+    //   // extrapolate it.
+    //   destination = VecInterpolate(
+    //     parent.GetWorldPosition(),
+    //     thePlayer.GetWorldPosition(),
+    //     1.01
+    //   );
+
+    //   destination = VecInterpolate(
+    //     thePlayer.GetWorldPosition(),
+    //     // then use the mean position between the extrapolated destination
+    //     // and the position the player was when it entered the area
+    //     (push_starting_position + destination) / 2,
+    //     1.01
+    //   );
+
+    //   WMH_slideEntityToPosition(
+    //     thePlayer,
+    //     destination,
+    //     0.25
+    //   );
+
+    //   Sleep(0.10);
+    // }
+  }
+}
+
+function WMH_slideEntityToPosition(entity: CEntity, position: Vector, optional duration: float) {
+  var movement_adjustor: CMovementAdjustor;
+  var slide_ticket: SMovementAdjustmentRequestTicket;
+  var translation: Vector;
+
+  if (duration <= 0) {
+    duration = 2; // two seconds
+  }
+
+  translation = position - entity.GetWorldPosition();
+
+  movement_adjustor = ((CActor)entity)
+    .GetMovingAgentComponent()
+    .GetMovementAdjustor();
+
+  // cancel any adjustement made with the same name
+  movement_adjustor.CancelByName('SharedUtilsSlideToPosition');
+
+  // and now we create a new request
+  slide_ticket = movement_adjustor.CreateNewRequest('SharedUtilsSlideToPosition');
+
+  movement_adjustor.AdjustmentDuration(
+    slide_ticket,
+    duration
+  );
+
+  movement_adjustor.SlideTo(
+    slide_ticket,
+    position,
+  );
+
+  movement_adjustor.RotateTo(
+    slide_ticket,
+    VecHeading(translation)
+  );
+}

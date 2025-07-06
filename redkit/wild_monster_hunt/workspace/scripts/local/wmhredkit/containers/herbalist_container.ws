@@ -1,4 +1,4 @@
-class WMH_HerbalistContainer extends W3AnimatedContainer {
+﻿class WMH_HerbalistContainer extends W3AnimatedContainer {
   event OnStreamIn() {
     super.OnStreamIn();
   }

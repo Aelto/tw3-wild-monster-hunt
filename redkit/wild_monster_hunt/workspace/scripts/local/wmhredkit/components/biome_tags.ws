@@ -1,4 +1,4 @@
-
+﻿
 struct WMH_BiomeTags {
   editable var roomWide: bool;
   editable var altitudeHigh: bool;

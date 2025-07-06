@@ -1,4 +1,4 @@
-
+﻿
 statemachine class WMH_MonsterClue extends W3MonsterClue {
 	// defines the localized name of the creature
 	public var localized_entry_name: string;

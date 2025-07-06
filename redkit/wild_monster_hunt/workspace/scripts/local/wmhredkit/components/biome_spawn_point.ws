@@ -1,4 +1,4 @@
-// 
+﻿// 
 class WMH_BiomeSpawnPoint extends CGameplayEntity {
 	public editable var biome_tags: WMH_BiomeTags;
 	public editable var biome_tags_bypass: array<name>;

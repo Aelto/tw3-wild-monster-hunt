@@ -1,4 +1,4 @@
-enum WMH_LootTag {
+﻿enum WMH_LootTag {
   WMH_LootTag_Food = 0,
   WMH_LootTag_Gear = 1,
   WMH_LootTag_Herb = 2,

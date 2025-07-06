@@ -1,4 +1,4 @@
-// A type of merchant that doesn't use a scene to open its selling menu, interacting
+﻿// A type of merchant that doesn't use a scene to open its selling menu, interacting
 // with it goes straight to the menu.
 class WMH_QuickMerchant extends W3MerchantNPC {
 	private var quickMerchantScenePlayer: WMH_QuickMerchantScenePlayer;

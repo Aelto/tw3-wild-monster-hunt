@@ -1,1 +1,30 @@
-捬慳猠坍䡟卥瑴汥浥湴䅲敡呲楧来爠數瑥湤猠䍅湴楴礠笍ਉ灲楶慴攠敤楴慢汥⁶慲⁵湬潣歟晡捴㨠獴物湧㬍ਉ桩湴⁵湬潣歟晡捴‽•䥦⁰牯癩摥搬⁰潩湴猠瑯⁡⁦慣琠瑨慴⁭畳琠扥⁤敦楮敤⁦潲⁴桥⁡牥愠瑯⁴物杧敲∻ഊഊ॥癥湴⁏湁牥慅湴敲⡡牥愺⁃呲楧来牁牥慃潭灯湥湴Ⱐ慣瑩癡瑯爺⁃䍯浰潮敮琩⁻ഊउ楦 慣瑩癡瑯爮䝥瑅湴楴礨⤠ℽ⁴桥偬慹敲⤠笍ਉउ牥瑵牮⁦慬獥㬍ਉॽഊഊउ楦 瑨楳⹣慮呲楧来爨⤩⁻ഊउऍਉउ瑨敐污祥爮睭栮獵扭楴佮卥瑴汥浥湴䕮瑥爨瑨楳⤻ഊउ納ਉ納਍ਉ敶敮琠佮䅲敡䕸楴⡡牥愺⁃呲楧来牁牥慃潭灯湥湴Ⱐ慣瑩癡瑯爺⁃䍯浰潮敮琩⁻ഊउ楦 慣瑩癡瑯爮䝥瑅湴楴礨⤠ℽ⁴桥偬慹敲⤠笍ਉउ牥瑵牮⁦慬獥㬍ਉॽഊഊउ楦 瑨楳⹣慮呲楧来爨⤩⁻ഊउॴ桥偬慹敲⹷浨⹳畢浩瑏湓整瑬敭敮瑅硩琨瑨楳⤻ഊउ納ਉ納ਉഊ॰物癡瑥⁦畮捴楯渠捡湔物杧敲⠩㨠扯潬⁻ഊउ牥瑵牮⁓瑲䱥渨瑨楳⹵湬潣歟晡捴⤠㰽‰ഊउॼ簠䙡捴獄潥獅硩獴⡴桩献畮汯捫彦慣琩㬍ਉ納੽ഊ
+﻿class WMH_SettlementAreaTrigger extends CEntity {
+	private editable var unlock_fact: string;
+	hint unlock_fact = "If provided, points to a fact that must be defined for the area to trigger";
+
+	event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+		if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
+		if (this.canTrigger()) {
+			
+			thePlayer.wmh.submitOnSettlementEnter(this);
+		}
+	}
+
+	event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
+		if (activator.GetEntity() != thePlayer) {
+			return false;
+		}
+
+		if (this.canTrigger()) {
+			thePlayer.wmh.submitOnSettlementExit(this);
+		}
+	}
+	
+	private function canTrigger(): bool {
+		return StrLen(this.unlock_fact) <= 0
+			|| FactsDoesExist(this.unlock_fact);
+	}
+}
