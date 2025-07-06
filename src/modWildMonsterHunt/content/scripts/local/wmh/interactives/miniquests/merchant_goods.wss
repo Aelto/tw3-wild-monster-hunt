@@ -25,6 +25,10 @@ class WMH_MerchantGoods extends CGameplayEntity {
     if (!displayed_fact) {
       WMHHUD("You found merchant goods, the camp merchant's will refill his stock on your next visit.");
     }
+
+    theSound.SoundEvent('gui_inventory_repair');
+    theSound.SoundEvent("gui_journal_track_quest");
+
     return true;
   }
 
