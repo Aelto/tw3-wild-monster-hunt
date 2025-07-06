@@ -46,7 +46,7 @@ statemachine class WMH_EventNpc_EventProtectHorde extends WMH_EventNpc_BaseEvent
       .startGroup("Protect horde event")
       .appendItem(this.itemName(0), this.itemQuantity(0))
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
-      .appendMoney(WMH_difficultyScaleDownF(15, 0.1) as int);
+      .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);
 
     return super.tryComplete(provider);
   }
