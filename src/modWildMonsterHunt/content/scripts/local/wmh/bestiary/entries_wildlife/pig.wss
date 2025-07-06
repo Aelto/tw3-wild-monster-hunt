@@ -9,11 +9,11 @@ class WMH_BestiaryEntryPig extends WMH_BestiaryEntry {
     );
 
     this.difficulty_scaling.minimum_count_easy = 1;
-    this.difficulty_scaling.maximum_count_easy = 5;
+    this.difficulty_scaling.maximum_count_easy = 3;
     this.difficulty_scaling.minimum_count_medium = 1;
-    this.difficulty_scaling.maximum_count_medium = 5;
+    this.difficulty_scaling.maximum_count_medium = 3;
     this.difficulty_scaling.minimum_count_hard = 1;
-    this.difficulty_scaling.maximum_count_hard = 5;
+    this.difficulty_scaling.maximum_count_hard = 3;
 
     this.biome_tag_bypass = 'Pig';
   }
