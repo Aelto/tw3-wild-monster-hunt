@@ -22,12 +22,12 @@ class WMH_EncounterClues extends WMH_Encounter {
     this.oneliner_distant.render_distance = 150;
     this.oneliner_distant.offset = Vector(0, 0, 1.5);
 
-    this.oneliner_distant = WMH_gameplayOnelinerEntity(
+    this.oneliner_close = WMH_gameplayOnelinerEntity(
       contract.toTargetLocNameHtml() + " tracks",
       this.spawn_point
     );
-    this.oneliner_distant.render_distance = 20;
-    this.oneliner_distant.offset = Vector(0, 0, 0.5);
+    this.oneliner_close.render_distance = 20;
+    this.oneliner_close.offset = Vector(0, 0, 0.5);
 
     return this;
   }
