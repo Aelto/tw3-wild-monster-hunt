@@ -37,12 +37,15 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
       )
     );
 
-    this.templates.PushBack(
-      WMH_EnemyTemplate(
-        "characters\npc_entities\monsters\nekker_mh__warrior.w2ent",1,
-        "gameplay\journal\bestiary\bestiarymonsterhuntmh202.journal"
-      )
-    );
+    // this template drops a Devine relic sword, too easy to kill for a relic
+    // that sells at 1K crowns
+    //
+    // this.templates.PushBack(
+    //   WMH_EnemyTemplate(
+    //     "characters\npc_entities\monsters\nekker_mh__warrior.w2ent",1,
+    //     "gameplay\journal\bestiary\bestiarymonsterhuntmh202.journal"
+    //   )
+    // );
 
     this.difficulty_scaling.minimum_count_easy = 4;
     this.difficulty_scaling.maximum_count_easy = 5;
