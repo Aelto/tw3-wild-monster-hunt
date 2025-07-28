@@ -230,3 +230,7 @@ class WMH_SpawnRequestGuardedTreasure extends WMH_SpawnRequest {
     this.guarded_treasure.onEncounterSpawned(encounter);
   }
 }
+
+class WMH_SpawnRequestAreaSpawnPoint extends WMH_SpawnRequest {
+  // uses the default `onRequestFinished`
+}
