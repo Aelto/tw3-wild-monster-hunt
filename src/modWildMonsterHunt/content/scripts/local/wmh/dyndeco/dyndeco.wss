@@ -11,7 +11,11 @@ class WMH_DynDecoration extends CGameplayEntity {
   default offset_seed_with_hunt = true;
   hint offset_seed_with_hunt = "if enabled, activates the use of a seed for PRNG and use the current WMH hunt seed as part of the seed.";
 
-  event OnSpawned(spawnData: SEntitySpawnData ) {
+  protected editable var despawn_on_exit: bool;
+  hint despawn_on_exit = "if enabled, the decorations spawned by this entity are despawned when the player exits the trigger area (if there is any)";
+  default despawn_on_exit = true;
+
+  event OnSpawned(spawnData: SEntitySpawnData) {
     super.OnSpawned(spawnData);
 
     if (this.offset_seed_with_position) {
@@ -26,6 +30,36 @@ class WMH_DynDecoration extends CGameplayEntity {
 
     this.AddTimer('delayedGeneratedRequest', 5.0);
 	}
+
+  event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+      return false;
+    }
+
+    var dyndeco_trigger_area: CTriggerAreaComponent = this
+      .GetComponent("DynDecoTriggerArea") as CTriggerAreaComponent;
+
+    if (area == dyndeco_trigger_area) {
+      // TODO: add cooldown
+      this.requestAsynchronousGeneration();
+    }
+  }
+
+  event OnAreaExit(area: CTriggerAreaComponent, activator: CComponent) {
+    if (activator.GetEntity() != thePlayer) {
+      return false;
+    }
+
+    if (this.despawn_on_exit) {
+      var dyndeco_trigger_area: CTriggerAreaComponent = this
+        .GetComponent("DynDecoTriggerArea") as CTriggerAreaComponent;
+
+      if (area == dyndeco_trigger_area) {
+        // TODO: reset cooldown
+        this.clearDynamicDecorations();
+      }
+    }
+  }
 
   public function getSeed(optional offset: int): int {
     if (this.seed <= 0) {
