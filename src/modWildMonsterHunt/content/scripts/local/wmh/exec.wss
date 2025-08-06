@@ -33,6 +33,6 @@ exec function wmhtrapper() {
   thePlayer.inv.AddAnItem('modwmh_trap_device', 1);
   thePlayer.inv.AddAnItem('modwmh_trap_repair_tools', 2);
   thePlayer.inv.AddAnItem('modwmh_silver_shrapnel', 1);
-  thePlayer.inv.AddAnItem('Drowner brain', 10);
-  thePlayer.inv.AddAnItem('Monstrous hide', 10);
+  thePlayer.inv.AddAnItem('Necrophage skin', 10);
+  thePlayer.inv.AddAnItem('Werewolf pelt', 10);
 }
