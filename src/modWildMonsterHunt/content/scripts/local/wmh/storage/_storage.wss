@@ -4,6 +4,7 @@ class WMH_Storage {
   public var contract: WMH_StorageContract;
   public var herbalist: WMH_StorageHerbalist;
   public var decorations: WMH_StorageDecorations;
+  public var quickstart: WMH_StorageQuickStart;
 }
 
 function WMH_getStorage(): WMH_Storage {
@@ -29,5 +30,9 @@ function WMH_initializeStorage(master: WMH_Master) {
 
   if (!master.storage.decorations) {
     master.storage.decorations = new WMH_StorageDecorations in master;
+  }
+
+  if (!master.storage.quickstart) {
+    master.storage.quickstart = new WMH_StorageQuickStart in master;
   }
 }

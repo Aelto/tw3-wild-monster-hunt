@@ -1,0 +1,21 @@
+function WMH_getStorageQuickStart(): WMH_StorageQuickStart {
+  return thePlayer.wmh.storage.quickstart;
+}
+
+function WMH_getStorageQuickStartActivatedLocations(): array<WMH_QuickStartLocationOptions> {
+  var storage: WMH_StorageQuickStart = WMH_getStorageQuickStart();
+
+  return storage.activated_quickstart_locations;
+}
+
+function WMH_setStorageQuickStartActivatedLocations(
+  locations: array<WMH_QuickStartLocationOptions>
+) {
+  var storage: WMH_StorageQuickStart = WMH_getStorageQuickStart();
+
+  return storage.activated_quickstart_locations = locations;
+}
+
+class WMH_StorageQuickStart {
+  public var activated_quickstart_locations: array<WMH_QuickStartLocationOptions>;
+}
