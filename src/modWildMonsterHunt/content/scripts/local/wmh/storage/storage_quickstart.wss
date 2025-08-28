@@ -13,7 +13,7 @@ function WMH_setStorageQuickStartActivatedLocations(
 ) {
   var storage: WMH_StorageQuickStart = WMH_getStorageQuickStart();
 
-  return storage.activated_quickstart_locations = locations;
+  storage.activated_quickstart_locations = locations;
 }
 
 class WMH_StorageQuickStart {

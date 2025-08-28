@@ -1,76 +1,75 @@
 /// There is a vanilla WeatherShrine class, however it doesn't 100% cover our
 /// needs: A shrine can only change the weather type to 1 specific value.
-class WMH_WeatherShrine extends CGameplayEntity {
-  private editable var target_weather: WMH_WeatherType;
+statemachine class WMH_WeatherShrine extends CGameplayEntity {
+  protected editable var target_weather: WMH_WeatherType;
   hint target_weather = "The desired weather after the shrine is interacted with.";
 
+  private var oneliner: WMH_GameplayOnelinerEntity;
+
+  protected editable var quickstart_options: WMH_QuickStartLocationOptions;
+
   event OnInteraction(actionName: string, activator: CEntity) {
-    this.changeWeather();
+    this.GotoState('StartDialogChoice');
   }
 
   event OnInteractionActivationTest(
     interactionComponentName: string,
     activator: CEntity
   ) {
-    var current: name = GetWeatherConditionName();
-
     this.displayTutorial();
 
-    // Each totem has two sides:
-    // - one to clear the weather if the current weather matches the desired one
-    //   for the shrine
-    // - one to set the weather to the desired one by the shrine but only if the
-    //   weather is clear/none
-    if (this.target_weather == WMH_WeatherType_Snow) {
-      if (current == 'WT_Snow') {
-        return interactionComponentName == "PrayInteractionClear";
-      }
-
-      return current == 'WT_Clear'
-          && interactionComponentName == "PrayInteractionDesired";
-    }
-    else if (this.target_weather == WMH_WeatherType_Rain) {
-      if (current == 'WT_Rain_Storm') {
-        return interactionComponentName == "PrayInteractionClear";
-      }
-
-      return current == 'WT_Clear'
-          && interactionComponentName == "PrayInteractionDesired";
-    }
-
-    // if the shrine is set to Clear or None, then only its Clear component is
-    // displayed, and no matter the current weather.
-    return interactionComponentName == "PrayInteractionClear";
+    return true;
   }
 
-  protected function changeWeather() {
-    var weather_name: string;
-    var success: bool;
+  event OnInteractionActivated(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    if (activator != thePlayer) {
+      return false;
+    }
 
+    if (!this.oneliner) {
+      this.setupOneliner();
+    }
+    else {
+      this.oneliner.register();
+    }
+  }
+
+  event OnInteractionDeactivated(
+    interactionComponentName: string,
+    activator: CEntity
+  ) {
+    if (activator != thePlayer) {
+      return false;
+    }
+
+    if (this.oneliner) {
+      this.oneliner.unregister();
+    }
+  }
+
+  protected function changeWeather(target_weather: WMH_WeatherType) {
     var current: WMH_WeatherType = WMH_getWeatherType();
     var target_weather_name: name;
 
-    if (current == this.target_weather) {
-      target_weather_name = 'WT_Clear';
-    }
-    else {
-      switch (this.target_weather) {
-        case WMH_WeatherType_Clear:
-        case WMH_WeatherType_None:
-          target_weather_name = 'WT_Clear';
-          break;
+    switch (target_weather) {
+      case WMH_WeatherType_Clear:
+      case WMH_WeatherType_None:
+        target_weather_name = 'WT_Clear';
+        break;
 
-        case WMH_WeatherType_Snow:
-          target_weather_name = 'WT_Snow';
-          break;
+      case WMH_WeatherType_Snow:
+        target_weather_name = 'WT_Snow';
+        break;
 
-        case WMH_WeatherType_Rain:
-          target_weather_name = 'WT_Rain_Storm';
-          break;
-      }
+      case WMH_WeatherType_Rain:
+        target_weather_name = 'WT_Rain_Storm';
+        break;
     }
 
-    success = RequestWeatherChangeTo(target_weather_name, 60, false);
+    var success: bool = RequestWeatherChangeTo(target_weather_name, 60, false);
     if (success) {
       thePlayer.DisplayHudMessage(
         GetLocStringByKeyExt("panel_hud_message_prayer_heard")
@@ -87,9 +86,158 @@ class WMH_WeatherShrine extends CGameplayEntity {
     WMHTUTOFACT(
       'WMH_WeatherShrine',
       "Weather Shrine",
-      "You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather."
+      "You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather as well as fast travel locations to start the hunts."
       + "<br/><br/>"
-      + "These Druidic artefacts possess two faces and the <font color='#CD7D03'>results may vary depending on which side you interact with</font>, experiment with them to turn the weather into one of your powerful hunting tools."
+      + "<font color='#CD7D03'>Quick-start locations</font>: Weather shrines can act as alternative starting locations for your hunts. Once activated this location will be listed among the other quick-start locations you have activated, however every shrine you maintain increases the total upkeep & usage cost needed to fast travel. Using a quick-start location requires crowns and <font color='#CD7D03'>Merchant Goods</font>."
     );
+  }
+
+  protected function setupOneliner() {
+    if (this.oneliner) {
+      this.oneliner.unregister();
+    }
+
+    var activated_message: string = "DEACTIVATED";
+    if (WMH_isQuickStartLocationActivated(this.quickstart_options)) {
+      activated_message = "<font color='#CD7D03'>ACTIVATED</font>";
+    }
+
+    this.oneliner = WMH_gameplayOnelinerEntity(
+      "<u>" + this.quickstart_options.location_name + "</u><br/>"
+      + "Quick-Start location<br/>"
+      + activated_message,
+      this
+    );
+
+    this.oneliner.offset = Vector(0, 0, 2);
+    this.oneliner.visible_outside_focus_mode = true;
+  }
+}
+
+state Waiting in WMH_WeatherShrine {}
+
+state StartDialogChoice in WMH_WeatherShrine {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    parent.GotoState('DialogChoice');
+  }
+}
+
+state DialogChoice in WMH_WeatherShrine {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.DialogChoice_main();
+  }
+
+  entry function DialogChoice_main() {
+    this.displayMainChoices();
+    parent.GotoState('Waiting');
+  }
+
+  latent function displayMainChoices() {
+    var choices: array<SSceneChoice>;
+
+    while (true) {
+      choices.Clear();
+
+      var upkeep_cost: int = WMH_getQuickStartMerchantGoodsCost(
+        parent.quickstart_options
+      );
+
+      if (WMH_isQuickStartLocationActivated(parent.quickstart_options)) {
+        choices.PushBack(SSceneChoice(
+          "Deactivate Fast Travel location (upkeep: "+upkeep_cost+")",
+          true, // true
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_GETBACK,
+          'QuickStartDeactivate'
+        ));
+      }
+      else {
+        choices.PushBack(SSceneChoice(
+          "Activate Fast Travel location (upkeep: "+upkeep_cost+")",
+          false, // true
+          true, // previouslyChoosen
+          false, // disabled
+          DialogAction_FAST_TRAVEL,
+          'QuickStartActivate'
+        ));
+      }
+
+      if (parent.target_weather == WMH_WeatherType_Rain) {
+        choices.PushBack(SSceneChoice(
+          "Summon rain weather",
+          false, // emphasis
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_NONE,
+          'WeatherSummonRain'
+        ));
+      }
+
+      if (
+        parent.target_weather == WMH_WeatherType_Clear
+        || parent.target_weather == WMH_WeatherType_None
+      ) {
+        choices.PushBack(SSceneChoice(
+          "Summon clear weather",
+          false, // emphasis
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_NONE,
+          'WeatherSummonClear'
+        ));
+      }
+
+      if (parent.target_weather == WMH_WeatherType_Snow) {
+        choices.PushBack(SSceneChoice(
+          "Summon clear weather",
+          false, // emphasis
+          false, // previouslyChoosen
+          false, // disabled
+          DialogAction_NONE,
+          'WeatherSummonSnow'
+        ));
+      }
+
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_EXIT,
+        'Cancel'
+      ));
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'QuickStartDeactivate') {
+        WMH_toggleQuickStartLocation(parent.quickstart_options, false);
+        parent.setupOneliner();
+      }
+      else if (response.playGoChunk == 'QuickStartActivate') {
+        WMH_toggleQuickStartLocation(parent.quickstart_options, true);
+        parent.setupOneliner();
+      }
+      else if (response.playGoChunk == 'WeatherSummonClear') {
+        parent.changeWeather(WMH_WeatherType_Clear);
+        return;
+      }
+      else if (response.playGoChunk == 'WeatherSummonRain') {
+        parent.changeWeather(WMH_WeatherType_Rain);
+        return;
+      }
+      else if (response.playGoChunk == 'WeatherSummonSnow') {
+        parent.changeWeather(WMH_WeatherType_Snow);
+        return;
+      }
+      else {
+        return;
+      }
+    }
+
+    return;
   }
 }

@@ -1,24 +1,177 @@
 struct WMH_QuickStartLocationOptions {
+  /// tag of the entity to use as a quick-start location
   editable var location_tag: name;
-  hint location_tag = "tag of the entity to use as a quick-start location";
 
+  /// modifier for how much the upkeep fee is for this location.
   editable var fee_upkeep_modifier: float;
   default fee_upkeep_modifier = 1.0;
-  hint fee_upkeep_modifier = "modifier for how much the upkeep fee is for this location. The upkeep fee is applied when the hunt ends and if at least one contract is completed.";
 
+  /// modifier for how much the on-use cost is for this location.
   editable var fee_use_modifier: float;
   default fee_use_modifier = 1.0;
-  hint fee_use_modifier = "modifier for how much the on-use cost is for this location.";
+
+  editable var location_name: string;
 }
 
-function WMH_getQuickStartTotalUpkeepCost(): float {
+function WMH_toggleQuickStartLocation(
+  out options: WMH_QuickStartLocationOptions,
+  activated: bool
+) {
+  var locations: array<WMH_QuickStartLocationOptions>;
+  locations = WMH_getStorageQuickStartActivatedLocations();
+
+  if (activated) {
+    if (!WMH_isQuickStartLocationActivated(options)) {
+      locations.PushBack(options);
+    }
+  }
+  else {
+    var to_remove: array<WMH_QuickStartLocationOptions>;
+
+    for location: WMH_QuickStartLocationOptions in locations {
+      if (location.location_tag == options.location_tag) {
+        to_remove.PushBack(location);
+      }
+    }
+
+    for location: WMH_QuickStartLocationOptions in to_remove {
+      locations.Remove(location);
+    }
+  }
+
+  WMH_setStorageQuickStartActivatedLocations(locations);
+}
+
+function WMH_isQuickStartLocationActivated(
+  out options: WMH_QuickStartLocationOptions
+): bool {
+  var locations: array<WMH_QuickStartLocationOptions>;
+  locations = WMH_getStorageQuickStartActivatedLocations();
+
+  for location: WMH_QuickStartLocationOptions in locations {
+      if (location.location_tag == options.location_tag) {
+        return true;
+      }
+    }
+
+  return false;
+}
+
+latent function WMH_displayQuickStartLocationChoice(): bool {
+  var choices: array<SSceneChoice>;
+
+  var br: string = "<br/>";
+  var message: string;
+  var upkeep_cost: int = WMH_getQuickStartTotalUpkeepCost();
+  var crowns_cost: int = WMH_getQuickStartCrownsCost();
+  var crowns_icon: string = thePlayer.GetInventory().GetItemIconPathByName('Crowns');
+
+  message += "<font size='24' color='#8a5551'>ROADS UPKEEP:</font>" + br;
+  message += "<font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee,</font>" + br;
+  message += "<font size='18'>Fast Travelling to any of the locations will cost the following:</font>" + br;
+
+  message += " - Upkeep fee: "+upkeep_cost+" Merchant Goods" + br;
+  message += " - Travel fee: "+crowns_cost+" "+crowns_icon + br;
+  WMHPOPUP(message, 60*5*1000);
+
+  while (true) {
+    choices.Clear();
+
+    var activated_locations: array<WMH_QuickStartLocationOptions>;
+    activated_locations = WMH_getStorageQuickStartActivatedLocations();
+
+    for location: WMH_QuickStartLocationOptions in activated_locations {
+      var upkeep_cost: int = WMH_getQuickStartMerchantGoodsCost(location);
+      choices.PushBack(SSceneChoice(
+        location.location_name+" (upkeep: "+upkeep_cost+")",
+        false, // emphasis
+        false, // previouslyChoosen
+        WMH_canUseQuickStartLocation(location), // disabled
+        DialogAction_FAST_TRAVEL,
+        location.location_tag
+      ));
+    }
+
+    choices.PushBack(SSceneChoice(
+      "Cancel",
+      false, // emphasis
+      false, // previouslyChoosen
+      false, // disabled
+      DialogAction_EXIT,
+      'Cancel'
+    ));
+
+    var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+    SU_closeDialogChoiceInterface();
+
+    if (response.playGoChunk == 'Cancel') {
+      return false;
+    }
+    else {
+      var location_tag: name = response.playGoChunk;
+
+      for location: WMH_QuickStartLocationOptions in activated_locations {
+        if (location.location_tag == location_tag) {
+          WMH_fastTravelToQuickstartLocation(location);
+          return true;
+        }
+      }
+      
+      return false;
+    }
+  }
+
+  return false;
+}
+
+latent function WMH_fastTravelToQuickstartLocation(
+  out options: WMH_QuickStartLocationOptions
+) {
+  if (!WMH_isInWmhLevel()) {
+    return;
+  }
+
+  var entity: CEntity = theGame.GetEntityByTag(options.location_tag);
+  if (!entity) {
+    return;
+  }
+
+  theGame.FadeOut(0.5);
+  thePlayer.TeleportWithRotation(
+    entity.GetWorldPosition(),
+    entity.GetWorldRotation()
+  );
+  theGame.FadeInAsync(1.0);
+  var cost: int = WMH_getQuickStartTotalUpkeepCost();
+  WMH_updateMerchantGoodsFact(cost * -1);
+  WMHHUD(cost+" Merchant Goods were used to reach the destination.");
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Cost functions
+
+function WMH_getQuickStartTotalUpkeepCost(): int {
   var locations: array<WMH_QuickStartLocationOptions>;
   locations = WMH_getStorageQuickStartActivatedLocations();
 
   var total_cost: float = 0;
   for location: WMH_QuickStartLocationOptions in locations {
-    total_cost += location.fee_upkeep_modifier;
+    total_cost += WMH_getQuickStartMerchantGoodsCost(location);
   }
 
-  return total_cost;
+  return FloorF(total_cost);
+}
+
+function WMH_getQuickStartMerchantGoodsCost(out options: WMH_QuickStartLocationOptions): int {
+  return FloorF(2 * options.fee_upkeep_modifier);
+}
+
+function WMH_getQuickStartCrownsCost(): int {
+  return 2;
+}
+
+function WMH_canUseQuickStartLocation(out options: WMH_QuickStartLocationOptions): bool {
+  return thePlayer.GetMoney() >= WMH_getQuickStartCrownsCost()
+      && WMH_getMerchantGoodsFacts() >= WMH_getQuickStartTotalUpkeepCost();
 }

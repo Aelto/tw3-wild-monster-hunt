@@ -308,17 +308,6 @@ statemachine class WMH_ContractManager {
 
     output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true, 10) + br;
 
-    var quickstart_upkeep_cost: int = WMH_getQuickStartTotalUpkeepCost() as int;
-    if (quickstart_upkeep_cost > 0) {
-      var provider: WMH_RewardProvider = new WMH_RewardProvider in this;
-      provider.startGroup("Camp & Services").lockGroups(true);
-      provider.appendMoney(quickstart_upkeep_cost * -1);
-
-      output += br + "<font size='24' color='#8a5551'>Camp & Services:</font>" + br;
-      output += "<font size='18'>Fees are applied at the end of the hunt if at least one contract is completed.</font>";
-      output += provider.toHtml(thePlayer.GetInventory(), true, 10) + br;
-    }
-
     return output;
   }
 
@@ -396,20 +385,20 @@ statemachine class WMH_ContractManager {
         "<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorites and re-used to replace unwanted ones. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being the combined result of all active contracts, try to keep an eye on the board for particularly efficient ones in order to maximize the rewards each time you go out."
       );
 
-      provider.appendMoney((WMH_getQuickStartTotalUpkeepCost() as int) * -1);
       provider.transferItems(thePlayer.GetInventory());
       WMHPOPUP(provider.toHtml(thePlayer.GetInventory()));
     }
   }
 
   private function completeHuntMiniquests(provider: WMH_RewardProvider): bool {
-    var merchant_goods: int = WMH_getMerchantGoodsFacts();
+    var merchant_goods: int = WMH_getMerchantGoodsCarryingFacts();
     var received_anything: bool;
 
     if (merchant_goods > 0) {
       received_anything = true;
       provider.addMoney("Merchant Goods", merchant_goods * 2);
-      WMH_resetMerchantGoodsFacts();
+      WMH_resetMerchantGoodsCarryingFacts();
+      WMH_updateMerchantGoodsFact(10);
     }
 
     return received_anything;
