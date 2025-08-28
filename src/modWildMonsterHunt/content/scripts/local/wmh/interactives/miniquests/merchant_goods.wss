@@ -15,7 +15,7 @@ class WMH_MerchantGoods extends CGameplayEntity {
       return false;
     }
 
-    WMH_updateMerchantGoodsFact(1);
+    WMH_updateMerchantGoodsCarryingFact(1);
     var displayed_fact: bool = WMHTUTOFACT(
       'WMH_MerchantGoods_PickedUp',
       "Merchant Goods",
@@ -49,13 +49,21 @@ class WMH_MerchantGoods extends CGameplayEntity {
 }
 
 function WMH_getMerchantGoodsFacts(): int {
-  return FactsQuerySum("WMH_MerchantGoods_carrying_count");
+  return FactsQuerySum("WMH_MerchantGoods_count");
 }
 
 function WMH_updateMerchantGoodsFact(optional offset: int) {
-  FactsSet("WMH_MerchantGoods_carrying_count", WMH_getMerchantGoodsFacts() + offset);
+  FactsSet("WMH_MerchantGoods_count", WMH_getMerchantGoodsFacts() + offset);
 }
 
-function WMH_resetMerchantGoodsFacts() {
+function WMH_getMerchantGoodsCarryingFacts(): int {
+  return FactsQuerySum("WMH_MerchantGoods_carrying_count");
+}
+
+function WMH_updateMerchantGoodsCarryingFact(optional offset: int) {
+  FactsSet("WMH_MerchantGoods_carrying_count", WMH_getMerchantGoodsCarryingFacts() + offset);
+}
+
+function WMH_resetMerchantGoodsCarryingFacts() {
   FactsRemove("WMH_MerchantGoods_carrying_count");
 }

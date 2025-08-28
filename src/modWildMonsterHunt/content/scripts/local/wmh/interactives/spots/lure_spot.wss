@@ -209,7 +209,7 @@ state DialogChoice in WMH_LureSpot {
         false, // emphasis
         false, // previouslyChoosen
         false, // disabled
-        DialogAction_MONSTERCONTRACT,
+        DialogAction_EXIT,
         'Cancel'
       ));
 

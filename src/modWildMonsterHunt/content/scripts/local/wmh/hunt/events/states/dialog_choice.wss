@@ -54,7 +54,7 @@ state DialogChoice in WMH_EventNpc {
       }
 
       choices.PushBack(SSceneChoice(
-        "Farewell.",
+        "Cancel",
         false,
         true,
         false,

@@ -34,23 +34,15 @@ function WMH_transferMoneyToSmithMerchant(quantity: int) {
 /// Extra funds: next time the merchant is interacted with, he gets additional
 /// money based on this value. The fact is reset once the money is added
 function WMH_addFundsToSmithMerchants(quantity: int) {
-  WMH_setSmithMerchantExtraFunds(WMh_getSmithMerchantExtraFunds() + quantity);
+  WMH_setSmithMerchantExtraFunds(WMH_getSmithMerchantExtraFunds() + quantity);
 }
 
 function WMH_setSmithMerchantExtraFunds(quantity: int) {
   FactsSet("WMH_SmithMerchant_extra_funds", quantity);
 }
 
-function WMh_getSmithMerchantExtraFunds(): int {
+function WMH_getSmithMerchantExtraFunds(): int {
   return FactsQueryLatestValue("WMH_SmithMerchant_extra_funds");
-}
-
-function WMH_setSmithMerchantRefillAllowed(quantity: int) {
-  FactsSet("WMH_SmithMerchant_refill_allowed", quantity);
-}
-
-function WMh_getSmithMerchantRefillAllowedCount(): int {
-  return FactsQueryLatestValue("WMH_SmithMerchant_refill_allowed");
 }
 
 
@@ -94,7 +86,7 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     var inventory: CInventoryComponent = this.GetInventory();
     var initial_money: int = inventory.GetMoney();
 
-    var allowed_refills: int = WMh_getSmithMerchantRefillAllowedCount();
+    var allowed_refills: int = WMH_getMerchantGoodsFacts();
     if (allowed_refills > 0) {
       this.addItems(inventory, provider);
       // +1 to count the crowns
@@ -106,7 +98,7 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
       }
     }
 
-    var extra_funds: int = WMh_getSmithMerchantExtraFunds();
+    var extra_funds: int = WMH_getSmithMerchantExtraFunds();
     inventory.SetMoney(initial_money + extra_funds);
     WMH_setSmithMerchantExtraFunds(0);
   }
