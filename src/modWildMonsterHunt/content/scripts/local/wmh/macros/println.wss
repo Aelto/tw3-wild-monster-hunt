@@ -1,0 +1,9 @@
+#define function println(code) {
+  #pragma find {
+  #pragma replace "+
+
+  #pragma find }
+  #pragma replace +"
+
+  WMHINFO(code)
+};

@@ -1,5 +1,3 @@
-#define const DEBUG;
-
 #define function todo(message) {
   WMHINFO("TODO: " + message);
 };
