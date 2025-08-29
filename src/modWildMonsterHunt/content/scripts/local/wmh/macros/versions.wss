@@ -1,0 +1,2 @@
+// switch it to VERSION_4010 for newer version
+#define const VERSION_404;
