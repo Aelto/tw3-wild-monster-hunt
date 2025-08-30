@@ -76,6 +76,7 @@ statemachine class WMH_HuntManager {
     this.spawnrates_pseudo_rng = WMH_getBestiary().toPseudoRngBuffer();
 
     WMH_setHuntSeedFact(this.seed);
+    WMH_resetMerchantGoodsCarryingFacts();
 
     this.start_time = WMH_getGameTimeNow();
     this.start_time_engine = WMH_getEngineTimeAsSeconds();

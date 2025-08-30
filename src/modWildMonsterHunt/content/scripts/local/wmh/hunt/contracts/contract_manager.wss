@@ -396,9 +396,9 @@ statemachine class WMH_ContractManager {
 
     if (merchant_goods > 0) {
       received_anything = true;
-      provider.addMoney("Merchant Goods", merchant_goods * 2);
+      provider.addMoney("Merchant Goods", merchant_goods);
       WMH_resetMerchantGoodsCarryingFacts();
-      WMH_updateMerchantGoodsFact(10);
+      WMH_updateMerchantGoodsFact(merchant_goods * 3);
     }
 
     return received_anything;
