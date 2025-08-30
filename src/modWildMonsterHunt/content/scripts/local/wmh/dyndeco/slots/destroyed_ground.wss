@@ -7,6 +7,10 @@ class WMH_DyndecoSlot_destroyedGround extends WMH_DyndecoSlot {
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_ground_pots_d.w2ent",
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_pots_a.w2ent",
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_pots_b.w2ent",
-    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_wine_a.w2ent"
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_wine_a.w2ent",
+
+    // a small chance to have merchant goods as part of Guarded Treasures
+    // any dyn deco.
+    "dlc\dlcwild_monster_hunt\data\gameplay\interactives\wmh_merchant_goods.w2ent"
   }};
 }

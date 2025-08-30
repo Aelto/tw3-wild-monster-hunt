@@ -6,6 +6,10 @@ class WMH_DyndecoSlot_box extends WMH_DyndecoSlot {
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_d.w2ent",
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_e.w2ent",
     "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_f.w2ent",
-    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_g.w2ent"
+    "dlc\bob\data\environment\decorations\gameplay\generic\decoration_set\destroyed\deco_gen_crates_g.w2ent",
+
+    // a small chance to have merchant goods as part of Guarded Treasures
+    // any dyn deco.
+    "dlc\dlcwild_monster_hunt\data\gameplay\interactives\wmh_merchant_goods.w2ent"
   }};
 }

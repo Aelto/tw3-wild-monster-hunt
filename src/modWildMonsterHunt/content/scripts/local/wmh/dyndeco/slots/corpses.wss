@@ -9,6 +9,10 @@ class WMH_DyndecoSlot_corpse extends WMH_DyndecoSlot {
     // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_06.w2ent",
     // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_07.w2ent",
     // "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_08.w2ent",
-    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_09.w2ent"
+    "environment\decorations\corpses\human_corpses\bandit_corpses\bandit_corpses_09.w2ent",
+
+    // a small chance to have merchant goods as part of Guarded Treasures
+    // any dyn deco.
+    "dlc\dlcwild_monster_hunt\data\gameplay\interactives\wmh_merchant_goods.w2ent"
   }};
 }
