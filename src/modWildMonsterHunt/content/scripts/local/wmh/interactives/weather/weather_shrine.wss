@@ -6,7 +6,7 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
 
   private var oneliner: WMH_GameplayOnelinerEntity;
 
-  protected editable var quickstart_options: WMH_QuickStartLocationOptions;
+  public editable var quickstart_options: WMH_QuickStartLocationOptions;
 
   event OnInteraction(actionName: string, activator: CEntity) {
     this.GotoState('StartDialogChoice');
@@ -74,11 +74,15 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
       thePlayer.DisplayHudMessage(
         GetLocStringByKeyExt("panel_hud_message_prayer_heard")
       );
+
+      theSound.SoundEvent("gui_character_synergy_effect");
     }
     else {
       thePlayer.DisplayHudMessage(
         GetLocStringByKeyExt("panel_hud_message_prayer_not_heard")
       );
+
+      theSound.SoundEvent("gui_character_synergy_effect_lose");
     }
   }
 
@@ -88,7 +92,7 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
       "Weather Shrine",
       "You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather as well as fast travel locations to start the hunts."
       + "<br/><br/>"
-      + "<font color='#CD7D03'>Quick-start locations</font>: Weather shrines can act as alternative starting locations for your hunts. Once activated this location will be listed among the other quick-start locations you have activated, however every shrine you maintain increases the total upkeep & usage cost needed to fast travel. Using a quick-start location requires crowns and <font color='#CD7D03'>Merchant Goods</font>."
+      + "<font color='#CD7D03'>Quick-start locations</font>: Weather shrines can act as alternative starting locations for your hunts. Once active this location will be listed among the other quick-start locations you have activated, however every shrine you maintain increases the total upkeep & usage cost needed to fast travel. Using a quick-start location requires crowns and <font color='#CD7D03'>Merchant Goods</font>."
     );
   }
 
@@ -97,9 +101,9 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
       this.oneliner.unregister();
     }
 
-    var activated_message: string = "DEACTIVATED";
+    var activated_message: string = "INACTIVE";
     if (WMH_isQuickStartLocationActivated(this.quickstart_options)) {
-      activated_message = "<font color='#CD7D03'>ACTIVATED</font>";
+      activated_message = "<font color='#CD7D03'>ACTIVE</font>";
     }
 
     this.oneliner = WMH_gameplayOnelinerEntity(
@@ -215,10 +219,12 @@ state DialogChoice in WMH_WeatherShrine {
 
       if (response.playGoChunk == 'QuickStartDeactivate') {
         WMH_toggleQuickStartLocation(parent.quickstart_options, false);
+        theSound.SoundEvent("gui_ingame_wheel_close");
         parent.setupOneliner();
       }
       else if (response.playGoChunk == 'QuickStartActivate') {
         WMH_toggleQuickStartLocation(parent.quickstart_options, true);
+        theSound.SoundEvent("gui_ingame_wheel_open");
         parent.setupOneliner();
       }
       else if (response.playGoChunk == 'WeatherSummonClear') {

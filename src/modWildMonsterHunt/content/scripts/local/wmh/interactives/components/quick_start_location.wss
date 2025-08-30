@@ -57,6 +57,9 @@ function WMH_isQuickStartLocationActivated(
   return false;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// UI functions
+
 latent function WMH_displayQuickStartLocationChoice(): bool {
   var choices: array<SSceneChoice>;
 
@@ -64,14 +67,17 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
   var message: string;
   var upkeep_cost: int = WMH_getQuickStartTotalUpkeepCost();
   var crowns_cost: int = WMH_getQuickStartCrownsCost();
+
   var crowns_icon: string = thePlayer.GetInventory().GetItemIconPathByName('Crowns');
+  crowns_icon = "<img src='img://" + crowns_icon + "' height='48' width='48' vspace='-24' />" ;
 
   message += "<font size='24' color='#8a5551'>ROADS UPKEEP:</font>" + br;
-  message += "<font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee,</font>" + br;
-  message += "<font size='18'>Fast Travelling to any of the locations will cost the following:</font>" + br;
+  message += "<i><font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee.</font><i>" + br + br;
+  message += "Fast Travelling to any of the locations will cost" + br;
 
   message += " - Upkeep fee: "+upkeep_cost+" Merchant Goods" + br;
-  message += " - Travel fee: "+crowns_cost+" "+crowns_icon + br;
+  message += " - Travel fee: "+crowns_cost+" "+crowns_icon + br + br;
+  message += "You have " + WMH_getMerchantGoodsFacts() + " Merchant Goods.";
   WMHPOPUP(message, 60*5*1000);
 
   while (true) {
@@ -86,7 +92,7 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
         location.location_name+" (upkeep: "+upkeep_cost+")",
         false, // emphasis
         false, // previouslyChoosen
-        WMH_canUseQuickStartLocation(location), // disabled
+        !WMH_canUseQuickStartLocation(location), // disabled
         DialogAction_FAST_TRAVEL,
         location.location_tag
       ));
