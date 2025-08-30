@@ -57,7 +57,7 @@ class WMH_BiomeSpawnPoint extends CGameplayEntity {
 		this.spawn_priority = WMH_BSP_SP_None;
 	}
 
-	// restart the spawn point to mark it as UNavailable until the respawn timer
+	// restart the spawn point to mark it as Unavailable until the respawn timer
 	// has passed.
 	public function restart() {
 		this.respawn_ticker.restart();

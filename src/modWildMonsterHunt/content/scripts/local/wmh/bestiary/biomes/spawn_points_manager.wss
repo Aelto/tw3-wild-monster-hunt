@@ -108,6 +108,27 @@ class WMH_SpawnPointManager {
     return output;
   }
 
+  public function getValidSpawnPointsInRadius(
+    radius: float,
+    optional ignore_respawn: bool
+  ): array<WMH_BiomeSpawnPoint> {
+    var points: array<WMH_BiomeSpawnPoint> = this
+      .getValidSpawnPoints(ignore_respawn);
+
+    var output: array<WMH_BiomeSpawnPoint>;
+
+    var origin: Vector = thePlayer.GetWorldPosition();
+    var radius_sq: float = radius * radius;
+
+    for point: WMH_BiomeSpawnPoint in points {
+      if (VecDistanceSquared2D(origin, point.GetWorldPosition()) <= radius_sq) {
+        output.PushBack(point);
+      }
+    }
+
+    return output;
+  }
+
   public function getNearbyEventNpcSpawnPoints(
     out output: array<WMH_EventNpcSpawnPoint>
   ) {

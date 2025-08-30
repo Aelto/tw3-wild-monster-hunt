@@ -188,6 +188,17 @@ statemachine class WMH_Bestiary {
 
     this.requestSpawn(request);
   }
+
+  public function onClearSpawnPoints(radius: float) {
+    var points: array<WMH_BiomeSpawnPoint> = this.spawn_points
+      .getValidSpawnPointsInRadius(radius);
+
+    for point: WMH_BiomeSpawnPoint in points {
+      if (point.canRespawn()) {
+        point.restart();
+      }
+    }
+  }
   
 
   // The elite entries are the closest ones to the given WMH_Level

@@ -176,3 +176,15 @@ function WMH_setHuntSeedFact(seed: int) {
 function WMH_getHuntSeedFact(): int {
   return FactsQueryLatestValue("WMH_hunt_seed");
 }
+
+function WMH_setHuntClearSpawnPointsFact() {
+  FactsSet("WMH_hunt_clear_spawnpoints", 1);
+}
+
+function WMH_doesHuntClearSpawnPointsFactExists(): bool {
+  return FactsDoesExist("WMH_hunt_clear_spawnpoints");
+}
+
+function WMH_removeHuntClearSpawnPointsFact() {
+  FactsRemove("WMH_hunt_clear_spawnpoints");
+}

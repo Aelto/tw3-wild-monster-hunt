@@ -137,6 +137,7 @@ latent function WMH_fastTravelToQuickstartLocation(
   }
 
   theGame.FadeOut(0.5);
+  WMH_setHuntClearSpawnPointsFact();
   thePlayer.TeleportWithRotation(
     entity.GetWorldPosition(),
     entity.GetWorldRotation()
