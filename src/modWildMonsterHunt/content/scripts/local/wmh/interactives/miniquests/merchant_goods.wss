@@ -19,11 +19,13 @@ class WMH_MerchantGoods extends CGameplayEntity {
     var displayed_fact: bool = WMHTUTOFACT(
       'WMH_MerchantGoods_PickedUp',
       "Merchant Goods",
-      "You picked up <font color='#CD7D03'>Merchant Goods</font>. If you successfully bring them back to the camp, it will refill the camp merchant's stock and slightly increase his funds as well as yours for your troubles.<br/><br/>Picking up multiple goods in a single or multiple hunts will further expand his stock, allowing him to refill one additional time for every retrieval."
+      "You picked up <font color='#CD7D03'>Merchant Goods</font>. Bring them back to the camp to refill the merchant's stock or to use them in exchange of services.<br/><br/><i>Merchant Goods can be found in numerious locations. You can also carry multiple goods at a time.</i>"
     );
 
     if (!displayed_fact) {
-      WMHHUD("You found merchant goods, the camp merchant's will refill his stock on your next visit.");
+      WMHHUD(
+        "You found merchant goods, there are " + WMH_getMerchantGoodsFacts() + " in the camp and you are now carrying " + WMH_getMerchantGoodsCarryingFacts()
+      );
     }
 
     theSound.SoundEvent('gui_inventory_repair');
