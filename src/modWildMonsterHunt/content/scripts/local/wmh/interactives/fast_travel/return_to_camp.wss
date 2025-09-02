@@ -24,14 +24,7 @@ statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
   }
 }
 
-state Waiting in WMH_ReturnToCampEntity {
-  event OnEnterState(previous_state_name: name) {
-    super.OnEnterState(previous_state_name);
-    this.Waiting_main();
-  }
-
-  entry function Waiting_main() {}
-}
+state Waiting in WMH_ReturnToCampEntity {}
 
 state FastTravel in WMH_ReturnToCampEntity {
   event OnEnterState(previous_state_name: name) {
@@ -117,6 +110,8 @@ latent function WMH_fastTravelToCamp() {
     theGame.FadeInAsync(1.0);
   }
   else {
+    WMH_addOutsiderFact();
+
     theGame.ScheduleWorldChangeToPosition(
       "levels\wmh_lv1\wmh_lv1.w2w",
       Vector(744.57,701.20,105.00),

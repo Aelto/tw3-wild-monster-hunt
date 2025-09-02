@@ -49,19 +49,21 @@ state Loading in WMH_LootManager {
     this.registerLootMaterial();
     this.registerLootOre();
 
-    this.registerWmhRecipes();
-    this.registerRecipesMisc();
-    this.registerRecipesTier1();
-    this.registerRecipesTier2();
-    this.registerRecipesTier3();
-    this.registerSchematicsMisc();
-    this.registerSchematicsTier0();
-    this.registerSchematicsTier1();
-    this.registerSchematicsTier2();
-    this.registerSchematicsTier3();
-    this.registerSchematicsTier4();
-    this.registerSchematicsTier5();
-    this.registerSchematicsTierNGP();
+    if (!WMH_isOutsiderLootFiltered()) {
+      this.registerWmhRecipes();
+      this.registerRecipesMisc();
+      this.registerRecipesTier1();
+      this.registerRecipesTier2();
+      this.registerRecipesTier3();
+      this.registerSchematicsMisc();
+      this.registerSchematicsTier0();
+      this.registerSchematicsTier1();
+      this.registerSchematicsTier2();
+      this.registerSchematicsTier3();
+      this.registerSchematicsTier4();
+      this.registerSchematicsTier5();
+      this.registerSchematicsTierNGP();
+    }
 
     this.registerRopPerks();
 
@@ -1716,7 +1718,8 @@ state Loading in WMH_LootManager {
 
   private function tryAddRecipe(recipe: name) {
     if (
-      this.witcher.CanLearnAlchemyRecipe(recipe)
+      !WMH_isOutsiderLootFiltered()
+      && this.witcher.CanLearnAlchemyRecipe(recipe)
       && !this.witcher.WMH_isRecipeKnown(recipe)
     ) {
       // the loot level is not important, we short-circuit the functions if the
@@ -1726,7 +1729,10 @@ state Loading in WMH_LootManager {
   }
 
   private function tryAddSchematic(schematic: name) {
-    if (!this.witcher.WMH_isSchematicKnown(schematic)) {
+    if (
+      !WMH_isOutsiderLootFiltered()
+      && !this.witcher.WMH_isSchematicKnown(schematic)
+    ) {
       // the loot level is not important, we short-circuit the functions if the
       // tier is too high instead so this method is never called.
       parent.registerLoot(WMH_LootTag_Schematic, 0, schematic);

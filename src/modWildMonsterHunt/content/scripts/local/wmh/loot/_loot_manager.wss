@@ -17,6 +17,8 @@ statemachine class WMH_LootManager {
   protected var maximum_loot_level: WMH_Level;
   protected var maximum_recipe_level: WMH_Level;
 
+  private var prompt_filtered_loot: WMH_OutsiderRemoveSchematicsYesNoPrompt;
+
   public function init(): WMH_LootManager {
     this.GotoState('Loading');
     return this;
@@ -52,6 +54,16 @@ statemachine class WMH_LootManager {
         runes_of_power_chance
       )
     );
+  }
+
+  public function onHuntStarted() {
+    if (WMH_isOutsider() && !WMH_isOutsiderLootPromptAnswered()) {
+      this.prompt_filtered_loot = 
+        new WMH_OutsiderRemoveSchematicsYesNoPrompt in this;
+
+      prompt.entity = this;
+      prompt.display();
+    }
   }
 
   public function onHuntFinished(storage: WMH_Storage) {
@@ -94,9 +106,9 @@ statemachine class WMH_LootManager {
   public function onMeldItem(seed: int, provider: WMH_RewardProvider) {
     var item: name = this.popRandomItem(WMH_LootTag_Recipe, seed);
     WMHINFO("onMeldItem(), item = " + item);
-
+  
     // in case the lists are empty
-    if (!IsNameValid(item)) {
+    if (!IsNameValid(item) || WMH_isOutsiderLootFiltered()) {
       item = this.getRandomItem(WMH_LootTag_Alchemy, seed);
     }
 
@@ -108,15 +120,22 @@ statemachine class WMH_LootManager {
   }
 
   public function getNextMeldItem(optional offset: int): name {
-    var max: int = this.loot_by_category[WMH_LootTag_Recipe].Size();
+    var seed: int = thePlayer.wmh.storage.herbalist.melding_level.value as int;
+    var category: WMH_LootTag = WMH_LootTag_Recipe;
+
+    if (WMH_isOutsiderLootFiltered()) {
+      category = this.getRandomCategory(seed + offset);
+    }
+
+    var max: int = this.loot_by_category[category].Size();
 
     if (max <= 0) {
       return '';
     }
 
-    var seed: int = thePlayer.wmh.storage.herbalist.melding_level.value as int;
+    
     var item_index: int = RandNoiseF(seed + offset, max) as int;
-    var item: name = this.loot_by_category[WMH_LootTag_Recipe][item_index];
+    var item: name = this.loot_by_category[category][item_index];
 
     return item;
   }
@@ -154,7 +173,7 @@ statemachine class WMH_LootManager {
     // -1 as we don't want recipes to be included unless the option is `true`
     max -= 1;
 
-    if (include_recipes) {
+    if (include_recipes && !WMH_isOutsiderLootFiltered()) {
       max = EnumGetMax('WMH_LootTag');
     }
 
@@ -168,8 +187,11 @@ statemachine class WMH_LootManager {
       this.loot_category_roller.addItem(2.5, WMH_LootTag_Alchemy);
       this.loot_category_roller.addItem(2, WMH_LootTag_Material);
       this.loot_category_roller.addItem(1, WMH_LootTag_Ore);
-      this.loot_category_roller.addItem(0.5, WMH_LootTag_Recipe);
-      this.loot_category_roller.addItem(0.5, WMH_LootTag_Schematic);
+
+      if (WMH_isOutsiderLootFiltered()) {
+        this.loot_category_roller.addItem(0.5, WMH_LootTag_Recipe);
+        this.loot_category_roller.addItem(0.5, WMH_LootTag_Schematic);
+      }
     }
     
 
@@ -188,6 +210,11 @@ statemachine class WMH_LootManager {
 
     if (max <= 0) {
       return '';
+    }
+
+    if (WMH_isLootCategoryFilteredOut(category)) {
+      category = this.getRandomCategory(seed, false);
+      max_index = max;
     }
 
     var roller: WMH_RatiosRoller = this.loot_by_category_rollers[category];
@@ -219,6 +246,11 @@ statemachine class WMH_LootManager {
     /// such as schematics or recipes
     optional max_index: int
   ): name {
+    if (WMH_isLootCategoryFilteredOut(category)) {
+      category = this.getRandomCategory(seed);
+      return this.getRandomItem(category, seed + 1);
+    }
+
     var max: int = this.loot_by_category[category].Size();
 
     if (max <= 0) {

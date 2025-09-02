@@ -1,0 +1,51 @@
+function WMH_addOutsiderFact() {
+  FactsSet("WMH_OutsiderEnterCamp", 1);
+}
+
+function WMH_isOutsider(): bool {
+  return FactsDoesExist("WMH_OutsiderEnterCamp");
+}
+
+function WMH_addOutsiderFilteredLootFact() {
+  FactsSet("WMH_OutsiderFilteredLoot", 1);
+}
+
+function WMH_addOutsiderLootPromptAnsweredFact() {
+  FactsSet("WMH_OutsiderLootPromptAnswered", 1);
+}
+
+function WMH_isOutsiderLootFiltered(): bool {
+  return FactsDoesExist("WMH_OutsiderFilteredLoot");
+}
+
+function WMH_isOutsiderLootPromptAnswered(): bool {
+  return FactsDoesExist("WMH_OutsiderLootPromptAnswered");
+}
+
+function WMH_isLootCategoryFilteredOut(category: WMH_LootTag): bool {
+  return (
+    category == WMH_LootTag_Recipe
+    || category == WMH_LootTag_Schematic
+  ) && WMH_isOutsiderLootFiltered();
+}
+
+class WMH_OutsiderRemoveSchematicsYesNoPrompt extends WMH_YesNoPrompt {
+  var entity: WMH_LootManager;
+
+  public function title(): string {
+    return "Wild Monster Hunt - Loot";
+  }
+
+  public function description(): string {
+    return "It looks like you visited other regions than Wild Monster Hunt. To preserve your character progression, would you like to remove the usual recipes & schematics that can be obtained from playing the mode?";
+  }
+
+  public function onResponse(accepted: bool) {
+    WMH_addOutsiderLootPromptAnsweredFact();
+
+    if (accepted) {
+      WMH_addOutsiderFilteredLootFact();
+      this.entity.GotoState('Loading');
+    }
+  }
+}
