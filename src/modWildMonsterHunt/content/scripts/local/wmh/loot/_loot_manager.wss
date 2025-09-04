@@ -61,8 +61,8 @@ statemachine class WMH_LootManager {
       this.prompt_filtered_loot = 
         new WMH_OutsiderRemoveSchematicsYesNoPrompt in this;
 
-      prompt.entity = this;
-      prompt.display();
+      this.prompt_filtered_loot.entity = this;
+      this.prompt_filtered_loot.display();
     }
   }
 

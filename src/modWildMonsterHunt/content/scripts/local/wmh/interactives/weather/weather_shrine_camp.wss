@@ -3,23 +3,23 @@
 statemachine class WMH_WeatherShrineCamp extends CGameplayEntity {
   event OnInteraction(actionName: string, activator: CEntity) {
     
-    var entities: array<CEntity>;
-    theGame.GetEntitiesByTag('WMH_WeatherShrine', entities);
-    var count: int = 0;
-    for entity: CEntity in entities {
-      var shrine: WMH_WeatherShrine = entity as WMH_WeatherShrine;
+    // var entities: array<CEntity>;
+    // theGame.GetEntitiesByTag('WMH_WeatherShrine', entities);
+    // var count: int = 0;
+    // for entity: CEntity in entities {
+    //   var shrine: WMH_WeatherShrine = entity as WMH_WeatherShrine;
 
-      if (count >= 3) {
-        break;
-      }
+    //   if (count >= 3) {
+    //     break;
+    //   }
 
-      if (shrine) {
-        WMH_toggleQuickStartLocation(shrine.quickstart_options, true);
-        count += 1;
-      }
-    }
-    WMH_updateMerchantGoodsFact(20);
-    thePlayer.AddMoney(100);
+    //   if (shrine) {
+    //     WMH_toggleQuickStartLocation(shrine.quickstart_options, true);
+    //     count += 1;
+    //   }
+    // }
+    // WMH_updateMerchantGoodsFact(20);
+    // thePlayer.AddMoney(100);
 
     var activated_locations: array<WMH_QuickStartLocationOptions>;
     activated_locations = WMH_getStorageQuickStartActivatedLocations();
