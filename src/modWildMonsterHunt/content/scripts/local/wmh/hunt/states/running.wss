@@ -12,7 +12,7 @@ state Running in WMH_HuntManager {
       Sleep(2.0);
 
       if (WMH_doesHuntClearSpawnPointsFactExists()) {
-        WMH_getBestiary().onClearSpawnPoints(100);
+        WMH_getBestiary().onClearSpawnPoints(50);
 
         WMH_removeHuntClearSpawnPointsFact();
       }
