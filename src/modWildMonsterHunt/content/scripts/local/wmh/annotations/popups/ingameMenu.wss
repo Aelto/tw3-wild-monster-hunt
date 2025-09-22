@@ -1,0 +1,18 @@
+@wrapMethod(CR4IngameMenu)
+function prepareBigMessage( epIndex : int ) {
+  if (!WMH_isInWmhLevel()) {
+    wrappedMethod(epIndex);
+  }
+}
+
+#ifdef VERSION_4010 {
+  @wrapMethod
+  function MessageDialogPopup(locMessage: string) {
+    var should_cancel: bool = locMessage == "message_new_game_plus_unlocked"
+      && WMH_isInWmhLevel();
+
+    if (!should_cancel) {
+      wrappedMethod(locMessage);
+    }
+  }
+};
