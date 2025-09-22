@@ -214,7 +214,7 @@ statemachine class WMH_SceneIntroduction {
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
         "Witcher Camp",
-        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>Thank you for trying out the mod and I hope you'll enjoy exploring this new world as much as I enjoyed making it !<br/><br/>Have fun roaming around these lands, and as it doesn't offer a concrete finish line, please remember to treat it as the calming experience it's meant to be.Take your time, make sure to read the tutorials about the new mechanics, enjoy the view from time to time, and look for the little secrets I may have left !<br/><br/>                              - <font color='#7e6d57'>Aeltoth</ font>"
+        "Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>Thank you for trying out the mod and I hope you'll enjoy exploring this new world as much as I enjoyed making it !<br/><br/>Have fun roaming around these lands, and as it doesn't offer a concrete finish line, please remember to treat it as the calming experience it's meant to be. Take your time, make sure to read the tutorials about the new mechanics, enjoy the view from time to time, and look for the little secrets I may have left !<br/><br/>                              - <font color='#7e6d57'>Aeltoth</font>"
       );
 
       // 1) look at camp manager, explain unlocking upgrades
