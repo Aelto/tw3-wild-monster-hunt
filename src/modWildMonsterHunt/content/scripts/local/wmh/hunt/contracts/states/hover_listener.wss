@@ -104,3 +104,23 @@ class WMH_DHCL_HuntInfo extends WMH_DialogHoverContractsListener {
     this.onHover(SSceneChoice(), 0);
   }
 }
+
+class WMH_DialogHoverChallengeListener extends WMH_DialogHoverContractsListener {
+  function onHover(scene_choice: SSceneChoice, index: int) {
+    if (scene_choice.playGoChunk == 'ToggleExtractionMode') {
+      
+      var title: string;
+      if (WMH_isExtractionChallengeEnabled()) {
+        title = "Merciless Path <font size='24' color='#8a5551'>(ACTIVE)</font>";
+      }
+      else {
+        title = "Merciless Path <font size='24' color='#E1E1E1'>(INACTIVE)</font>";
+      }
+
+      var description: string = ""
+        + "Enabling the <font color='#CD7D03'>Merciless Path</font> challenge can provide an experience similar to extraction games where dying during a hunt results in the loss of all the equipment you're carrying in your inventory and on yourself. <i>The stash and the items in it are not affected.</i> In return loot and rewards are also adjusted to compensate for the increased risks.<br/><br/>If you're into the high risk high rewards type of gameplay from hardcore ARPGs or extraction games then this challenge is for you."
+
+      this.displayLongLastingPopup(title + "<br/><br/>" + description);
+    }
+  }
+}

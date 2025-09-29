@@ -96,6 +96,15 @@ state DialogChoice in WMH_ContractManager {
       }
 
       choices.PushBack(SSceneChoice(
+        "Challenges",
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        'ViewChallenges'
+      ));
+
+      choices.PushBack(SSceneChoice(
         "Cancel",
         false,
         true,
@@ -116,7 +125,57 @@ state DialogChoice in WMH_ContractManager {
       else if (response.playGoChunk == 'ViewContractsHistory') {
         this.displayChoicesContractsHistory();
       }
+      else if (response.playGoChunk == 'ViewChallenges') {
+        this.displayChallenges();
+      }
       else { // Cancel option
+        return;
+      }
+    }
+  }
+
+  latent function displayChallenges() {
+    var choices: array<SSceneChoice>;
+
+    while (true) {
+      WMH_setdialogHoverContractsListener(new WMH_DialogHoverChallengeListener in this);
+      choices.Clear();
+
+      if (WMH_isExtractionChallengeEnabled()) {
+        choices.PushBack(SSceneChoice(
+          "Merciless Path (active)",
+          true, // emphasis
+          false,
+          false,
+          DialogAction_MONSTERCONTRACT,
+          'ToggleExtractionMode'
+        ));
+      }
+      else {
+        choices.PushBack(SSceneChoice(
+          "Merciless Path",
+          false, // emphasis
+          false,
+          false,
+          DialogAction_GETBACK,
+          'ToggleExtractionMode'
+        ));
+      }
+
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
+      if (response.playGoChunk == 'ToggleExtractionMode') {
+        WMH_setExtractionChallengeEnabled(!WMH_isExtractionChallengeEnabled());
+        theSound.SoundEvent("gui_character_synergy_effect");
+      }
+      else {
         return;
       }
     }
