@@ -1,0 +1,12 @@
+function WMH_isExtractionChallengeEnabled(): bool {
+  return FactsDoesExist('wmh_challenge_extraction');
+}
+
+function WMH_setExtractionChallengeEnabled(enabled: bool) {
+  if (enabled) {
+    FactsSet('wmh_challenge_extraction', 1);
+  }
+  else {
+    FactsRemove('wmh_challenge_extraction');
+  }
+}
