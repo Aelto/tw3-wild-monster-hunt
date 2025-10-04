@@ -166,22 +166,24 @@ class WMH_RewardProvider {
       }
 
       if (this.groups[i].experience > 0) {
-        message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; XP &nbsp;&nbsp;&nbsp;&nbsp;"
+        message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; XP "
                 + "<font size='18'>"
-                + WMH_leftPad(this.groups[i].experience, 3)
-                + "</font>";
+                + WMH_leftPad(this.groups[i].experience, 4)
+                + "</font>&nbsp;&nbsp;&nbsp;&nbsp;";
       }
 
       if (this.groups[i].reputation > 0) {
         if (WMH_getContractManager().hasPendingMilestoneContract()) {
-          message += "<br/> milestone contract active: REP gains locked";
+          message += "<br/>&nbsp;&nbsp;&nbsp; REP: milestone contract active, gains locked";
         }
         else {
-          message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; REP &nbsp;&nbsp;&nbsp;&nbsp;"
+          message += "<br />&nbsp;&nbsp;&nbsp; REP "
                   + "<font size='18'>"
-                  + WMH_leftPad(FloorF(FloorF(this.groups[i].reputation * 10) * 0.1), 3)
+                  + WMH_leftPad(FloorF(FloorF(this.groups[i].reputation * 10) * 0.1), 4)
                   + "</font>";
         }
+
+        message += "&nbsp;&nbsp;&nbsp;&nbsp;";
       }
 
       if (!include_item_names) {

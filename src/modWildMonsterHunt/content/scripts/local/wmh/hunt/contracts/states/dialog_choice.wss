@@ -141,6 +141,15 @@ state DialogChoice in WMH_ContractManager {
       WMH_setdialogHoverContractsListener(new WMH_DialogHoverChallengeListener in this);
       choices.Clear();
 
+      choices.PushBack(SSceneChoice(
+        "Cancel",
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
       if (WMH_isExtractionChallengeEnabled()) {
         choices.PushBack(SSceneChoice(
           "Merciless Path (active)",
@@ -162,14 +171,8 @@ state DialogChoice in WMH_ContractManager {
         ));
       }
 
-      choices.PushBack(SSceneChoice(
-        "Cancel",
-        false,
-        true,
-        false,
-        DialogAction_GETBACK,
-        'Cancel'
-      ));
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
 
       if (response.playGoChunk == 'ToggleExtractionMode') {
         WMH_setExtractionChallengeEnabled(!WMH_isExtractionChallengeEnabled());
