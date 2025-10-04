@@ -127,8 +127,8 @@ class WMH_ContractTarget {
       var position: Vector = point.GetWorldPosition();
       var distance: float = VecDistanceSquared2D(target_position, position);
 
-      // 10% less chances for every 100 meters
-      var chances: float = MaxF(0.1, 1.0 - (distance / (100.0*100.0)) * 0.1);
+      // 35% less chances for every 100 meters
+      var chances: float = MaxF(0.05, 1.0 - (distance / (100.0*100.0)) * 0.35);
       var point_seed: int = point.getPointSeed(hunt_seed);
       var allowed: bool = chances > 0 && RandNoiseF(point_seed, 1.0) < chances;
 
