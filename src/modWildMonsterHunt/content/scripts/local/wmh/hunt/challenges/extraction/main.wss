@@ -9,4 +9,35 @@ function WMH_setExtractionChallengeEnabled(enabled: bool) {
   else {
     FactsRemove('wmh_challenge_extraction');
   }
+
+function WMH_extractionChallengeOnDeath() {
+  if (!WMH_isExtractionChallengeEnabled()) {
+    return;
+  }
+
+  // 1. empty singleton items (potions & oils)
+  var inventory: CInventoryComponent = thePlayer.GetInventory();
+  var singletons: array<SItemUniqueId> = inventory
+    .GetSingletonItems();
+
+  for item: SItemUniqueId in singletons {
+    inventory.SingletonItemSetAmmo(item, 0);
+  }
+
+  // 2. remove gear from inventory
+  inventory.RemoveItemByCategory('steelsword', -1);
+  inventory.RemoveItemByCategory('silversword', -1);
+  inventory.RemoveItemByCategory('pants', -1);
+  inventory.RemoveItemByCategory('gloves', -1);
+  inventory.RemoveItemByCategory('armor', -1);
+  inventory.RemoveItemByCategory('boots', -1);
+  inventory.RemoveItemByCategory('edibles', -1);
+
+  inventory.RemoveItemByTag('Armor', -1);
+  inventory.RemoveItemByTag('Weapon', -1);
+  inventory.RemoveItemByTag('Trophy', -1);
+  inventory.RemoveItemByTag('Edibles', -1);
+
+  // 3. crafting & alchemy ingredients are kept as it would force players to
+  // transfer all items to stashes between hunt, which could become tedious.
 }

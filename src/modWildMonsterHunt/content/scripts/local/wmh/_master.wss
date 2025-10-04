@@ -178,6 +178,7 @@ class WMH_Master {
     this.hunt.onPlayerDeath();
 
     WMH_teleportToFeintRespawn();
+    WMH_extractionChallengeOnDeath();
 
     // 2. break some consumables
     var inventory: CInventoryComponent = thePlayer.GetInventory();
