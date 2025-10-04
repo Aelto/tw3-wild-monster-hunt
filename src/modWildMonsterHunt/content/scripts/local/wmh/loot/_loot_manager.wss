@@ -182,7 +182,10 @@ statemachine class WMH_LootManager {
     if (!this.loot_category_roller) {
       this.loot_category_roller = new WMH_RatiosRollerGen<WMH_LootTag> in this;
       this.loot_category_roller.addItem(4, WMH_LootTag_Food);
-      this.loot_category_roller.addItem(1, WMH_LootTag_Gear);
+      this.loot_category_roller.addItem(
+        WMH_extractionChallengeMultiplier(1, 2.0, 1.0),
+        WMH_LootTag_Gear
+      );
       this.loot_category_roller.addItem(4, WMH_LootTag_Herb);
       this.loot_category_roller.addItem(2.5, WMH_LootTag_Alchemy);
       this.loot_category_roller.addItem(2, WMH_LootTag_Material);

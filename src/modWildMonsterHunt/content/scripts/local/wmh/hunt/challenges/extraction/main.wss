@@ -9,6 +9,19 @@ function WMH_setExtractionChallengeEnabled(enabled: bool) {
   else {
     FactsRemove('wmh_challenge_extraction');
   }
+}
+
+function WMH_extractionChallengeMultiplier(
+  value: float,
+  multiplier_if_enabled: float,
+  multiplier_if_disabled: float,
+): float {
+  if (WMH_isExtractionChallengeEnabled()) {
+    return value * multiplier_if_enabled;
+  }
+
+  return value * multiplier_if_disabled;
+}
 
 function WMH_extractionChallengeOnDeath() {
   if (!WMH_isExtractionChallengeEnabled()) {

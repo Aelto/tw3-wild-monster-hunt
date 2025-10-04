@@ -28,6 +28,9 @@ state Running in WMH_LootManager {
       0.1
     );
 
+    // challenge extration: increases all loot amount by a given amount.
+    max_chance = WMH_extractionChallengeMultiplier(max_chance, 2.0, 1.0);
+
     var items_count: int = 0;
     var i: int;
     for (i = 0; i < tags_count; i += 1) {
