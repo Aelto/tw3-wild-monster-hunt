@@ -194,7 +194,6 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short sword 1');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short sword 2');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short Steel Sword');
-    parent.registerLoot(WMH_LootTag_Gear, 0, 'Wooden sword');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short sword 1');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short sword 2');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Short Steel Sword');
