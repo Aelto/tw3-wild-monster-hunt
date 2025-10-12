@@ -46,11 +46,15 @@ statemachine class WMH_EncounterManager {
   }
 
   public function onHuntFinished() {
-    this.GotoState('Finish');
+    if (this.GetCurrentStateName() != 'Finish') {
+      this.GotoState('Finish');
+    }
   }
 
   public function onHuntStarted() {
-    this.GotoState('Finish');
+    if (this.GetCurrentStateName() != 'Finish') {
+      this.GotoState('Finish');
+    }
   }
 
   public function isInRepulsive(point: Vector): bool {

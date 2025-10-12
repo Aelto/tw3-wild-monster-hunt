@@ -3,8 +3,6 @@ function WMH_getStorageContract(): WMH_StorageContract {
 }
 
 class WMH_StorageContract {
-  /// this is currently unused, the milestone level is obtained by dividing the
-  /// general level by 5.
   public var milestone_level: WMH_Level;
 
   public var completed_contracts_count: int;
@@ -34,4 +32,18 @@ function WMH_isContractFavourite(
   }
 
   return false;
+}
+
+function WMH_storageContractGetMilestoneLevel(): WMH_Level {
+  var storage: WMH_StorageContract = WMH_getStorageContract();
+
+  return storage.milestone_level;
+}
+
+function WMH_storageContractSetMilestoneLevel(level: WMH_Level) {
+  var storage: WMH_StorageContract = WMH_getStorageContract();
+
+  if (level.value > storage.milestone_level.value) {
+    storage.milestone_level = level;
+  }
 }

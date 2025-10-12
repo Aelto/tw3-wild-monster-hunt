@@ -117,7 +117,7 @@ class WMH_DialogHoverChallengeListener extends WMH_DialogHoverContractsListener 
       }
 
       var description: string = ""
-        + "Enabling the <font color='#CD7D03'>Merciless Path</font> challenge can provide an experience similar to extraction games where dying during a hunt results in the loss of all the equipment you're carrying in your inventory and on yourself. <i>The stash and the items in it are not affected.</i> In return loot and rewards are also adjusted to compensate for the increased risks.<br/><br/>If you're into the high risk high rewards type of gameplay from hardcore ARPGs or extraction games then this challenge is for you.";
+        + "Enabling the <font color='#CD7D03'>Merciless Path</font> challenge can provide an experience similar to extraction games where dying during a hunt results in the loss of all the gear, edibles, and potions you're carrying. <i>Crafting ingredients as well as the stash and the items in it are not affected.</i> In return loot and rewards are also adjusted to compensate for the increased risks.<br/><br/>If you're into the high risk high rewards type of gameplay from hardcore ARPGs or extraction games then this challenge is for you.";
 
       this.displayLongLastingPopup(title + "<br/><br/>" + description);
     }
