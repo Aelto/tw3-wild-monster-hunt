@@ -21,8 +21,11 @@ class WMH_MilestoneContract extends WMH_PendingContract {
   }
 
   public function isContractExpired(): bool {
-    // milestone contracts do not expire
-    return false;
+    var current: WMH_Level = WMH_storageContractGetMilestoneLevel();
+
+    // the milestone contract was already completed for this level, it may be a
+    // duplicate so mark it as expired.
+    return this.milestone_level.value <= current.value;
   }
 
   public function getContractSeed(optional offset: int): int {
@@ -55,6 +58,7 @@ class WMH_MilestoneContract extends WMH_PendingContract {
       + this.milestone_level.value
     );
 
+    WMH_storageContractSetMilestoneLevel(this.milestone_level);
     WMH_getLootManager()
       .onMilestoneContractCompleted(this.getContractSeed());
   }

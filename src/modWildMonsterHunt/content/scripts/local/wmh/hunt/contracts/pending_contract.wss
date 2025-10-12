@@ -118,9 +118,11 @@ class WMH_PendingContract {
   }
 
   public function isContractExpired(): bool {
-    var now: int = WMH_getGameTimeMinutes();
+    // var now: int = WMH_getGameTimeMinutes();
 
-    return now - this.contract.created_at_minutes >= ContractDurationMinutes!;
+    // return now - this.contract.created_at_minutes >= ContractDurationMinutes!;
+
+    return false;
   }
 
   public function isTargetted(id: WMH_BestiaryId): bool {

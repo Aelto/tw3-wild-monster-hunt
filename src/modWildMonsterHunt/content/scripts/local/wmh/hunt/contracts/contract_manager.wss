@@ -50,7 +50,19 @@ statemachine class WMH_ContractManager {
 
     this.finishExpiredContracts(storage.contract, new_level);
 
-    var milestones_to_generate: int = (new_level.value >= next_milestone.value) as int;
+    // refresh the value as a milestone contract may have been completed:
+    next_milestone = this.getNextMilestoneLevel();
+
+    var milestones_to_generate: int = (
+      new_level.value >= next_milestone.value
+      && !this.hasPendingMilestoneContract()
+    ) as int;
+
+    // var c: WMH_Level = WMH_storageContractGetMilestoneLevel();
+    // WMHINFO("current milestone level = " + c.value);
+    // WMHINFO("milestones_to_generate = " + milestones_to_generate);
+    // WMHINFO("new_level = " + new_level.value);
+    // WMHINFO("next_milestone = " + next_milestone.value);
 
     var contracts_to_generate: int = 5
                                    - this.pending_contracts.Size()
@@ -224,14 +236,9 @@ statemachine class WMH_ContractManager {
   }
 
   public function getNextMilestoneLevel(): WMH_Level {
-    var storage: WMH_Storage = WMH_getStorage();
-    var previous_level: WMH_Level = storage.general.level;
-    var next_milestone: WMH_Level = WMH_Level(
-      ((previous_level.value as int) / this.milestoneContractsInterval() + 1)
-      * this.milestoneContractsInterval()
-    );
+    var current: WMH_Level = WMH_storageContractGetMilestoneLevel();
 
-    return next_milestone;
+    return WMH_Level((current.value+1) * this.milestoneContractsInterval());
   }
 
   // returns how many WMH_Levels are needed before a new milestone contract is
@@ -411,8 +418,14 @@ statemachine class WMH_ContractManager {
     var expired_contracts: array<WMH_PendingContract>;
 
     var contract: WMH_PendingContract;
+    var count: int = 0;
     for contract: WMH_PendingContract in this.pending_contracts {
+      count += 1;
+
       if (contract.isContractExpired()) {
+        expired_contracts.PushBack(contract);
+      }
+      else if (count > 5) {
         expired_contracts.PushBack(contract);
       }
     }
