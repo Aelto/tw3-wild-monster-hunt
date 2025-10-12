@@ -110,7 +110,7 @@ statemachine class WMH_CampManager {
 
   public function startDialog(camp_manager_npc: WMH_CampManagerNPC) {
     this.camp_manager_npc = camp_manager_npc;
-    this.GotoState('DialogChoice');
+    this.GotoState('DialogChoiceStart');
   }
 
   private function swapAndMoveCamera(position: Vector, rotation: EulerAngles, fov: float) {

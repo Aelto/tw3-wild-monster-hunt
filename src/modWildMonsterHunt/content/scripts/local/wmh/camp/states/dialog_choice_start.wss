@@ -1,0 +1,6 @@
+state DialogChoiceStart in WMH_CampManager {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    parent.GotoState('DialogChoice');
+  }
+}
