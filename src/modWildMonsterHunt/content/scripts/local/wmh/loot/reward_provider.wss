@@ -166,7 +166,7 @@ class WMH_RewardProvider {
       }
 
       if (this.groups[i].experience > 0) {
-        message += "<br />&nbsp;&nbsp;&nbsp;&nbsp; XP "
+        message += "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XP "
                 + "<font size='18'>"
                 + WMH_leftPad(this.groups[i].experience, 4)
                 + "</font>&nbsp;&nbsp;&nbsp;&nbsp;";
