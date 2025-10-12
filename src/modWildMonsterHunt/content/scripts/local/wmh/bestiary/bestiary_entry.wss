@@ -162,7 +162,13 @@ class WMH_BestiaryEntry {
         thePlayer.GetLevel(),
         this.strength + hunt_level.value * 0.5
       ));
-      npc.SetLevel(Min(level, Min(thePlayer.GetLevel() + 20, 100)));
+
+      npc.SetLevel(
+        Min(
+          level,
+          Min(thePlayer.GetLevel() + 5, 100)
+        )
+      );
 
       var health: float = npc.GetMaxHealth()
         * (1 + this.strength * 0.02) // +100% every 50 points
