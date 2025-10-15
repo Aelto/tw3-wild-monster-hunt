@@ -1,0 +1,8 @@
+@wrapMethod(CPlayer)
+function IsActionAllowed(action: EInputActionBlock): bool {
+  if (action == EIAB_OpenMap && WMH_isInWmhLevel()) {
+    return false;
+  }
+
+  return wrappedMethod(action);
+}
