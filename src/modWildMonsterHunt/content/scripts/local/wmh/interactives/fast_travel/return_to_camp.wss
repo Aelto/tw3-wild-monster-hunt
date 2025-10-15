@@ -9,7 +9,7 @@ statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
     if (this.offer_travel_to_prolog) {
       if (!WMH_isOutsider()) {
         WMHHUD("You cannot leave the region in a WMH only playthrough.");
-        return;
+        return false;
       }
 
       this.prompt_wo = new WMH_ReturnToCampYesNoWhiteOrchardPrompt in this;
