@@ -6,5 +6,29 @@ state Waiting in WMH_CampManager {
 
   entry function Waiting_main() {
     parent.removeTemporaryUnlocks();
+
+    if (WMH_isInWmhLevel()) {
+      if (WMH_isOutsider() && !FactsDoesExist("wmh_scene_introduction")) {
+        while (
+          theGame.IsLoadingScreenVideoPlaying()
+          || theGame.IsDialogOrCutscenePlaying()
+          || theGame.IsCurrentlyPlayingNonGameplayScene()
+          || theGame.IsFading()
+          || theGame.IsBlackscreen()
+        ) {
+          Sleep(0.2);
+        }
+
+        theGame.OnSpawnPlayerHorse();
+        Sleep(2.0);
+        WMH_playIntroductionScene();
+      }
+
+      // do it twice to be extra sure
+      parent.handleCampLayersVisibility();
+      Sleep(5.0);
+      parent.handleCampLayersVisibility();
+    }
+
   }
 }

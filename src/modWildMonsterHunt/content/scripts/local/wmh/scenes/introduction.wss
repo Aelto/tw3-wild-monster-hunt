@@ -1,10 +1,12 @@
 exec function wmhsceneintroduction() {
-  var player: CR4Player = thePlayer;
-  player.wmh_scene = new WMH_SceneIntroduction in player;
-  player.wmh_scene.start();
+  WMH_playIntroductionScene();
 }
 
 quest function wmhsceneintroduction_start() {
+  WMH_playIntroductionScene();
+}
+
+function WMH_playIntroductionScene() {
   var player: CR4Player = thePlayer;
   player.wmh_scene = new WMH_SceneIntroduction in player;
   player.wmh_scene.start();
@@ -93,13 +95,15 @@ statemachine class WMH_SceneIntroduction {
   latent function setupScene(): bool {
     WMH_instantMountRoach();
     
-    while (true) {
+    var attempts: int = 0;
+    while (attempts < 60*5) {
       var mount: CEntity = thePlayer.GetHorseCurrentlyMounted();
 
       if (mount) {
         break;
       }
 
+      attempts += 1;
       SleepOneFrame();
     }
 

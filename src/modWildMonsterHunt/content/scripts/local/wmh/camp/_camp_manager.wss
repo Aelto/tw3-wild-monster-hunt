@@ -151,22 +151,21 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_Garden0Unlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockGarden0Price(): int {
     return 350;
   }
 
-  protected function isGarden0Unlocked(): bool {
+  protected function isGarden0Unlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_Garden0Unlocked')
-        && !this.temporary_unlocks.Contains('WMH_Garden0Unlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_Garden0Unlocked'));
   }
 
-  //--
-
-  protected function isGarden1Unlocked(): bool {
+  protected function isGarden1Unlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_Garden1Unlocked')
-        && !this.temporary_unlocks.Contains('WMH_Garden1Unlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_Garden1Unlocked'));
   }
 
   protected function unlockGarden1Price(): int {
@@ -182,6 +181,7 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_Garden1Unlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   //--
@@ -196,15 +196,16 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_ArmorsUnlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockArmorsPrice(): int {
     return 325;
   }
 
-  protected function isArmorsUnlocked(): bool {
+  protected function isArmorsUnlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_ArmorsUnlocked')
-        && !this.temporary_unlocks.Contains('WMH_ArmorsUnlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_ArmorsUnlocked'));
   }
 
   //--
@@ -218,15 +219,16 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_WeaponsUnlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockWeaponsPrice(): int {
     return 325;
   }
 
-  protected function isWeaponsUnlocked(): bool {
+  protected function isWeaponsUnlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_WeaponsUnlocked')
-        && !this.temporary_unlocks.Contains('WMH_WeaponsUnlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_WeaponsUnlocked'));
   }
   
   //--
@@ -240,15 +242,16 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_MerchantUnlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockMerchantPrice(): int {
     return 25;
   }
 
-  protected function isMerchantUnlocked(): bool {
+  protected function isMerchantUnlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_MerchantUnlocked')
-        && !this.temporary_unlocks.Contains('WMH_MerchantUnlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_MerchantUnlocked'));
   }
 
   //--
@@ -262,15 +265,16 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_HerbalistUnlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockHerbalistPrice(): int {
     return 50;
   }
 
-  protected function isHerbalistUnlocked(): bool {
+  protected function isHerbalistUnlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_HerbalistUnlocked')
-        && !this.temporary_unlocks.Contains('WMH_HerbalistUnlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_HerbalistUnlocked'));
   }
 
   //--
@@ -284,14 +288,63 @@ statemachine class WMH_CampManager {
     }
 
     FactsSet('WMH_BarberUnlocked', 1);
+    this.handleCampLayersVisibility(temporarily);
   }
 
   protected function unlockBarberPrice(): int {
     return 50;
   }
 
-  protected function isBarberUnlocked(): bool {
+  protected function isBarberUnlocked(optional accept_temporary: bool): bool {
     return FactsDoesExist('WMH_BarberUnlocked')
-        && !this.temporary_unlocks.Contains('WMH_BarberUnlocked');
+        && (accept_temporary || !this.temporary_unlocks.Contains('WMH_BarberUnlocked'));
+  }
+
+  protected function handleCampLayersVisibility(
+    optional accept_temporary_unlocks: bool
+  ) {
+    this.toggleLayer(
+      this.isHerbalistUnlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\smiths\herbalist"
+    );
+
+    this.toggleLayer(
+      this.isMerchantUnlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\smiths\merchant"
+    );
+
+    this.toggleLayer(
+      this.isGarden0Unlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\gardens\garden_0"
+    );
+
+    this.toggleLayer(
+      this.isGarden1Unlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\gardens\garden_1"
+    );
+
+    this.toggleLayer(
+      this.isArmorsUnlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\smiths\armors"
+    );
+
+    this.toggleLayer(
+      this.isWeaponsUnlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\smiths\weapons"
+    );
+
+    this.toggleLayer(
+      this.isBarberUnlocked(accept_temporary_unlocks),
+      "deco\layers_s_settlement\smiths\barber"
+    );
+  }
+
+  private function toggleLayer(value: bool, layer: string) {
+    if (value) {
+      theGame.GetWorld().ShowLayerGroup(layer);
+    }
+    else {
+      theGame.GetWorld().HideLayerGroup(layer);
+    }
   }
 }
