@@ -6,20 +6,15 @@ statemachine class WMH_ReturnToCampEntity extends CGameplayEntity {
 
   event OnInteraction(actionName: string, activator: CEntity) {
     this.GotoState('Waiting');
-    if (!thePlayer.IsActionAllowed( EIAB_OpenMap )) {
-      thePlayer.DisplayActionDisallowedHudMessage(EIAB_OpenMap);
+    if (this.offer_travel_to_prolog) {
+      this.prompt_wo = new WMH_ReturnToCampYesNoWhiteOrchardPrompt in this;
+      this.prompt_wo.entity = this;
+      this.prompt_wo.display();
     }
     else {
-      if (this.offer_travel_to_prolog) {
-        this.prompt_wo = new WMH_ReturnToCampYesNoWhiteOrchardPrompt in this;
-        prompt.entity = this;
-        prompt.display();
-      }
-      else {
-        this.prompt = new WMH_ReturnToCampYesNoPrompt in this;
-        prompt.entity = this;
-        prompt.display();
-      }
+      this.prompt = new WMH_ReturnToCampYesNoPrompt in this;
+      this.prompt.entity = this;
+      this.prompt.display();
     }
   }
 }
@@ -40,10 +35,10 @@ state FastTravel in WMH_ReturnToCampEntity {
 state FastTravelWhiteOrchard in WMH_ReturnToCampEntity {
   event OnEnterState(previous_state_name: name) {
     super.OnEnterState(previous_state_name);
-    this.FastTravel_main();
+    this.FastTravelWhiteOrchard_main();
   }
 
-  entry function FastTravel_main() {
+  entry function FastTravelWhiteOrchard_main() {
     WMH_fastTravelToWhiteOrchard();
   }
 }
