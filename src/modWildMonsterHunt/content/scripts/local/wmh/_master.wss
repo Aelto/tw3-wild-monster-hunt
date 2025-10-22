@@ -93,6 +93,21 @@ class WMH_Master {
     }
   }
 
+  public function submitOnSettlementEnterNpc(
+    origin: WMH_SettlementAreaTrigger,
+    entity: CEntity
+  ) {
+    var npc: CNewNPC = entity as CNewNPC;
+    
+    if (npc) {
+      if (npc.GetNPCType() == ENGT_Enemy) {
+        WMHINFO("submitOnSettlementEnterNpc, killing NPC");
+        npc.Kill('Camp Safe Zone');
+      }
+    }
+
+  }
+
   public function submitOnSpawn(
     origin: WMH_HuntManager,
     contract: WMH_ContractManager,
