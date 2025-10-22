@@ -84,7 +84,11 @@ class WMH_Master {
       this.hunt.contract.onHuntStarted(this.bestiary);
       this.bestiary.spawn_points.onHuntStarted();
       this.loot.onHuntStarted();
-      theGame.OnSpawnPlayerHorse();
+
+      if (!thePlayer.IsUsingHorse()) {
+        theGame.OnSpawnPlayerHorse();
+      }
+
       theSound.SoundEvent("gui_journal_track_quest");
     }
   }
