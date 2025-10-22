@@ -420,6 +420,10 @@ state DialogChoice in WMH_ContractManager {
       for (i = 0; i < choices.Size(); i += 1) {
         if (StrFindFirst(response.description, choices[i].description) >= 0) {
           // -1 due to the 'Cancel' being the first option
+          if (i - 1 < 0) {
+            continue;
+          }
+          
           contract = contracts_storage.favourite_contracts[i - 1];
           index = i;
           return true;
@@ -482,10 +486,19 @@ state DialogChoice in WMH_ContractManager {
 
       for (i = 0; i < choices.Size(); i += 1) {
         if (StrFindFirst(response.description, choices[i].description) >= 0) {
-          WMHINFO("new_favourite found");
           // -1 due to the 'Cancel' being the first option
+          if (i - 1 < 0) {
+            continue;
+          }
+
+          WMHINFO("new_favourite found");
           var new_favourite: WMH_Contract = contracts_storage
               .completed_contracts_history[i - 1];
+
+          if (new_favourite.type == WMH_PendingContractType_MILESTONE) {
+            WMHHUD("Milestone contracts cannot be set as favorite");
+            break;
+          }
 
           var already_favourite: bool = WMH_isContractFavourite(
             contracts_storage,
@@ -495,12 +508,12 @@ state DialogChoice in WMH_ContractManager {
           if (already_favourite) {
             contracts_storage.favourite_contracts.Remove(new_favourite);
             WMHHUD("The contract is no longer marked as favorite");
-            Sleep(3.0);
+            Sleep(2.0);
           }
           else {
             contracts_storage.favourite_contracts.PushBack(new_favourite);
             WMHHUD("The contract was added to the favorites");
-            Sleep(3.0);
+            Sleep(2.0);
           }
         }
       }

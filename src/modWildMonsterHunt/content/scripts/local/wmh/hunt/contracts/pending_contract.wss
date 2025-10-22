@@ -56,7 +56,11 @@ class WMH_PendingContract {
   var encounter_tag: WMH_EncounterTag;
   default encounter_tag = WMH_EncounterTag_ContractRegular;
 
-  public function init(bestiary: WMH_Bestiary, contract: WMH_Contract, optional do_not_inform_gui: bool): WMH_PendingContract {
+  public function init(
+    bestiary: WMH_Bestiary,
+    contract: WMH_Contract,
+    optional do_not_inform_gui: bool
+  ): WMH_PendingContract {
     this.contract = contract;
 
     var targets_count: int = WMH_diminishingReturns(
