@@ -99,3 +99,5 @@
           |        |wmh_camp_upgrade_oneliner|<u>{{title}}</u> lv{{level}}<br/>{{description}}<br/><u>interact with Witcher Senses to upgrade</>
           |        |wmh_camp_upgrade_yesno_prompt_title|Upgrade {{title}}
           |        |wmh_camp_upgrade_yesno_prompt_description|Spend {{price}} Crowns to upgrade to level {{new_level}}?
+          |        |wmh_hunt_provisions_on_apply_no_stock|There is nothing to retrieve at the moment
+          |        |wmh_return_to_camp_cannot_leave_wmh|You cannot leave the region in a WMH only playthrough.

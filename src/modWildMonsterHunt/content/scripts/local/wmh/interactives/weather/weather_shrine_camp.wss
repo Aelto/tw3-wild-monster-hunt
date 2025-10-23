@@ -25,7 +25,7 @@ statemachine class WMH_WeatherShrineCamp extends CGameplayEntity {
     activated_locations = WMH_getStorageQuickStartActivatedLocations();
 
     if (activated_locations.Size() <= 0) {
-      WMHHUD("You do not have any active Quick-Start location");
+      WMHHUD(GetLocStringByKey("wmh_weather_shrine_no_active_locations"));
       return false;
     }
 
