@@ -102,7 +102,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     var cost: int = this.getUpgradeCost();
 
     if (thePlayer.GetMoney() < cost) {
-      WMHHUD("Insufficient funds to do that");
+      WMHHUD(GetLocStringByKey("wmh_insufficient_funds"));
       return false;
     }
 
@@ -146,9 +146,19 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     }
 
     this.oneliner = WMH_gameplayOnelinerEntity(
-      "<u>" + this.title() + "</u> lv" + this.getLevel() + "<br/>"
-      + this.description()
-      + "<br/><u>interact with Witcher Senses to upgrade</u>",
+      StrReplace(
+        StrReplace(
+          StrReplace(
+            GetLocStringByKey("wmh_camp_upgrade_oneliner"),
+            "{{title}}",
+            this.title()
+          ),
+          "{{level}}",
+          this.getLevel()
+        ),
+        "{{description}}",
+        this.description()
+      ),
       this
     );
 
@@ -159,6 +169,17 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
   // OVERRIDE to perform custom action when entity was successfully upgraded
   protected function onUpgrade(money_spent: int) {
     theSound.SoundEvent('gui_inventory_repair');
+    WMHHUD(
+      StrReplace(
+        StrReplace(
+          GetLocStringByKey("wmh_camp_upgrade_on_upgrade_hud"),
+          "{{title}}",
+          this.title()
+        ),
+        "{{level}}",
+        this.getLevel()
+      )
+    );
     WMHHUD(this.title() + " is now level " + this.getLevel());
   }
 
@@ -172,16 +193,25 @@ class WMH_CampUpgradeYesNoPrompt extends WMH_YesNoPrompt {
   var entity: WMH_CampUpgradeBase;
 
   public function title(): string {
-    return "Upgrade " + this.entity.title();
+    return StrReplace(
+      GetLocStringByKey("wmh_camp_upgrade_yesno_prompt_title"),
+      "{{title}}",
+      this.entity.title()
+    );
   }
 
   public function description(): string {
     var price: int = this.entity.getUpgradeCost();
 
-    return "Spend " + price 
-      + " Crowns to upgrade to level "
-      + (this.entity.getLevel() + 1)
-      + "?";
+    return StrReplace(
+      StrReplace(
+        GetLocStringByKey("wmh_camp_upgrade_yesno_prompt_description"),
+        "{{price}}",
+        price
+      ),
+      "{{new_level}}",
+      (this.entity.getLevel() + 1)
+    );
   }
 
   public function onResponse(accepted: bool) {

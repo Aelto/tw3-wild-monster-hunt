@@ -70,3 +70,9 @@
           |        |wmh_affix_exposed|Exposed
           |        |wmh_affix_hardened|Hardened
           |        |wmh_affix_bloodthirsty|Bloodthirsty
+; camp related messages
+          |        |wmh_insufficient_funds|Insufficient funds to do that
+          |        |wmh_camp_upgrade_on_upgrade_hud|{{title}} is now level {{level}}
+          |        |wmh_camp_upgrade_oneliner|<u>{{title}}</u> lv{{level}}<br/>{{description}}<br/><u>interact with Witcher Senses to upgrade</>
+          |        |wmh_camp_upgrade_yesno_prompt_title|Upgrade {{title}}
+          |        |wmh_camp_upgrade_yesno_prompt_description|Spend {{price}} Crowns to upgrade to level {{new_level}}?
