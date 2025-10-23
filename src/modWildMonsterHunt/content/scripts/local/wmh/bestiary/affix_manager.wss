@@ -222,44 +222,44 @@ class WMH_AffixManager {
 
     if (this.damage_modifier != 1.0) {
       if (this.damage_modifier >= 1.5) {
-        output += "Deadly ";
+        output += GetLocStringByKey("wmh_affix_deadly") + " ";
       }
       else {
-        output += "Vicious ";
+        output += GetLocStringByKey("wmh_affix_vicious") + " ";
       }
     }
 
     if (this.health_modifier != 1.0) {
       if (this.health_modifier > 1.5) {
-        output += "Invincible ";
+        output += GetLocStringByKey("wmh_affix_invincible") + " ";
       }
       else {
-        output += "Hearty ";
+        output += GetLocStringByKey("wmh_affix_hearty") + " ";
       }
     }
 
     if (this.health_regen_percent > 0) {
       if (this.health_regen_percent > 0.1) {
-        output += "Immortal ";
+        output += GetLocStringByKey("wmh_affix_immortal") + " ";
       }
       else {
-        output += "Regenerating ";
+        output += GetLocStringByKey("wmh_affix_regenerating") + " ";
       }
     }
 
     if (this.armor_modifier > 1.0) {
-      output += "Armored ";
+      output += GetLocStringByKey("wmh_affix_armored") + " ";
     }
     else if (this.armor_modifier < 1.0) {
-      output += "Exposed ";
+      output += GetLocStringByKey("wmh_affix_exposed") + " ";
     }
 
     if (this.durability_loss_modifier > 1.0) {
-      output += "Hardened ";
+      output += GetLocStringByKey("wmh_affix_hardened") + " ";
     }
 
     if (this.lifesteal_percent > 0) {
-      output += "Bloodthirsty ";
+      output += GetLocStringByKey("wmh_affix_bloodthirsty") + " ";
     }
 
     return output;

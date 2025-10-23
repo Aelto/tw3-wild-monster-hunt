@@ -59,3 +59,14 @@
           |        |wmh_berserker|Berserker
           |        |wmh_dracolizard|Slyzard
           |        |wmh_gargoyle|Gargoyle
+; affixes
+          |        |wmh_affix_deadly|Deadly
+          |        |wmh_affix_vicious|Vicious
+          |        |wmh_affix_invincible|Invincible
+          |        |wmh_affix_hearty|Hearty
+          |        |wmh_affix_immortal|Immortal
+          |        |wmh_affix_regenerating|Regenerating
+          |        |wmh_affix_armored|Armored
+          |        |wmh_affix_exposed|Exposed
+          |        |wmh_affix_hardened|Hardened
+          |        |wmh_affix_bloodthirsty|Bloodthirsty
