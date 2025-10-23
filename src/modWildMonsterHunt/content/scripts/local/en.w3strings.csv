@@ -59,6 +59,9 @@
           |        |wmh_berserker|Berserker
           |        |wmh_dracolizard|Slyzard
           |        |wmh_gargoyle|Gargoyle
+;
+;
+;
 ; affixes
           |        |wmh_affix_deadly|Deadly
           |        |wmh_affix_vicious|Vicious
@@ -70,6 +73,26 @@
           |        |wmh_affix_exposed|Exposed
           |        |wmh_affix_hardened|Hardened
           |        |wmh_affix_bloodthirsty|Bloodthirsty
+;
+;
+;
+; hunt & contract related messages
+          |        |wmh_contract_completed_hud|A contract was completed
+          |        |wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location
+;
+;
+;
+; traps & lures
+          |        |wmh_lure_nothing_to_lure|There is nothing to lure at the moment
+          |        |wmh_lure_lure_container_needed|You need a {{container}} to set up a lure here
+          |        |wmh_trap_already_consumed|This trap was already used during this hunt
+          |        |wmh_trap_already_enhanced|This trap is already enhanced
+          |        |wmh_trap_enhanced|Trap enhanced
+          |        |wmh_trap_armed|Trap armed
+          |        |wmh_trap_trap_device_needed|You need a {{device}} to do this
+;
+;
+;
 ; camp related messages
           |        |wmh_insufficient_funds|Insufficient funds to do that
           |        |wmh_camp_upgrade_on_upgrade_hud|{{title}} is now level {{level}}

@@ -55,12 +55,12 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
     var current_state: name = this.GetCurrentStateName();
 
     if (current_state == 'Consumed') {
-      WMHHUD("This trap was already used during this hunt");
+      WMHHUD(GetLocStringByKey("wmh_trap_already_consumed"));
       return;
     }
 
     if (IsNameValid(this.oil_enhancement_name)) {
-      WMHHUD("This trap is already enhanced");
+      WMHHUD(GetLocStringByKey("wmh_trap_already_enhanced"));
       return;
     }
 
@@ -125,7 +125,7 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
       thePlayer.inv.RemoveItem(item, 1);
     }
 
-    WMHHUD("Trap enhanced");
+    WMHHUD(GetLocStringByKey("wmh_trap_enhanced"));
     theSound.SoundEvent('gui_inventory_bombs_attach');
   }
 }
@@ -144,7 +144,11 @@ state TryArming in WMH_TrapSpot {
     if (devices.Size() <= 0) {
       var trap_device: string = GetLocStringByKey('wmh_trap_device');
 
-      return WMHHUD("You need a " + trap_device + " to do this");
+      return WMHHUD(StrReplace(
+        GetLocStringByKey("wmh_trap_trap_device_needed"),
+        "{{device}}",
+        trap_device
+      ));
     }
 
     inventory.RemoveItem(devices[0], 1);
@@ -162,7 +166,7 @@ state Armed in WMH_TrapSpot {
 
   entry function Armed_main() {
     theSound.SoundEvent('gui_inventory_bombs_attach');
-    WMHHUD("Trap armed");
+    WMHHUD(GetLocStringByKey("wmh_trap_armed"));
 
     this.armed_time = SUH_now();
 
