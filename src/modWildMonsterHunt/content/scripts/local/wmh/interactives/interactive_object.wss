@@ -81,7 +81,7 @@ abstract class WMH_InteractiveObject extends W3Container {
     action: string,
     activator: CEntity
   ) {
-    WMHHUD("You cannot perform this now");
+    WMHHUD(GetLocStringByKey("wmh_cannot_perform_this_now"));
   }
   //#endregion
 }

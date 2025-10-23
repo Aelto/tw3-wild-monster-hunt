@@ -101,7 +101,13 @@ class WMH_PendingContract {
     }
 
     if (!do_not_inform_gui) {
-      WMHHUD("New contract: " + this.toTargetLocNameHtml());
+      WMHHUD(
+        StrReplace(
+          GetLocStringByKey("wmh_contract_new_hud"),
+          "{{target}}",
+          this.toTargetLocNameHtml()
+        )
+      );
     }
 
     return this;

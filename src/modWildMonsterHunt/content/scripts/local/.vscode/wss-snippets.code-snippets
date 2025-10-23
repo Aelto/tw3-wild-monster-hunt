@@ -52,6 +52,12 @@
       "GetLocStringByKey(\"$1\")"
     ]
   },
+  "cloc": {
+    "prefix": "cloc",
+    "body": [
+      "GetLocStringByKey(\"$CLIPBOARD\")"
+    ]
+  },
   "strreplace": {
     "prefix": "strlocreplace",
     "body": [

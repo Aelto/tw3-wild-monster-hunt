@@ -59,7 +59,13 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
 
       if (items.Size() <= 0) {
         var objname: string = this.getObjectName();
-        WMHHUD("You lack the necessary tools to repair this " + objname);
+        WMHHUD(
+          StrReplace(
+            GetLocStringByKey("wmh_restorable_object_on_restoration_tools_needed"),
+            "{{name}}",
+            objname
+          )
+        );
 
         return;
       }
@@ -91,7 +97,13 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
 
   //#region public API, to override
   public function onRestoration() {
-    WMHHUD(this.getObjectName() + " restored");
+    WMHHUD(
+      StrReplace(
+        GetLocStringByKey("wmh_restorable_object_on_restoration"),
+        "{{name}}",
+        this.getObjectName()
+      )
+    );
     theSound.SoundEvent('gui_inventory_repair');
   }
   //#endregion

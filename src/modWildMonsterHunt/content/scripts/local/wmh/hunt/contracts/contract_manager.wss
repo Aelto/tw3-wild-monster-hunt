@@ -99,7 +99,7 @@ statemachine class WMH_ContractManager {
       var contract: WMH_Contract = contracts.pending_contracts[index];
 
       if (contract.type == WMH_PendingContractType_MILESTONE) {
-        WMHHUD("Milestone contracts cannot be replaced");
+        WMHHUD(GetLocStringByKey("wmh_contract_replace_milestone_forbidden"));
         return;
       }
 

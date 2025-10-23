@@ -9,14 +9,20 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
                       + inventory.GetItemIconPathByName(this.itemName(0))
                       + "' height='18' width='18' />";
 
-    return "Give "
-         + this.itemQuantity() + "x "
-         + item_icon;
+    return StrReplace(
+      StrReplace(
+        GetLocStringByKey("wmh_event_fetch_description"),
+        "{{quantity}}",
+        this.itemQuantity()
+      ),
+      "{{icon}}",
+      item_icon
+    );
   }
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
     if (!this.canBeCompleted()) {
-      WMHHUD("You do not have the required items");
+      WMHHUD(GetLocStringByKey("wmh_event_fetch_lack_items"));
 
       return false;
     }

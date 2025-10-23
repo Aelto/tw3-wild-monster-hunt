@@ -496,7 +496,7 @@ state DialogChoice in WMH_ContractManager {
               .completed_contracts_history[i - 1];
 
           if (new_favourite.type == WMH_PendingContractType_MILESTONE) {
-            WMHHUD("Milestone contracts cannot be set as favorite");
+            WMHHUD(GetLocStringByKey("wmh_contract_favorite_milestone_forbidden"));
             break;
           }
 
@@ -507,12 +507,12 @@ state DialogChoice in WMH_ContractManager {
 
           if (already_favourite) {
             contracts_storage.favourite_contracts.Remove(new_favourite);
-            WMHHUD("The contract is no longer marked as favorite");
+            WMHHUD(GetLocStringByKey("wmh_contract_favorite_removed"));
             Sleep(2.0);
           }
           else {
             contracts_storage.favourite_contracts.PushBack(new_favourite);
-            WMHHUD("The contract was added to the favorites");
+            WMHHUD(GetLocStringByKey("wmh_contract_favorite_added"));
             Sleep(2.0);
           }
         }

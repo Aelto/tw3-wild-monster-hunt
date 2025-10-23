@@ -17,7 +17,7 @@ statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
     var apples: int = waters;
 
     if (devices + containers + waters <= 0) {
-      return WMHHUD("There is nothing to retrieve at the moment");
+      return WMHHUD(GetLocStringByKey("wmh_hunt_provisions_on_apply_no_stock"));
     }
 
     this.setPreviousCompletedContractsCount(this.getCompletedContracts());

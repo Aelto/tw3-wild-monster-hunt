@@ -77,8 +77,27 @@
 ;
 ;
 ; hunt & contract related messages
+          |        |wmh_contract_new_hud|New contract: {{target}}
           |        |wmh_contract_completed_hud|A contract was completed
+          |        |wmh_contract_replace_milestone_forbidden|Milestone contracts cannot be replaced
+          |        |wmh_contract_favorite_milestone_forbidden|Milestone contracts cannot be set as favorite
+          |        |wmh_contract_favorite_removed|The contract is no longer marked as favorite
+          |        |wmh_contract_favorite_added|The contract was added to the favorites
           |        |wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location
+          |        |wmh_quickstart_used_hud|{{cost}} Merchand Goods were used to reach the destination.
+          |        |wmh_restorable_object_on_restoration|{{name}} restored
+          |        |wmh_restorable_object_on_restoration_tools_needed|You lack the necessary tools to repair this {{name}}
+          |        |wmh_cannot_perform_this_now|You cannot perform this now
+          |        |wmh_event_fetch_lack_items|You do not have the required items
+          |        |wmh_event_fetch_description|Give {{quantity}}x {{icon}}
+;
+;
+;
+; Witcher Medallion
+          |        |wmh_witcher_medallion_forge_attempt_item_invalid|The trophy you are wearing is not a Medallion that can hold Runes of Power
+          |        |wmh_witcher_medallion_forge_attempt_reagent_needed|You lack the necessary Melding Reagents for the process
+          |        |wmh_witcher_medallion_forge_yesno_title|Medallion melding
+          |        |wmh_witcher_medallion_forge_yesno_description|Use a {{reagent}} to meld a {{rune}} onto your currently equipped medallion?
 ;
 ;
 ;
@@ -94,10 +113,38 @@
 ;
 ;
 ; camp related messages
-          |        |wmh_insufficient_funds|Insufficient funds to do that
+          |        |wmh_insufficient_funds|Insufficient funds
           |        |wmh_camp_upgrade_on_upgrade_hud|{{title}} is now level {{level}}
           |        |wmh_camp_upgrade_oneliner|<u>{{title}}</u> lv{{level}}<br/>{{description}}<br/><u>interact with Witcher Senses to upgrade</>
           |        |wmh_camp_upgrade_yesno_prompt_title|Upgrade {{title}}
           |        |wmh_camp_upgrade_yesno_prompt_description|Spend {{price}} Crowns to upgrade to level {{new_level}}?
           |        |wmh_hunt_provisions_on_apply_no_stock|There is nothing to retrieve at the moment
           |        |wmh_return_to_camp_cannot_leave_wmh|You cannot leave the region in a WMH only playthrough.
+          |        |wmh_camp_improve|Improve Witcher Camp
+          |        |wmh_camp_hired|{{thing}} hired
+          |        |wmh_camp_unlocked|{{thing}} unlocked
+          |        |wmh_camp_herbalist_already_in_camp|You already have an Herbalist in your camp
+          |        |wmh_camp_barber_already_in_camp|You already have a Barber in your camp
+          |        |wmh_camp_merchant_already_in_camp|You already have a Merchant in your camp
+          |        |wmh_camp_armor_tools_already_in_camp|You already have Armor Tools in your camp
+          |        |wmh_camp_weapon_tools_already_in_camp|You already have Weapon Tools in your camp
+          |        |wmh_camp_garden_plot_already_cultivating|You are already cultivating this garden plot
+          |        |wmh_camp_herbalist|Herbalist
+          |        |wmh_camp_merchant|Merchant
+          |        |wmh_camp_barber|Barber
+          |        |wmh_camp_armor_tools|Armor Tools
+          |        |wmh_camp_weapon_tools|Weapon Tools
+          |        |wmh_camp_garden_plot_small|Small Garden Plot
+          |        |wmh_camp_garden_plot_large|Large Garden Plot
+;
+;
+;
+; tutorials
+          |        |wmh_tutorial_medallion_forge_title|Medallion Forge
+          |        |wmh_tutorial_medallion_forge_description|The <font color='#CD7D03'>Medallion Forge</font> can be used to engrave <font color='#CD7D03'>Runes of Power</font> into a <font color='#CD7D03'>Witcher Medallion</font>.<br/><br/>Wearing a forged medallion allows you to inherit the power of the runes that were engraved into it.<br/><br/><u>A medallion may only hold a limited amount of runes, and engraving runes is a permanent process.</u>
+;
+;
+;
+; general messages
+          |        |wmh_cancel|Cancel
+          |        |wmh_farewell|Farewell.

@@ -10,8 +10,8 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
   ) {
     WMHTUTOFACT(
       'WMH_MedallionForge',
-      "Medallion Forge",
-      "The <font color='#CD7D03'>Medallion Forge</font> can be used to engrave <font color='#CD7D03'>Runes of Power</font> into a <font color='#CD7D03'>Witcher Medallion</font>.<br/><br/>Wearing a forged medallion allows you to inherit the power of the runes that were engraved into it.<br/><br/><u>A medallion may only hold a limited amount of runes, and engraving runes is a permanent process.</u>"
+      GetLocStringByKey("wmh_tutorial_medallion_forge_title"),
+      GetLocStringByKey("wmh_tutorial_medallion_forge_description")
     );
 
     this.prompt = new WMH_ForgeYesNoPrompt in this;
@@ -30,7 +30,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
       .GetInventoryComponent();
 
     if (!inventory.ItemHasTag(trophy, 'WMH_Medallion')) {
-      WMHHUD("The trophy you are wearing is not a Medallion that can hold Runes of Power");
+      WMHHUD(GetLocStringByKey("wmh_witcher_medallion_forge_attempt_item_invalid"));
 
       return;
     }
@@ -39,7 +39,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
       .GetItemQuantityByName('modwmh_melding_reagent');
 
     if (reagents_count < 1) {
-      WMHHUD("You lack the necessary Melding Reagreants for the process");
+      WMHHUD(GetLocStringByKey("wmh_witcher_medallion_forge_attempt_reagent_needed"));
 
       return;
     }
@@ -90,14 +90,22 @@ class WMH_ForgeYesNoPrompt extends WMH_YesNoPrompt {
   public var forge: WMH_MedallionForge;
 
   public function title(): string {
-    return "Medallion melding";
+    return GetLocStringByKey("wmh_witcher_medallion_forge_yesno_title");
   }
 
   public function description(): string {
     var reagent: string = GetLocStringByKey('wmh_melding_reagent');
     var rune: string = GetLocStringByKey('wmh_rune_of_power');
 
-    return "Use a "+reagent+" to meld a "+rune+" onto your currently equipped medallion?";
+    return StrReplace(
+      StrReplace(
+        GetLocStringByKey("wmh_witcher_medallion_forge_yesno_description"),
+        "{{reagent}}",
+        reagent
+      ),
+      "{{rune}}",
+      rune
+    );
   }
 
   public function onResponse(accepted: bool) {

@@ -151,7 +151,11 @@ latent function WMH_fastTravelToQuickstartLocation(
   theGame.FadeInAsync(1.0);
   var cost: int = WMH_getQuickStartTotalUpkeepCost();
   WMH_updateMerchantGoodsFact(cost * -1);
-  WMHHUD(cost+" Merchant Goods were used to reach the destination.");
+  WMHHUD(StrReplace(
+    GetLocStringByKey("wmh_quickstart_used_hud"),
+    "{{cost}}",
+    cost
+  ));
 }
 
 

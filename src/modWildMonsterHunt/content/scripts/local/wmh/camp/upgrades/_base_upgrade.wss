@@ -180,7 +180,6 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
         this.getLevel()
       )
     );
-    WMHHUD(this.title() + " is now level " + this.getLevel());
   }
 
   // OVERRIDE to apply bonus when used
