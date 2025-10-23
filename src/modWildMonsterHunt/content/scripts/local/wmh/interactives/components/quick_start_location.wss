@@ -89,7 +89,15 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
     for location: WMH_QuickStartLocationOptions in activated_locations {
       var upkeep_cost: int = WMH_getQuickStartMerchantGoodsCost(location);
       choices.PushBack(SSceneChoice(
-        location.location_name+" (upkeep: "+upkeep_cost+")",
+        StrReplace(
+          StrReplace(
+            GetLocStringByKey("wmh_quickstart_dialog"),
+            "{{name}}",
+            location.location_name
+          ),
+          "{{cost}}",
+          upkeep_cost
+        ),
         false, // emphasis
         false, // previouslyChoosen
         !WMH_canUseQuickStartLocation(location), // disabled
@@ -99,7 +107,7 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
     }
 
     choices.PushBack(SSceneChoice(
-      "Cancel",
+      GetLocStringByKey("wmh_cancel"),
       false, // emphasis
       false, // previouslyChoosen
       false, // disabled

@@ -174,7 +174,7 @@ class WMH_RewardProvider {
 
       if (this.groups[i].reputation > 0) {
         if (WMH_getContractManager().hasPendingMilestoneContract()) {
-          message += "<br/>&nbsp;&nbsp;&nbsp; REP: milestone contract active, gains locked";
+          message += "<br/>&nbsp;&nbsp;&nbsp; REP: " + GetLocStringByKey("wmh_milestone_reputation_locked");
         }
         else {
           message += "<br />&nbsp;&nbsp;&nbsp; REP "

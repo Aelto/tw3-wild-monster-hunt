@@ -46,12 +46,8 @@ statemachine class WMH_WeatherShrineCamp extends CGameplayEntity {
   private function displayTutorial() {
     WMHTUTOFACT(
       'WMH_WeatherShrineCamp',
-      "Quick-Start Locations",
-      "As you'll explore the surroundings, you will discover <font color='#CD7D03'>Weather Shrines</font> that can act as <font color='#CD7D03'>Quick-Start locations</font>."
-      + "<br/><br/>"
-      + "From here in the Witcher Camp, you can start your hunts at any <font color='#CD7D03'>Active</font> shrine that you have. Using a quick-start location requires a few crowns, and mostly <font color='#CD7D03'>Merchant Goods</font> as an upkeep fee for all the shrines that are currently active."
-      + "<br/><br/>"
-      + "<i>Merchants Goods are found during your hunts and must be brought back to the camp</i>"
+      GetLocStringByKey("wmh_tutorial_weather_shrine_camp_title"),
+      GetLocStringByKey("wmh_tutorial_weather_shrine_camp_description")
     );
   }
 }

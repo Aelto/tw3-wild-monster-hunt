@@ -86,8 +86,8 @@ statemachine class WMH_SceneIntroduction {
     if (level.value <= 0 && GameTimeHours(theGame.CalculateTimePlayed()) > 6) {
       WMHTUTOFACT(
         'WMH_overleveled',
-        "The road ahead",
-        "<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>. It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start, or alternative you can start a regular playthrough and interact with the new Fast Travel signpost near the White Orchard bridge."
+        GetLocStringByKey("wmh_tutorial_intro_0_title"),
+        GetLocStringByKey("wmh_tutorial_intro_0_description")
       );
     }
   }
@@ -219,8 +219,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(15.75, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
-        "Witcher Camp",
-        "<font color='#7e6d57'>Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>Thank you for trying out the mod and I hope you'll enjoy exploring this new world as much as I enjoyed making it.<br/><br/>Have fun roaming around these lands, and as it doesn't offer a concrete finish line, please remember to treat it as the calming experience it's meant to be. Take your time, make sure to read the tutorials about the new mechanics, enjoy the view from time to time, and look for the little secrets I may have left.<br/><br/>                              - Aeltoth</font>"
+        GetLocStringByKey("wmh_tutorial_intro_1_title"),
+        GetLocStringByKey("wmh_tutorial_intro_1_description")
       );
 
       // 1) look at camp manager, explain unlocking upgrades
@@ -233,8 +233,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(9.5, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCampMaster',
-        "Camp Master",
-        "The <font color='#CD7D03'>Camp Master</font> can arrange the Witcher Camp by adding new upgrades and by hiring people who can get you better gear.<br/><br/>Additionally, if you look around the camp, you will find different furnitures that he set up for you. They provide various advantages for your hunts and can be improved for greater & longer effects."
+        GetLocStringByKey("wmh_tutorial_intro_2_title"),
+        GetLocStringByKey("wmh_tutorial_intro_2_description")
       );
     }
 
@@ -245,8 +245,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(6, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeLeavingCamp',
-        "On the Path",
-        "The world beyond the camp is your <font color='#CD7D03'>hunting ground</font>. Explore the surrounding lands, gather, loot, and track down the threats designated by your contracts."
+        GetLocStringByKey("wmh_tutorial_intro_3_title"),
+        GetLocStringByKey("wmh_tutorial_intro_3_description")
       );
     }
 
@@ -263,8 +263,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(6, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeNoticeboard',
-        "A Witcher's Duty",
-        "Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades:<br/> - Each completed contracts grants you but also all merchants additional crowns for you to trade items of greater rarity.<br/> - Gear schematics are awarded as your <font color='#CD7D03'>Reputation</font> increases from the completed contracts"
+        GetLocStringByKey("wmh_tutorial_intro_4_title"),
+        GetLocStringByKey("wmh_tutorial_intro_4_description")
       );
     }
     else {
@@ -298,8 +298,8 @@ statemachine class WMH_SceneIntroduction {
     this.tick(1, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
-      "Prepare for the Hunt",
-      "Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your swords and <font color='#CD7D03'>ready yourself for the trials that await</font>."
+      GetLocStringByKey("wmh_tutorial_intro_5_title"),
+      GetLocStringByKey("wmh_tutorial_intro_5_description")
     );
 
     this.tick(2, camera, position, rotation);

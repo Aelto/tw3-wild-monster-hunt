@@ -36,7 +36,11 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       
       if (!this.oneliner) {
         this.oneliner = WMH_gameplayOnelinerEntity(
-          "<img src='img://icons/quests/monsterhunt.png' vspace='-24' /> Clear area",
+          StrReplace(
+            GetLocStringByKey("wmh_event_clear_area_oneliner"),
+            "{{icon}}",
+            "<img src='img://icons/quests/monsterhunt.png' vspace='-24' />"
+          ),
           this.poi
         );
 

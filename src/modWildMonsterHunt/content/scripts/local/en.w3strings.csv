@@ -84,12 +84,29 @@
           |        |wmh_contract_favorite_removed|The contract is no longer marked as favorite
           |        |wmh_contract_favorite_added|The contract was added to the favorites
           |        |wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location
+          |        |wmh_weather_shrine_summon_rain|Summon rain weather
+          |        |wmh_weather_shrine_summon_clear|Summon clear weather
+          |        |wmh_weather_shrine_summon_snow|Summon snow weather
           |        |wmh_quickstart_used_hud|{{cost}} Merchand Goods were used to reach the destination.
+          |        |wmh_quickstart_dialog|{{name}} (upkeep: {{cost}})
+          |        |wmh_quickstart_dialog_deactivate|Deactivate Fast Travel location (upkeep: {{cost}})
+          |        |wmh_quickstart_dialog_activate|Activate Fast Travel location (upkeep: {{cost}})
+          |        |wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
           |        |wmh_restorable_object_on_restoration|{{name}} restored
           |        |wmh_restorable_object_on_restoration_tools_needed|You lack the necessary tools to repair this {{name}}
           |        |wmh_cannot_perform_this_now|You cannot perform this now
           |        |wmh_event_fetch_lack_items|You do not have the required items
           |        |wmh_event_fetch_description|Give {{quantity}}x {{icon}}
+          |        |wmh_event_clear_area_oneliner|{{icon}} Clear area
+          |        |wmh_milestone_reputation_locked|milestone contract active, gains locked
+          |        |wmh_merchant_goods_picked_up_hud|You found merchant goods, there are {{camp_count}} in the camp and you are now carrying {{carry_count}}
+          |        |wmh_clues_oneliner_target|{{creature_name}} tracks
+;
+; contract summary popup
+          |        |wmh_contract_summary_targets|<font size='24' color='#8a5551'>TARGETS:</font>
+          |        |wmh_contract_summary_affixes|<font size='24' color='#8a5551'>AFFIXES:</font>
+          |        |wmh_contract_summary_rewards|<font size='24' color='#8a5551'>REWARDS:</font> 
+          |        |wmh_contract_summary_influences|<font size='24' color='#8a5551'>INFLUENCES:</font><br/><font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>
 ;
 ;
 ;
@@ -104,6 +121,9 @@
 ; traps & lures
           |        |wmh_lure_nothing_to_lure|There is nothing to lure at the moment
           |        |wmh_lure_lure_container_needed|You need a {{container}} to set up a lure here
+          |        |wmh_lure_lure_small_dialog|Lure small monster
+          |        |wmh_lure_lure_powerful_dialog|Lure powerful monster
+          |        |wmh_lure_lure_known_dialog|Lure {{creature}}
           |        |wmh_trap_already_consumed|This trap was already used during this hunt
           |        |wmh_trap_already_enhanced|This trap is already enhanced
           |        |wmh_trap_enhanced|Trap enhanced
@@ -138,13 +158,67 @@
           |        |wmh_camp_garden_plot_large|Large Garden Plot
 ;
 ;
+; camp (noticeboard) messages
+          |        |wmh_active_contracts|Active contracts
+          |        |wmh_favorite_contracts|Favorite contracts
+          |        |wmh_completed_contracts_history|Completed contracts history
+          |        |wmh_challenges|Challenges
+          |        |wmh_challenges_merciless_path|Merciless Path
+          |        |wmh_lower_difficulty|Lower difficulty
+          |        |wmh_raise_difficulty|Raise difficulty
+          |        |wmh_replace_with_favorite_contract|Replace with favorite contract
+;
+;
+; camp (herbalist) messages
+          |        |wmh_herbalist_cauldron_queue_oneliner|<font size='28'>{{next_item}}</font><br/>Next yield: {{points_til_next}}/<font size='18'>{{points_per_product}}</font>
+          |        |wmh_herbalist_cauldron_queue_oneliner_yields_count|Products in queue: {{count}}
+          |        |wmh_herbalist_cauldron_queue_oneliner_empty|<u>The pot is empty</u><br/>Drop alchemy items for unique rewards.
+;
+;
 ;
 ; tutorials
           |        |wmh_tutorial_medallion_forge_title|Medallion Forge
           |        |wmh_tutorial_medallion_forge_description|The <font color='#CD7D03'>Medallion Forge</font> can be used to engrave <font color='#CD7D03'>Runes of Power</font> into a <font color='#CD7D03'>Witcher Medallion</font>.<br/><br/>Wearing a forged medallion allows you to inherit the power of the runes that were engraved into it.<br/><br/><u>A medallion may only hold a limited amount of runes, and engraving runes is a permanent process.</u>
+          |        |wmh_tutorial_completed_contract_title|Controlling the hunt
+          |        |wmh_tutorial_completed_contract_description|<font color='#CD7D03'>You completed a contract</font>. By interacting with the <font color='#CD7D03'>noticeboard</font> in the camp, you can personalize the hunt to some extent: The previously completed contracts can be saved as favorites and re-used to replace unwanted ones. The favorite contracts can be repeated as many times as needed and will offer the same target & rewards as the first time.<br/><br/>The hunt being the combined result of all active contracts, try to keep an eye on the board for particularly efficient ones in order to maximize the rewards each time you go out.
+          |        |wmh_tutorial_hunting_mode_title|Hunting mode
+          |        |wmh_tutorial_hunting_mode_description|You left the <font color='#CD7D03'>Witcher Camp</font>, you are now entering in <font color='#CD7D03'>Hunting Mode</font>.<br/><br/>Each hunt is unique, the world is refilled with chests for you to loot, and depending on the time of day & weather the creatures you killed are back as well. You are free to stay in hunting mode for as long as you wish, you are also free to leave the camp as often as needed.<br/><br/>Keep in mind however that hunting your contract targets remains your primary objective, so make every hunt count in order to maximize your rewards and improve your gear.
+          |        |wmh_tutorial_melding_cauldron_title|Melding Cauldron
+          |        |wmh_tutorial_melding_cauldron_description|Drop your excess of materials & herbs into Shupe's <font color='#CD7D03'>Melting Cauldron</font> in exchange of alchemical recipes. The rarer ingredients contribute more to the strange mixture, making Shupe more inclined to reward you when you drop these.
+          |        |wmh_tutorial_hunter_expertise_title|Hunter Expertise
+          |        |wmh_tutorial_hunter_expertise_description|<font color='#CD7D03'>You completed a contract</font>.<br/><br/>You are free to go back to the camp now to get the reward or you can continue your hunt at the risk of losing your progress in the event a feint.<br/><br/>Keep note of the location you found this target, but also the weather and the time of day, so the next time a similar creature emerges you will have an easier time hunting it.
+          |        |wmh_tutorial_person_in_distress_title|Person in Distress
+          |        |wmh_tutorial_person_in_distress_description|You may randomly encounter <font color='#CD7D03'>Persons in Distress</font> during your hunts. Usually found in safe areas where no monster will attack them, they offer <font color='#CD7D03'>mini events</font> that you can complete for additional rewards & experience.
+          |        |wmh_tutorial_merchand_goods_picked_up_title|Merchant Goods
+          |        |wmh_tutorial_merchand_goods_picked_up_description|You picked up <font color='#CD7D03'>Merchant Goods</font>. Bring them back to the camp to refill the merchant's stock or to use them in exchange of services.<br/><br/><i>Merchant Goods can be found in numerious locations. You can also carry multiple goods at a time.</i>
+          |        |wmh_tutorial_luring_spot_title|Luring Spot
+          |        |wmh_tutorial_luring_spot_description|<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>Each spot is able to lure two specific types of creatures, a powerful monster or a weaker one. If you decide to go after the tougher foe then additional materials will be needed to prepare the lure.<br/><br/><i>You can get <font color='#CD7D03'>Repair Tools</font> from the <font color='#CD7D03'>Witcher Camp's Merchant</font>, and once a Luring Spot is repaired it remains available for all of your future hunts.<i/>
+          |        |wmh_tutorial_trap_spot_title|Trap Spot
+          |        |wmh_tutorial_trap_spot_description|<font color='#CD7D03'>Trap Spots</font> are deadly devices that you can arm using dedicated tools.Lure your creatures near them and trigger them with Igni.<br/><br/>Traps may also be enhanced with oils or special components to block the monsters' magic abilities.<br/><br/>Once a Trap Spot is repaired, it remains available for all of your future hunts.
+          |        |wmh_tutorial_weather_shrine_camp_title|Quick-Start Locations
+          |        |wmh_tutorial_weather_shrine_camp_description|As you'll explore the surroundings, you will discover <font color='#CD7D03'>Weather Shrines</font> that can act as <font color='#CD7D03'>Quick-Start locations</font>.<br/><br/>From here in the Witcher Camp, you can start your hunts at any <font color='#CD7D03'>Active</font> shrine that you have. Using a quick-start location requires a few crowns, and mostly <font color='#CD7D03'>Merchant Goods</font> as an upkeep fee for all the shrines that are currently active.<br/><br/><i>Merchants Goods are found during your hunts and must be brought back to the camp</i>
+          |        |wmh_tutorial_weather_shrine_title|Weather Shrine
+          |        |wmh_tutorial_weather_shrine_description|You found a <font color='#CD7D03'>Weather Shrine</font>, they are scattered across the world and can be used to control the weather as well as fast travel locations to start the hunts.<br/><br/><font color='#CD7D03'>Quick-start locations</font>: Weather shrines can act as alternative starting locations for your hunts. Once active this location will be listed among the other quick-start locations you have activated, however every shrine you maintain increases the total upkeep & usage cost needed to fast travel. Using a quick-start location requires crowns and <font color='#CD7D03'>Merchant Goods</font>.
+          |        |wmh_tutorial_intro_0_title|The road ahead
+          |        |wmh_tutorial_intro_0_description|<font color='#CD7D03'>Welcome to Wild Monster Hunt</font>. It looks like you've made a detour through Velen before coming to these wildlands.<br/><br/>Please note that a core element of Wild Monster Hunt is the slow and methodical progression via the scarce environment it provides, unlike Velen, Skellige or Toussaint; And by using an advanced character you may lose some of what make this adventure special.<br/><br/>The <font color='#CD7D03'>Wild Monster Hunt quick-start</font> can be used from the Main Menu to start, or alternative you can start a regular playthrough and interact with the new Fast Travel signpost near the White Orchard bridge.
+          |        |wmh_tutorial_intro_1_title|Witcher Camp
+          |        |wmh_tutorial_intro_1_description|<font color='#7e6d57'>Welcome to the <font color='#CD7D03'>Witcher Camp</font>, your main base of operations in <font color='#CD7D03'>Wild Monster Hunt</font>.<br/><br/>Thank you for trying out the mod and I hope you'll enjoy exploring this new world as much as I enjoyed making it.<br/><br/>Have fun roaming around these lands, and as it doesn't offer a concrete finish line, please remember to treat it as the calming experience it's meant to be. Take your time, make sure to read the tutorials about the new mechanics, enjoy the view from time to time, and look for the little secrets I may have left.<br/><br/>                              - Aeltoth</font>
+          |        |wmh_tutorial_intro_2_title|Camp Master
+          |        |wmh_tutorial_intro_2_description|The <font color='#CD7D03'>Camp Master</font> can arrange the Witcher Camp by adding new upgrades and by hiring people who can get you better gear.<br/><br/>Additionally, if you look around the camp, you will find different furnitures that he set up for you. They provide various advantages for your hunts and can be improved for greater & longer effects.
+          |        |wmh_tutorial_intro_3_title|On the Path
+          |        |wmh_tutorial_intro_3_description|The world beyond the camp is your <font color='#CD7D03'>hunting ground</font>. Explore the surrounding lands, gather, loot, and track down the threats designated by your contracts.
+          |        |wmh_tutorial_intro_4_title|A Witcher's Duty
+          |        |wmh_tutorial_intro_4_description|Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades:<br/> - Each completed contracts grants you but also all merchants additional crowns for you to trade items of greater rarity.<br/> - Gear schematics are awarded as your <font color='#CD7D03'>Reputation</font> increases from the completed contracts
+          |        |wmh_tutorial_intro_5_title|Prepare for the Hunt
+          |        |wmh_tutorial_intro_5_description|Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your swords and <font color='#CD7D03'>ready yourself for the trials that await</font>.
 ;
 ;
 ;
 ; general messages
           |        |wmh_cancel|Cancel
           |        |wmh_farewell|Farewell.
+          |        |wmh_active|Active
+          |        |wmh_active_uppercase|ACTIVE
+          |        |wmh_inactive|Inactive
+          |        |wmh_inactive_uppercase|INACTIVE
+          |        |wmh_delete|Delete

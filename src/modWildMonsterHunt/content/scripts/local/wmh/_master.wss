@@ -76,8 +76,8 @@ class WMH_Master {
 
       WMHTUTOFACT(
         'WMH_HuntingModeStarted',
-        "Hunting mode",
-        "You left the <font color='#CD7D03'>Witcher Camp</font>, you are now entering in <font color='#CD7D03'>Hunting Mode</font>.<br/><br/>Each hunt is unique, the world is refilled with chests for you to loot, and depending on the time of day & weather the creatures you killed are back as well. You are free to stay in hunting mode for as long as you wish, you are also free to leave the camp as often as needed.<br/><br/>Keep in mind however that hunting your contract targets remains your primary objective, so make every hunt count in order to maximize your rewards and improve your gear."
+        GetLocStringByKey("wmh_tutorial_hunting_mode_title"),
+        GetLocStringByKey("wmh_tutorial_hunting_mode_title")
       );
 
       this.hunt.onHuntStarted(this.storage);

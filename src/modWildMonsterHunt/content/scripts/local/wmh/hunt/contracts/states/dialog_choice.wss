@@ -65,7 +65,7 @@ state DialogChoice in WMH_ContractManager {
 
       choices.Clear();
       choices.PushBack(SSceneChoice(
-        "Active contracts",
+        GetLocStringByKey("wmh_active_contracts"),
         true, // emphasis
         false, // previouslyChoosen
         false, // disabled
@@ -75,7 +75,7 @@ state DialogChoice in WMH_ContractManager {
 
       if (storage.favourite_contracts.Size() > 0) {
         choices.PushBack(SSceneChoice(
-          "Favorite contracts",
+          GetLocStringByKey("wmh_favorite_contracts"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -86,7 +86,7 @@ state DialogChoice in WMH_ContractManager {
 
       if (storage.completed_contracts_history.Size()) {
         choices.PushBack(SSceneChoice(
-          "Completed contracts history",
+          GetLocStringByKey("wmh_completed_contracts_history"),
           false, // emphasis
           true, // previouslyChoosen
           false, // disabled
@@ -96,7 +96,7 @@ state DialogChoice in WMH_ContractManager {
       }
 
       choices.PushBack(SSceneChoice(
-        "Challenges",
+        wmh_challenges,
         true, // emphasis
         false, // previouslyChoosen
         false, // disabled
@@ -105,7 +105,7 @@ state DialogChoice in WMH_ContractManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -142,7 +142,7 @@ state DialogChoice in WMH_ContractManager {
       choices.Clear();
 
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -152,7 +152,8 @@ state DialogChoice in WMH_ContractManager {
 
       if (WMH_isExtractionChallengeEnabled()) {
         choices.PushBack(SSceneChoice(
-          "Merciless Path (active)",
+          GetLocStringByKey("wmh_challenges_merciless_path")
+            + " (" GetLocStringByKey("wmh_active") + ")",
           true, // emphasis
           false,
           false,
@@ -162,7 +163,7 @@ state DialogChoice in WMH_ContractManager {
       }
       else {
         choices.PushBack(SSceneChoice(
-          "Merciless Path",
+          GetLocStringByKey("wmh_challenges_merciless_path"),
           false, // emphasis
           false,
           false,
@@ -218,7 +219,7 @@ state DialogChoice in WMH_ContractManager {
 
       WMH_setdialogHoverContractsListener(hover_info);
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -264,7 +265,7 @@ state DialogChoice in WMH_ContractManager {
       
       choices.Clear();
       choices.PushBack(SSceneChoice(
-        "Delete",
+        GetLocStringByKey("wmh_delete"),
         false,
         true,
         false,
@@ -273,7 +274,7 @@ state DialogChoice in WMH_ContractManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -303,7 +304,7 @@ state DialogChoice in WMH_ContractManager {
 
       if (pending.contract.type != WMH_PendingContractType_MILESTONE) {
         choices.PushBack(SSceneChoice(
-          "Lower difficulty",
+          GetLocStringByKey("wmh_lower_difficulty"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -312,7 +313,7 @@ state DialogChoice in WMH_ContractManager {
         ));
 
         choices.PushBack(SSceneChoice(
-          "Raise difficulty",
+          GetLocStringByKey("wmh_raise_difficulty"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -321,7 +322,7 @@ state DialogChoice in WMH_ContractManager {
         ));
 
         choices.PushBack(SSceneChoice(
-          "Replace with favorite contract",
+          GetLocStringByKey("wmh_replace_with_favorite_contract"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -331,7 +332,7 @@ state DialogChoice in WMH_ContractManager {
       }
 
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -385,7 +386,7 @@ state DialogChoice in WMH_ContractManager {
 
       hover_info.contracts.PushBack(NULL);
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,
@@ -447,7 +448,7 @@ state DialogChoice in WMH_ContractManager {
 
       hover_info.contracts.PushBack(NULL);
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false,
         true,
         false,

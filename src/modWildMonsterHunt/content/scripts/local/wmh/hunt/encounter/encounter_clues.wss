@@ -23,7 +23,11 @@ class WMH_EncounterClues extends WMH_Encounter {
     this.oneliner_distant.offset = Vector(0, 0, 1.5);
 
     this.oneliner_close = WMH_gameplayOnelinerEntity(
-      contract.toTargetLocNameHtml() + " tracks",
+      StrReplace(
+        GetLocStringByKey("wmh_clues_oneliner_target"),
+        "{{creature_name}}",
+        contract.toTargetLocNameHtml()
+      ),
       this.spawn_point
     );
     this.oneliner_close.render_distance = 20;

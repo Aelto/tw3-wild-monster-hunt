@@ -31,8 +31,8 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
   ) {
     WMHTUTOFACT(
       'WMH_LureSpot',
-      "Luring Spot",
-      "<font color='#CD7D03'>Luring Spots</font> can be used to attract unsuspecting creatures.<br/><br/>Each spot is able to lure two specific types of creatures, a powerful monster or a weaker one. If you decide to go after the tougher foe then additional materials will be needed to prepare the lure.<br/><br/><i>You can get <font color='#CD7D03'>Repair Tools</font> from the <font color='#CD7D03'>Witcher Camp's Merchant</font>, and once a Luring Spot is repaired it remains available for all of your future hunts.<i/>"
+      GetLocStringByKey("wmh_tutorial_luring_spot_title"),
+      GetLocStringByKey("wmh_tutorial_luring_spot_description")
     );
 
     if (!this.respawn_ticker) {
@@ -173,13 +173,17 @@ state DialogChoice in WMH_LureSpot {
     while (true) {
       choices.Clear();
 
-      var small_creature_message: string = "Lure small creature";
+      var small_creature_message: string = GetLocStringByKey("wmh_lure_lure_small_dialog");
       if (parent.isSpawnedCreatureKnown(false)) {
         var bentry: WMH_BestiaryEntry = bestiary
           .getEntryByBiomeTagByPass(parent.weak_creature_bypass_tag);
 
         if (bentry) {
-          small_creature_message = "Lure " + bentry.getLocName();
+          small_creature_message = StrReplace(
+            GetLocStringByKey("wmh_lure_lure_known_dialog"),
+            "{{creature}}",
+            bentry.getLocName()
+          );
         }
       }
 
@@ -192,13 +196,17 @@ state DialogChoice in WMH_LureSpot {
         'LureWeak'
       ));
 
-      var strong_creature_message: string = "Lure powerful monster";
+      var strong_creature_message: string = GetLocStringByKey("wmh_lure_lure_powerful_dialog");
       if (parent.isSpawnedCreatureKnown(true)) {
         var bentry: WMH_BestiaryEntry = bestiary
           .getEntryByBiomeTagByPass(parent.strong_creature_bypass_tag);
 
         if (bentry) {
-          strong_creature_message = "Lure " + bentry.getLocName();
+          strong_creature_message = StrReplace(
+            GetLocStringByKey("wmh_lure_lure_known_dialog"),
+            "{{creature}}",
+            bentry.getLocName()
+          );
         }
       }
 
@@ -213,7 +221,7 @@ state DialogChoice in WMH_LureSpot {
       ));
 
       choices.PushBack(SSceneChoice(
-        "Cancel",
+        GetLocStringByKey("wmh_cancel"),
         false, // emphasis
         false, // previouslyChoosen
         false, // disabled

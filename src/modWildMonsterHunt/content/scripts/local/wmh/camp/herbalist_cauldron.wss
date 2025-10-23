@@ -120,8 +120,8 @@ class WMH_HerbalistCauldron extends W3Container {
 
     WMHTUTOFACT(
       'WMH_HerbalistCauldron',
-      "Melding Cauldron",
-      "Drop your excess of materials & herbs into Shupe's <font color='#CD7D03'>Melting Cauldron</font> in exchange of alchemical recipes. The rarer ingredients contribute more to the strange mixture, making Shupe more inclined to reward you when you drop these."
+      GetLocStringByKey("wmh_tutorial_melding_cauldron_title"),
+      GetLocStringByKey("wmh_tutorial_melding_cauldron_description")
     );
 
     this.Enable(true, false, true);
@@ -316,17 +316,30 @@ class WMH_HerbalistCauldron extends W3Container {
         .GetItemLocalisationKeyName(next_item)
       );
 
-      message = "<font size='28'>" + next_item_loc + "</font>"
-              + "<br/>Next yield: "
-              + points_til_next + "/"
-              + "<font size='18'>" + points_per_product + "</font>";
+      message = StrReplace(
+        StrReplace(
+          StrReplace(
+            GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner"),
+            "{{next_item}}",
+            next_item_loc
+          ),
+          "{{points_til_next}}",
+          points_til_next
+        ),
+        "{{points_per_product}}",
+        points_per_product
+      );
 
       if (yields_count > 0) {
-        message += "<br/>Products in queue: " + yields_count;
+        message += "<br/>" + StrReplace(
+          GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner_yields_count"),
+          "{{count}}",
+          yields_count
+        );
       }
     }
     else {
-      message = "<u>The pot is empty</u><br/>Drop alchemy items for unique rewards.";
+      message = GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner_empty");
     }
 
     this.oneliner.text = message;
