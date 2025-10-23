@@ -53,6 +53,6 @@ class WMH_BestiaryEntrySkelbear extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Snow Bear";
+    return GetLocStringByKey("wmh__skelligebear");
   }
 }

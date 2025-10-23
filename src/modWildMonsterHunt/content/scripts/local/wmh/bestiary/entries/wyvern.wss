@@ -46,6 +46,6 @@ class WMH_BestiaryEntryWyvern extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Wyvern";
+    return GetLocStringByKey("wmh__wyvern");
   }
 }

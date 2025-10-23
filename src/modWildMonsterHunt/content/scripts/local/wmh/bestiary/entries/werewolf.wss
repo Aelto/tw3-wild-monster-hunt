@@ -91,6 +91,6 @@ class WMH_BestiaryEntryWerewolf extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Werewolf";
+    return GetLocStringByKey("wmh__werewolf");
   }
 }

@@ -50,6 +50,6 @@ class WMH_BestiaryEntryGravier extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Gravier";
+    return GetLocStringByKey("wmh__scurver");
   }
 }

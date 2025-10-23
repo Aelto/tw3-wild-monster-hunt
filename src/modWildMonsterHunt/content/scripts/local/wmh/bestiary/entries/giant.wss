@@ -58,6 +58,6 @@ class WMH_BestiaryEntryGiant extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Giant";
+    return GetLocStringByKey("wmh__giant");
   }
 }

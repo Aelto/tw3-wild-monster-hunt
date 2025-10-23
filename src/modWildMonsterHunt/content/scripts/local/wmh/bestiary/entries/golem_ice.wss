@@ -37,6 +37,6 @@ class WMH_BestiaryEntryGolemIce extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Ice Golem";
+    return GetLocStringByKey("wmh__golem");
   }
 }

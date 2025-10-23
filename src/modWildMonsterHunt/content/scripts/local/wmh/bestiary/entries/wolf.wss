@@ -52,7 +52,7 @@ class WMH_BestiaryEntryWolf extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Wolf";
+    return GetLocStringByKey("wmh__wolf");
   }
 
   public function onContractCompleted(

@@ -45,6 +45,6 @@ class WMH_BestiaryEntryCyclop extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Cyclop";
+    return GetLocStringByKey("wmh__cyclop");
   }
 }

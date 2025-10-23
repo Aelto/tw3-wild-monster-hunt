@@ -1,0 +1,61 @@
+;meta[language=en]
+; id      |key(hex)|key(str)| text
+2119426001|        |wmh_mod_name|Wild Monster Hunt
+; monster names
+          |        |wmh_leshen|Leshen
+          |        |wmh_spriggan|Spriggan
+          |        |wmh_werewolf|Werewolf
+          |        |wmh_cyclop|Cyclop
+          |        |wmh_arachas|Arachas
+          |        |wmh_fiend|Fiend
+          |        |wmh_chort|Chort
+          |        |wmh_vampire|Vampire
+          |        |wmh_bear|Bears
+          |        |wmh_skelligebear|Snow Bear
+          |        |wmh_golem|Golem
+          |        |wmh_elemental|Elemental
+          |        |wmh_nightwraith|NightWraith
+          |        |wmh_noonwraith|NoonWraith
+          |        |wmh_troll|Troll
+          |        |wmh_skelligetroll|Ice Troll
+          |        |wmh_hag|Hag
+          |        |wmh_harpy|Harpy
+          |        |wmh_fogling|Fogling
+          |        |wmh_endrega|Endrega
+          |        |wmh_ghoul|Ghoul
+          |        |wmh_alghoul|Alghoul
+          |        |wmh_nekker|Nekker
+          |        |wmh_drowner|Drowner
+          |        |wmh_rotfiend|Rotfiend
+          |        |wmh_wolf|Wolf
+          |        |wmh_skelligewolf|Snow Wolf
+          |        |wmh_wraith|Wraith
+          |        |wmh_spider|Spider
+          |        |wmh_boar|Boar
+          |        |wmh_higher_vampire|Higher Vampire
+          |        |wmh_bruxa|Bruxa
+          |        |wmh_fleder|Fleder
+          |        |wmh_garkain|Garkain
+          |        |wmh_scurver|Scurver
+          |        |wmh_giant|Giant
+          |        |wmh_skeleton|Skeleton
+          |        |wmh_barghest|Barghest
+          |        |wmh_echinops|Echinop
+          |        |wmh_centipede|Centipede
+          |        |wmh_kikimore|Kikimore
+          |        |wmh_panther|Panther
+          |        |wmh_shaelmaar|Shaelmaar
+          |        |wmh_wight|Wight
+          |        |wmh_human|Bandit
+          |        |wmh_wildhunt|Wild Hunt
+          |        |wmh_gryphon|Gryphon
+          |        |wmh_cockatrice|Cockatrice
+          |        |wmh_wyvern|Wyvern
+          |        |wmh_forktail|Forktail
+          |        |wmh_basilisk|Basilisk
+          |        |wmh_katakan|Katakan
+          |        |wmh_ekimmara|Ekimmara
+          |        |wmh_siren|Siren
+          |        |wmh_berserker|Berserker
+          |        |wmh_dracolizard|Slyzard
+          |        |wmh_gargoyle|Gargoyle

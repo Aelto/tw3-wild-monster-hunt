@@ -63,6 +63,6 @@ class WMH_BestiaryEntryDracolizard extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Dracolizard";
+    return GetLocStringByKey("wmh__dracolizard");;
   }
 }

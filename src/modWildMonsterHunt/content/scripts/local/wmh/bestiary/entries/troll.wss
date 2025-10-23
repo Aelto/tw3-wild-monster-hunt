@@ -42,7 +42,7 @@ class WMH_BestiaryEntryTroll extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Troll";
+    return GetLocStringByKey("wmh__troll");
   }
 
   public function onContractCompleted(

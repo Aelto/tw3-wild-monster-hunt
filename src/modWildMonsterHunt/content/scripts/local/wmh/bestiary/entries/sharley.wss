@@ -53,6 +53,6 @@ class WMH_BestiaryEntrySharley extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Sharley";
+    return GetLocStringByKey("wmh__shaelmaar");
   }
 }

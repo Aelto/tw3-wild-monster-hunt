@@ -50,6 +50,6 @@ class WMH_BestiaryEntryFleder extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Fleder";
+    return GetLocStringByKey("wmh__fleder");
   }
 }

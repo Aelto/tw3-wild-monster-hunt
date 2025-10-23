@@ -77,7 +77,7 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Nekker";
+    return GetLocStringByKey("wmh__nekker");
   }
 
   public function onContractCompleted(

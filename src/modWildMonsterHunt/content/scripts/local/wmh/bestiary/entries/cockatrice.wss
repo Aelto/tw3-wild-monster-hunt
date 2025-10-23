@@ -63,6 +63,6 @@ class WMH_BestiaryEntryCockatrice extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Cockatrice";
+    return GetLocStringByKey("wmh__cockatrice");
   }
 }

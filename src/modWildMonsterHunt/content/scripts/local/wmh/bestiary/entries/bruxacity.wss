@@ -55,6 +55,6 @@ class WMH_BestiaryEntryBruxacity extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Bruxacity";
+    return GetLocStringByKey("wmh__bruxa");;
   }
 }

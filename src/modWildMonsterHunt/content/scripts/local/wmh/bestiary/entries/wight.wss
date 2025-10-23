@@ -47,6 +47,6 @@ class WMH_BestiaryEntryWight extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Wight";
+    return GetLocStringByKey("wmh__wight");
   }
 }

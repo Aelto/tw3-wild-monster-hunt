@@ -88,7 +88,7 @@ class WMH_BestiaryEntrySpider extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Spider";
+    return GetLocStringByKey("wmh__spider");
   }
 
   public function onContractCompleted(

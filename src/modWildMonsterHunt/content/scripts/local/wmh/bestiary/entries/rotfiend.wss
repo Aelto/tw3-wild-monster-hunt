@@ -57,7 +57,7 @@ class WMH_BestiaryEntryRotfiend extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Rotfiend";
+    return GetLocStringByKey("wmh__rotfiend");
   }
 
   public function onContractCompleted(

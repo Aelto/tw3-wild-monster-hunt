@@ -56,7 +56,7 @@ class WMH_BestiaryEntrySkeltroll extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return "Skellige troll";
+    return GetLocStringByKey("wmh__skelligetroll");
   }
 
   public function onContractCompleted(
