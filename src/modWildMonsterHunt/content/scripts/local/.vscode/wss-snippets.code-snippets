@@ -45,5 +45,21 @@
     "body": [
       "PushBack(${1:item});"
     ]
+  },
+  "loc": {
+    "prefix": "loc",
+    "body": [
+      "GetLocStringByKey(\"$1\")"
+    ]
+  },
+  "strreplace": {
+    "prefix": "strlocreplace",
+    "body": [
+      "StrReplace(",
+      "  $TM_SELECTED_TEXT,",
+      "  \"{{$1}}\",",
+      "  $2",
+      ")"
+    ]
   }
 }
