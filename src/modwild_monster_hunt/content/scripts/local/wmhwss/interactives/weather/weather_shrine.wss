@@ -72,14 +72,14 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
     var success: bool = RequestWeatherChangeTo(target_weather_name, 60, false);
     if (success) {
       thePlayer.DisplayHudMessage(
-        GetLocStringByKeyExtExt("panel_hud_message_prayer_heard")
+        GetLocStringByKeyExt("panel_hud_message_prayer_heard")
       );
 
       theSound.SoundEvent("gui_character_synergy_effect");
     }
     else {
       thePlayer.DisplayHudMessage(
-        GetLocStringByKeyExtExt("panel_hud_message_prayer_not_heard")
+        GetLocStringByKeyExt("panel_hud_message_prayer_not_heard")
       );
 
       theSound.SoundEvent("gui_character_synergy_effect_lose");

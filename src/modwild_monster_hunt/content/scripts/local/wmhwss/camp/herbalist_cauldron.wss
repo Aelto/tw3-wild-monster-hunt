@@ -311,7 +311,7 @@ class WMH_HerbalistCauldron extends W3Container {
     
     if (total_prices > 0) {
       var next_item: name = thePlayer.wmh.loot.getNextMeldItem(yields_count);
-      var next_item_loc: string = GetLocStringByKeyExtExt(
+      var next_item_loc: string = GetLocStringByKeyExt(
         theGame.GetDefinitionsManager()
         .GetItemLocalisationKeyName(next_item)
       );

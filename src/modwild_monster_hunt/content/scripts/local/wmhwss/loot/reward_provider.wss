@@ -212,7 +212,7 @@ class WMH_RewardProvider {
         if (include_item_names) {
           message += item_icon
                   + item_count
-                  + GetLocStringByKeyExtExt(
+                  + GetLocStringByKeyExt(
                     theGame.GetDefinitionsManager()
                     .GetItemLocalisationKeyName(this.groups[i].items[k].item)
                   );
