@@ -20,6 +20,8 @@ const path_compiled_scripts = path.join(
   "local"
 );
 
+const path_witcher_game = process.env.WITCHER_ROOT;
+
 require.main == module && main();
 module.exports = main;
 
@@ -27,6 +29,10 @@ function main() {
   script_compile();
   removeCurrentWorkspaceScripts();
   copyCompiledScriptsToWorkspace();
+
+  if (process.argv.includes("--game")) {
+    copyWorkspaceScriptsToGame();
+  }
 }
 
 function removeCurrentWorkspaceScripts() {
@@ -39,4 +45,20 @@ function removeCurrentWorkspaceScripts() {
 
 function copyCompiledScriptsToWorkspace() {
   fs.cpSync(path_compiled_scripts, path_workspace_scripts, { recursive: true });
+}
+
+function copyWorkspaceScriptsToGame() {
+  const path_witcher_game_local_scripts = path.join(
+    path_witcher_game,
+    "mods",
+    "modwild_monster_hunt",
+    "content",
+    "scripts",
+    "local"
+  );
+
+  fs.rmSync(path_witcher_game_local_scripts, { recursive: true });
+  fs.cpSync(path_workspace_scripts, path_witcher_game_local_scripts, {
+    recursive: true,
+  });
 }
