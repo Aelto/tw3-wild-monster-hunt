@@ -77,6 +77,6 @@ class WMH_BestiaryEntryFogling extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__fogling");
+    return GetLocStringByKey("wmh_fogling");
   }
 }

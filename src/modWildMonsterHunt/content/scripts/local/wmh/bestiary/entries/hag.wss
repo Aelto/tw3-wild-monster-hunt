@@ -71,7 +71,7 @@ class WMH_BestiaryEntryHag extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__hag");
+    return GetLocStringByKey("wmh_hag");
   }
 
   public function onContractCompleted(

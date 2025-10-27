@@ -83,7 +83,7 @@ class WMH_BestiaryEntryWraith extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__wraith");
+    return GetLocStringByKey("wmh_wraith");
   }
 
   public function onContractCompleted(

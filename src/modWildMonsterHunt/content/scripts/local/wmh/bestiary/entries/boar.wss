@@ -38,6 +38,6 @@ class WMH_BestiaryEntryBoar extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__boar");
+    return GetLocStringByKey("wmh_boar");
   }
 }

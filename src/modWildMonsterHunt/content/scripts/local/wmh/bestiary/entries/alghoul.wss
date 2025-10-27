@@ -75,7 +75,7 @@ class WMH_BestiaryEntryAlghoul extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__alghoul");
+    return GetLocStringByKey("wmh_alghoul");
   }
 
   public function onContractCompleted(

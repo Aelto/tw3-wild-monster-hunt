@@ -35,6 +35,6 @@ class WMH_BestiaryEntryBerserker extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__berserker");
+    return GetLocStringByKey("wmh_berserker");
   }
 }

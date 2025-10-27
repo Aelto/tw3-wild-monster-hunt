@@ -64,6 +64,6 @@ class WMH_BestiaryEntryGarkain extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__garkain");
+    return GetLocStringByKey("wmh_garkain");
   }
 }

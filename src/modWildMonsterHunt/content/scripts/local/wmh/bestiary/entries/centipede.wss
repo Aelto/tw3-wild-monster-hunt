@@ -44,6 +44,6 @@ class WMH_BestiaryEntryCentipede extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__centipede");
+    return GetLocStringByKey("wmh_centipede");
   }
 }

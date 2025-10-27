@@ -153,7 +153,7 @@ state DialogChoice in WMH_ContractManager {
       if (WMH_isExtractionChallengeEnabled()) {
         choices.PushBack(SSceneChoice(
           GetLocStringByKey("wmh_challenges_merciless_path")
-            + " (" GetLocStringByKey("wmh_active") + ")",
+            + " (" + GetLocStringByKey("wmh_active") + ")",
           true, // emphasis
           false,
           false,

@@ -72,6 +72,6 @@ class WMH_BestiaryEntryKatakan extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__katakan");
+    return GetLocStringByKey("wmh_katakan");
   }
 }

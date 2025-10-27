@@ -79,6 +79,6 @@ class WMH_BestiaryEntryEchinops extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__echinops");
+    return GetLocStringByKey("wmh_echinops");
   }
 }

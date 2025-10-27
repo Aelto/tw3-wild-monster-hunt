@@ -37,6 +37,6 @@ class WMH_BestiaryEntryChort extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__chort");
+    return GetLocStringByKey("wmh_chort");
   }
 }

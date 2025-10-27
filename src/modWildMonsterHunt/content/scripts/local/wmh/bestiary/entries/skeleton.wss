@@ -40,6 +40,6 @@ class WMH_BestiaryEntrySkeleton extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh__skeleton");
+    return GetLocStringByKey("wmh_skeleton");
   }
 }
