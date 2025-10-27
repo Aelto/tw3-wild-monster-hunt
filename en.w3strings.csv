@@ -92,6 +92,7 @@
 ||wmh_quickstart_dialog_deactivate|Deactivate Fast Travel location (upkeep: {{cost}})
 ||wmh_quickstart_dialog_activate|Activate Fast Travel location (upkeep: {{cost}})
 ||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
+||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
 ||wmh_restorable_object_on_restoration|{{name}} restored
 ||wmh_restorable_object_on_restoration_tools_needed|You lack the necessary tools to repair this {{name}}
 ||wmh_cannot_perform_this_now|You cannot perform this now
@@ -140,6 +141,12 @@
 ||wmh_camp_upgrade_yesno_prompt_description|Spend {{price}} Crowns to upgrade to level {{new_level}}?
 ||wmh_hunt_provisions_on_apply_no_stock|There is nothing to retrieve at the moment
 ||wmh_return_to_camp_cannot_leave_wmh|You cannot leave the region in a WMH only playthrough.
+||wmh_return_to_camp|Return to camp
+||wmh_return_to_camp_back_to_camp|Fast travel back to camp?
+||wmh_return_to_camp_go_to_camp|Fast travel to the camp?
+||wmh_return_to_camp_yesno_prompt_wo_title|Leave Wild Monster Hunt
+||wmh_return_to_camp_yesno_prompt_wo_description|Fast travel to White Orchard?
+||wmh_enter_wmh|Enter Wild Monster Hunt
 ||wmh_camp_improve|Improve Witcher Camp
 ||wmh_camp_hired|{{thing}} hired
 ||wmh_camp_unlocked|{{thing}} unlocked
@@ -211,6 +218,8 @@
 ||wmh_tutorial_intro_4_description|Contracts offer a <font color='#CD7D03'>steady income and valuable experience</font>, the noticeboard lists the active threats that are roaming around. Make them your primary targets in order to afford better gear and upgrades:<br/> - Each completed contracts grants you but also all merchants additional crowns for you to trade items of greater rarity.<br/> - Gear schematics are awarded as your <font color='#CD7D03'>Reputation</font> increases from the completed contracts
 ||wmh_tutorial_intro_5_title|Prepare for the Hunt
 ||wmh_tutorial_intro_5_description|Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your swords and <font color='#CD7D03'>ready yourself for the trials that await</font>.
+||wmh_tutorial_board_interaction_activated_title|Monster Hunts
+||wmh_tutorial_intro_5_description|The noticeboard displays up to 5 targets for your monster hunts. Slaying the designated targets during your hunts will allow you to complete the contracts, netting you crowns and experience while also immediately receiving a new target in return the next time you get back to camp.<br/><br/>Every now and then an usual creature may be listed, when it appears, hunting it should be your first priority as experience gain from regular contracts is halted until the target is no more.
 ;
 ;
 ;

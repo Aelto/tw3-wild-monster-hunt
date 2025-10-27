@@ -53,18 +53,18 @@ class WMH_ReturnToCampYesNoPrompt extends WMH_YesNoPrompt {
 
   public function title(): string {
     if (WMH_isInWmhLevel()) {
-      return "Return to camp";
+      return GetLocStringByKeyExt("wmh_return_to_camp");
     }
 
-    return "Enter Wild Monster Hunt";
+    return GetLocStringByKeyExt("wmh_enter_wmh");
   }
 
   public function description(): string {
     if (WMH_isInWmhLevel()) {
-      return "Fast travel back to camp?";
+      return GetLocStringByKeyExt("wmh_return_to_camp_back_to_camp");
     }
 
-    return "Fast travel to the camp?";
+    return GetLocStringByKeyExt("wmh_return_to_camp_go_to_camp");
   }
 
   public function onResponse(accepted: bool) {
@@ -78,11 +78,11 @@ class WMH_ReturnToCampYesNoWhiteOrchardPrompt extends WMH_YesNoPrompt {
   var entity: WMH_ReturnToCampEntity;
 
   public function title(): string {
-    return "Leave Wild Monster Hunt";
+    return GetLocStringByKeyExt("wmh_return_to_camp_yesno_prompt_wo_title");
   }
 
   public function description(): string {
-    return "Fast travel to White Orchard?";
+    return GetLocStringByKeyExt("wmh_return_to_camp_yesno_prompt_wo_description");
   }
 
   public function onResponse(accepted: bool) {

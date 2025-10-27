@@ -1,1 +1,170 @@
-뽦畮捴楯渠坍䡟晩湤乥慲批乯瑩捥扯慲摳⠩㨠慲牡礼坍䡟乯瑩捥䉯慲搾⁻ഊ†癡爠敮瑩瑩敳㨠慲牡礼䍇慭数污祅湴楴社㬍ਠ⁶慲⁯畴灵琺⁡牲慹㱗䵈彎潴楣敂潡牤㸻ഊ†癡爠扯慲携⁗䵈彎潴楣敂潡牤㬍ਠ⁶慲⁩㨠楮琻ഊഊ†䙩湤䝡浥灬慹䕮瑩瑩敳䥮剡湧攨ഊ††敮瑩瑩敳Ⰽਠ† 䍎潤攩瑨敐污祥爬ഊ††㈵Ⰽਠ†‱〬 ⼠浡砠牥獵汴猍ਠ†‧坍䡟乯瑩捥䉯慲搧ഊ†⤻ഊഊ†景爠⡩‽‰㬠椠㰠敮瑩瑩敳⹓楺攨⤻⁩‫㴠ㄩ⁻ഊ††扯慲搠㴠⡗䵈彎潴楣敂潡牤⥥湴楴楥獛楝㬍਍ਠ†⁩映⡢潡牤⤠笍ਠ††⁯畴灵琮偵獨䉡捫⡢潡牤⤻ഊ††納ਠ⁽ഊഊ†牥瑵牮⁯畴灵琻ഊ納਍੣污獳⁗䵈彎潴楣敂潡牤⁥硴敮摳⁗㍎潴楣敂潡牤⁻ഊ†灲楶慴攠癡爠潮敬楮敲猺⁡牲慹㱓啟佮敬楮敲䕮瑩瑹㸻ഊ†灲楶慴攠癡爠来湥牡江潮敬楮敲㨠单彏湥汩湥牅湴楴礻ഊ†灲楶慴攠癡爠捯湴牡捴彭慮慧敲㨠坍䡟䍯湴牡捴䵡湡来爻ഊഊ†灲楶慴攠癡爠異摡瑥彣潯汤潷渺⁗䵈彔楣步爻ഊഊ†敶敮琠佮䅲敡䕮瑥爨慲敡㨠䍔物杧敲䅲敡䍯浰潮敮琬⁡捴楶慴潲㨠䍃潭灯湥湴⤠笍ਠ†⁳異敲⹏湁牥慅湴敲⡡牥愬⁡捴楶慴潲⤻ഊഊ††瑨楳⹳整異䍯湴牡捴佮敬楮敲猨⤻ഊ†納਍ਠ⁥癥湴⁏湉湴敲慣瑩潮⡡捴楯湎慭攺⁳瑲楮本⁡捴楶慴潲㨠䍅湴楴礩⁻ഊ††坍䡟来瑃潮瑲慣瑍慮慧敲⠩⹇潴潓瑡瑥⠧䑩慬潧䍨潩捥✩㬍ਠ⁽ഊഊ†敶敮琠佮䥮瑥牡捴楯湁捴楶慴敤⡩湴敲慣瑩潮䍯浰潮敮瑎慭攠㨠獴物湧Ⱐ慣瑩癡瑯爠㨠䍅湴楴礩⁻ഊ††獵灥爮佮䥮瑥牡捴楯湁捴楶慴敤⡩湴敲慣瑩潮䍯浰潮敮瑎慭攬⁡捴楶慴潲⤻ഊഊ††坍䡔啔但䅃吨ഊ†††❗䵈彎潴楣敂潡牤✬ഊ†††≍潮獴敲⁈畮瑳∬ഊ†††≔桥⁮潴楣敢潡牤⁤楳灬慹猠異⁴漠㔠瑡牧整猠景爠祯畲⁭潮獴敲⁨畮瑳⸠∍ਠ††‫•卬慹楮朠瑨攠摥獩杮慴敤⁴慲来瑳⁤畲楮朠祯畲⁨畮瑳⁷楬氠慬汯眠祯甠瑯•ഊ†††⬠≣潭灬整攠瑨攠捯湴牡捴猬⁮整瑩湧⁹潵⁣牯睮猠慮搠數灥物敮捥⁷桩汥⁡汳漠∍ਠ††‫•業浥摩慴敬礠牥捥楶楮朠愠湥眠瑡牧整⁩渠牥瑵牮⁴桥⁮數琠瑩浥⁹潵⁧整⁢慣欠∍ਠ††‫•瑯⁣慭瀮∍ਠ††‫•㱢爯㸼扲⼾∍ਠ††‫•䕶敲礠湯眠慮搠瑨敮⁡渠畳畡氠捲敡瑵牥⁭慹⁢攠汩獴敤Ⱐ睨敮⁩琠慰灥慲猬•ഊ†††⬠≨畮瑩湧⁩琠獨潵汤⁢攠祯畲⁦楲獴⁰物潲楴礠慳⁥硰敲楥湣攠条楮⁦牯洠∍ਠ††‫•牥杵污爠捯湴牡捴猠楳⁨慬瑥搠畮瑩氠瑨攠瑡牧整⁩猠湯⁭潲攮∍ਠ† 㬍਍ਠ†⁩映⡡捴楶慴潲‽㴠瑨敐污祥爩⁻ഊ†††瑨楳⹳整異䍯湴牡捴佮敬楮敲猨⤻ഊ††納ਠ⁽ഊഊ†灵扬楣⁦畮捴楯渠獥瑵灃潮瑲慣瑏湥汩湥牳⡯灴楯湡氠景牣攺⁢潯氩⁻ഊ††瑨楳⹣潮瑲慣瑟浡湡来爠㴠坍䡟来瑃潮瑲慣瑍慮慧敲⠩㬍਍ਠ†⁩映⠡瑨楳⹵灤慴敟捯潬摯睮⤠笍ਠ††⁴桩献異摡瑥彣潯汤潷渠㴠⡮敷⁗䵈彔楣步爠楮⁴桩猩⹩湩琨㔮〩㬍ਠ†⁽ഊഊ††楦 景牣攩⁻ഊ†††瑨楳⹵灤慴敟捯潬摯睮⹲敳整⠩㬍ਠ†⁽ഊഊ††瑨楳⹁摤呩浥爨❳整異䍯湴牡捴佮敬楮敲獔業敲✬′⸰⤻ഊ†納਍ਠ⁰物癡瑥⁴業敲⁦畮捴楯渠獥瑵灃潮瑲慣瑏湥汩湥牳呩浥爨摥汴愺⁦汯慴Ⱐ楤㨠楮琩⁻ഊ††癡爠瑡牧整彮慭敳㨠慲牡礼獴物湧㸠㴠瑨楳⹣潮瑲慣瑟浡湡来爮来瑐敮摩湧呡牧整獎慭效瑭氨⤻ഊ††癡爠潮敬楮敲㨠单彏湥汩湥牅湴楴礻ഊ††癡爠捯湴牡捴彬敶敬㨠坍䡟䱥癥氻ഊ††癡爠来湥牡江瑥硴㨠獴物湧㬍ਠ†⁶慲⁩㨠楮琠㴠〻ഊഊ††癡爠灯獩瑩潮㨠噥捴潲㬍ਠ†⁶慲⁦潲睡牤㨠噥捴潲㬍ਠ†⁶慲⁬敦琺⁖散瑯爻ഊഊ††癡爠牯瑟景牷慲携⁅畬敲䅮杬敳㬍ਠ†⁶慲⁭敳栺⁃䍯浰潮敮琻ഊഊ††楦 ⅴ桩献異摡瑥彣潯汤潷渮癡汩摡瑥⠩⤠笍ਠ††⁴桩献䅤摔業敲⠧獥瑵灃潮瑲慣瑏湥汩湥牳呩浥爧Ⱐㄮ〩㬍ਠ††⁲整畲渻ഊ††納਍ਠ†⁭敳栠㴠瑨楳⹇整䍯浰潮敮瑂祃污獳乡浥⠧䍓瑡瑩捍敳桃潭灯湥湴✩㬍਍ਠ†⁩映⡭敳栩⁻納ਠ†⁥汳攠笍ਠ††⁲整畲渻ഊ††納਍ਠ†⁷桩汥 瑨楳⹯湥汩湥牳⹓楺攨⤠㰠瑡牧整彮慭敳⹓楺攨⤩⁻ഊ†††瑨楳⹯湥汩湥牳⹐畳桂慣欨ഊ††††单彯湥汩湥牅湴楴礨ഊ†††††∢Ⰽਠ††††⁴桩猍ਠ††† ഊ†††⤻ഊ††納਍ਠ†⁗䵈䥎䙏⠢坍䡟乯瑩捥䉯慲携㩳整異䍯湴牡捴佮敬楮敲猨⤢⤻ഊഊ††景牷慲搠㴠瑨楳⹇整䡥慤楮杖散瑯爨⤻ഊ††牯瑟景牷慲搠㴠瑨楳⹇整䱯捡汒潴慴楯渨⤻ഊ††汥晴‽⁖散䙲潭䡥慤楮木䅮杬敎潲浡汩穥ㄸ〨瑨楳⹇整䡥慤楮木⤠ⴠ㤰⤩㬍਍ਠ†⁦潲 椠㴠〻⁩‼⁴慲来瑟湡浥献卩穥⠩㬠椠⬽‱⤠笍ਠ††⁗䵈䥎䙏⠢瑡牧整彮慭攠㴠∠⬠瑡牧整彮慭敳孩崠⬠∠椠㴠∠⬠椩㬍਍ਠ††⁯湥汩湥爠㴠瑨楳⹯湥汩湥牳孩崻ഊ†††潮敬楮敲⹴數琠㴠瑡牧整彮慭敳孩崻ഊ†††潮敬楮敲⹲敮摥牟摩獴慮捥‽‵㬍਍ਠ††⁯湥汩湥爮潦晳整‽⁍慴物硇整呲慮獬慴楯渨ഊ††††䵡瑲楸䉵楬瑒潴慴楯渨ഊ†††††䕵汥牁湧汥猨ഊ††††††䅮杬敎潲浡汩穥ㄸ〨牯瑟景牷慲搮偩瑣栠⬠椠⨠ⴴ㔩Ⰽਠ†††††⁁湧汥乯牭慬楺攱㠰⡲潴彦潲睡牤⹙慷‫‱‪‹〩Ⰽਠ†††††⁁湧汥乯牭慬楺攱㠰⡲潴彦潲睡牤⹒潬氠⬠〠⨠ⴹ〩ഊ†††††⤍ਠ††† ഊ††††⨠䵡瑲楸䉵楬瑔牡湳污瑩潮⡦潲睡牤‪‰⸸⤍ਠ†† 㬍਍ਠ††⁯湥汩湥爮潦晳整⹗‽‰㬍ਠ††⁯湥汩湥爮潦晳整⹚‫㴠ㄮ〻ഊ†††潮敬楮敲⹵灤慴攨⤻ഊ††納਍ਠ†⁣潮瑲慣瑟汥癥氠㴠坍䡟来瑓瑯牡来⠩⹧敮敲慬⹬敶敬㬍ਠ†⁧敮敲慬彴數琠㴠∼甾剥灵瑡瑩潮⁬敶敬㨼⽵㸠∻ഊ††来湥牡江瑥硴‫㴠䙬潯牆⡣潮瑲慣瑟汥癥氮癡汵攩㬍਍ਠ†⁩映⡴桩献来湥牡江潮敬楮敲⤠笍ਠ††⁴桩献来湥牡江潮敬楮敲⹴數琠㴠来湥牡江瑥硴㬍ਠ††⁴桩献来湥牡江潮敬楮敲⹵灤慴攨⤻ഊ††納ਠ†⁥汳攠笍ਠ††⁴桩献来湥牡江潮敬楮敲‽⁓啟潮敬楮敲䕮瑩瑹⠍ਠ†††⁧敮敲慬彴數琬ഊ††††瑨楳ഊ†††⤻ഊ††納਍ਠ††瑨楳⹧敮敲慬彯湥汩湥爮潦晳整‽⁖散瑯爨〬‰Ⱐ㈮〩㬍ਠ††瑨楳⹧敮敲慬彯湥汩湥爮牥湤敲彤楳瑡湣攠㴠㔻ഊ†納਍ਠ⁰物癡瑥⁦畮捴楯渠畮牥杩獴敲佮敬楮敲猨⤠笍ਠ†⁶慲⁯湥汩湥爺⁓啟佮敬楮敲䕮瑩瑹㬍ਠ†⁶慲⁩㨠楮琻ഊഊ††景爠⡩‽‰㬠椠㰠瑨楳⹯湥汩湥牳⹓楺攨⤻⁩‫㴠ㄩ⁻ഊ†††潮敬楮敲‽⁴桩献潮敬楮敲獛楝㬍ਠ††⁯湥汩湥爮畮牥杩獴敲⠩㬍ਠ†⁽ഊഊ††瑨楳⹯湥汩湥牳⹃汥慲⠩㬍਍ਠ†⁩映⡴桩献来湥牡江潮敬楮敲⤠笍ਠ††⁴桩献来湥牡江潮敬楮敲⹵湲敧楳瑥爨⤻ഊ†††摥汥瑥⁴桩献来湥牡江潮敬楮敲㬍ਠ†⁽ഊ†納੽
+function WMH_findNearbyNoticeboards(): array<WMH_NoticeBoard> {
+  var entities: array<CGameplayEntity>;
+  var output: array<WMH_NoticeBoard>;
+  var board: WMH_NoticeBoard;
+  var i: int;
+
+  FindGameplayEntitiesInRange(
+    entities,
+    (CNode)thePlayer,
+    25,
+    10, // max results
+    'WMH_NoticeBoard'
+  );
+
+  for (i = 0; i < entities.Size(); i += 1) {
+    board = (WMH_NoticeBoard)entities[i];
+
+    if (board) {
+      output.PushBack(board);
+    }
+  }
+
+  return output;
+}
+
+class WMH_NoticeBoard extends W3NoticeBoard {
+  private var oneliners: array<SU_OnelinerEntity>;
+  private var general_oneliner: SU_OnelinerEntity;
+  private var contract_manager: WMH_ContractManager;
+
+  private var update_cooldown: WMH_Ticker;
+
+  event OnAreaEnter(area: CTriggerAreaComponent, activator: CComponent) {
+    super.OnAreaEnter(area, activator);
+
+    this.setupContractOneliners();
+  }
+
+  event OnInteraction(actionName: string, activator: CEntity) {
+    WMH_getContractManager().GotoState('DialogChoice');
+  }
+
+  event OnInteractionActivated(interactionComponentName : string, activator : CEntity) {
+    super.OnInteractionActivated(interactionComponentName, activator);
+
+    WMHTUTOFACT(
+      'WMH_NoticeBoard',
+      GetLocStringByKeyExt("wmh_tutorial_board_interaction_activated_title"),
+      GetLocStringByKeyExt("wmh_tutorial_board_interaction_activated_description")
+    );
+
+    if (activator == thePlayer) {
+      this.setupContractOneliners();
+    }
+  }
+
+  public function setupContractOneliners(optional force: bool) {
+    this.contract_manager = WMH_getContractManager();
+
+    if (!this.update_cooldown) {
+      this.update_cooldown = (new WMH_Ticker in this).init(5.0);
+    }
+
+    if (force) {
+      this.update_cooldown.reset();
+    }
+
+    this.AddTimer('setupContractOnelinersTimer', 2.0);
+  }
+
+  private timer function setupContractOnelinersTimer(delta: float, id: int) {
+    var target_names: array<string> = this.contract_manager.getPendingTargetsNameHtml();
+    var oneliner: SU_OnelinerEntity;
+    var contract_level: WMH_Level;
+    var general_text: string;
+    var i: int = 0;
+
+    var position: Vector;
+    var forward: Vector;
+    var left: Vector;
+
+    var rot_forward: EulerAngles;
+    var mesh: CComponent;
+
+    if (!this.update_cooldown.validate()) {
+      this.AddTimer('setupContractOnelinersTimer', 1.0);
+      return;
+    }
+
+    mesh = this.GetComponentByClassName('CStaticMeshComponent');
+
+    if (mesh) {}
+    else {
+      return;
+    }
+
+    while (this.oneliners.Size() < target_names.Size()) {
+      this.oneliners.PushBack(
+        SU_onelinerEntity(
+          "",
+          this
+        )
+      );
+    }
+
+    WMHINFO("WMH_NoticeBoard::setupContractOneliners()");
+
+    forward = this.GetHeadingVector();
+    rot_forward = this.GetLocalRotation();
+    left = VecFromHeading(AngleNormalize180(this.GetHeading() - 90));
+
+    for (i = 0; i < target_names.Size(); i += 1) {
+      WMHINFO("target_name = " + target_names[i] + " i = " + i);
+
+      oneliner = this.oneliners[i];
+      oneliner.text = target_names[i];
+      oneliner.render_distance = 5;
+
+      oneliner.offset = MatrixGetTranslation(
+        MatrixBuiltRotation(
+          EulerAngles(
+            AngleNormalize180(rot_forward.Pitch + i * -45),
+            AngleNormalize180(rot_forward.Yaw + 1 * 90),
+            AngleNormalize180(rot_forward.Roll + 0 * -90)
+          )
+        )
+        * MatrixBuiltTranslation(forward * 0.8)
+      );
+
+      oneliner.offset.W = 0;
+      oneliner.offset.Z += 1.0;
+      oneliner.update();
+    }
+
+    contract_level = WMH_getStorage().general.level;
+    general_text = "<u>Reputation level:</u> ";
+    general_text += FloorF(contract_level.value);
+
+    if (this.general_oneliner) {
+      this.general_oneliner.text = general_text;
+      this.general_oneliner.update();
+    }
+    else {
+      this.general_oneliner = SU_onelinerEntity(
+        general_text,
+        this
+      );
+    }
+
+     this.general_oneliner.offset = Vector(0, 0, 2.0);
+     this.general_oneliner.render_distance = 5;
+  }
+
+  private function unregisterOneliners() {
+    var oneliner: SU_OnelinerEntity;
+    var i: int;
+
+    for (i = 0; i < this.oneliners.Size(); i += 1) {
+      oneliner = this.oneliners[i];
+      oneliner.unregister();
+    }
+
+    this.oneliners.Clear();
+
+    if (this.general_oneliner) {
+      this.general_oneliner.unregister();
+      delete this.general_oneliner;
+    }
+  }
+}
