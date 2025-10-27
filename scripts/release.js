@@ -1,16 +1,27 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 const STRINGS_ID = 9426;
 
 const path_mod = path.join(__dirname, "..");
 const path_release = path.join(path_mod, "release");
-const path_redkit_packed = path.join(path_mod, "redkit", "wild_monster_hunt", "packed");
+const path_redkit_packed = path.join(
+  path_mod,
+  "redkit",
+  "wild_monster_hunt",
+  "packed"
+);
 
-const path_release_dlc_wmh = path.join(path_release, "dlc", "dlcwild_monster_hunt");
+const path_release_dlc_wmh = path.join(
+  path_release,
+  "dlc",
+  "dlcwild_monster_hunt"
+);
 
-process.env.test || main();
+require.main == module && main();
+
+module.exports = main;
 
 function main() {
   resetReleaseFolder();
@@ -30,11 +41,7 @@ function main() {
   );
 
   duplicateStringsToAllLanguages(
-    path.join(
-      path_release_dlc_wmh,
-      "content",
-      "en.w3strings"
-    )
+    path.join(path_release_dlc_wmh, "content", "en.w3strings")
   );
 
   copyDependencies();
@@ -46,11 +53,12 @@ function resetReleaseFolder() {
 }
 
 function moveRedkitPackedToRelease() {
-  const moveSubFolder = (sub) => fs.renameSync(
-    path.join(path_redkit_packed, sub),
-    path.join(path_release, sub)
-  );
-  
+  const moveSubFolder = (sub) =>
+    fs.renameSync(
+      path.join(path_redkit_packed, sub),
+      path.join(path_release, sub)
+    );
+
   moveSubFolder("dlc");
   moveSubFolder("mods");
 }
@@ -77,7 +85,10 @@ function duplicateStringsToAllLanguages(path_en_w3strings) {
   ];
 
   for (const language of languages) {
-    fs.copyFileSync(path_en_w3strings, path.join(path_origin, `${language}.w3strings`));
+    fs.copyFileSync(
+      path_en_w3strings,
+      path.join(path_origin, `${language}.w3strings`)
+    );
   }
 }
 
@@ -91,11 +102,20 @@ function copyStringsCsvToDlc() {
 }
 
 function encodeDlcStringsCsv() {
-  const path_release_dlc_wmh_content = path.join(path_release_dlc_wmh, "content");
-  const path_dlc_w3strings_csv = path.join(path_release_dlc_wmh_content, "en.w3strings.csv");
-  const path_dlc_w3strings = path.join(path_release_dlc_wmh_content, "en.w3strings");
+  const path_release_dlc_wmh_content = path.join(
+    path_release_dlc_wmh,
+    "content"
+  );
+  const path_dlc_w3strings_csv = path.join(
+    path_release_dlc_wmh_content,
+    "en.w3strings.csv"
+  );
+  const path_dlc_w3strings = path.join(
+    path_release_dlc_wmh_content,
+    "en.w3strings"
+  );
 
-  const arg_autogen_ids = '--auto-generate-missing-ids';
+  const arg_autogen_ids = "--auto-generate-missing-ids";
   const arg_encode = `--encode ${path_dlc_w3strings_csv}`;
   const arg_idspace = `--id-space ${STRINGS_ID}`;
   execSync(`w3strings ${arg_autogen_ids} ${arg_encode} ${arg_idspace}`);
@@ -117,7 +137,11 @@ function copyDependencies() {
     "mods/mod_sharedutils_oneliners",
   ];
 
-  const path_sharedutils_release = path.join(path_mod, "tw3-shared-utils", "release");
+  const path_sharedutils_release = path.join(
+    path_mod,
+    "tw3-shared-utils",
+    "release"
+  );
 
   for (const dep of dependencies) {
     const path_dep = path.join(path_sharedutils_release, dep);
