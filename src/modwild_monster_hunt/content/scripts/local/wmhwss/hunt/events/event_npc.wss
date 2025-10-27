@@ -26,8 +26,8 @@ statemachine class WMH_EventNpc extends CNewNPC {
 
     WMHTUTOFACT(
       'WMH_LureSpot_OnInteraction',
-      GetLocStringByKey("wmh_tutorial_person_in_distress_title"),
-      GetLocStringByKey("wmh_tutorial_person_in_distress_description")
+      GetLocStringByKeyExt("wmh_tutorial_person_in_distress_title"),
+      GetLocStringByKeyExt("wmh_tutorial_person_in_distress_description")
     );
 
     // 1. load/generate events

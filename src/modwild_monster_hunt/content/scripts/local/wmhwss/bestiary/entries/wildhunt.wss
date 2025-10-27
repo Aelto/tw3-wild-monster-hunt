@@ -77,6 +77,6 @@ class WMH_BestiaryEntryWildhunt extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_wildhunt");
+    return GetLocStringByKeyExt("wmh_wildhunt");
   }
 }

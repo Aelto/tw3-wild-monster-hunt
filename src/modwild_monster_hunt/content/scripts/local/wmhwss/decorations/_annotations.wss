@@ -133,7 +133,7 @@ function GetBaseItemData(
       var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
       var icon: string = "<img src='" + src + "' width='24' height='24' />";
 
-      var perk_name: string = GetLocStringByKeyExt(
+      var perk_name: string = GetLocStringByKeyExtExt(
         thePlayer.GetSkillLocalisationKeyName(perk)
       );
 
@@ -161,11 +161,11 @@ function GetBaseItemData(
     var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
     var icon: string = "<img src='" + src + "' width='24' height='24' />";
 
-    var perk_name: string = GetLocStringByKeyExt(
+    var perk_name: string = GetLocStringByKeyExtExt(
       thePlayer.GetSkillLocalisationKeyName(perk)
     );
 
-    var perk_description: string = GetLocStringByKeyExt(
+    var perk_description: string = GetLocStringByKeyExtExt(
       thePlayer.GetSkillLocalisationKeyDescription(perk)
     );
 
@@ -200,7 +200,7 @@ function SetInventoryFlashObjectForItem(
     var perk: ESkill = WMH_runeGetPerk(this._inv, item);
 
     var src: string = "img://" + thePlayer.GetSkillIconPath(perk);
-    var perk_name: string = GetLocStringByKeyExt(
+    var perk_name: string = GetLocStringByKeyExtExt(
       thePlayer.GetSkillLocalisationKeyName(perk)
     );
 

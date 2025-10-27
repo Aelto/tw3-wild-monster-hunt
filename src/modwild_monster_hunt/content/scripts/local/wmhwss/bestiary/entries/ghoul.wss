@@ -64,6 +64,6 @@ class WMH_BestiaryEntryGhoul extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_ghoul");
+    return GetLocStringByKeyExt("wmh_ghoul");
   }
 }

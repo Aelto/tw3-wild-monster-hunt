@@ -31,8 +31,8 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
   ) {
     WMHTUTOFACT(
       'WMH_LureSpot',
-      GetLocStringByKey("wmh_tutorial_luring_spot_title"),
-      GetLocStringByKey("wmh_tutorial_luring_spot_description")
+      GetLocStringByKeyExt("wmh_tutorial_luring_spot_title"),
+      GetLocStringByKeyExt("wmh_tutorial_luring_spot_description")
     );
 
     if (!this.respawn_ticker) {
@@ -40,14 +40,14 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
     }
 
     if (!this.respawn_ticker.hasExpired()) {
-      return WMHHUD(GetLocStringByKey("wmh_lure_nothing_to_lure"));
+      return WMHHUD(GetLocStringByKeyExt("wmh_lure_nothing_to_lure"));
     }
 
     if (thePlayer.inv.GetItemQuantityByTag('WMH_LureContainer') <= 0) {
-      var lure_container: string = GetLocStringByKey('wmh_lure_container');
+      var lure_container: string = GetLocStringByKeyExt('wmh_lure_container');
 
       return WMHHUD(StrReplace(
-        GetLocStringByKey("wmh_lure_lure_container_needed"),
+        GetLocStringByKeyExt("wmh_lure_lure_container_needed"),
         "{{container}}",
         lure_container
       ));
@@ -97,10 +97,10 @@ statemachine class WMH_LureSpot extends WMH_RestorableObject {
       .GetItemsByName('modwmh_lure_container');
 
     if (lures.Size() <= 0) {
-      var lure_container: string = GetLocStringByKey('wmh_lure_container');
+      var lure_container: string = GetLocStringByKeyExt('wmh_lure_container');
 
       return WMHHUD(StrReplace(
-        GetLocStringByKey("wmh_lure_lure_container_needed"),
+        GetLocStringByKeyExt("wmh_lure_lure_container_needed"),
         "{{container}}",
         lure_container
       ));
@@ -173,14 +173,14 @@ state DialogChoice in WMH_LureSpot {
     while (true) {
       choices.Clear();
 
-      var small_creature_message: string = GetLocStringByKey("wmh_lure_lure_small_dialog");
+      var small_creature_message: string = GetLocStringByKeyExt("wmh_lure_lure_small_dialog");
       if (parent.isSpawnedCreatureKnown(false)) {
         var bentry: WMH_BestiaryEntry = bestiary
           .getEntryByBiomeTagByPass(parent.weak_creature_bypass_tag);
 
         if (bentry) {
           small_creature_message = StrReplace(
-            GetLocStringByKey("wmh_lure_lure_known_dialog"),
+            GetLocStringByKeyExt("wmh_lure_lure_known_dialog"),
             "{{creature}}",
             bentry.getLocName()
           );
@@ -196,14 +196,14 @@ state DialogChoice in WMH_LureSpot {
         'LureWeak'
       ));
 
-      var strong_creature_message: string = GetLocStringByKey("wmh_lure_lure_powerful_dialog");
+      var strong_creature_message: string = GetLocStringByKeyExt("wmh_lure_lure_powerful_dialog");
       if (parent.isSpawnedCreatureKnown(true)) {
         var bentry: WMH_BestiaryEntry = bestiary
           .getEntryByBiomeTagByPass(parent.strong_creature_bypass_tag);
 
         if (bentry) {
           strong_creature_message = StrReplace(
-            GetLocStringByKey("wmh_lure_lure_known_dialog"),
+            GetLocStringByKeyExt("wmh_lure_lure_known_dialog"),
             "{{creature}}",
             bentry.getLocName()
           );
@@ -221,7 +221,7 @@ state DialogChoice in WMH_LureSpot {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_cancel"),
+        GetLocStringByKeyExt("wmh_cancel"),
         false, // emphasis
         false, // previouslyChoosen
         false, // disabled

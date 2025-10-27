@@ -25,7 +25,7 @@ function CreateNewGameListArray(): CScriptedFlashArray {
   l_DataFlashObject.SetMemberFlashArray("subElements", l_ChildMenuFlashArray);
   l_DataFlashObject.SetMemberFlashString(
     "description",
-    GetLocStringByKeyExt("panel_mainmenu_start_wmh_description")
+    GetLocStringByKeyExtExt("panel_mainmenu_start_wmh_description")
   );
   
   output.PushBackFlashObject(l_DataFlashObject);

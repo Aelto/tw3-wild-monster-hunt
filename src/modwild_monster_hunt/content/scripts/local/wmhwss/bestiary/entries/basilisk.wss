@@ -65,6 +65,6 @@ class WMH_BestiaryEntryBasilisk extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_basilisk");
+    return GetLocStringByKeyExt("wmh_basilisk");
   }
 }

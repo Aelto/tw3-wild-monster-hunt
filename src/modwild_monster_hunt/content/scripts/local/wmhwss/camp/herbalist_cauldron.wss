@@ -120,8 +120,8 @@ class WMH_HerbalistCauldron extends W3Container {
 
     WMHTUTOFACT(
       'WMH_HerbalistCauldron',
-      GetLocStringByKey("wmh_tutorial_melding_cauldron_title"),
-      GetLocStringByKey("wmh_tutorial_melding_cauldron_description")
+      GetLocStringByKeyExt("wmh_tutorial_melding_cauldron_title"),
+      GetLocStringByKeyExt("wmh_tutorial_melding_cauldron_description")
     );
 
     this.Enable(true, false, true);
@@ -311,7 +311,7 @@ class WMH_HerbalistCauldron extends W3Container {
     
     if (total_prices > 0) {
       var next_item: name = thePlayer.wmh.loot.getNextMeldItem(yields_count);
-      var next_item_loc: string = GetLocStringByKeyExt(
+      var next_item_loc: string = GetLocStringByKeyExtExt(
         theGame.GetDefinitionsManager()
         .GetItemLocalisationKeyName(next_item)
       );
@@ -319,7 +319,7 @@ class WMH_HerbalistCauldron extends W3Container {
       message = StrReplace(
         StrReplace(
           StrReplace(
-            GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner"),
+            GetLocStringByKeyExt("wmh_herbalist_cauldron_queue_oneliner"),
             "{{next_item}}",
             next_item_loc
           ),
@@ -332,14 +332,14 @@ class WMH_HerbalistCauldron extends W3Container {
 
       if (yields_count > 0) {
         message += "<br/>" + StrReplace(
-          GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner_yields_count"),
+          GetLocStringByKeyExt("wmh_herbalist_cauldron_queue_oneliner_yields_count"),
           "{{count}}",
           yields_count
         );
       }
     }
     else {
-      message = GetLocStringByKey("wmh_herbalist_cauldron_queue_oneliner_empty");
+      message = GetLocStringByKeyExt("wmh_herbalist_cauldron_queue_oneliner_empty");
     }
 
     this.oneliner.text = message;

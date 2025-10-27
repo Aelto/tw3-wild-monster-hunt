@@ -1,5 +1,5 @@
 function WMH_playerUsesEnhancedEditionRedux(): bool {
-  return StrLen(GetLocStringByKey("Redux_ToxMult")) > 0;
+  return StrLen(GetLocStringByKeyExt("Redux_ToxMult")) > 0;
 }
 
 function WMH_playerUsesVladimirUI(): bool {

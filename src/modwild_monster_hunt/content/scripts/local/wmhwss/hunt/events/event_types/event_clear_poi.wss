@@ -37,7 +37,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
       if (!this.oneliner) {
         this.oneliner = WMH_gameplayOnelinerEntity(
           StrReplace(
-            GetLocStringByKey("wmh_event_clear_area_oneliner"),
+            GetLocStringByKeyExt("wmh_event_clear_area_oneliner"),
             "{{icon}}",
             "<img src='img://icons/quests/monsterhunt.png' vspace='-24' />"
           ),

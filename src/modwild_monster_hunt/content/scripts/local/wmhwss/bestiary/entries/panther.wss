@@ -50,6 +50,6 @@ class WMH_BestiaryEntryPanther extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_panther");
+    return GetLocStringByKeyExt("wmh_panther");
   }
 }

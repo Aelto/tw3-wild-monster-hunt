@@ -10,8 +10,8 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
   ) {
     WMHTUTOFACT(
       'WMH_MedallionForge',
-      GetLocStringByKey("wmh_tutorial_medallion_forge_title"),
-      GetLocStringByKey("wmh_tutorial_medallion_forge_description")
+      GetLocStringByKeyExt("wmh_tutorial_medallion_forge_title"),
+      GetLocStringByKeyExt("wmh_tutorial_medallion_forge_description")
     );
 
     this.prompt = new WMH_ForgeYesNoPrompt in this;
@@ -30,7 +30,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
       .GetInventoryComponent();
 
     if (!inventory.ItemHasTag(trophy, 'WMH_Medallion')) {
-      WMHHUD(GetLocStringByKey("wmh_witcher_medallion_forge_attempt_item_invalid"));
+      WMHHUD(GetLocStringByKeyExt("wmh_witcher_medallion_forge_attempt_item_invalid"));
 
       return;
     }
@@ -39,7 +39,7 @@ class WMH_MedallionForge extends WMH_InteractiveObject {
       .GetItemQuantityByName('modwmh_melding_reagent');
 
     if (reagents_count < 1) {
-      WMHHUD(GetLocStringByKey("wmh_witcher_medallion_forge_attempt_reagent_needed"));
+      WMHHUD(GetLocStringByKeyExt("wmh_witcher_medallion_forge_attempt_reagent_needed"));
 
       return;
     }
@@ -90,16 +90,16 @@ class WMH_ForgeYesNoPrompt extends WMH_YesNoPrompt {
   public var forge: WMH_MedallionForge;
 
   public function title(): string {
-    return GetLocStringByKey("wmh_witcher_medallion_forge_yesno_title");
+    return GetLocStringByKeyExt("wmh_witcher_medallion_forge_yesno_title");
   }
 
   public function description(): string {
-    var reagent: string = GetLocStringByKey('wmh_melding_reagent');
-    var rune: string = GetLocStringByKey('wmh_rune_of_power');
+    var reagent: string = GetLocStringByKeyExt('wmh_melding_reagent');
+    var rune: string = GetLocStringByKeyExt('wmh_rune_of_power');
 
     return StrReplace(
       StrReplace(
-        GetLocStringByKey("wmh_witcher_medallion_forge_yesno_description"),
+        GetLocStringByKeyExt("wmh_witcher_medallion_forge_yesno_description"),
         "{{reagent}}",
         reagent
       ),

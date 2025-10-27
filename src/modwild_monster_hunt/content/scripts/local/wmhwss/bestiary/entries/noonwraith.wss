@@ -66,6 +66,6 @@ class WMH_BestiaryEntryNoonwraith extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_noonwraith");
+    return GetLocStringByKeyExt("wmh_noonwraith");
   }
 }

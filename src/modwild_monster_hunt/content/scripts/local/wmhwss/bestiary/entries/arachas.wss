@@ -60,7 +60,7 @@ class WMH_BestiaryEntryArachas extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_arachas");
+    return GetLocStringByKeyExt("wmh_arachas");
   }
 
   public function onContractCompleted(

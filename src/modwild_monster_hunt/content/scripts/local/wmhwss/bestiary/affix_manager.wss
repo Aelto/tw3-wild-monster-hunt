@@ -222,44 +222,44 @@ class WMH_AffixManager {
 
     if (this.damage_modifier != 1.0) {
       if (this.damage_modifier >= 1.5) {
-        output += GetLocStringByKey("wmh_affix_deadly") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_deadly") + " ";
       }
       else {
-        output += GetLocStringByKey("wmh_affix_vicious") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_vicious") + " ";
       }
     }
 
     if (this.health_modifier != 1.0) {
       if (this.health_modifier > 1.5) {
-        output += GetLocStringByKey("wmh_affix_invincible") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_invincible") + " ";
       }
       else {
-        output += GetLocStringByKey("wmh_affix_hearty") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_hearty") + " ";
       }
     }
 
     if (this.health_regen_percent > 0) {
       if (this.health_regen_percent > 0.1) {
-        output += GetLocStringByKey("wmh_affix_immortal") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_immortal") + " ";
       }
       else {
-        output += GetLocStringByKey("wmh_affix_regenerating") + " ";
+        output += GetLocStringByKeyExt("wmh_affix_regenerating") + " ";
       }
     }
 
     if (this.armor_modifier > 1.0) {
-      output += GetLocStringByKey("wmh_affix_armored") + " ";
+      output += GetLocStringByKeyExt("wmh_affix_armored") + " ";
     }
     else if (this.armor_modifier < 1.0) {
-      output += GetLocStringByKey("wmh_affix_exposed") + " ";
+      output += GetLocStringByKeyExt("wmh_affix_exposed") + " ";
     }
 
     if (this.durability_loss_modifier > 1.0) {
-      output += GetLocStringByKey("wmh_affix_hardened") + " ";
+      output += GetLocStringByKeyExt("wmh_affix_hardened") + " ";
     }
 
     if (this.lifesteal_percent > 0) {
-      output += GetLocStringByKey("wmh_affix_bloodthirsty") + " ";
+      output += GetLocStringByKeyExt("wmh_affix_bloodthirsty") + " ";
     }
 
     return output;

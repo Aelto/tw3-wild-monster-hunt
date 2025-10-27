@@ -87,8 +87,8 @@ class WMH_Encounter {
       if (this.isContractTarget()) {
         WMHTUTOFACT(
           'WMH_EncounterContractHunterExpertise',
-          GetLocStringByKey("wmh_tutorial_hunter_expertise_title"),
-          GetLocStringByKey("wmh_tutorial_hunter_expertise_description")
+          GetLocStringByKeyExt("wmh_tutorial_hunter_expertise_title"),
+          GetLocStringByKeyExt("wmh_tutorial_hunter_expertise_description")
         );
       }
 

@@ -54,7 +54,7 @@ state DialogChoice in WMH_EventNpc {
       }
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_cancel"),
+        GetLocStringByKeyExt("wmh_cancel"),
         false,
         true,
         false,

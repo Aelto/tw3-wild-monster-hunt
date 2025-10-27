@@ -48,19 +48,19 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
   ) {
     WMHTUTOFACT(
       'WMH_TrapSpot',
-      GetLocStringByKey("wmh_tutorial_trap_spot_title"),
-      GetLocStringByKey("wmh_tutorial_trap_spot_description")
+      GetLocStringByKeyExt("wmh_tutorial_trap_spot_title"),
+      GetLocStringByKeyExt("wmh_tutorial_trap_spot_description")
     );
 
     var current_state: name = this.GetCurrentStateName();
 
     if (current_state == 'Consumed') {
-      WMHHUD(GetLocStringByKey("wmh_trap_already_consumed"));
+      WMHHUD(GetLocStringByKeyExt("wmh_trap_already_consumed"));
       return;
     }
 
     if (IsNameValid(this.oil_enhancement_name)) {
-      WMHHUD(GetLocStringByKey("wmh_trap_already_enhanced"));
+      WMHHUD(GetLocStringByKeyExt("wmh_trap_already_enhanced"));
       return;
     }
 
@@ -125,7 +125,7 @@ statemachine class WMH_TrapSpot extends WMH_RestorableObject {
       thePlayer.inv.RemoveItem(item, 1);
     }
 
-    WMHHUD(GetLocStringByKey("wmh_trap_enhanced"));
+    WMHHUD(GetLocStringByKeyExt("wmh_trap_enhanced"));
     theSound.SoundEvent('gui_inventory_bombs_attach');
   }
 }
@@ -142,10 +142,10 @@ state TryArming in WMH_TrapSpot {
       .GetItemsByName('modwmh_trap_device');
 
     if (devices.Size() <= 0) {
-      var trap_device: string = GetLocStringByKey('wmh_trap_device');
+      var trap_device: string = GetLocStringByKeyExt('wmh_trap_device');
 
       return WMHHUD(StrReplace(
-        GetLocStringByKey("wmh_trap_trap_device_needed"),
+        GetLocStringByKeyExt("wmh_trap_trap_device_needed"),
         "{{device}}",
         trap_device
       ));
@@ -166,7 +166,7 @@ state Armed in WMH_TrapSpot {
 
   entry function Armed_main() {
     theSound.SoundEvent('gui_inventory_bombs_attach');
-    WMHHUD(GetLocStringByKey("wmh_trap_armed"));
+    WMHHUD(GetLocStringByKeyExt("wmh_trap_armed"));
 
     this.armed_time = SUH_now();
 
@@ -324,7 +324,7 @@ class WMH_TrapYesNoPrompt extends WMH_YesNoPrompt {
   }
 
   public function description(): string {
-    var trap_device: string = GetLocStringByKey('wmh_trap_device');
+    var trap_device: string = GetLocStringByKeyExt('wmh_trap_device');
 
     return "Use a " + trap_device + " here?";
   }

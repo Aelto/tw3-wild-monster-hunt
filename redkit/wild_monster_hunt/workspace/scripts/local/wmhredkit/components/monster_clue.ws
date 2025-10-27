@@ -48,7 +48,7 @@ state Interacting in WMH_MonsterClue {
   function displayHudText(entry_name: string) {
     WMHHUD(
 			StrReplace(
-        GetLocStringByKey("WMH_tracks_examine_hud_message"),
+        GetLocStringByKeyExt("WMH_tracks_examine_hud_message"),
         "{{species}}",
         entry_name
       )

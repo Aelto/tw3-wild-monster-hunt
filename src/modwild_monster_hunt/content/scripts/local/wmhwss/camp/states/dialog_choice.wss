@@ -32,7 +32,7 @@ state DialogChoice in WMH_CampManager {
     var choices: array<SSceneChoice>;
 
     choices.PushBack(SSceneChoice(
-      GetLocStringByKey("wmh_camp_improve"),
+      GetLocStringByKeyExt("wmh_camp_improve"),
       true, // emphasis
       false, // previouslyChoosen
       false, // disabled
@@ -41,7 +41,7 @@ state DialogChoice in WMH_CampManager {
     ));
 
     choices.PushBack(SSceneChoice(
-      GetLocStringByKey("wmh_farewell"),
+      GetLocStringByKeyExt("wmh_farewell"),
       false,
       true,
       false,
@@ -110,7 +110,7 @@ state DialogChoice in WMH_CampManager {
     while (true) {
       choices.Clear();
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_merchant")
+        GetLocStringByKeyExt("wmh_camp_merchant")
           +" ("+parent.unlockMerchantPrice()+")",
         true, // emphasis
         parent.isMerchantUnlocked(), // previouslyChoosen
@@ -120,7 +120,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_garden_plot_small")
+        GetLocStringByKeyExt("wmh_camp_garden_plot_small")
           +" ("+parent.unlockGarden0Price()+")",
         true, // emphasis
         parent.isGarden0Unlocked(), // previouslyChoosen
@@ -130,7 +130,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_barber")
+        GetLocStringByKeyExt("wmh_camp_barber")
           +" ("+parent.unlockBarberPrice()+")",
         true, // emphasis
         parent.isBarberUnlocked(), // previouslyChoosen
@@ -140,7 +140,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_herbalist")
+        GetLocStringByKeyExt("wmh_camp_herbalist")
           +" ("+parent.unlockHerbalistPrice()+")",
         true, // emphasis
         parent.isHerbalistUnlocked(), // previouslyChoosen
@@ -150,7 +150,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_garden_plot_large")
+        GetLocStringByKeyExt("wmh_camp_garden_plot_large")
           +" ("+parent.unlockGarden1Price()+")",
         true, // emphasis
         parent.isGarden1Unlocked(), // previouslyChoosen
@@ -160,7 +160,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_armor_tools")
+        GetLocStringByKeyExt("wmh_camp_armor_tools")
           +" ("+parent.unlockArmorsPrice()+")",
         true, // emphasis
         parent.isArmorsUnlocked(), // previouslyChoosen
@@ -170,7 +170,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_camp_weapon_tools")
+        GetLocStringByKeyExt("wmh_camp_weapon_tools")
           +" ("+parent.unlockWeaponsPrice()+")",
         true, // emphasis
         parent.isWeaponsUnlocked(), // previouslyChoosen
@@ -180,7 +180,7 @@ state DialogChoice in WMH_CampManager {
       ));
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_cancel"),
+        GetLocStringByKeyExt("wmh_cancel"),
         false,
         true,
         false,
@@ -196,14 +196,14 @@ state DialogChoice in WMH_CampManager {
 
       if (response.playGoChunk == 'UnlockHerbalist') {
         if (parent.isHerbalistUnlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_herbalist_already_in_camp"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_herbalist_already_in_camp"));
           continue;
         }
 
         var cost: int = parent.unlockHerbalistPrice();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -211,21 +211,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockHerbalist();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_hired"),
+          GetLocStringByKeyExt("wmh_camp_hired"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_herbalist")
+          GetLocStringByKeyExt("wmh_camp_herbalist")
         ));
       }
       else if (response.playGoChunk == 'UnlockMerchant') {
         if (parent.isMerchantUnlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_merchant_already_in_camp"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_merchant_already_in_camp"));
           continue;
         }
 
         var cost: int = parent.unlockMerchantPrice();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -233,21 +233,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockMerchant();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_hired"),
+          GetLocStringByKeyExt("wmh_camp_hired"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_merchant")
+          GetLocStringByKeyExt("wmh_camp_merchant")
         ));
       }
       else if (response.playGoChunk == 'UnlockBarber') {
         if (parent.isBarberUnlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_barber_already_in_camp"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_barber_already_in_camp"));
           continue;
         }
 
         var cost: int = parent.unlockBarberPrice();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -255,21 +255,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockBarber();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_hired"),
+          GetLocStringByKeyExt("wmh_camp_hired"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_barber")
+          GetLocStringByKeyExt("wmh_camp_barber")
         ));
       }
       else if (response.playGoChunk == 'UnlockArmors') {
         if (parent.isArmorsUnlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_armor_tools_already_in_camp"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_armor_tools_already_in_camp"));
           continue;
         }
 
         var cost: int = parent.unlockArmorsPrice();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -277,21 +277,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockArmors();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_unlocked"),
+          GetLocStringByKeyExt("wmh_camp_unlocked"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_armor_tools")
+          GetLocStringByKeyExt("wmh_camp_armor_tools")
         ));
       }
       else if (response.playGoChunk == 'UnlockWeapons') {
         if (parent.isWeaponsUnlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_weapon_tools_already_in_camp"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_weapon_tools_already_in_camp"));
           continue;
         }
 
         var cost: int = parent.unlockWeaponsPrice();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -299,21 +299,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockWeapons();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_unlocked"),
+          GetLocStringByKeyExt("wmh_camp_unlocked"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_weapon_tools")
+          GetLocStringByKeyExt("wmh_camp_weapon_tools")
         ));
       }
       else if (response.playGoChunk == 'UnlockGarden0') {
         if (parent.isGarden0Unlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_garden_plot_already_cultivating"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_garden_plot_already_cultivating"));
           continue;
         }
 
         var cost: int = parent.unlockGarden0Price();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -321,21 +321,21 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockGarden0();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_unlocked"),
+          GetLocStringByKeyExt("wmh_camp_unlocked"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_garden_plot_small")
+          GetLocStringByKeyExt("wmh_camp_garden_plot_small")
         ));
       }
       else if (response.playGoChunk == 'UnlockGarden1') {
         if (parent.isGarden1Unlocked()) {
-          WMHPOPUP(GetLocStringByKey("wmh_camp_garden_plot_already_cultivating"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_camp_garden_plot_already_cultivating"));
           continue;
         }
 
         var cost: int = parent.unlockGarden1Price();
 
         if (thePlayer.GetMoney() < cost) {
-          WMHPOPUP(GetLocStringByKey("wmh_insufficient_funds"));
+          WMHPOPUP(GetLocStringByKeyExt("wmh_insufficient_funds"));
           continue;
         }
 
@@ -343,9 +343,9 @@ state DialogChoice in WMH_CampManager {
         WMH_addFundsToSmithMerchants(cost);
         parent.unlockGarden1();
         WMHPOPUP(StrReplace(
-          GetLocStringByKey("wmh_camp_unlocked"),
+          GetLocStringByKeyExt("wmh_camp_unlocked"),
           "{{thing}}",
-          GetLocStringByKey("wmh_camp_garden_plot_large")
+          GetLocStringByKeyExt("wmh_camp_garden_plot_large")
         ));
       }
       else {

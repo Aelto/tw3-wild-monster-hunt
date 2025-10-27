@@ -91,7 +91,7 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
       choices.PushBack(SSceneChoice(
         StrReplace(
           StrReplace(
-            GetLocStringByKey("wmh_quickstart_dialog"),
+            GetLocStringByKeyExt("wmh_quickstart_dialog"),
             "{{name}}",
             location.location_name
           ),
@@ -107,7 +107,7 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
     }
 
     choices.PushBack(SSceneChoice(
-      GetLocStringByKey("wmh_cancel"),
+      GetLocStringByKeyExt("wmh_cancel"),
       false, // emphasis
       false, // previouslyChoosen
       false, // disabled
@@ -160,7 +160,7 @@ latent function WMH_fastTravelToQuickstartLocation(
   var cost: int = WMH_getQuickStartTotalUpkeepCost();
   WMH_updateMerchantGoodsFact(cost * -1);
   WMHHUD(StrReplace(
-    GetLocStringByKey("wmh_quickstart_used_hud"),
+    GetLocStringByKeyExt("wmh_quickstart_used_hud"),
     "{{cost}}",
     cost
   ));

@@ -60,6 +60,6 @@ class WMH_BestiaryEntryForktail extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_forktail");
+    return GetLocStringByKeyExt("wmh_forktail");
   }
 }

@@ -59,7 +59,7 @@ abstract class WMH_InteractiveObject extends W3Container {
   }
 
   protected function getObjectName(): string {
-    return GetLocStringByKey(this.object_name_loc_key);
+    return GetLocStringByKeyExt(this.object_name_loc_key);
   }
   //#endregion
 
@@ -81,7 +81,7 @@ abstract class WMH_InteractiveObject extends W3Container {
     action: string,
     activator: CEntity
   ) {
-    WMHHUD(GetLocStringByKey("wmh_cannot_perform_this_now"));
+    WMHHUD(GetLocStringByKeyExt("wmh_cannot_perform_this_now"));
   }
   //#endregion
 }

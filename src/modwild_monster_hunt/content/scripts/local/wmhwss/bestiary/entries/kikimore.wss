@@ -66,7 +66,7 @@ class WMH_BestiaryEntryKikimore extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_kikimore");
+    return GetLocStringByKeyExt("wmh_kikimore");
   }
 
   public function onContractCompleted(

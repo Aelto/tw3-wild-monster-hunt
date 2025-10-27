@@ -40,6 +40,6 @@ class WMH_BestiaryEntryBarghest extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_barghest");
+    return GetLocStringByKeyExt("wmh_barghest");
   }
 }

@@ -38,6 +38,6 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_golem");
+    return GetLocStringByKeyExt("wmh_golem");
   }
 }

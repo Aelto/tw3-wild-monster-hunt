@@ -53,7 +53,7 @@ class WMH_BestiaryEntryEndrega extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_endrega");
+    return GetLocStringByKeyExt("wmh_endrega");
   }
 
   public function onContractCompleted(

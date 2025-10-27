@@ -46,6 +46,6 @@ class WMH_BestiaryEntrySiren extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_siren");
+    return GetLocStringByKeyExt("wmh_siren");
   }
 }

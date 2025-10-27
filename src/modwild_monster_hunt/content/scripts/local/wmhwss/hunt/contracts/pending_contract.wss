@@ -103,7 +103,7 @@ class WMH_PendingContract {
     if (!do_not_inform_gui) {
       WMHHUD(
         StrReplace(
-          GetLocStringByKey("wmh_contract_new_hud"),
+          GetLocStringByKeyExt("wmh_contract_new_hud"),
           "{{target}}",
           this.toTargetLocNameHtml()
         )

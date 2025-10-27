@@ -24,7 +24,7 @@ class WMH_EncounterClues extends WMH_Encounter {
 
     this.oneliner_close = WMH_gameplayOnelinerEntity(
       StrReplace(
-        GetLocStringByKey("wmh_clues_oneliner_target"),
+        GetLocStringByKeyExt("wmh_clues_oneliner_target"),
         "{{creature_name}}",
         contract.toTargetLocNameHtml()
       ),

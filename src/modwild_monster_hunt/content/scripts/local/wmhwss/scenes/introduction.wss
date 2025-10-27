@@ -86,8 +86,8 @@ statemachine class WMH_SceneIntroduction {
     if (level.value <= 0 && GameTimeHours(theGame.CalculateTimePlayed()) > 6) {
       WMHTUTOFACT(
         'WMH_overleveled',
-        GetLocStringByKey("wmh_tutorial_intro_0_title"),
-        GetLocStringByKey("wmh_tutorial_intro_0_description")
+        GetLocStringByKeyExt("wmh_tutorial_intro_0_title"),
+        GetLocStringByKeyExt("wmh_tutorial_intro_0_description")
       );
     }
   }
@@ -219,8 +219,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(15.75, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCamp',
-        GetLocStringByKey("wmh_tutorial_intro_1_title"),
-        GetLocStringByKey("wmh_tutorial_intro_1_description")
+        GetLocStringByKeyExt("wmh_tutorial_intro_1_title"),
+        GetLocStringByKeyExt("wmh_tutorial_intro_1_description")
       );
 
       // 1) look at camp manager, explain unlocking upgrades
@@ -233,8 +233,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(9.5, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeCampMaster',
-        GetLocStringByKey("wmh_tutorial_intro_2_title"),
-        GetLocStringByKey("wmh_tutorial_intro_2_description")
+        GetLocStringByKeyExt("wmh_tutorial_intro_2_title"),
+        GetLocStringByKeyExt("wmh_tutorial_intro_2_description")
       );
     }
 
@@ -245,8 +245,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(6, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeLeavingCamp',
-        GetLocStringByKey("wmh_tutorial_intro_3_title"),
-        GetLocStringByKey("wmh_tutorial_intro_3_description")
+        GetLocStringByKeyExt("wmh_tutorial_intro_3_title"),
+        GetLocStringByKeyExt("wmh_tutorial_intro_3_description")
       );
     }
 
@@ -263,8 +263,8 @@ statemachine class WMH_SceneIntroduction {
       this.tick(6, camera, position, rotation);
       WMHTUTOFACT(
         'WMH_IntroductionWelcomeNoticeboard',
-        GetLocStringByKey("wmh_tutorial_intro_4_title"),
-        GetLocStringByKey("wmh_tutorial_intro_4_description")
+        GetLocStringByKeyExt("wmh_tutorial_intro_4_title"),
+        GetLocStringByKeyExt("wmh_tutorial_intro_4_description")
       );
     }
     else {
@@ -298,8 +298,8 @@ statemachine class WMH_SceneIntroduction {
     this.tick(1, camera, position, rotation);
     WMHTUTOFACT(
       'WMH_IntroductionWelcomeGettingReady',
-      GetLocStringByKey("wmh_tutorial_intro_5_title"),
-      GetLocStringByKey("wmh_tutorial_intro_5_description")
+      GetLocStringByKeyExt("wmh_tutorial_intro_5_title"),
+      GetLocStringByKeyExt("wmh_tutorial_intro_5_description")
     );
 
     this.tick(2, camera, position, rotation);

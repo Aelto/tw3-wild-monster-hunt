@@ -18,15 +18,15 @@ class WMH_MerchantGoods extends CGameplayEntity {
     WMH_updateMerchantGoodsCarryingFact(1);
     var displayed_fact: bool = WMHTUTOFACT(
       'WMH_MerchantGoods_PickedUp',
-      GetLocStringByKey("wmh_tutorial_merchand_goods_picked_up_title"),
-      GetLocStringByKey("wmh_tutorial_merchand_goods_picked_up_description")
+      GetLocStringByKeyExt("wmh_tutorial_merchand_goods_picked_up_title"),
+      GetLocStringByKeyExt("wmh_tutorial_merchand_goods_picked_up_description")
     );
 
     if (!displayed_fact) {
       WMHHUD(
         StrReplace(
           StrReplace(
-            GetLocStringByKey("wmh_merchant_goods_picked_up_hud"),
+            GetLocStringByKeyExt("wmh_merchant_goods_picked_up_hud"),
             "{{camp_count}}",
             WMH_getMerchantGoodsFacts()
           ),

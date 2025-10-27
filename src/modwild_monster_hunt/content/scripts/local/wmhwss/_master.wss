@@ -76,8 +76,8 @@ class WMH_Master {
 
       WMHTUTOFACT(
         'WMH_HuntingModeStarted',
-        GetLocStringByKey("wmh_tutorial_hunting_mode_title"),
-        GetLocStringByKey("wmh_tutorial_hunting_mode_title")
+        GetLocStringByKeyExt("wmh_tutorial_hunting_mode_title"),
+        GetLocStringByKeyExt("wmh_tutorial_hunting_mode_title")
       );
 
       this.hunt.onHuntStarted(this.storage);

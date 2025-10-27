@@ -47,6 +47,6 @@ class WMH_BestiaryEntryLeshen extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_leshen");
+    return GetLocStringByKeyExt("wmh_leshen");
   }
 }

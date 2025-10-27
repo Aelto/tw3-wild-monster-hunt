@@ -11,7 +11,7 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
 
     return StrReplace(
       StrReplace(
-        GetLocStringByKey("wmh_event_fetch_description"),
+        GetLocStringByKeyExt("wmh_event_fetch_description"),
         "{{quantity}}",
         this.itemQuantity()
       ),
@@ -22,7 +22,7 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
 
   public function tryComplete(provider: WMH_RewardProvider): bool {
     if (!this.canBeCompleted()) {
-      WMHHUD(GetLocStringByKey("wmh_event_fetch_lack_items"));
+      WMHHUD(GetLocStringByKeyExt("wmh_event_fetch_lack_items"));
 
       return false;
     }

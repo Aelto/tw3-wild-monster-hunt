@@ -125,7 +125,7 @@ statemachine class WMH_HuntManager {
 
     if (is_contract) {
       theSound.SoundEvent("gui_ingame_new_journal");
-      WMHHUD(GetLocStringByKey("wmh_contract_completed_hud"));
+      WMHHUD(GetLocStringByKeyExt("wmh_contract_completed_hud"));
     }
   }
 

@@ -50,6 +50,6 @@ class WMH_BestiaryEntryBruxa extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_bruxa");
+    return GetLocStringByKeyExt("wmh_bruxa");
   }
 }

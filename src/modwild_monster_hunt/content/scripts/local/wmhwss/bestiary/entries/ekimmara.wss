@@ -58,6 +58,6 @@ class WMH_BestiaryEntryEkimmara extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_ekimmara");
+    return GetLocStringByKeyExt("wmh_ekimmara");
   }
 }

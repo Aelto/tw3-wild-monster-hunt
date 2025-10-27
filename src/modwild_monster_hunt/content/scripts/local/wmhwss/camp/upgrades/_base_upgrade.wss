@@ -102,7 +102,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     var cost: int = this.getUpgradeCost();
 
     if (thePlayer.GetMoney() < cost) {
-      WMHHUD(GetLocStringByKey("wmh_insufficient_funds"));
+      WMHHUD(GetLocStringByKeyExt("wmh_insufficient_funds"));
       return false;
     }
 
@@ -149,7 +149,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
       StrReplace(
         StrReplace(
           StrReplace(
-            GetLocStringByKey("wmh_camp_upgrade_oneliner"),
+            GetLocStringByKeyExt("wmh_camp_upgrade_oneliner"),
             "{{title}}",
             this.title()
           ),
@@ -172,7 +172,7 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
     WMHHUD(
       StrReplace(
         StrReplace(
-          GetLocStringByKey("wmh_camp_upgrade_on_upgrade_hud"),
+          GetLocStringByKeyExt("wmh_camp_upgrade_on_upgrade_hud"),
           "{{title}}",
           this.title()
         ),
@@ -193,7 +193,7 @@ class WMH_CampUpgradeYesNoPrompt extends WMH_YesNoPrompt {
 
   public function title(): string {
     return StrReplace(
-      GetLocStringByKey("wmh_camp_upgrade_yesno_prompt_title"),
+      GetLocStringByKeyExt("wmh_camp_upgrade_yesno_prompt_title"),
       "{{title}}",
       this.entity.title()
     );
@@ -204,7 +204,7 @@ class WMH_CampUpgradeYesNoPrompt extends WMH_YesNoPrompt {
 
     return StrReplace(
       StrReplace(
-        GetLocStringByKey("wmh_camp_upgrade_yesno_prompt_description"),
+        GetLocStringByKeyExt("wmh_camp_upgrade_yesno_prompt_description"),
         "{{price}}",
         price
       ),

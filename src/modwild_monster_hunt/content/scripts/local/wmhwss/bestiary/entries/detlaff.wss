@@ -39,6 +39,6 @@ class WMH_BestiaryEntryDetlaff extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_higher_vampire");
+    return GetLocStringByKeyExt("wmh_higher_vampire");
   }
 }

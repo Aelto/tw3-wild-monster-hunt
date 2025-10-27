@@ -49,13 +49,13 @@
   "loc": {
     "prefix": "loc",
     "body": [
-      "GetLocStringByKey(\"$1\")"
+      "GetLocStringByKeyExt(\"$1\")"
     ]
   },
   "cloc": {
     "prefix": "cloc",
     "body": [
-      "GetLocStringByKey(\"$CLIPBOARD\")"
+      "GetLocStringByKeyExt(\"$CLIPBOARD\")"
     ]
   },
   "strreplace": {

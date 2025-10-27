@@ -76,6 +76,6 @@ class WMH_BestiaryEntryGriffin extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_gryphon");
+    return GetLocStringByKeyExt("wmh_gryphon");
   }
 }

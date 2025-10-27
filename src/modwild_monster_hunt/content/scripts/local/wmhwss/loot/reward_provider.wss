@@ -174,7 +174,7 @@ class WMH_RewardProvider {
 
       if (this.groups[i].reputation > 0) {
         if (WMH_getContractManager().hasPendingMilestoneContract()) {
-          message += "<br/>&nbsp;&nbsp;&nbsp; REP: " + GetLocStringByKey("wmh_milestone_reputation_locked");
+          message += "<br/>&nbsp;&nbsp;&nbsp; REP: " + GetLocStringByKeyExt("wmh_milestone_reputation_locked");
         }
         else {
           message += "<br />&nbsp;&nbsp;&nbsp; REP "
@@ -212,7 +212,7 @@ class WMH_RewardProvider {
         if (include_item_names) {
           message += item_icon
                   + item_count
-                  + GetLocStringByKeyExt(
+                  + GetLocStringByKeyExtExt(
                     theGame.GetDefinitionsManager()
                     .GetItemLocalisationKeyName(this.groups[i].items[k].item)
                   );

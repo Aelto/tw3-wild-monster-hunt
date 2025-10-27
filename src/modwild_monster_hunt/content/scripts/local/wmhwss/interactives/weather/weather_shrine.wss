@@ -72,14 +72,14 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
     var success: bool = RequestWeatherChangeTo(target_weather_name, 60, false);
     if (success) {
       thePlayer.DisplayHudMessage(
-        GetLocStringByKeyExt("panel_hud_message_prayer_heard")
+        GetLocStringByKeyExtExt("panel_hud_message_prayer_heard")
       );
 
       theSound.SoundEvent("gui_character_synergy_effect");
     }
     else {
       thePlayer.DisplayHudMessage(
-        GetLocStringByKeyExt("panel_hud_message_prayer_not_heard")
+        GetLocStringByKeyExtExt("panel_hud_message_prayer_not_heard")
       );
 
       theSound.SoundEvent("gui_character_synergy_effect_lose");
@@ -89,8 +89,8 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
   private function displayTutorial() {
     WMHTUTOFACT(
       'WMH_WeatherShrine',
-      GetLocStringByKey("wmh_tutorial_weather_shrine_title"),
-      GetLocStringByKey("wmh_tutorial_weather_shrine_description")
+      GetLocStringByKeyExt("wmh_tutorial_weather_shrine_title"),
+      GetLocStringByKeyExt("wmh_tutorial_weather_shrine_description")
     );
   }
 
@@ -99,15 +99,15 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
       this.oneliner.unregister();
     }
 
-    var activated_message: string = GetLocStringByKey("wmh_inactive_uppercase");
+    var activated_message: string = GetLocStringByKeyExt("wmh_inactive_uppercase");
     if (WMH_isQuickStartLocationActivated(this.quickstart_options)) {
       activated_message = "<font color='#CD7D03'>"
-        +GetLocStringByKey("wmh_active_uppercase")
+        +GetLocStringByKeyExt("wmh_active_uppercase")
         +"</font>";
     }
 
     this.oneliner = WMH_gameplayOnelinerEntity(
-      GetLocStringByKey("wmh_quickstart_oneliner") + "<br/>" + activated_message,
+      GetLocStringByKeyExt("wmh_quickstart_oneliner") + "<br/>" + activated_message,
       this
     );
 
@@ -149,7 +149,7 @@ state DialogChoice in WMH_WeatherShrine {
       if (WMH_isQuickStartLocationActivated(parent.quickstart_options)) {
         choices.PushBack(SSceneChoice(
           StrReplace(
-            GetLocStringByKey("wmh_quickstart_dialog_deactivate"),
+            GetLocStringByKeyExt("wmh_quickstart_dialog_deactivate"),
             "{{cost}}",
             upkeep_cost
           ),
@@ -163,7 +163,7 @@ state DialogChoice in WMH_WeatherShrine {
       else {
         choices.PushBack(SSceneChoice(
           StrReplace(
-            GetLocStringByKey("wmh_quickstart_dialog_activate"),
+            GetLocStringByKeyExt("wmh_quickstart_dialog_activate"),
             "{{cost}}",
             upkeep_cost
           ),
@@ -177,7 +177,7 @@ state DialogChoice in WMH_WeatherShrine {
 
       if (parent.target_weather == WMH_WeatherType_Rain) {
         choices.PushBack(SSceneChoice(
-          GetLocStringByKey("wmh_weather_shrine_summon_rain"),
+          GetLocStringByKeyExt("wmh_weather_shrine_summon_rain"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -191,7 +191,7 @@ state DialogChoice in WMH_WeatherShrine {
         || parent.target_weather == WMH_WeatherType_None
       ) {
         choices.PushBack(SSceneChoice(
-          GetLocStringByKey("wmh_weather_shrine_summon_clear"),
+          GetLocStringByKeyExt("wmh_weather_shrine_summon_clear"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -202,7 +202,7 @@ state DialogChoice in WMH_WeatherShrine {
 
       if (parent.target_weather == WMH_WeatherType_Snow) {
         choices.PushBack(SSceneChoice(
-          GetLocStringByKey("wmh_weather_shrine_summon_snow"),
+          GetLocStringByKeyExt("wmh_weather_shrine_summon_snow"),
           false, // emphasis
           false, // previouslyChoosen
           false, // disabled
@@ -212,7 +212,7 @@ state DialogChoice in WMH_WeatherShrine {
       }
 
       choices.PushBack(SSceneChoice(
-        GetLocStringByKey("wmh_cancel"),
+        GetLocStringByKeyExt("wmh_cancel"),
         false, // emphasis
         false, // previouslyChoosen
         false, // disabled

@@ -61,7 +61,7 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
         var objname: string = this.getObjectName();
         WMHHUD(
           StrReplace(
-            GetLocStringByKey("wmh_restorable_object_on_restoration_tools_needed"),
+            GetLocStringByKeyExt("wmh_restorable_object_on_restoration_tools_needed"),
             "{{name}}",
             objname
           )
@@ -99,7 +99,7 @@ class WMH_RestorableObject extends WMH_InteractiveObject {
   public function onRestoration() {
     WMHHUD(
       StrReplace(
-        GetLocStringByKey("wmh_restorable_object_on_restoration"),
+        GetLocStringByKeyExt("wmh_restorable_object_on_restoration"),
         "{{name}}",
         this.getObjectName()
       )

@@ -52,6 +52,6 @@ class WMH_BestiaryEntrySkelwolf extends WMH_BestiaryEntry {
   }
 
   public function getLocName(): string {
-    return GetLocStringByKey("wmh_skelligewolf");
+    return GetLocStringByKeyExt("wmh_skelligewolf");
   }
 }
