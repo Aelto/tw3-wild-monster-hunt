@@ -29,7 +29,7 @@ class WMH_BestiaryEntryEndrega extends WMH_BestiaryEntry {
     this.difficulty_scaling.maximum_count_medium = 4;
     this.difficulty_scaling.minimum_count_hard = 3;
     this.difficulty_scaling.maximum_count_hard = 5;
-#
+
     this.strength = 3.5;
     this.biome_tag_bypass = 'Endrega';
   }
