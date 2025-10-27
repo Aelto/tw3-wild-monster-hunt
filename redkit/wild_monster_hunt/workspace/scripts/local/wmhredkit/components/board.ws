@@ -133,8 +133,11 @@ class WMH_NoticeBoard extends W3NoticeBoard {
     }
 
     contract_level = WMH_getStorage().general.level;
-    general_text = "<u>Reputation level:</u> ";
-    general_text += FloorF(contract_level.value);
+    general_text = StrReplace(
+      GetLocStringByKeyExt("wmh_reputation_level_oneliner"),
+      "{{level}}",
+      FloorF(contract_level.value)
+    );
 
     if (this.general_oneliner) {
       this.general_oneliner.text = general_text;

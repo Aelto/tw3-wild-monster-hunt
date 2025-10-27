@@ -166,6 +166,7 @@
 ;
 ;
 ; camp (noticeboard) messages
+||wmh_reputation_level_oneliner|<u>Reputation level:</u> {{level}}
 ||wmh_active_contracts|Active contracts
 ||wmh_favorite_contracts|Favorite contracts
 ||wmh_completed_contracts_history|Completed contracts history
