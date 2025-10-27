@@ -117,6 +117,8 @@ function encodeDlcStringsCsv() {
 
   autogenerateCsvIds();
 
+  // for when the strings encoder will officially support it, it'll replace the
+  // autogenerateCsvIds function below.
   const arg_autogen_ids = "--auto-generate-missing-ids";
   const arg_encode = `--encode ${path_dlc_w3strings_csv}`;
   const arg_idspace = `--id-space ${STRINGS_ID}`;
