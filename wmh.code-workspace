@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "path": "./src/modWildMonsterHunt/content/scripts/local",
+      "path": "./src/modwild_monster_hunt/content/scripts/local",
       "name": "wss",
       "color": "green"
     },
