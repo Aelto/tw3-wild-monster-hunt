@@ -115,10 +115,12 @@ function encodeDlcStringsCsv() {
     "en.w3strings"
   );
 
+  autogenerateCsvIds();
+
   const arg_autogen_ids = "--auto-generate-missing-ids";
   const arg_encode = `--encode ${path_dlc_w3strings_csv}`;
   const arg_idspace = `--id-space ${STRINGS_ID}`;
-  execSync(`w3strings ${arg_autogen_ids} ${arg_encode} ${arg_idspace}`);
+  execSync(`w3strings ${arg_encode} ${arg_idspace}`);
   fs.renameSync(
     path.join(path_release_dlc_wmh_content, "en.w3strings.csv.w3strings"),
     path_dlc_w3strings
@@ -126,6 +128,30 @@ function encodeDlcStringsCsv() {
   fs.rmSync(
     path.join(path_release_dlc_wmh_content, "en.w3strings.csv.w3strings.ws")
   );
+
+  function autogenerateCsvIds() {
+    let id = 2119426001;
+
+    const csv_content = fs.readFileSync(path_dlc_w3strings_csv, "utf-8");
+    const csv_content_edited = csv_content.split("\n").map(mapLine).join("\n");
+    fs.writeFileSync(path_dlc_w3strings_csv, csv_content_edited, "utf-8");
+
+    /**
+     *
+     * @param {string} line
+     * @returns string
+     */
+    function mapLine(line) {
+      if (line.startsWith("2119426") || line.startsWith("||")) {
+        const first_pipe_index = line.indexOf("|");
+        const line_without_id = line.slice(first_pipe_index);
+
+        return `${id++}${line_without_id}`;
+      }
+
+      return line;
+    }
+  }
 }
 
 function copyDependencies() {
