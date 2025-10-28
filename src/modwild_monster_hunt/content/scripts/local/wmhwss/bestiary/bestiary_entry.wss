@@ -192,13 +192,16 @@ class WMH_BestiaryEntry {
     out contract: WMH_Contract,
     seed: int
   ) {
-    var prefix: string;
+    var contract_loc: string;
 
     if (contract.type == WMH_PendingContractType_MILESTONE) {
-      prefix = " milestone";
+      contract_loc = GetLocStringByKeyExt("wmh_contract_milestone_lowercase");
+    }
+    else {
+      contract_loc = GetLocStringByKeyExt("wmh_contract_lowercase");
     }
 
-    provider.startGroup(this.getLocName() + prefix + " contract");
+    provider.startGroup(this.getLocName() + " " + contract_loc);
 
     var loot: WMH_LootManager = WMH_getLootManager();
     var items_count: int = WMH_diminishingReturns(

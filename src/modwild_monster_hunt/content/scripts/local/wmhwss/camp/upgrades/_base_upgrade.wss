@@ -126,11 +126,11 @@ abstract class WMH_CampUpgradeBase extends CGameplayEntity {
   }
 
   public function title(): string {
-    return this.upgrade_title;
+    return GetLocStringByKeyExt(this.upgrade_title);
   }
 
   public function description(): string {
-    return this.upgrade_description;
+    return GetLocStringByKeyExt(this.upgrade_description);
   }
 
   protected function addLevel() {

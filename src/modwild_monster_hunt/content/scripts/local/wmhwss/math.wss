@@ -12,21 +12,21 @@ function WMH_vectorToCardinalDescription(input: Vector): string {
   var space: bool = false;
 
   if (normalized.Y > 0.25) {
-    output += "North";
+    output += GetLocStringByKeyExt("wmh_north");
     space = true;
   }
   else if (normalized.Y < -0.25) {
     space = true;
-    output += "South";
+    output += GetLocStringByKeyExt("wmh_south");
   }
 
   if (normalized.X > 0.25) {
     if (space) {output += " ";}
-    output += "East";
+    output += GetLocStringByKeyExt("wmh_east");
   }
   else if (normalized.X < -0.25) {
     if (space) {output += " ";}
-    output += "West";
+    output += GetLocStringByKeyExt("wmh_west");
   }
 
   return output;

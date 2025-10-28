@@ -81,7 +81,13 @@ class WMH_CauldronModuleDialog extends CR4HudModuleDialog {
       + thePlayer.GetInventory().GetItemIconPathByUniqueID(item_to_transfer)
       + "' height='18' width='18' />";
 
-    data.SetMessageTitle("Amount of " + item_name + " to drop in the cauldron?");
+    data.SetMessageTitle(
+      StrReplace(
+        GetLocStringByKeyExt("wmh_herbalist_cauldron_item_drop_quantity_slider_title"),
+        "{{item}}",
+        item_name
+      )
+    );
 		data.dialogueRef = this;
 		data.BlurBackground = false;
 

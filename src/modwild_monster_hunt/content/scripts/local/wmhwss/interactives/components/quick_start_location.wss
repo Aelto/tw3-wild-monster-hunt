@@ -71,13 +71,20 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
   var crowns_icon: string = thePlayer.GetInventory().GetItemIconPathByName('Crowns');
   crowns_icon = "<img src='img://" + crowns_icon + "' height='48' width='48' vspace='-24' />" ;
 
-  message += "<font size='24' color='#8a5551'>ROADS UPKEEP:</font>" + br;
-  message += "<i><font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee.</font><i>" + br + br;
-  message += "Fast Travelling to any of the locations will cost" + br;
+  message += StrReplace(
+    StrReplace(
+      StrReplace(
+        GetLocStringByKeyExt("wmh_quickstart_popup_upkeep"),
+        "{{upkeep_cost}}",
+        upkeep_cost
+      ),
+      "{{crowns_cost}}",
+      crowns_cost
+    ),
+    "{{crowns_icon}}",
+    crowns_icon
+  );
 
-  message += " - Upkeep fee: "+upkeep_cost+" Merchant Goods" + br;
-  message += " - Travel fee: "+crowns_cost+" "+crowns_icon + br + br;
-  message += "You have " + WMH_getMerchantGoodsFacts() + " Merchant Goods.";
   WMHPOPUP(message, 60*5*1000);
 
   while (true) {

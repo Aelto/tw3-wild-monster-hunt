@@ -2,8 +2,8 @@
 /// - 
 statemachine class WMH_HuntProvisions extends WMH_CampUpgradeBase {
   default level_fact = 'wmh_camp_upgrade_provisions';
-  default upgrade_title = "Provisions";
-  default upgrade_description = "Completing contracts motivates the neighbouring villages to give you provisions<br/>scales with level, both in quantity & frequency";
+  default upgrade_title = "wmh_camp_upgrade_provision_title";
+  default upgrade_description = "wmh_camp_upgrade_provision_description";
 
   default upgrade_cost_base = 25;
   default upgrade_cost_per_level = 50;

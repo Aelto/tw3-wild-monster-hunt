@@ -175,20 +175,22 @@ class WMH_PendingContract {
     var br: string = "<br/>";
 
 
-    output += "<font size='24' color='#8a5551'>TARGETS:</font> ";
+    output += GetLocStringByKeyExt("wmh_contract_summary_targets");
     output += this.toTargetLocNameHtml() + br;
 
-    output += "<font size='18'>";
-    output += "Difficulty level " + FloorF(this.contract.level.value);
-    output += "</font>" + br;
+    output += StrReplace(
+      GetLocStringByKeyExt("wmh_contract_summary_difficulty"),
+      "{{level}}",
+      FloorF(this.contract.level.value)
+    );
 
     if (this.affix_manager.has_affix) {
-      output += br + br + "<font size='24' color='#8a5551'>AFFIXES:</font> " + this.affix_manager.toLocString() + br;
+      output += br + br + GetLocStringByKeyExt("wmh_contract_summary_affixes");
+      output += " " + this.affix_manager.toLocString() + br;
     }
 
     if (this.spawn_influences.Size()) {
-      output += br + br + "<font size='24' color='#8a5551'>INFLUENCES:</font>" + br;
-      output += "<font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>";
+      output += br + br + GetLocStringByKeyExt("wmh_contract_summary_influences");
       output += br;
 
       var bestiary: WMH_Bestiary = WMH_getBestiary();
@@ -212,7 +214,8 @@ class WMH_PendingContract {
 
     this.getItemRewards(provider);
 
-    output += br + br + "<font size='24' color='#8a5551'>REWARDS:</font> " + provider.toHtml(thePlayer.GetInventory(), true) + br;
+    output += br + br + GetLocStringByKeyExt("wmh_contract_summary_rewards")
+    output += " " + provider.toHtml(thePlayer.GetInventory(), true) + br;
 
     return output;
   }

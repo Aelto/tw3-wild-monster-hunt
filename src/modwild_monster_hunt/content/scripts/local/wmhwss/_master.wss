@@ -251,8 +251,8 @@ class WMH_Master {
 
     WMHTUTOFACT(
       'WMH_OnFeint',
-      "Feinting",
-      "You <font color='#CD7D03'>feinted</font>. You cannot die while in Hunting Mode, but that doesn't make the situation any less punishing.<br/><br/>Feinting caused you to <font color='CD7D03'>lose some of your potions, but also any progress you may have made in your contracts</font>.<br/><br/>Bring in your hunt only what's necessary, and make sure that you're prepared for what's coming if you decide to pursue multiple targets in your hunt. "
+      GetLocStringByKeyExt("wmh_tutorial_on_death_feinting_title"),
+      GetLocStringByKeyExt("wmh_tutorial_on_death_feinting_description")
     );
   }
 

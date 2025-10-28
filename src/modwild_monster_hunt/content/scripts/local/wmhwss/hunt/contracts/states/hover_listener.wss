@@ -110,14 +110,13 @@ class WMH_DialogHoverChallengeListener extends WMH_DialogHoverContractsListener 
     if (scene_choice.playGoChunk == 'ToggleExtractionMode') {
       var title: string;
       if (WMH_isExtractionChallengeEnabled()) {
-        title = "Merciless Path <font size='24' color='#8a5551'>(ACTIVE)</font>";
+        title = GetLocStringByKeyExt("wmh_challenges_merciless_path_hover_title_active");
       }
       else {
-        title = "Merciless Path <font size='24' color='#E1E1E1'>(INACTIVE)</font>";
+        title = GetLocStringByKeyExt("wmh_challenges_merciless_path_hover_title_inactive");
       }
 
-      var description: string = ""
-        + "Enabling the <font color='#CD7D03'>Merciless Path</font> challenge can provide an experience similar to extraction games where dying during a hunt results in the loss of all the gear, edibles, and potions you're carrying. <i>Crafting ingredients as well as the stash and the items in it are not affected.</i> In return loot and rewards are also adjusted to compensate for the increased risks.<br/><br/>If you're into the high risk high rewards type of gameplay from hardcore ARPGs or extraction games then this challenge is for you.";
+      var description: string = GetLocStringByKeyExt("wmh_challenges_merciless_path_hover_description");
 
       this.displayLongLastingPopup(title + "<br/><br/>" + description);
     }

@@ -79,6 +79,8 @@
 ; hunt & contract related messages
 ||wmh_contract_new_hud|New contract: {{target}}
 ||wmh_contract_completed_hud|A contract was completed
+||wmh_contract_lowercase|contract
+||wmh_contract_milestone_lowercase|milestone contract
 ||wmh_contract_replace_milestone_forbidden|Milestone contracts cannot be replaced
 ||wmh_contract_favorite_milestone_forbidden|Milestone contracts cannot be set as favorite
 ||wmh_contract_favorite_removed|The contract is no longer marked as favorite
@@ -93,6 +95,7 @@
 ||wmh_quickstart_dialog_activate|Activate Fast Travel location (upkeep: {{cost}})
 ||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
 ||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
+||wmh_quickstart_popup_upkeep|<font size='24' color='#8a5551'>ROADS UPKEEP:</font><br/><i><font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee.</font><i><br/><br/>Fast Travelling to any of the locations will cost<br/> - Upkeep fee: {{upkeep_cost}} Merchant Goods<br/> - Travel fee: {{crowns_cost}} {{crowns_icon}}<br/><br/>You have {{merchant_goods_count}} Merchant Goods.
 ||wmh_restorable_object_on_restoration|{{name}} restored
 ||wmh_restorable_object_on_restoration_tools_needed|You lack the necessary tools to repair this {{name}}
 ||wmh_cannot_perform_this_now|You cannot perform this now
@@ -108,6 +111,7 @@
 ||wmh_contract_summary_affixes|<font size='24' color='#8a5551'>AFFIXES:</font>
 ||wmh_contract_summary_rewards|<font size='24' color='#8a5551'>REWARDS:</font> 
 ||wmh_contract_summary_influences|<font size='24' color='#8a5551'>INFLUENCES:</font><br/><font size='18'>The presence of the target has an influence on the region's ecosystem, the chances to meet the following species during the hunt are altered:</font>
+||wmh_contract_summary_difficulty|<font size='18'>Difficulty level {{level}}</font>
 ;
 ;
 ;
@@ -172,6 +176,9 @@
 ||wmh_completed_contracts_history|Completed contracts history
 ||wmh_challenges|Challenges
 ||wmh_challenges_merciless_path|Merciless Path
+||wmh_challenges_merciless_path_hover_title_active|Merciless Path <font size='24' color='#8a5551'>(ACTIVE)</font>
+||wmh_challenges_merciless_path_hover_title_inactive|Merciless Path <font size='24' color='#E1E1E1'>(INACTIVE)</font>
+||wmh_challenges_merciless_path_hover_description|Enabling the <font color='#CD7D03'>Merciless Path</font> challenge can provide an experience similar to extraction games where dying during a hunt results in the loss of all the gear, edibles, and potions you're carrying. <i>Crafting ingredients as well as the stash and the items in it are not affected.</i> In return loot and rewards are also adjusted to compensate for the increased risks.<br/><br/>If you're into the high risk high rewards type of gameplay from hardcore ARPGs or extraction games then this challenge is for you.
 ||wmh_lower_difficulty|Lower difficulty
 ||wmh_raise_difficulty|Raise difficulty
 ||wmh_replace_with_favorite_contract|Replace with favorite contract
@@ -181,6 +188,18 @@
 ||wmh_herbalist_cauldron_queue_oneliner|<font size='28'>{{next_item}}</font><br/>Next yield: {{points_til_next}}/<font size='18'>{{points_per_product}}</font>
 ||wmh_herbalist_cauldron_queue_oneliner_yields_count|Products in queue: {{count}}
 ||wmh_herbalist_cauldron_queue_oneliner_empty|<u>The pot is empty</u><br/>Drop alchemy items for unique rewards.
+||wmh_herbalist_cauldron_item_drop_quantity_slider_title|Amount of {{item}} to drop in the cauldron?
+;
+;
+; camp (upgrades) messages
+||wmh_camp_upgrade_provision_title|Provisions
+||wmh_camp_upgrade_provision_description|Completing contracts motivates the neighbouring villages to give you provisions<br/>scales with level, both in quantity & frequency
+||wmh_camp_upgrade_food_title|Food
+||wmh_camp_upgrade_food_description|Provides bonus HP for 60 minutes
+||wmh_camp_upgrade_bookshelf_title|Bookshelf
+||wmh_camp_upgrade_bookshelf_description|Provides bonus XP for 60 minutes
+||wmh_camp_upgrade_bed_title|Bed
+||wmh_camp_upgrade_bed_description|Provides HP regeneration for 60 minutes
 ;
 ;
 ;
@@ -221,6 +240,8 @@
 ||wmh_tutorial_intro_5_description|Before venturing in the wild, ensure you're well-rested and equipped. Use this place to sharpen your swords and <font color='#CD7D03'>ready yourself for the trials that await</font>.
 ||wmh_tutorial_board_interaction_activated_title|Monster Hunts
 ||wmh_tutorial_board_interaction_activated_description|The noticeboard displays up to 5 targets for your monster hunts. Slaying the designated targets during your hunts will allow you to complete the contracts, netting you crowns and experience while also immediately receiving a new target in return the next time you get back to camp.<br/><br/>Every now and then an usual creature may be listed, when it appears, hunting it should be your first priority as experience gain from regular contracts is halted until the target is no more.
+||wmh_tutorial_on_death_feinting_title|Feinting
+||wmh_tutorial_on_death_feinting_description|You <font color='#CD7D03'>feinted</font>. You cannot die while in Hunting Mode, but that doesn't make the situation any less punishing.<br/><br/>Feinting caused you to <font color='CD7D03'>lose some of your potions, but also any progress you may have made in your contracts</font>.<br/><br/>Bring in your hunt only what's necessary, and make sure that you're prepared for what's coming if you decide to pursue multiple targets in your hunt.
 ;
 ;
 ;
@@ -232,3 +253,7 @@
 ||wmh_inactive|Inactive
 ||wmh_inactive_uppercase|INACTIVE
 ||wmh_delete|Delete
+||wmh_north|North
+||wmh_east|East
+||wmh_south|South
+||wmh_west|West
