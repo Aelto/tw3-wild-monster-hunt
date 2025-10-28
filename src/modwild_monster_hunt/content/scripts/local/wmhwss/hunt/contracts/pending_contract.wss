@@ -214,7 +214,7 @@ class WMH_PendingContract {
 
     this.getItemRewards(provider);
 
-    output += br + br + GetLocStringByKeyExt("wmh_contract_summary_rewards")
+    output += br + br + GetLocStringByKeyExt("wmh_contract_summary_rewards");
     output += " " + provider.toHtml(thePlayer.GetInventory(), true) + br;
 
     return output;

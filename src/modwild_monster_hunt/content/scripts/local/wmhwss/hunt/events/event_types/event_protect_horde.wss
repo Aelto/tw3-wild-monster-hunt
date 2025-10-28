@@ -25,7 +25,11 @@ statemachine class WMH_EventNpc_EventProtectHorde extends WMH_EventNpc_BaseEvent
       message_waves += waves[i].getLocName();
     }
 
-    return "Survive against " + message_waves;
+    return StrReplace(
+      GetLocStringByKeyExt("wmh_event_horde_description"),
+      "{{targets}}",
+      message_waves
+    );
   }
 
   public function tryStart() {
@@ -43,7 +47,7 @@ statemachine class WMH_EventNpc_EventProtectHorde extends WMH_EventNpc_BaseEvent
     }
 
     provider
-      .startGroup("Protect horde event")
+      .startGroup(GetLocStringByKeyExt("wmh_event_horde_reward_title"))
       .appendItem(this.itemName(0), this.itemQuantity(0))
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);

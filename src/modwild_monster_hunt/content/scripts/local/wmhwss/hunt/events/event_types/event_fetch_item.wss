@@ -28,7 +28,7 @@ class WMH_EventNpc_EventFetchItem extends WMH_EventNpc_BaseEvent {
     }
 
     provider
-      .startGroup("Fetch item event")
+      .startGroup(GetLocStringByKeyExt("wmh_event_fetch_reward_title"))
       .appendItem(this.itemName(0), this.itemQuantity(0) * -1)
       .appendItem(this.itemName(1), this.itemQuantity(1))
       .appendExperience(WMH_difficultyScaleUpF(50, 0.25) as int)

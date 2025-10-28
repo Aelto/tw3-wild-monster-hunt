@@ -101,7 +101,12 @@
 ||wmh_cannot_perform_this_now|You cannot perform this now
 ||wmh_event_fetch_lack_items|You do not have the required items
 ||wmh_event_fetch_description|Give {{quantity}}x {{icon}}
+||wmh_event_fetch_reward_title|Trade Item request
 ||wmh_event_clear_area_oneliner|{{icon}} Clear area
+||wmh_event_clear_area_description|Clear area {{cardinal_direction}} from here
+||wmh_event_clear_area_reward_title|Clear Area request
+||wmh_event_horde_description|Survive against {{targets}}
+||wmh_event_horde_reward_title|Horde Protection request
 ||wmh_milestone_reputation_locked|milestone contract active, gains locked
 ||wmh_merchant_goods_picked_up_hud|You found merchant goods, there are {{camp_count}} in the camp and you are now carrying {{carry_count}}
 ||wmh_clues_oneliner_target|{{creature_name}} tracks

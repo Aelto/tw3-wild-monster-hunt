@@ -24,8 +24,10 @@ require.main == module && main();
 module.exports = main;
 
 function main() {
-  resetReleaseFolder();
-  moveRedkitPackedToRelease();
+  if (!process.argv.includes("--no-reset")) {
+    resetReleaseFolder();
+    moveRedkitPackedToRelease();
+  }
 
   copyStringsCsvToDlc();
   encodeDlcStringsCsv();

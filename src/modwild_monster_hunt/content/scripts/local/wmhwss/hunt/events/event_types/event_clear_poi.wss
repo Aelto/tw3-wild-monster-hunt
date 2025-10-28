@@ -14,9 +14,11 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
     var travel: Vector = this.poi.GetWorldPosition()
                          - this.origin.GetWorldPosition();
 
-    return "Clear area "
-         + WMH_vectorToCardinalDescription(travel)
-         + " from here";
+    return StrReplace(
+      GetLocStringByKeyExt("wmh_event_clear_area_description"),
+      "{{cardinal_direction}}",
+      WMH_vectorToCardinalDescription(travel)
+    );
   }
 
   public function tryStart() {
@@ -60,7 +62,7 @@ class WMH_EventNpc_EventClearPoi extends WMH_EventNpc_BaseEvent {
     }
 
     provider
-      .startGroup("Clear POI event")
+      .startGroup(GetLocStringByKeyExt("wmh_event_clear_area_reward_title"))
       .appendItem(this.itemName(0), this.itemQuantity(0))
       .appendExperience(WMH_difficultyScaleUpF(100, 0.25) as int)
       .appendMoney(WMH_difficultyScaleDownF(10, 0.1) as int);
