@@ -33,10 +33,14 @@ function main() {
   if (process.argv.includes("--game")) {
     copyWorkspaceScriptsToGame();
   }
+
+  if (process.argv.includes("--release")) {
+    copyWorkspaceScriptsToRelease();
+  }
 }
 
 function removeCurrentWorkspaceScripts() {
-  console.log(`removing workspace scripts at ${path_workspace_scripts}`);
+  console.log(`removing WORKSPACE scripts at ${path_workspace_scripts}`);
   fs.rmSync(path.join(path_workspace_scripts, "wmhwss"), {
     recursive: true,
     force: true,
@@ -57,8 +61,27 @@ function copyWorkspaceScriptsToGame() {
     "local"
   );
 
+  console.log(`updating GAME scripts at ${path_witcher_game_local_scripts}`);
   fs.rmSync(path_witcher_game_local_scripts, { recursive: true });
   fs.cpSync(path_workspace_scripts, path_witcher_game_local_scripts, {
+    recursive: true,
+  });
+}
+
+function copyWorkspaceScriptsToRelease() {
+  const path_release_local_scripts = path.join(
+    path_mod,
+    "release",
+    "mods",
+    "modwild_monster_hunt",
+    "content",
+    "scripts",
+    "local"
+  );
+
+  console.log(`updating RELEASE scripts at ${path_release_local_scripts}`);
+  fs.rmSync(path_release_local_scripts, { recursive: true });
+  fs.cpSync(path_workspace_scripts, path_release_local_scripts, {
     recursive: true,
   });
 }
