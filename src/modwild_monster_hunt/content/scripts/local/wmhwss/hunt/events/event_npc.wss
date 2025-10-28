@@ -20,7 +20,7 @@ statemachine class WMH_EventNpc extends CNewNPC {
   }
 
   event OnInteraction(actionName: string, activator: CEntity) {
-    if (actionName != "Talk") {
+    if (actionName != "Talk" && actionName != "talk") {
       return super.OnInteraction(actionName, activator);
     }
 
@@ -35,7 +35,7 @@ statemachine class WMH_EventNpc extends CNewNPC {
     this.generateEvents(this.seed);
 
     // 2.
-    this.GotoState('DialogChoice');
+    this.GotoState('StartDialogChoice');
   }
 
   event OnInteractionActivationTest(

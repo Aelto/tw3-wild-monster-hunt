@@ -1,3 +1,10 @@
+state StartDialogChoice in WMH_EventNpc {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    parent.GotoState('DialogChoice');
+  }
+}
+
 state DialogChoice in WMH_EventNpc {
   var camera: WMH_StaticCamera;
 
