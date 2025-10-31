@@ -66,4 +66,13 @@ class WMH_BestiaryEntryGarkain extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return GetLocStringByKeyExt("wmh_garkain");
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+    provider.appendItem('Glowing ingot', (RandNoiseF(seed, 2.0) as int) + 1);
+  }
 }

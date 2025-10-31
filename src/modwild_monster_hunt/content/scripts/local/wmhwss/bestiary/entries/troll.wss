@@ -52,5 +52,9 @@ class WMH_BestiaryEntryTroll extends WMH_BestiaryEntry {
   ) {
     super.onContractCompleted(provider, contract, seed);
     provider.appendItem('Sulfur', (RandNoiseF(seed, 2.0) as int) + 1);
+
+    if (contract.level.value > 20) {
+      provider.appendItem('Silver ingot', (RandNoiseF(seed, 2.0) as int));
+    }
   }
 }

@@ -89,8 +89,8 @@ class WMH_BestiaryEntryNekker extends WMH_BestiaryEntry {
     provider.appendItem('Silver mineral', (RandNoiseF(seed, 2.0) as int) + 1);
 
     if (contract.level.value > 50) {
-      provider.appendItem('Silver mineral', (RandNoiseF(seed, 2.0) as int) + 1);
-      provider.appendItem('Orichalcum mineral', (RandNoiseF(seed, 2.0) as int) + 1);
+      provider.appendItem('Silver mineral', (RandNoiseF(seed + 1, 2.0) as int) + 1);
+      provider.appendItem('Orichalcum mineral', (RandNoiseF(seed + 2, 2.0) as int) + 1);
     }
   }
 

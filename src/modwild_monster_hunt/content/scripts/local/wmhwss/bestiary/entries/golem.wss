@@ -40,4 +40,27 @@ class WMH_BestiaryEntryGolem extends WMH_BestiaryEntry {
   public function getLocName(): string {
     return GetLocStringByKeyExt("wmh_golem");
   }
+
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    out contract: WMH_Contract,
+    seed: int
+  ) {
+    super.onContractCompleted(provider, contract, seed);
+
+    provider.appendItem('Lead ore', (RandNoiseF(seed + 1, 2.0) as int));
+    provider.appendItem('Dark iron ore', (RandNoiseF(seed + 8, 2.0) as int));
+    provider.appendItem('Iron ore', (RandNoiseF(seed + 3, 2.0) as int));
+
+    if (contract.level.value > 25) {
+      provider.appendItem('Silver ore', (RandNoiseF(seed + 7, 2.0) as int));
+      provider.appendItem('Gold ore', (RandNoiseF(seed + 2, 2.0) as int));
+      provider.appendItem('Glowing ore', (RandNoiseF(seed + 5, 2.0) as int));
+    }
+
+    if (contract.level.value > 50) {
+      provider.appendItem('Meteorite ore', (RandNoiseF(seed + 4, 2.0) as int));
+      provider.appendItem('Dwimeryte ore', (RandNoiseF(seed + 6, 2.0) as int));
+    }
+  }
 }
