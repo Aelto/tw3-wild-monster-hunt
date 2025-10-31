@@ -46,7 +46,7 @@
 ||wmh_panther|Panther
 ||wmh_shaelmaar|Shaelmaar
 ||wmh_wight|Wight
-||wmh_human|Bandit
+||wmh_bandit|Bandit
 ||wmh_wildhunt|Wild Hunt
 ||wmh_gryphon|Gryphon
 ||wmh_cockatrice|Cockatrice
@@ -85,17 +85,6 @@
 ||wmh_contract_favorite_milestone_forbidden|Milestone contracts cannot be set as favorite
 ||wmh_contract_favorite_removed|The contract is no longer marked as favorite
 ||wmh_contract_favorite_added|The contract was added to the favorites
-||wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location
-||wmh_weather_shrine_summon_rain|Summon rain weather
-||wmh_weather_shrine_summon_clear|Summon clear weather
-||wmh_weather_shrine_summon_snow|Summon snow weather
-||wmh_quickstart_used_hud|{{cost}} Merchand Goods were used to reach the destination.
-||wmh_quickstart_dialog|{{name}} (upkeep: {{cost}})
-||wmh_quickstart_dialog_deactivate|Deactivate Fast Travel location (upkeep: {{cost}})
-||wmh_quickstart_dialog_activate|Activate Fast Travel location (upkeep: {{cost}})
-||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
-||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
-||wmh_quickstart_popup_upkeep|<font size='24' color='#8a5551'>ROADS UPKEEP:</font><br/><i><font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee.</font><i><br/><br/>Fast Travelling to any of the locations will cost<br/> - Upkeep fee: {{upkeep_cost}} Merchant Goods<br/> - Travel fee: {{crowns_cost}} {{crowns_icon}}<br/><br/>You have {{merchant_goods_count}} Merchant Goods.
 ||wmh_restorable_object_on_restoration|{{name}} restored
 ||wmh_restorable_object_on_restoration_tools_needed|You lack the necessary tools to repair this {{name}}
 ||wmh_cannot_perform_this_now|You cannot perform this now
@@ -110,6 +99,32 @@
 ||wmh_milestone_reputation_locked|milestone contract active, gains locked
 ||wmh_merchant_goods_picked_up_hud|You found merchant goods, there are {{camp_count}} in the camp and you are now carrying {{carry_count}}
 ||wmh_clues_oneliner_target|{{creature_name}} tracks
+;
+; quickstart locations
+||wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location
+||wmh_weather_shrine_summon_rain|Summon rain weather
+||wmh_weather_shrine_summon_clear|Summon clear weather
+||wmh_weather_shrine_summon_snow|Summon snow weather
+||wmh_quickstart_used_hud|{{cost}} Merchand Goods were used to reach the destination.
+||wmh_quickstart_dialog|{{name}} (upkeep: {{cost}})
+||wmh_quickstart_dialog_deactivate|Deactivate Fast Travel location (upkeep: {{cost}})
+||wmh_quickstart_dialog_activate|Activate Fast Travel location (upkeep: {{cost}})
+||wmh_quickstart_oneliner|<u>{{location_name}}</u><br/>Quick-Start location
+||wmh_quickstart_popup_upkeep|<font size='24' color='#8a5551'>ROADS UPKEEP:</font><br/><i><font size='18'>Every Fast Travel location that you keep active adds to the upkeep fee.</font><i><br/><br/>Fast Travelling to any of the locations will cost<br/> - Upkeep fee: {{upkeep_cost}} Merchant Goods<br/> - Travel fee: {{crowns_cost}} {{crowns_icon}}<br/><br/>You have {{merchant_goods_count}} Merchant Goods.
+||wmh_shrine_name_snowfall_village|Snowfall Village
+||wmh_shrine_name_foggy_recess|Foggy Recess
+||wmh_shrine_name_isolated_perch|Isolated Perch
+||wmh_shrine_name_lonely_monolith|Lonely Monolith
+||wmh_shrine_name_shepherd_entrance|The Shepherd's Entrance
+||wmh_shrine_name_tall_pines_forest|Tall Pines Forest
+||wmh_shrine_name_pilgrimage_end|Pilgrimage's End
+||wmh_shrine_name_hollow_sanctuary|Hollow Sanctuary
+||wmh_shrine_name_elven_descent|Elven Descent
+||wmh_shrine_name_fisherman_companion|Fisherman's Companion
+||wmh_shrine_name_elven_archipelago|Elven Archipelago
+||wmh_shrine_name_druid_retreat|Druid's Retreat
+||wmh_shrine_name_ancestors_tomb|Ancestors Tomb
+||wmh_shrine_name_old_siege_tower|Old Siege Tower
 ;
 ; contract summary popup
 ||wmh_contract_summary_targets|<font size='24' color='#8a5551'>TARGETS:</font>

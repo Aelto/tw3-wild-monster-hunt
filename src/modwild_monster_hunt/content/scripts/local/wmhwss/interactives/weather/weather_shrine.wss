@@ -102,12 +102,23 @@ statemachine class WMH_WeatherShrine extends CGameplayEntity {
     var activated_message: string = GetLocStringByKeyExt("wmh_inactive_uppercase");
     if (WMH_isQuickStartLocationActivated(this.quickstart_options)) {
       activated_message = "<font color='#CD7D03'>"
-        +GetLocStringByKeyExt("wmh_active_uppercase")
-        +"</font>";
+        + GetLocStringByKeyExt("wmh_active_uppercase")
+        + "</font>";
     }
 
+    var location_name: string = GetLocStringByKeyExt(
+      this.quickstart_options.location_name
+    );
+
+    WMHINFO("WMH_WeatherShrine, loc key = " + this.quickstart_options.location_name);
+    WMHINFO("WMH_WeatherShrine, loc name = " + location_name);
+
     this.oneliner = WMH_gameplayOnelinerEntity(
-      GetLocStringByKeyExt("wmh_quickstart_oneliner") + "<br/>" + activated_message,
+      StrReplace(
+        GetLocStringByKeyExt("wmh_quickstart_oneliner"),
+        "{{location_name}}",
+        location_name
+      ) + "<br/>" + activated_message,
       this
     );
 
