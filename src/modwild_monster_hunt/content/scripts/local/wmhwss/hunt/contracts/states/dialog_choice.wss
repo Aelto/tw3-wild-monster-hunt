@@ -426,7 +426,7 @@ state DialogChoice in WMH_ContractManager {
           }
           
           contract = contracts_storage.favourite_contracts[i - 1];
-          index = i;
+          index = i - 1;
           return true;
         }
       }
