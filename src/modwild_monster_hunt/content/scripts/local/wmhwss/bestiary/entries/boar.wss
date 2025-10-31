@@ -5,7 +5,7 @@ class WMH_BestiaryEntryBoar extends WMH_BestiaryEntry {
 
     this.templates.PushBack(
       WMH_EnemyTemplate(
-        "dlc\ep1\data\characters\npc_entities\monsters\wild_boar_ep1.w2ent",,
+        "dlc\bob\data\characters\npc_entities\monsters\wild_boar_ep2.w2ent",,
         "dlc\bob\journal\bestiary\ep2boar.journal"
       )
     );
