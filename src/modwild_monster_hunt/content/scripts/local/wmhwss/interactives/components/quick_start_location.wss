@@ -74,15 +74,19 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
   message += StrReplace(
     StrReplace(
       StrReplace(
-        GetLocStringByKeyExt("wmh_quickstart_popup_upkeep"),
-        "{{upkeep_cost}}",
-        upkeep_cost
+        StrReplace(
+          GetLocStringByKeyExt("wmh_quickstart_popup_upkeep"),
+          "{{upkeep_cost}}",
+          upkeep_cost
+        ),
+        "{{crowns_cost}}",
+        crowns_cost
       ),
-      "{{crowns_cost}}",
-      crowns_cost
+      "{{crowns_icon}}",
+      crowns_icon
     ),
-    "{{crowns_icon}}",
-    crowns_icon
+    "{{merchant_goods_count}}",
+    WMH_getMerchantGoodsFacts()
   );
 
   WMHPOPUP(message, 60*5*1000);
@@ -100,7 +104,7 @@ latent function WMH_displayQuickStartLocationChoice(): bool {
           StrReplace(
             GetLocStringByKeyExt("wmh_quickstart_dialog"),
             "{{name}}",
-            location.location_name
+            GetLocStringByKeyExt(location.location_name)
           ),
           "{{cost}}",
           upkeep_cost
