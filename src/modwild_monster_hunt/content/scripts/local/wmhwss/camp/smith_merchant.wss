@@ -142,6 +142,10 @@ class WMH_SmithMerchant extends WMH_QuickMerchant {
     provider.appendItem('modwmh_lure_container', 1 + every20Levels);
     provider.appendItem('modwmh_trap_device', 1 + every20Levels);
 
+    provider.appendItem('Silver sword 1 schematic', 1);
+    provider.appendItem('Viper Silver sword schematic', 1);
+    provider.appendItem('Viper Steel sword schematic', 1);
+
     if (every20Levels > 0) {
       provider.appendItem('Split Bolt Legendary', 0 + every20Levels * 3); // ~14dmg
     }

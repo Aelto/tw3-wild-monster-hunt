@@ -231,6 +231,10 @@ state Loading in WMH_LootManager {
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Heavy boots 01');
     parent.registerLoot(WMH_LootTag_Gear, 0, 'Boots 012');
 
+    // grant access to a silver sword early:
+    parent.registerLoot(WMH_LootTag_Gear, 10, 'Silver sword 1');
+
+
     if (parent.maximum_loot_level.value >= 10) {
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Rune stribog lesser');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Rune dazhbog lesser');
@@ -279,7 +283,6 @@ state Loading in WMH_LootManager {
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Wild Hunt sword 2');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Wild Hunt sword 3');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Wild Hunt sword 4');
-      parent.registerLoot(WMH_LootTag_Gear, 10, 'Silver sword 1');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Silver sword 2');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Silver sword 3');
       parent.registerLoot(WMH_LootTag_Gear, 10, 'Elven silver sword 1');
