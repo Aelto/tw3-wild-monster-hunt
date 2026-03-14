@@ -284,10 +284,19 @@ class WMH_PendingContract {
         0.1
       ) as int;
 
+      // a flat amount of crowns that is not modified by either the target's
+      // strength or the difficulty.
+      //
+      // It makes the start of a WMH playthrough a bit easier
+      money += 2;
+
       provider.appendMoney(money);
 
       var experience: int = WMH_difficultyScaleUpF(
-        (35 + target.bentry.strength * 7)
+        // the bookshelf camp upgrade increases the impact of the target's
+        // strength. So by level ~4 the effect of the strength has more than
+        // double since it would be `7 * 4*2`
+        (35 + target.bentry.strength * (7 + WMH_campUpgradeBookshelfLevel() * 2))
         // at level 100 the rewards are doubled, the XP should scale with
         // contract level, but it shouldn't be too high either:
         * (1 + this.contract.level.value / 100.0),

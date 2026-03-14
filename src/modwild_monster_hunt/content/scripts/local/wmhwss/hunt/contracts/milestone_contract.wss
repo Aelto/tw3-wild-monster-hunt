@@ -63,6 +63,12 @@ class WMH_MilestoneContract extends WMH_PendingContract {
       .onMilestoneContractCompleted(this.getContractSeed());
   }
 
+  public function getItemRewards(out provider: WMH_RewardProvider) {
+    super.getItemRewards(provider);
+
+    provider.appendMoney(this.milestone_level.value * 5);
+  }
+
   private function initFromMilestoneLevel(
     bestiary: WMH_Bestiary, 
     milestone_level: WMH_Level
