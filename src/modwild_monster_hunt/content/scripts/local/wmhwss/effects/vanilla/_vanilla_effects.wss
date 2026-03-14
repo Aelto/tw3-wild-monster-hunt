@@ -26,6 +26,17 @@ function WMH_removeEffectsBySource(source_name: string) {
   }
 }
 
+@addMethod(W3EffectManager)
+function WMH_countEffectsBySource(source_name: string): int {
+  var output: int = 0;
+
+  for effect: CBaseGameplayEffect in this.effects {
+    output += (effect.GetSourceName() == source_name) as int;
+  }
+
+  return output;
+}
+
 @addMethod(CActor)
 function WMH_getEffectManager(): W3EffectManager {
   return this.effectManager;

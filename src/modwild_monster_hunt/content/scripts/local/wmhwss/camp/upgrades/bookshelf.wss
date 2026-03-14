@@ -1,0 +1,3 @@
+function WMH_campUpgradeBookshelfLevel(): int {
+  return FactsQueryLatestValue("wmh_camp_upgrade_bookshelf");
+}
