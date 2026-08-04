@@ -21,8 +21,8 @@ function CreateNewGameListArray(): CScriptedFlashArray {
     "newgame_difficulty"
   );
 
-  l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP1_Save);
-  l_DataFlashObject.SetMemberFlashArray("subElements", l_ChildMenuFlashArray);
+  // l_ChildMenuFlashArray = CreateDifficultyListArray(IGMC_EP1_Save);
+  // l_DataFlashObject.SetMemberFlashArray("subElements", l_ChildMenuFlashArray);
   l_DataFlashObject.SetMemberFlashString(
     "description",
     GetLocStringByKeyExt("panel_mainmenu_start_wmh_description")

@@ -1,5 +1,5 @@
 @wrapMethod(CScriptSoundSystem)
-function InitializeAreaMusic(worldArea: EAreaName ) {
+function InitializeAreaMusic(worldArea: CName ) {
   var world_path: string;
 
   wrappedMethod(worldArea);
