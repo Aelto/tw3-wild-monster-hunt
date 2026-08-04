@@ -1,4 +1,4 @@
-function WMH_findNearbyNoticeboards(): array<WMH_NoticeBoard> {
+﻿function WMH_findNearbyNoticeboards(): array<WMH_NoticeBoard> {
   var entities: array<CGameplayEntity>;
   var output: array<WMH_NoticeBoard>;
   var board: WMH_NoticeBoard;
