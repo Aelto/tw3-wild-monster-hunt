@@ -96,7 +96,7 @@ class WMH_VanillaEffect extends CBaseGameplayEffect {
     }
 
     if (duration > 0) {
-      init.duration = this.duration;
+      init.duration = duration;
     }
 
     this.Init(init);
