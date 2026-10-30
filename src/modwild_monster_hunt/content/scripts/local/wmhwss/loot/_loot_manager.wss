@@ -191,7 +191,7 @@ statemachine class WMH_LootManager {
       this.loot_category_roller.addItem(2, WMH_LootTag_Material);
       this.loot_category_roller.addItem(1, WMH_LootTag_Ore);
 
-      if (WMH_isOutsiderLootFiltered()) {
+      if (!WMH_isOutsiderLootFiltered()) {
         this.loot_category_roller.addItem(0.5, WMH_LootTag_Recipe);
         this.loot_category_roller.addItem(0.5, WMH_LootTag_Schematic);
       }
