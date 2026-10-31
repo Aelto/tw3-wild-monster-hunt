@@ -7,6 +7,10 @@ state DialogChoice in WMH_ContractManager {
     this.DialogChoice_main();
   }
 
+  event OnLeaveState(nextStateName: name) {
+    SU_closeDialogChoiceInterface();
+  }
+
   entry function DialogChoice_main() {
     Sleep(0.1);
 

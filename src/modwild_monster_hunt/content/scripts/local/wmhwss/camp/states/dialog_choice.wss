@@ -356,7 +356,8 @@ state DialogChoice in WMH_CampManager {
     }
   }
 
-  event OnLeaveState( nextStateName : name ) {
+  event OnLeaveState(nextStateName: name) {
     parent.removeTemporaryUnlocks();
+    SU_closeDialogChoiceInterface();
   }
 }

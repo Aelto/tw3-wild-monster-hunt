@@ -13,6 +13,10 @@ state DialogChoice in WMH_EventNpc {
     this.DialogChoice_main();
   }
 
+  event OnLeaveState(nextStateName: name) {
+    SU_closeDialogChoiceInterface();
+  }
+
   entry function DialogChoice_main() {
     parent.conversation = (new WMH_ConversationManager in this)
       .init()
