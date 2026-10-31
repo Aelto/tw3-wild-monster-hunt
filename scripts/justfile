@@ -1,0 +1,16 @@
+
+# it's kinda difficult to figure out how to run commands with variable paths using
+# just while inside WSL, but these commands actually need to run windows tools
+# like `wcc_lite.exe`
+redkit := "D:/programs/Steam/steamapps/common/The Witcher 3 REDkit/bin/x64_RedKit"
+precompiled_windows := "D:/dev/github/tw3-wild-monster-hunt/release/mods/modwild_monster_hunt"
+# those scripts are the generated "dev scripts" from the shared-utils repo, basically
+# a combination of the vanilla content0 & all of the sharedutils.
+gamescripts := "D:/dev/github/tw3-shared-utils/dev-scripts"
+[windows]
+release-make-precompiled-blob:
+    cd "{{ redkit }}" ; wcc_lite.exe compilescripts "{{ gamescripts }}" -patch="{{ precompiled_windows }}/content/scripts" -out "{{ precompiled_windows }}/content"
+    mv "{{ precompiled_windows }}/content/scripts/blob.rsblob" "{{ precompiled_windows }}/content/precompiled.rsblob"
+
+[windows]
+set shell := ["nu", "-c"]
