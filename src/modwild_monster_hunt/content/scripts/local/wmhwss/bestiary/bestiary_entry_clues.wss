@@ -29,6 +29,7 @@ class WMH_BestiaryClues extends WMH_BestiaryEntry {
     // assign the localized name of the creature this clue is from
     if (clues) {
       clues.localized_entry_name = this.parent_bentry.getLocName();
+      clues.target_bentry = this.parent_bentry;
     }
   }
 
