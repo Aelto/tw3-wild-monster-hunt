@@ -12,8 +12,13 @@ class WMH_BestiaryEntry {
 
   public var strength: float;
 
+  public var hunting_experience: WMH_BestiaryEntryHuntingExperience;
+
   public function init(id: WMH_BestiaryId) {
     this.id = id;
+
+    this.hunting_experience = new WMH_BestiaryEntryHuntingExperience in this;
+    this.hunting_experience.init(id);
   }
 
   public function getLocName(): string {

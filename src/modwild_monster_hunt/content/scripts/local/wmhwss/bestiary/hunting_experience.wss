@@ -1,0 +1,48 @@
+
+/// Represents the hunting experience for a single bestiary entry, that experience
+/// can then be used to scale things when contracts or hunts are related to that
+/// species.
+class WMH_BestiaryEntryHuntingExperience {
+  private var bestiary_entry_id: WMH_BestiaryId;
+  private var facts: WMH_BestiaryEntryHuntingExperience_Facts;
+
+  public function init(bentry_id: WMH_BestiaryId) {
+    this.bestiary_entry_id = bentry_id;
+
+    this.facts = new WMH_BestiaryEntryHuntingExperience_Facts in this;
+    this.facts.init(bentry_id.value);
+  }
+
+  public function onClueInteracted() {
+    this.facts.setFactLevel(this.facts.getFactLevel() + 1);
+  }
+
+  private function getLevel(): float {
+    return this.facts.getFactLevel();
+  }
+
+  public function getContractTargetOnelinerRenderDistanceBonus(): int {
+    // rather simple at the moment: +1m for every level
+    return FloorF(this.getLevel() * 1.0);
+  }
+}
+
+class WMH_BestiaryEntryHuntingExperience_Facts {
+  private var id: int;
+
+  public function init(id: int)  {
+    this.id = id;
+  }
+
+  public function factKey(): string {
+    return "WMH_BestiaryEntryHuntingExperience_" + this.id;
+  }
+
+  public function setFactLevel(value: int) {
+    FactsSet(this.factKey(), value);
+  }
+
+  public function getFactLevel(): int {
+    return FactsQuerySum(this.factKey());
+  }
+}
