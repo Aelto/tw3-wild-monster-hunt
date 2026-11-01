@@ -75,6 +75,11 @@ class WMH_BestiaryEntryBear extends WMH_BestiaryEntry {
     seed: int
   ) {
     super.onContractCompleted(provider, contract, seed);
-    provider.appendItem('Fur square', (RandNoiseF(seed, 2.0) as int) + 1);
+
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
+    provider.appendItem(
+      'Fur square',
+      ((RandNoiseF(seed, 2.0) as int) + 1) * multiplier
+    );
   }
 }

@@ -29,6 +29,10 @@ class WMH_BestiaryEntryHuntingExperience {
     // rather simple at the moment: +1m for every level
     return FloorF(this.getLevel() * 1.0);
   }
+
+  public function getCustomLootMultipler(): int {
+    return 1 + FloorF(this.getLevel() / 30.0);
+  }
 }
 
 class WMH_BestiaryEntryHuntingExperience_Facts {

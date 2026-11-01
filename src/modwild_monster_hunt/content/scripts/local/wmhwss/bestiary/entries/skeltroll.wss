@@ -65,6 +65,8 @@ class WMH_BestiaryEntrySkeltroll extends WMH_BestiaryEntry {
     seed: int
   ) {
     super.onContractCompleted(provider, contract, seed);
-    provider.appendItem('Sulfur', (RandNoiseF(seed, 2.0) as int) + 1);
+    
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
+    provider.appendItem('Sulfur', ((RandNoiseF(seed, 2.0) as int) + 1) * multiplier);
   }
 }

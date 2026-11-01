@@ -63,14 +63,15 @@ class WMH_BestiaryEntrySharley extends WMH_BestiaryEntry {
   ) {
     super.onContractCompleted(provider, contract, seed);
 
-    provider.appendItem('Lead ore', (RandNoiseF(seed + 1, 4.0) as int));
-    provider.appendItem('Dark iron ore', (RandNoiseF(seed + 8, 4.0) as int));
-    provider.appendItem('Iron ore', (RandNoiseF(seed + 3, 4.0) as int));
-    provider.appendItem('Silver ore', (RandNoiseF(seed + 7, 4.0) as int));
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
+    provider.appendItem('Lead ore', (RandNoiseF(seed + 1, 4.0) as int) * multiplier);
+    provider.appendItem('Dark iron ore', (RandNoiseF(seed + 8, 4.0) as int) * multiplier);
+    provider.appendItem('Iron ore', (RandNoiseF(seed + 3, 4.0) as int) * multiplier);
+    provider.appendItem('Silver ore', (RandNoiseF(seed + 7, 4.0) as int) * multiplier);
     
-    provider.appendItem('Gold ore', (RandNoiseF(seed + 2, 2.0) as int));
-    provider.appendItem('Glowing ore', (RandNoiseF(seed + 5, 2.0) as int));
-    provider.appendItem('Meteorite ore', (RandNoiseF(seed + 4, 2.0) as int));
-    provider.appendItem('Dwimeryte ore', (RandNoiseF(seed + 6, 2.0) as int));
+    provider.appendItem('Gold ore', (RandNoiseF(seed + 2, 2.0) as int) * multiplier);
+    provider.appendItem('Glowing ore', (RandNoiseF(seed + 5, 2.0) as int) * multiplier);
+    provider.appendItem('Meteorite ore', (RandNoiseF(seed + 4, 2.0) as int) * multiplier);
+    provider.appendItem('Dwimeryte ore', (RandNoiseF(seed + 6, 2.0) as int) * multiplier);
   }
 }

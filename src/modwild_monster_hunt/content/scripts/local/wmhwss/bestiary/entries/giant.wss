@@ -67,9 +67,20 @@ class WMH_BestiaryEntryGiant extends WMH_BestiaryEntry {
     seed: int
   ) {
     super.onContractCompleted(provider, contract, seed);
-    provider.appendItem('Old goat skin', (RandNoiseF(seed, 2.0) as int));
-    provider.appendItem('Old sheep skin', (RandNoiseF(seed + 1, 2.0) as int));
-    provider.appendItem('Bear pelt', (RandNoiseF(seed + 2, 2.0) as int));
+
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
+    provider.appendItem(
+      'Old goat skin',
+      ((RandNoiseF(seed, 2.0) as int)) * multiplier
+    );
+    provider.appendItem(
+      'Old sheep skin',
+      ((RandNoiseF(seed + 1, 2.0) as int)) * multiplier
+    );
+    provider.appendItem(
+      'Bear pelt',
+      ((RandNoiseF(seed + 2, 2.0) as int)) * multiplier
+    );
 
   }
 }

@@ -66,9 +66,11 @@ class WMH_BestiaryEntryHarpy extends WMH_BestiaryEntry {
     seed: int
   ) {
     super.onContractCompleted(provider, contract, seed);
+
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
     provider.appendItem(
       'Harpy feathers',
-      (RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1
+      ((RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1) * multiplier
     );
   }
 

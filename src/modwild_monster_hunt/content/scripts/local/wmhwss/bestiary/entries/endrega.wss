@@ -62,6 +62,11 @@ class WMH_BestiaryEntryEndrega extends WMH_BestiaryEntry {
     seed: int
   ) {
     super.onContractCompleted(provider, contract, seed);
-    provider.appendItem('Monstrous vine', (RandNoiseF(seed, 2.0) as int) + 1);
+
+    var multiplier: int = this.getCustomLootMultiplerFromHuntingExperience();
+    provider.appendItem(
+      'Monstrous vine',
+      ((RandNoiseF(seed, 2.0) as int) + 1) * multiplier
+    );
   }
 }
