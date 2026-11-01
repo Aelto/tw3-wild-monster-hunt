@@ -4,11 +4,17 @@ struct WMH_ItemQuantity {
   var quantity: int;
 }
 
+struct WMH_HuntingExperienceGain {
+  var bentry: WMH_BestiaryEntry;
+  var quantity: int;
+}
+
 struct WMH_RewardGroup {
   var reason: string;
   var items: array<WMH_ItemQuantity>;
   var experience: int;
   var reputation: float;
+  var hunting_experience_gains: array<WMH_HuntingExperienceGain>;
 }
 
 
@@ -49,6 +55,12 @@ class WMH_RewardProvider {
 
   public function appendReputation(quantity: float): WMH_RewardProvider {
     return this.addReputation(this.active_group, quantity);
+  }
+
+  public function appendHuntingExperience(
+    gain: WMH_HuntingExperienceGain
+  ): WMH_RewardProvider {
+    return this.addHuntingExperience(this.active_group, gain);
   }
 
   public function addMoney(reason: string, quantity: int): WMH_RewardProvider {
@@ -145,6 +157,31 @@ class WMH_RewardProvider {
     return this;
   }
 
+  public function addHuntingExperience(
+    reason: string,
+    gain: WMH_HuntingExperienceGain
+  ): WMH_RewardProvider {
+    var i: int;
+
+    if (quantity <= 0) {
+      return this;
+    }
+
+    for (i = 0; i < this.groups.Size(); i += 1) {
+      if (this.groups[i].reason == reason) {
+        this.groups[i].hunting_experience_gains.PushBack(gain);
+        return this;
+      }
+    }
+
+    // no group with the given name was found, add it
+    this.groups.PushBack(WMH_RewardGroup(reason));
+    this.groups[this.groups.Size() - 1].hunting_experience_gains.PushBack(gain);
+
+
+    return this;
+  }
+
   public function toHtml(
     inventory: CInventoryComponent,
     optional skip_reason: bool,
@@ -163,6 +200,15 @@ class WMH_RewardProvider {
     for (i = 0; i < this.groups.Size(); i += 1) {
       if (!skip_reason) {
         message += "<u>" + this.groups[i].reason + "</u>";
+      }
+
+      for gain: WMH_HuntingExperienceGain in this.groups[i].hunting_experience_gains {
+        message += "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+                + gain.bentry.getLocName()
+                + " "
+                + GetLocStringByKeyExt("wmh_hunting_expertise")
+                + "<font size='18'>"
+                + "</font>";
       }
 
       if (this.groups[i].experience > 0) {
@@ -276,6 +322,11 @@ class WMH_RewardProvider {
         );
         WMHINFO("transferItems, new reputation = " +  storage.general.level.value);
       }
+    }
+
+    for gain: WMH_HuntingExperienceGain in this.groups[i].hunting_experience_gains {
+      WMHINFO("hunting experience gain, target = " +  gain.bentry.getLocName() + " quantity = " + gain.quantity);
+      gain.bentry.hunting_experience.onContractCompleted(gain.quantity);
     }
   }
 

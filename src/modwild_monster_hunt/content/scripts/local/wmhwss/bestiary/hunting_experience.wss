@@ -17,6 +17,10 @@ class WMH_BestiaryEntryHuntingExperience {
     this.facts.setFactLevel(this.facts.getFactLevel() + 1);
   }
 
+  public function onContractCompleted(gain: int) {
+    this.facts.setFactLevel(this.facts.getFactLevel() + gain);
+  }
+
   private function getLevel(): float {
     return this.facts.getFactLevel();
   }

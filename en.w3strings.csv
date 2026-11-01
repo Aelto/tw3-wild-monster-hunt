@@ -99,6 +99,7 @@
 ||wmh_milestone_reputation_locked|milestone contract active, gains locked
 ||wmh_merchant_goods_picked_up_hud|You found merchant goods, there are {{camp_count}} in the camp and you are now carrying {{carry_count}}
 ||wmh_clues_oneliner_target|{{creature_name}} tracks
+||wmh_hunting_expertise|Hunting Expertise
 ;
 ; quickstart locations
 ||wmh_weather_shrine_no_active_locations|You do not have any active Quick-Start location

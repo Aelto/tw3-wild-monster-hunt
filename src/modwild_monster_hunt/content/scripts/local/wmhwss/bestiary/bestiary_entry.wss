@@ -208,6 +208,9 @@ class WMH_BestiaryEntry {
 
     provider.startGroup(this.getLocName() + " " + contract_loc);
 
+    // every completed contract against 
+    provider.appendHuntingExperience(WMH_HuntingExperienceGain(this, 3));
+
     var loot: WMH_LootManager = WMH_getLootManager();
     var items_count: int = WMH_diminishingReturns(
       seed,
