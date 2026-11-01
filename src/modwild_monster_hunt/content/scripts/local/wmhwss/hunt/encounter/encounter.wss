@@ -31,8 +31,8 @@ class WMH_Encounter {
         "<img src='img://icons/perks/s_perk_20.png' vspace='-10' />",
         this.spawn_point
       );
-      this.target_oneliner.render_distance = 50;
       this.target_oneliner.offset = Vector(0, 0, 1.5);
+      this.setOnelinerRenderDistance();
     }
 
     return this;
@@ -45,6 +45,7 @@ class WMH_Encounter {
   // returns `true` if it needs to be destroyed by the manager
   public function onTick(): bool {
     SUH_removeDeadEntities(this.entities);
+    this.setOnelinerRenderDistance();
 
     return this.entities.Size() <= 0
         || VecDistanceSquared2D(
@@ -110,5 +111,37 @@ class WMH_Encounter {
 
     return this.encounter_tag == WMH_EncounterTag_ContractRegular
         || this.encounter_tag == WMH_EncounterTag_ContractMilestone;
+  }
+
+  private function getMeanHuntingExperienceRenderDistanceBonus(): int {
+    var targets_count: int;
+    var output: float;
+
+    for bentry: WMH_BestiaryEntry in this.entries {
+      if (contract_manager.isTargetted(bentry.id)) {
+        continue;
+      }
+
+      targets_count += 1;
+      output += bentry.hunting_experience
+        .getContractTargetOnelinerRenderDistanceBonus();
+    }
+
+    if (targets_count <= 0) {
+      return 0;
+    }
+
+    return FloorF(output / targets_count);
+  }
+
+  private function setOnelinerRenderDistance() {
+    // set the oneliner's render distance based on the hunting experience for
+    // this encounter's target.
+    if (this.target_oneliner) {
+      this.target_oneliner.render_distance = (
+        35
+        + this.getMeanHuntingExperienceRenderDistanceBonus()
+      );
+    }
   }
 }
