@@ -49,8 +49,9 @@ state Loading in WMH_LootManager {
     this.registerLootMaterial();
     this.registerLootOre();
 
+    this.registerWmhRecipes();
+
     if (!WMH_isOutsiderLootFiltered()) {
-      this.registerWmhRecipes();
       this.registerRecipesTier1();
       this.registerRecipesTier2();
       this.registerRecipesMisc();
