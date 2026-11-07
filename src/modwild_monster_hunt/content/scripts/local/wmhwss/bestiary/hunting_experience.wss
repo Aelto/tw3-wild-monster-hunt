@@ -17,7 +17,14 @@ class WMH_BestiaryEntryHuntingExperience {
     this.facts.setFactLevel(this.facts.getFactLevel() + 1);
   }
 
-  public function onContractCompleted(gain: int) {
+  public function onContractCompleted(
+    provider: WMH_RewardProvider,
+    bentry: WMH_BestiaryEntry
+  ) {
+    provider.appendHuntingExperience(WMH_HuntingExperienceGain(bentry, 3));
+  }
+
+  public function onRewardProviderGain(gain: int) {
     this.facts.setFactLevel(this.facts.getFactLevel() + gain);
   }
 

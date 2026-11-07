@@ -326,7 +326,7 @@ class WMH_RewardProvider {
 
     for gain: WMH_HuntingExperienceGain in this.groups[i].hunting_experience_gains {
       WMHINFO("hunting experience gain, target = " +  gain.bentry.getLocName() + " quantity = " + gain.quantity);
-      gain.bentry.hunting_experience.onContractCompleted(gain.quantity);
+      gain.bentry.hunting_experience.onRewardProviderGain(gain.quantity);
     }
   }
 
