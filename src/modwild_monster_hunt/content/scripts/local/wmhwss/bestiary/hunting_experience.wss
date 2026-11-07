@@ -34,6 +34,11 @@ class WMH_BestiaryEntryHuntingExperience {
     this.facts.setFactLevel(this.facts.getFactLevel() + gain);
   }
 
+  public function onCreatureKilled() {
+    this.facts.onCreatureKilled();
+    this.focus.onCreatureKilled();
+  }
+
   private function getLevel(): float {
     return this.facts.getFactLevel() + this.focus.getLevel();
   }
@@ -67,6 +72,10 @@ class WMH_BestiaryEntryHuntingExperience_Facts {
     this.setFactLevel(this.getFactLevel() + 1);
   }
 
+  public function onCreatureKilled() {
+    this.setFactLevel(this.getFactLevel() + 1);
+  }
+
 
 
   private function setFactLevel(value: int) {
@@ -87,6 +96,10 @@ class WMH_BestiaryEntryHuntingExperience_HunterFocus {
   }
 
   public function onClueInteracted() {
+    this.increaseLevel(1);
+  }
+
+  public function onCreatureKilled() {
     this.increaseLevel(1);
   }
 

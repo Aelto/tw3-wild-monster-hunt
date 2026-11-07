@@ -233,6 +233,10 @@ class WMH_BestiaryEntry {
     }
   }
 
+  public function onCreatureKilled() {
+    this.hunting_experience.onCreatureKilled();
+  }
+
   // Entries can override this function to add custom loot to their entities
   public function addCustomLoot(inventory: CInventoryComponent) {
     if (RandRangeF(100.0) < 25.0 + this.strength) {

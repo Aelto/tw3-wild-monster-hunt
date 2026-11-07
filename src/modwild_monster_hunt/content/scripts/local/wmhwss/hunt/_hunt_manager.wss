@@ -127,6 +127,8 @@ statemachine class WMH_HuntManager {
       theSound.SoundEvent("gui_ingame_new_journal");
       WMHHUD(GetLocStringByKeyExt("wmh_contract_completed_hud"));
     }
+
+    bentry.onCreatureKilled();
   }
 
   public function difficulty(): int {
