@@ -5,16 +5,21 @@
 class WMH_BestiaryEntryHuntingExperience {
   private var bestiary_entry_id: WMH_BestiaryId;
   private var facts: WMH_BestiaryEntryHuntingExperience_Facts;
+  private var focus: WMH_BestiaryEntryHuntingExperience_HunterFocus;
 
   public function init(bentry_id: WMH_BestiaryId) {
     this.bestiary_entry_id = bentry_id;
 
     this.facts = new WMH_BestiaryEntryHuntingExperience_Facts in this;
     this.facts.init(bentry_id.value);
+
+    this.focus = new WMH_BestiaryEntryHuntingExperience_HunterFocus in this;
+    this.focus.init();
   }
 
   public function onClueInteracted() {
-    this.facts.setFactLevel(this.facts.getFactLevel() + 1);
+    this.facts.onClueInteracted();
+    this.focus.onClueInteracted();
   }
 
   public function onContractCompleted(
@@ -22,6 +27,7 @@ class WMH_BestiaryEntryHuntingExperience {
     bentry: WMH_BestiaryEntry
   ) {
     provider.appendHuntingExperience(WMH_HuntingExperienceGain(bentry, 3));
+    this.focus.onContractCompleted();
   }
 
   public function onRewardProviderGain(gain: int) {
@@ -29,7 +35,7 @@ class WMH_BestiaryEntryHuntingExperience {
   }
 
   private function getLevel(): float {
-    return this.facts.getFactLevel();
+    return this.facts.getFactLevel() + this.focus.getLevel();
   }
 
   public function getContractTargetOnelinerRenderDistanceBonus(): int {
@@ -53,11 +59,46 @@ class WMH_BestiaryEntryHuntingExperience_Facts {
     return "WMH_BestiaryEntryHuntingExperience_" + this.id;
   }
 
-  public function setFactLevel(value: int) {
-    FactsSet(this.factKey(), value);
-  }
-
   public function getFactLevel(): int {
     return FactsQuerySum(this.factKey());
+  }
+
+  public function onClueInteracted() {
+    this.setFactLevel(this.getFactLevel() + 1);
+  }
+
+
+
+  private function setFactLevel(value: int) {
+    FactsSet(this.factKey(), value);
+  }
+}
+
+/// Temporary experience that lasts for a single hunt
+class WMH_BestiaryEntryHuntingExperience_HunterFocus {
+  private var level;
+
+  public function init() {
+    this.reset();
+  }
+
+  public function getLevel(): int {
+    return this.level;
+  }
+
+  public function onClueInteracted() {
+    this.increaseLevel(1);
+  }
+
+  public function onContractCompleted() {
+    this.reset();
+  }
+
+  private function reset() {
+    this.level = 0;
+  }
+
+  private function increaseLevel(gain: int) {
+    this.level += 1;
   }
 }
