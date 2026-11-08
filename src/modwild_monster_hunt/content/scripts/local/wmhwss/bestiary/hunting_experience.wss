@@ -85,7 +85,7 @@ class WMH_BestiaryEntryHuntingExperience_Facts {
 
 /// Temporary experience that lasts for a single hunt
 class WMH_BestiaryEntryHuntingExperience_HunterFocus {
-  private var level;
+  private var level: int;
 
   public function init() {
     this.reset();
@@ -113,5 +113,90 @@ class WMH_BestiaryEntryHuntingExperience_HunterFocus {
 
   private function increaseLevel(gain: int) {
     this.level += 1;
+  }
+}
+
+function WMH_getHunterFocusManager(): WMH_HunterFocusManager {
+  return thePlayer.wmh.hunt.hunt_focus;
+}
+
+class WMH_HunterFocusManager {
+  private var target: WMH_BestiaryEntry;
+  private var oneliner_interaction: WMH_MovingGameplayOneliner;
+
+  public function init(): WMH_HunterFocusManager {
+    this.reset();
+
+    return this;
+  }
+
+  public function onHuntStarted() {
+    this.reset();
+  }
+
+  public function onHuntingExperienceChanged(bentry_id: WMH_BestiaryId) {
+    if (this.setFocusTargetIfHighLevelEnough(bentry_id)) {
+      this.playFocusActivationEffect();
+    }
+  }
+
+  public function onClueInteracted(position: Vector) {
+    if (!this.oneliner_interaction) {
+      this.oneliner_interaction = new WMH_MovingGameplayOneliner in this;
+      this.oneliner_interaction.translation_per_tick = Vector(0, 0, 0.05);
+      this.oneliner_interaction.visible_outside_focus_mode = true;
+    }
+
+    this.oneliner_interaction.position = position;
+    this.
+  }
+
+  public function hasFocusTarget(): bool {
+    if (this.target) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public isFocusTarget(bentry_id: WMH_BestiaryId): bool {
+    return this.hasFocusTarget()
+        && this.target.id == bentry_id;
+  }
+
+  private function setFocusTargetIfHighLevelEnough(
+    bentry_id: WMH_BestiaryId
+  ): bool {
+    var bestiary: WMH_Bestiary = WMH_getBestiary();
+
+    if (this.hasFocusTarget()) {
+      if (this.target.id == bentry_id) {
+        return false;
+      }
+    }
+
+    for bentry: WMH_BestiaryEntry in bestiary.entries {
+      if (bentry.id != bentry_id) {
+        continue;
+      }
+
+      var level: int = bentry.hunting_experience.getTemporaryHunterFocusLevel();
+      if (level < 3) {
+        continue;
+      }
+
+      this.target = bentry;
+      return true;
+    }
+
+    return false;
+  }
+
+  private function reset() {
+    this.target = NULL;
+  }
+
+  private playFocusActivationEffect() {
+    theSound.SoundEvent('expl_focus_stop_sfx');
   }
 }
