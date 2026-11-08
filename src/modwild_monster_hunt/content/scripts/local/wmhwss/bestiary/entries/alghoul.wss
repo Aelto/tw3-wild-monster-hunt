@@ -93,7 +93,7 @@ class WMH_BestiaryEntryAlghoul extends WMH_BestiaryEntry {
 
     provider.appendItem(
       'Alchemical paste',
-      ((RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1) multiplier
+      ((RandNoiseF(seed, 2.0 + contract.level.value * 0.1) as int) + 1) * multiplier
     );
   }
 }

@@ -21,6 +21,7 @@ statemachine class WMH_HuntManager {
   public var contract: WMH_ContractManager;
   public var wildlife: WMH_WildlifeManager;
   public var hunt_facts: WMH_HuntFactsDb;
+  public var hunt_focus: WMH_HunterFocusManager;
   
   /// Tweaks the spawn rates dynamically during the hunt to ensure a greater
   /// variety of spawns.
@@ -44,6 +45,7 @@ statemachine class WMH_HuntManager {
 
     this.hunt_facts = new WMH_HuntFactsDb in this;
     this.encounters = (new WMH_EncounterManager in this).init();
+    this.hunt_focus = (new WMH_HunterFocusManager in this).init();
     
     this.contract = (new WMH_ContractManager in this)
       .init(master.bestiary, master.storage);
@@ -83,6 +85,7 @@ statemachine class WMH_HuntManager {
     this.killed_creatures.Clear();
     this.encounters.onHuntStarted();
     this.hunt_facts.onHuntStarted();
+    this.hunt_focus.onHuntStarted();
 
     if (!thePlayer.wmh.hasJustBooted()) {
       // theGame.SaveGame(SGT_QuickSave, -1);

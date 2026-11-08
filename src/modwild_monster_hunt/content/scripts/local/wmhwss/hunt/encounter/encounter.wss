@@ -162,10 +162,10 @@ class WMH_Encounter {
         }
       }
       else {
-      this.target_oneliner.render_distance = (
-        35
-        + this.getMeanHuntingExperienceRenderDistanceBonus()
-      );
+        this.target_oneliner.render_distance = (
+          35
+          + this.getMeanHuntingExperienceRenderDistanceBonus()
+        );
       }
     }
   }

@@ -37,10 +37,17 @@ class WMH_BestiaryEntryHuntingExperience {
   public function onCreatureKilled() {
     this.facts.onCreatureKilled();
     this.focus.onCreatureKilled();
+
+    WMH_getHunterFocusManager()
+      .onHuntingExperienceChanged(this.bestiary_entry_id);
   }
 
   private function getLevel(): float {
-    return this.facts.getFactLevel() + this.focus.getLevel();
+    return this.facts.getFactLevel() + this.getTemporaryHunterFocusLevel();
+  }
+
+  public function getTemporaryHunterFocusLevel(): int {
+    return this.focus.getLevel();
   }
 
   public function getContractTargetOnelinerRenderDistanceBonus(): int {
