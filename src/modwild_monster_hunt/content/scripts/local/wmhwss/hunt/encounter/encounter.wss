@@ -134,14 +134,39 @@ class WMH_Encounter {
     return FloorF(output / targets_count);
   }
 
+  private function hasHunterFocusTarget(focus: WMH_HunterFocusManager): bool {
+    for bentry: WMH_BestiaryEntry in this.entries {
+      if (focus.isFocusTarget(bentry.id)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private function setOnelinerRenderDistance() {
     // set the oneliner's render distance based on the hunting experience for
     // this encounter's target.
     if (this.target_oneliner) {
+      var focus: WMH_HunterFocusManager = WMH_getHunterFocusManager();
+
+      if (focus.hasFocusTarget()) {
+        if (this.hasHunterFocusTarget(focus)) {
+          // 0 == no render distance
+          this.target_oneliner.render_distance = 0; 
+        }
+        else {
+          // player has hunter focus, but not on this target.
+          // the oneliner is "hidden".
+          this.target_oneliner.render_distance = 15;
+        }
+      }
+      else {
       this.target_oneliner.render_distance = (
         35
         + this.getMeanHuntingExperienceRenderDistanceBonus()
       );
+      }
     }
   }
 }
