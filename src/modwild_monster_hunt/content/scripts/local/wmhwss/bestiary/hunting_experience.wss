@@ -37,9 +37,26 @@ class WMH_BestiaryEntryHuntingExperience {
   public function onCreatureKilled() {
     this.facts.onCreatureKilled();
     this.focus.onCreatureKilled();
+    this.spawnExperienceGainOneliner();
 
     WMH_getHunterFocusManager()
       .onHuntingExperienceChanged(this.bestiary_entry_id);
+  }
+
+  private function spawnExperienceGainOneliner() {
+    var look: Vector;
+    var oneliner: WMH_MovingGameplayOneliner;
+
+    look = theCamera.GetCameraDirection();
+
+    oneliner = new WMH_MovingGameplayOneliner in this;
+    oneliner.text = "+1";
+    oneliner.translation_per_tick = Vector(0, 0, 0.01);
+    oneliner.visible_outside_focus_mode = true;
+    oneliner.position = thePlayer.GetWorldPosition()
+      + look * 2.0
+      + Vector(0, 0, 1.5);
+    oneliner.register();
   }
 
   private function getLevel(): float {
@@ -152,10 +169,10 @@ class WMH_HunterFocusManager {
       this.oneliner_interaction = new WMH_MovingGameplayOneliner in this;
       this.oneliner_interaction.translation_per_tick = Vector(0, 0, 0.05);
       this.oneliner_interaction.visible_outside_focus_mode = true;
+      this.oneliner_interaction.register();
     }
 
     this.oneliner_interaction.position = position;
-    this.
   }
 
   public function hasFocusTarget(): bool {

@@ -18,6 +18,19 @@ class WMH_GameplayOnelinerEntity extends SU_OnelinerEntity {
   }
 }
 
+/// A gameplay oneliner that drifts from its initial position, the drift is
+/// applied as translation_per_tick added to the offset every time the position
+/// is computed.
+class WMH_MovingGameplayOneliner extends WMH_GameplayOneliner {
+  public var translation_per_tick: Vector;
+
+  function getPosition(): Vector {
+    this.offset = this.offset + this.translation_per_tick;
+
+    return this.position + this.offset;
+  }
+}
+
 /// A oneliner that sits to the side of an entity
 class WMH_GameplayOnelinerEntitySide extends WMH_GameplayOnelinerEntity {
   public function WMH_OnelinerEntitySide(
@@ -38,6 +51,20 @@ function WMH_gameplayOneliner(
   var oneliner: WMH_GameplayOneliner;
 
   oneliner = new WMH_GameplayOneliner in thePlayer;
+  oneliner.text = text;
+  oneliner.position = position;
+  oneliner.register();
+
+  return oneliner;
+}
+
+function WMH_movingGameplayOneliner(
+  text: string,
+  position: Vector
+): WMH_MovingGameplayOneliner {
+  var oneliner: WMH_MovingGameplayOneliner;
+
+  oneliner = new WMH_MovingGameplayOneliner in thePlayer;
   oneliner.text = text;
   oneliner.position = position;
   oneliner.register();
