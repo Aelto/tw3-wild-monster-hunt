@@ -31,6 +31,22 @@ class WMH_MovingGameplayOneliner extends WMH_GameplayOneliner {
   }
 }
 
+/// A gameplay oneliner that shows a hunting experience gain, popping up in
+/// front of where the player is looking.
+class WMH_GameplayOnelinerExperienceGain extends WMH_MovingGameplayOneliner {
+  public function WMH_GameplayOnelinerExperienceGain(
+  ): WMH_GameplayOnelinerExperienceGain {
+    this.text = "+1";
+    this.translation_per_tick = Vector(0, 0, 0.01);
+    this.visible_outside_focus_mode = true;
+    this.position = thePlayer.GetWorldPosition()
+      + theCamera.GetCameraDirection() * 2.0
+      + Vector(0, 0, 1.5);
+
+    return this;
+  }
+}
+
 /// A oneliner that sits to the side of an entity
 class WMH_GameplayOnelinerEntitySide extends WMH_GameplayOnelinerEntity {
   public function WMH_OnelinerEntitySide(

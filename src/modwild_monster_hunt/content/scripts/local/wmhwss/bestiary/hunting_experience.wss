@@ -44,18 +44,9 @@ class WMH_BestiaryEntryHuntingExperience {
   }
 
   private function spawnExperienceGainOneliner() {
-    var look: Vector;
-    var oneliner: WMH_MovingGameplayOneliner;
+    var oneliner: WMH_GameplayOnelinerExperienceGain;
 
-    look = theCamera.GetCameraDirection();
-
-    oneliner = new WMH_MovingGameplayOneliner in this;
-    oneliner.text = "+1";
-    oneliner.translation_per_tick = Vector(0, 0, 0.01);
-    oneliner.visible_outside_focus_mode = true;
-    oneliner.position = thePlayer.GetWorldPosition()
-      + look * 2.0
-      + Vector(0, 0, 1.5);
+    oneliner = new WMH_GameplayOnelinerExperienceGain in this;
     oneliner.register();
   }
 
