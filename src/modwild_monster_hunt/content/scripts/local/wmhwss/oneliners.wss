@@ -39,6 +39,25 @@ class WMH_GameplayOnelinerHuntingExperienceGain extends WMH_MovingGameplayOnelin
     this.text = "+1";
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;
+    this.render_distance = 15;
+    this.position = thePlayer.GetWorldPosition()
+      + theCamera.GetCameraDirection() * 2.0
+      + Vector(0, 0, 1.5);
+
+    return this;
+  }
+}
+
+/// A gameplay oneliner that shows which species the hunter focus is directed
+/// towards, popping up in front of where the player is looking.
+class WMH_GameplayOnelinerHunterFocus extends WMH_MovingGameplayOneliner {
+  public function WMH_GameplayOnelinerHunterFocus(
+    species: string
+  ): WMH_GameplayOnelinerHunterFocus {
+    this.text = "Hunter Focus directed towards an " + species;
+    this.translation_per_tick = Vector(0, 0, 0.01);
+    this.visible_outside_focus_mode = true;
+    this.render_distance = 15;
     this.position = thePlayer.GetWorldPosition()
       + theCamera.GetCameraDirection() * 2.0
       + Vector(0, 0, 1.5);

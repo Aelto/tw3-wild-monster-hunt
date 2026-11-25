@@ -6,6 +6,7 @@ class WMH_BestiaryEntryHuntingExperience {
   private var bestiary_entry_id: WMH_BestiaryId;
   private var facts: WMH_BestiaryEntryHuntingExperience_Facts;
   private var focus: WMH_BestiaryEntryHuntingExperience_HunterFocus;
+  private var oneliner_experience_gain: WMH_GameplayOnelinerHuntingExperienceGain;
 
   public function init(bentry_id: WMH_BestiaryId) {
     this.bestiary_entry_id = bentry_id;
@@ -44,10 +45,12 @@ class WMH_BestiaryEntryHuntingExperience {
   }
 
   private function spawnExperienceGainOneliner() {
-    var oneliner: WMH_GameplayOnelinerHuntingExperienceGain;
+    if (this.oneliner_experience_gain) {
+      this.oneliner_experience_gain.unregister();
+    }
 
-    oneliner = new WMH_GameplayOnelinerHuntingExperienceGain in this;
-    oneliner.register();
+    this.oneliner_experience_gain = new WMH_GameplayOnelinerHuntingExperienceGain in this;
+    this.oneliner_experience_gain.register();
   }
 
   private function getLevel(): float {
@@ -138,6 +141,7 @@ function WMH_getHunterFocusManager(): WMH_HunterFocusManager {
 class WMH_HunterFocusManager {
   private var target: WMH_BestiaryEntry;
   private var oneliner_interaction: WMH_MovingGameplayOneliner;
+  private var oneliner_focus_species: WMH_GameplayOnelinerHunterFocus;
 
   public function init(): WMH_HunterFocusManager {
     this.reset();
@@ -213,5 +217,17 @@ class WMH_HunterFocusManager {
 
   private playFocusActivationEffect() {
     theSound.SoundEvent('expl_focus_stop_sfx');
+    this.spawnFocusSpeciesOneliner();
+  }
+
+  private function spawnFocusSpeciesOneliner() {
+    if (this.oneliner_focus_species) {
+      this.oneliner_focus_species.unregister();
+    }
+
+    this.oneliner_focus_species = new WMH_GameplayOnelinerHunterFocus(
+      this.target.getLocName()
+    ) in this;
+    this.oneliner_focus_species.register();
   }
 }
