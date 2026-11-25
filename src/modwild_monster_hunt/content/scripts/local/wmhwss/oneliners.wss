@@ -33,9 +33,9 @@ class WMH_MovingGameplayOneliner extends WMH_GameplayOneliner {
 
 /// A gameplay oneliner that shows a hunting experience gain, popping up in
 /// front of where the player is looking.
-class WMH_GameplayOnelinerExperienceGain extends WMH_MovingGameplayOneliner {
-  public function WMH_GameplayOnelinerExperienceGain(
-  ): WMH_GameplayOnelinerExperienceGain {
+class WMH_GameplayOnelinerHuntingExperienceGain extends WMH_MovingGameplayOneliner {
+  public function WMH_GameplayOnelinerHuntingExperienceGain(
+  ): WMH_GameplayOnelinerHuntingExperienceGain {
     this.text = "+1";
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;

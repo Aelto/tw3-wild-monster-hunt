@@ -44,9 +44,9 @@ class WMH_BestiaryEntryHuntingExperience {
   }
 
   private function spawnExperienceGainOneliner() {
-    var oneliner: WMH_GameplayOnelinerExperienceGain;
+    var oneliner: WMH_GameplayOnelinerHuntingExperienceGain;
 
-    oneliner = new WMH_GameplayOnelinerExperienceGain in this;
+    oneliner = new WMH_GameplayOnelinerHuntingExperienceGain in this;
     oneliner.register();
   }
 
