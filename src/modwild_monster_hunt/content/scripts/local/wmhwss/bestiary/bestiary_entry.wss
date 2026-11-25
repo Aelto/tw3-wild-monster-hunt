@@ -234,7 +234,7 @@ class WMH_BestiaryEntry {
   }
 
   public function onCreatureKilled() {
-    this.hunting_experience.onCreatureKilled();
+    this.hunting_experience.onCreatureKilled(this);
   }
 
   // Entries can override this function to add custom loot to their entities
