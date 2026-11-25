@@ -20,12 +20,24 @@ class WMH_GameplayOnelinerEntity extends SU_OnelinerEntity {
 
 /// A gameplay oneliner that drifts from its initial position, the drift is
 /// applied as translation_per_tick added to the offset every time the position
-/// is computed.
+/// is computed. If a lifetime is set the oneliner also auto deregisters once
+/// that duration has passed since its creation.
 class WMH_MovingGameplayOneliner extends WMH_GameplayOneliner {
   public var translation_per_tick: Vector;
+  public var created_at: float;
+  public var lifetime_seconds: float;
+
+  default lifetime_seconds = -1;
 
   function getPosition(): Vector {
     this.offset = this.offset + this.translation_per_tick;
+
+    if (
+      this.lifetime_seconds > 0
+      && SUH_hasElapsed(this.created_at, this.lifetime_seconds)
+    ) {
+      this.unregister();
+    }
 
     return this.position + this.offset;
   }
@@ -42,6 +54,8 @@ class WMH_GameplayOnelinerHuntingExperienceGain extends WMH_MovingGameplayOnelin
       "{{species}}",
       species
     );
+    this.created_at = WMH_getEngineTimeAsSeconds();
+    this.lifetime_seconds = 10;
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;
     this.render_distance = 15;
@@ -64,6 +78,8 @@ class WMH_GameplayOnelinerHunterFocus extends WMH_MovingGameplayOneliner {
       "{{species}}",
       species
     );
+    this.created_at = WMH_getEngineTimeAsSeconds();
+    this.lifetime_seconds = 10;
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;
     this.render_distance = 15;
