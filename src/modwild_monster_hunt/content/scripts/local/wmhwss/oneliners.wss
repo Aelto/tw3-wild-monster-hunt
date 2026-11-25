@@ -37,7 +37,11 @@ class WMH_GameplayOnelinerHuntingExperienceGain extends WMH_MovingGameplayOnelin
   public function WMH_GameplayOnelinerHuntingExperienceGain(
     species: string
   ): WMH_GameplayOnelinerHuntingExperienceGain {
-    this.text = species + " Hunting Experience +1";
+    this.text = StrReplace(
+      GetLocStringByKeyExt("wmh_hunting_experience_oneliner"),
+      "{{species}}",
+      species
+    );
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;
     this.render_distance = 15;
@@ -55,7 +59,11 @@ class WMH_GameplayOnelinerHunterFocus extends WMH_MovingGameplayOneliner {
   public function WMH_GameplayOnelinerHunterFocus(
     species: string
   ): WMH_GameplayOnelinerHunterFocus {
-    this.text = "Hunter Focus directed towards an " + species;
+    this.text = StrReplace(
+      GetLocStringByKeyExt("wmh_hunter_focus_oneliner"),
+      "{{species}}",
+      species
+    );
     this.translation_per_tick = Vector(0, 0, 0.01);
     this.visible_outside_focus_mode = true;
     this.render_distance = 15;
