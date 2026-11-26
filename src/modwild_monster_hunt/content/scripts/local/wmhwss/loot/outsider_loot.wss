@@ -35,6 +35,10 @@ function WMH_setOutsiderLootFiltered(enabled: bool) {
   WMH_getLootManager().refreshLootList();
 }
 
+function WMH_isOutsiderLootPromptAnswered(): bool {
+  return FactsDoesExist("WMH_OutsiderLootPromptAnswered");
+}
+
 function WMH_isLootCategoryFilteredOut(category: WMH_LootTag): bool {
   return (
     category == WMH_LootTag_Recipe
