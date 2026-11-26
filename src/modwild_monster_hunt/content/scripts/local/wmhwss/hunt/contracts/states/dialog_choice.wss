@@ -109,6 +109,15 @@ state DialogChoice in WMH_ContractManager {
       ));
 
       choices.PushBack(SSceneChoice(
+        GetLocStringByKeyExt("wmh_options"),
+        true, // emphasis
+        false, // previouslyChoosen
+        false, // disabled
+        DialogAction_MONSTERCONTRACT,
+        'ViewOptions'
+      ));
+
+      choices.PushBack(SSceneChoice(
         GetLocStringByKeyExt("wmh_cancel"),
         false,
         true,
@@ -131,6 +140,9 @@ state DialogChoice in WMH_ContractManager {
       }
       else if (response.playGoChunk == 'ViewChallenges') {
         this.displayChallenges();
+      }
+      else if (response.playGoChunk == 'ViewOptions') {
+        this.displayOptions();
       }
       else { // Cancel option
         return;
@@ -181,6 +193,57 @@ state DialogChoice in WMH_ContractManager {
 
       if (response.playGoChunk == 'ToggleExtractionMode') {
         WMH_setExtractionChallengeEnabled(!WMH_isExtractionChallengeEnabled());
+        theSound.SoundEvent("gui_character_synergy_effect");
+      }
+      else {
+        return;
+      }
+    }
+  }
+
+  latent function displayOptions() {
+    var choices: array<SSceneChoice>;
+
+    while (true) {
+      WMH_setdialogHoverContractsListener(new WMH_DialogHoverOptionsListener in this);
+      choices.Clear();
+
+      choices.PushBack(SSceneChoice(
+        GetLocStringByKeyExt("wmh_cancel"),
+        false,
+        true,
+        false,
+        DialogAction_GETBACK,
+        'Cancel'
+      ));
+
+      if (WMH_isOutsiderLootFiltered()) {
+        choices.PushBack(SSceneChoice(
+          GetLocStringByKeyExt("wmh_options_outsider_loot")
+            + " (" + GetLocStringByKeyExt("wmh_active") + ")",
+          true, // emphasis
+          false,
+          false,
+          DialogAction_MONSTERCONTRACT,
+          'ToggleOutsiderLoot'
+        ));
+      }
+      else {
+        choices.PushBack(SSceneChoice(
+          GetLocStringByKeyExt("wmh_options_outsider_loot"),
+          false, // emphasis
+          false,
+          false,
+          DialogAction_GETBACK,
+          'ToggleOutsiderLoot'
+        ));
+      }
+
+      var response: SSceneChoice = SU_setDialogChoicesAndWaitForResponse(choices);
+      SU_closeDialogChoiceInterface();
+
+      if (response.playGoChunk == 'ToggleOutsiderLoot') {
+        WMH_setOutsiderLootFiltered(!WMH_isOutsiderLootFiltered());
         theSound.SoundEvent("gui_character_synergy_effect");
       }
       else {

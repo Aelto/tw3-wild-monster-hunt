@@ -105,6 +105,28 @@ class WMH_DHCL_HuntInfo extends WMH_DialogHoverContractsListener {
   }
 }
 
+class WMH_DialogHoverOptionsListener extends WMH_DialogHoverContractsListener {
+  function onHover(scene_choice: SSceneChoice, index: int) {
+    if (scene_choice.playGoChunk == 'ToggleOutsiderLoot') {
+      var title: string;
+      if (WMH_isOutsiderLootFiltered()) {
+        title = GetLocStringByKeyExt("wmh_options_outsider_loot_hover_title_active");
+      }
+      else {
+        title = GetLocStringByKeyExt("wmh_options_outsider_loot_hover_title_inactive");
+      }
+
+      var description: string = WMH_outsiderLootPromptDescription();
+
+      this.displayLongLastingPopup(title + "<br/><br/>" + description);
+    }
+  }
+
+  function onListenerAdded() {
+    WMHPOPUP("", 1);
+  }
+}
+
 class WMH_DialogHoverChallengeListener extends WMH_DialogHoverContractsListener {
   function onHover(scene_choice: SSceneChoice, index: int) {
     if (scene_choice.playGoChunk == 'ToggleExtractionMode') {

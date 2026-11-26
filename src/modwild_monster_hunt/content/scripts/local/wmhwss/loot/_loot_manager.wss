@@ -71,6 +71,15 @@ statemachine class WMH_LootManager {
     this.GotoState('Loading');
   }
 
+  public function refreshLootList() {
+    // the category roller caches the recipes & schematics ratios, it needs to
+    // be rebuilt to take the outsider loot option into account
+    this.loot_category_roller = NULL;
+
+    // this will cause the loot lists to be refreshed
+    this.GotoState('Loading');
+  }
+
   public function onPendingContractCompleted(seed: int) {
     var count: int = 1;
     while (count > 0) {

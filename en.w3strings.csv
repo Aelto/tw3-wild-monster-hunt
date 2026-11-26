@@ -195,6 +195,10 @@
 ||wmh_favorite_contracts|Favorite contracts
 ||wmh_completed_contracts_history|Completed contracts history
 ||wmh_challenges|Challenges
+||wmh_options|Options
+||wmh_options_outsider_loot|Outsider loot
+||wmh_options_outsider_loot_hover_title_active|Outsider Loot <font size='24' color='#8a5551'>(ACTIVE)</font>
+||wmh_options_outsider_loot_hover_title_inactive|Outsider Loot <font size='24' color='#E1E1E1'>(INACTIVE)</font>
 ||wmh_challenges_merciless_path|Merciless Path
 ||wmh_challenges_merciless_path_hover_title_active|Merciless Path <font size='24' color='#8a5551'>(ACTIVE)</font>
 ||wmh_challenges_merciless_path_hover_title_inactive|Merciless Path <font size='24' color='#E1E1E1'>(INACTIVE)</font>
