@@ -35,14 +35,6 @@ function WMH_setOutsiderLootFiltered(enabled: bool) {
   WMH_getLootManager().refreshLootList();
 }
 
-function WMH_outsiderLootPromptDescription(): string {
-  return "It looks like you visited other regions than Wild Monster Hunt. To preserve your character progression, would you like to remove the usual recipes & schematics that can be obtained from playing the mode?";
-}
-
-function WMH_isOutsiderLootPromptAnswered(): bool {
-  return FactsDoesExist("WMH_OutsiderLootPromptAnswered");
-}
-
 function WMH_isLootCategoryFilteredOut(category: WMH_LootTag): bool {
   return (
     category == WMH_LootTag_Recipe
@@ -58,7 +50,7 @@ class WMH_OutsiderRemoveSchematicsYesNoPrompt extends WMH_YesNoPrompt {
   }
 
   public function description(): string {
-    return WMH_outsiderLootPromptDescription();
+    return GetLocStringByKeyExt("wmh_options_outsider_loot_description");
   }
 
   public function onResponse(accepted: bool) {

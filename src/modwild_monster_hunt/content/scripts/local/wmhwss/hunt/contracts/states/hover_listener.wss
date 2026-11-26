@@ -116,7 +116,7 @@ class WMH_DialogHoverOptionsListener extends WMH_DialogHoverContractsListener {
         title = GetLocStringByKeyExt("wmh_options_outsider_loot_hover_title_inactive");
       }
 
-      var description: string = WMH_outsiderLootPromptDescription();
+      var description: string = GetLocStringByKeyExt("wmh_options_outsider_loot_description");
 
       this.displayLongLastingPopup(title + "<br/><br/>" + description);
     }
