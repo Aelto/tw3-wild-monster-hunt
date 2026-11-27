@@ -18,6 +18,8 @@ statemachine class WMH_Bestiary {
   protected var spawn_instant_seed: WMH_DynInstantSeed;
   protected var wildlife_instant_seed: WMH_DynInstantSeed;
 
+  public var entity_displacer: WMH_EntityDisplacer;
+
   public function init(master: WMH_Master): WMH_Bestiary {
     this.master = master;
 
@@ -27,6 +29,8 @@ statemachine class WMH_Bestiary {
 
     this.spawn_instant_seed = (new WMH_DynInstantSeed in this).init(300);
     this.wildlife_instant_seed = (new WMH_DynInstantSeed in this).init(120);
+
+    this.entity_displacer = (new WMH_EntityDisplacer in this).init();
 
     this.initEntries();
     this.GotoState('Waiting');
