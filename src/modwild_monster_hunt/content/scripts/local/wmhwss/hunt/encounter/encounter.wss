@@ -127,7 +127,7 @@ class WMH_Encounter {
     var output: float;
 
     for bentry: WMH_BestiaryEntry in this.entries {
-      if (contract_manager.isTargetted(bentry.id)) {
+      if (!contract_manager.isTargetted(bentry.id)) {
         continue;
       }
 
