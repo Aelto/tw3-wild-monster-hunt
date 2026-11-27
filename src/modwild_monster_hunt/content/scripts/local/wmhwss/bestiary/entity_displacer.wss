@@ -1,0 +1,82 @@
+function WMH_getEntityDisplacer(): WMH_EntityDisplacer {
+  return WMH_getBestiary().entity_displacer;
+}
+
+statemachine class WMH_EntityDisplacer {
+  private var entities: array<CEntity>;
+
+  public function init(): WMH_EntityDisplacer {
+    this.GotoState('Waiting');
+
+    return this;
+  }
+
+  public function push(entity: CEntity) {
+    if (!entity) {
+      return;
+    }
+
+    this.entities.PushBack(entity);
+
+    if (this.GetCurrentStateName() != 'Processing') {
+      this.GotoState('Processing');
+    }
+  }
+
+  private function displaceOnGround(entity: CEntity) {
+    var position: Vector = entity.GetWorldPosition();
+    var ground_z: float;
+    var found_ground: bool;
+
+    found_ground = theGame.GetWorld().NavigationComputeZ(
+      position,
+      position.Z - 10.0,
+      position.Z + 10.0,
+      ground_z
+    );
+
+    if (!found_ground) {
+      return;
+    }
+
+    if (AbsF(position.Z - ground_z) < 0.05) {
+      return;
+    }
+
+    position.Z = ground_z;
+    entity.Teleport(position);
+  }
+}
+
+state Waiting in WMH_EntityDisplacer {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Waiting_main();
+  }
+
+  entry function Waiting_main() {
+    if (parent.entities.Size() > 0) {
+      parent.GotoState('Processing');
+    }
+  }
+}
+
+state Processing in WMH_EntityDisplacer {
+  event OnEnterState(previous_state_name: name) {
+    super.OnEnterState(previous_state_name);
+    this.Processing_main();
+  }
+
+  entry function Processing_main() {
+    while (parent.entities.Size() > 0) {
+      var entity: CEntity = parent.entities[0];
+
+      parent.displaceOnGround(entity);
+      parent.entities.Erase(0);
+
+      SleepOneFrame();
+    }
+
+    parent.GotoState('Waiting');
+  }
+}

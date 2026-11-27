@@ -161,6 +161,10 @@ class WMH_Master {
     var encounter: WMH_Encounter = (new WMH_Encounter in thePlayer.wmh)
       .init(spawn_point, entries, entities, encounter_tag);
 
+    for entity: CEntity in entities {
+      WMH_getEntityDisplacer().push(entity);
+    }
+
     this.hunt.onEncounterSpawned(entries);
     this.hunt.encounters.onEncounterSpawned(encounter);
   }
