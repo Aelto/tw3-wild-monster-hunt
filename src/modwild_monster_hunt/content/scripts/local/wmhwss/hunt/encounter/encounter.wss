@@ -33,6 +33,7 @@ class WMH_Encounter {
       );
       this.target_oneliner.offset = Vector(0, 0, 1.5);
       this.setOnelinerRenderDistance();
+      this.playMedallionSynergyIfClose();
     }
 
     return this;
@@ -113,7 +114,15 @@ class WMH_Encounter {
         || this.encounter_tag == WMH_EncounterTag_ContractMilestone;
   }
 
+  /// the whole render distance of the contract target oneliner, the base
+  /// distance increased by the hunting experience bonus.
+  public function getContractTargetOnelinerRenderDistance(): int {
+    return 35
+      + this.getMeanHuntingExperienceRenderDistanceBonus();
+  }
+
   private function getMeanHuntingExperienceRenderDistanceBonus(): int {
+    var contract_manager: WMH_ContractManager = WMH_getContractManager();
     var targets_count: int;
     var output: float;
 
@@ -163,10 +172,30 @@ class WMH_Encounter {
       }
       else {
         this.target_oneliner.render_distance = (
-          35
-          + this.getMeanHuntingExperienceRenderDistanceBonus()
+          this.getContractTargetOnelinerRenderDistance()
         );
       }
     }
+  }
+
+  /// medallion synergy: when a contract target is spawned within the distance
+  /// at which its oneliner is rendered, the witcher's medallion reacts.
+  private function playMedallionSynergyIfClose() {
+    var distance: int = this.getContractTargetOnelinerRenderDistance();
+
+    if (
+      VecDistanceSquared2D(
+        thePlayer.GetWorldPosition(),
+        this.GetWorldPosition()
+      ) <= distance * distance
+    ) {
+      this.playMedallionSynergy();
+    }
+  }
+
+  private function playMedallionSynergy() {
+    theSound.SoundEvent("gui_character_synergy_effect");
+    theGame.VibrateControllerLow();
+    WMHHUD(GetLocStringByKeyExt("wmh_encounter_medallion_synergy"));
   }
 }

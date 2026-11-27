@@ -79,6 +79,7 @@
 ; hunt & contract related messages
 ||wmh_contract_new_hud|New contract: {{target}}
 ||wmh_contract_completed_hud|A contract was completed
+||wmh_encounter_medallion_synergy|Your medallion is humming, a contract target must be nearby
 ||wmh_contract_lowercase|contract
 ||wmh_contract_milestone_lowercase|milestone contract
 ||wmh_contract_replace_milestone_forbidden|Milestone contracts cannot be replaced
